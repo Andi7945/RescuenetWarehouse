@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
           ),
           home: const WidgetTree(),
           routes: {
-            // all of the raoutes in the app
+            // all of the routes in the app
             WareHouseOverviewPage.routeName: (ctx) =>
                 const WareHouseOverviewPage(),
             HorizontalDragWidget.routeName: (ctx) =>
