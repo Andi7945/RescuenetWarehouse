@@ -10,9 +10,11 @@ import '../widget/image_picker_widget.dart';
 
 class RNItemsProvider extends ChangeNotifier {
   List<SingleRNItemModel> _rnItems = [];
+  List<SingleRNItemModel> _rnBoxes = [];
   static const String _firebasePath = 'items';
 
   List<SingleRNItemModel> get rnItems => _rnItems;
+  List<SingleRNItemModel> get rnBoxes => _rnBoxes;
 
   //listen to all items in the firebase
   void listenToRNItemsFromFB() {
@@ -20,11 +22,14 @@ class RNItemsProvider extends ChangeNotifier {
         .collection(_firebasePath)
         .snapshots()
         .listen((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
-      _rnItems = querySnapshot.docs
+      List<SingleRNItemModel> _rnIncome = querySnapshot.docs
           .map((QueryDocumentSnapshot<Map<String, dynamic>> e) =>
               SingleRNItemModel.fromJson(e.data(), e.id))
           .toList();
+      _rnItems = _rnIncome.where((element) => element.isBox == false).toList();
+      _rnBoxes = _rnIncome.where((element) => element.isBox).toList();
       print("RNItems from Firebase: ${_rnItems.length}");
+      print("RNBoxes from Firebase: ${_rnBoxes.length}");
       notifyListeners();
     });
   }

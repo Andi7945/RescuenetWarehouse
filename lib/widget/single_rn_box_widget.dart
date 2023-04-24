@@ -5,19 +5,24 @@ import '../model/single_rn_item_model.dart';
 import '../provider/rn_items_provider.dart';
 import '../utils/storage_util.dart';
 
-class SingleRNItemWidget extends StatefulWidget {
-  SingleRNItemWidget({Key? key, required this.id}) : super(key: key);
+class SingleRNBoxWidget extends StatefulWidget {
+  const SingleRNBoxWidget({Key? key, required this.id}) : super(key: key);
   final String id;
 
   @override
-  State<SingleRNItemWidget> createState() => _SingleRNItemWidgetState();
+  State<SingleRNBoxWidget> createState() => _SingleRNBoxWidgetState();
 }
 
-class _SingleRNItemWidgetState extends State<SingleRNItemWidget> {
+class _SingleRNBoxWidgetState extends State<SingleRNBoxWidget> {
   @override
   Widget build(BuildContext context) {
     RNItemsProvider rnItemsProvider = Provider.of<RNItemsProvider>(context, listen: true);
-    SingleRNItemModel rnItem = rnItemsProvider.rnItems.firstWhere((SingleRNItemModel element) => element.id == widget.id);
+    if(widget.id == "1") {
+      return Container(
+        child: Text("Unsorted"),
+      );
+    }
+    SingleRNItemModel rnItem = rnItemsProvider.rnBoxes.firstWhere((SingleRNItemModel element) => element.id == widget.id);
     return SizedBox(
       width: 100,
       child: Column(
@@ -27,8 +32,8 @@ class _SingleRNItemWidgetState extends State<SingleRNItemWidget> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               SizedBox(
-                width: 70,
-                height: 85,
+                  width: 70,
+                  height: 85,
                   child: StorageUtil().getItemImage(id: rnItem.id)),
               Column(
                 children: [

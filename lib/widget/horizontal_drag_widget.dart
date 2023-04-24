@@ -1,6 +1,7 @@
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rescuenet_warehouse/widget/single_rn_box_widget.dart';
 import 'package:rescuenet_warehouse/widget/single_rn_item_widget.dart';
 
 import '../model/single_rn_item_model.dart';
@@ -31,9 +32,10 @@ class _HorizontalDragWidget extends State<HorizontalDragWidget> {
 
   @override
   Widget build(BuildContext context) {
-    List<SingleRNItemModel> all_items = Provider.of<RNItemsProvider>(context, listen: true).rnItems;
+    RNItemsProvider rnItemsProvider = Provider.of<RNItemsProvider>(context, listen: true);
+    List<SingleRNItemModel> all_items = rnItemsProvider.rnItems;
     List<SingleRNItemModel> boxes = [SingleRNItemModel(id: "1", name: "Unsorted"),];
-    boxes.addAll(all_items.where((element) => element.isBox).toList());
+    boxes.addAll(rnItemsProvider.rnBoxes);
     print("Anzahl der Boxen:${boxes.length}");
     print("Anzahl der Items:${all_items.length}");
 
@@ -92,7 +94,7 @@ class _HorizontalDragWidget extends State<HorizontalDragWidget> {
                 color: Colors.grey,
               ),
               padding: const EdgeInsets.all(10),
-              child: SingleRNItemWidget(
+              child: SingleRNBoxWidget(
                 id: _lists[outerIndex].box.id,
               ),
             ),
