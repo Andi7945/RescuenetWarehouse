@@ -18,13 +18,15 @@ class HorizontalDragWidget extends StatefulWidget {
 class InnerList {
   SingleRNItemModel box;
   List<SingleRNItemModel> children;
-  InnerList({required this.box, required this.children});
+  double weight = 0;
+
+  InnerList({required this.box, required this.children, required this.weight});
 }
 
 class _HorizontalDragWidget extends State<HorizontalDragWidget> {
   late List<InnerList> _lists;
 
- /* @override
+  /* @override
   void initState() {
     super.initState();
 
@@ -32,44 +34,52 @@ class _HorizontalDragWidget extends State<HorizontalDragWidget> {
 
   @override
   Widget build(BuildContext context) {
-    RNItemsProvider rnItemsProvider = Provider.of<RNItemsProvider>(context, listen: true);
+    RNItemsProvider rnItemsProvider =
+        Provider.of<RNItemsProvider>(context, listen: true);
     List<SingleRNItemModel> all_items = rnItemsProvider.rnItems;
-    List<SingleRNItemModel> boxes = [SingleRNItemModel(id: "1", name: "Unsorted"),];
+    List<SingleRNItemModel> boxes = [
+      SingleRNItemModel(id: "1", name: "Unsorted"),
+    ];
     boxes.addAll(rnItemsProvider.rnBoxes);
     print("Anzahl der Boxen:${boxes.length}");
     print("Anzahl der Items:${all_items.length}");
 
-
     _lists = List.generate(boxes.length, (outerIndex) {
-      if(outerIndex == 0) {
+      if (outerIndex == 0) {
         return InnerList(
           box: boxes[outerIndex],
           children: [],
+          weight: 0,
         );
       }
-      return InnerList(
-        box: boxes[outerIndex],
-        children: List.generate(boxes[outerIndex].contains.length, (innerIndex) => all_items.firstWhere((element) => element.id == boxes[outerIndex].contains[innerIndex])),
-      );
+      final list = List.generate(
+          boxes[outerIndex].contains.length,
+          (innerIndex) => all_items.firstWhere((element) =>
+              element.id == boxes[outerIndex].contains[innerIndex]));
+      final double weight = list.fold(
+          0, (previousValue, element) => previousValue + element.weight!);
+
+      return InnerList(box: boxes[outerIndex], weight: weight, children: list);
     });
 
     List<SingleRNItemModel> remainingItems = List.from(all_items);
-    for(int i = 0; i < _lists.length; i++) {
-      for(int j = 0; j < _lists[i].children.length; j++) {
+    for (int i = 0; i < _lists.length; i++) {
+      for (int j = 0; j < _lists[i].children.length; j++) {
         remainingItems.remove(_lists[i].children[j]);
       }
     }
     _lists[0].children = remainingItems;
 
-
     return SizedBox(
-      height: MediaQuery.of(context).size.height-14,
+      height: MediaQuery.of(context).size.height - 14,
       width: MediaQuery.of(context).size.width,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Warehouse'),
         ),
-        drawer: NavigationDrawer(children: [],),
+        drawer: NavigationDrawer(
+          children: [],
+        ),
         body: DragAndDropLists(
           children: List.generate(_lists.length, (index) => _buildList(index)),
           onItemReorder: _onItemReorder,
@@ -98,58 +108,64 @@ class _HorizontalDragWidget extends State<HorizontalDragWidget> {
   _buildList(int outerIndex) {
     var innerList = _lists[outerIndex];
     return DragAndDropList(
-      header: Row(
-        children: <Widget>[
-          Expanded(
-            child: Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(7.0)),
-                color: Colors.grey,
-              ),
-              padding: const EdgeInsets.all(10),
-              child: SingleRNBoxWidget(
-                id: _lists[outerIndex].box.id,
-                position: outerIndex,
-              ),
-            ),
-          ),
-        ],
-      ),
-      footer: Row(
-        children: <Widget>[
-          Expanded(
-            child: Container(
-              decoration: const BoxDecoration(
-                borderRadius:
-                BorderRadius.vertical(bottom: Radius.circular(7.0)),
-                color: Colors.grey,
-              ),
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                  children: [
-                    outerIndex == 0 ?
-                    ElevatedButton(onPressed: (){
-                      Provider.of<RNItemsProvider>(context, listen: false).addNewRNItem(context);
-                    }, child: const Text("Add item")) : Container(),
-                  ]
+        header: Row(
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(7.0)),
+                  color: Colors.grey,
+                ),
+                padding: const EdgeInsets.all(10),
+                child: SingleRNBoxWidget(
+                  id: _lists[outerIndex].box.id,
+                  position: outerIndex,
+                  wight: _lists[outerIndex].weight,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-      leftSide: const VerticalDivider(
-        color: Colors.grey,
-        width: 1.5,
-        thickness: 1.5,
-      ),
-      rightSide: const VerticalDivider(
-        color: Colors.grey,
-        width: 1.5,
-        thickness: 1.5,
-      ),
-      children: List.generate(innerList.children.length,
-              (index) => _buildItem(SingleRNItemWidget(id:innerList.children[index].id),
-    )));
+          ],
+        ),
+        footer: Row(
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                  borderRadius:
+                      BorderRadius.vertical(bottom: Radius.circular(7.0)),
+                  color: Colors.grey,
+                ),
+                padding: const EdgeInsets.all(10),
+                child: Column(children: [
+                  outerIndex == 0
+                      ? ElevatedButton(
+                          onPressed: () {
+                            Provider.of<RNItemsProvider>(context, listen: false)
+                                .addNewRNItem(context);
+                          },
+                          child: const Text("Add item"))
+                      : Container(),
+                ]),
+              ),
+            ),
+          ],
+        ),
+        leftSide: const VerticalDivider(
+          color: Colors.grey,
+          width: 1.5,
+          thickness: 1.5,
+        ),
+        rightSide: const VerticalDivider(
+          color: Colors.grey,
+          width: 1.5,
+          thickness: 1.5,
+        ),
+        children: List.generate(
+            innerList.children.length,
+            (index) => _buildItem(
+                  SingleRNItemWidget(id: innerList.children[index].id),
+                )));
   }
 
   _buildItem(Widget item) {
@@ -160,14 +176,14 @@ class _HorizontalDragWidget extends State<HorizontalDragWidget> {
     );
   }
 
-
   _onItemReorder(
       int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
     setState(() {
       var movedItem = _lists[oldListIndex].children.removeAt(oldItemIndex);
       _lists[newListIndex].children.insert(newItemIndex, movedItem);
     });
-    print("Item ${_lists[newListIndex].children[newItemIndex].id} moved from ${_lists[oldListIndex].box.id} to ${_lists[newListIndex].box.id}");
+    print(
+        "Item ${_lists[newListIndex].children[newItemIndex].id} moved from ${_lists[oldListIndex].box.id} to ${_lists[newListIndex].box.id}");
     // Hier den Provider aktualisieren
     Provider.of<RNItemsProvider>(context, listen: false).updateItemPosition(
       id: _lists[newListIndex].children[newItemIndex].id,
@@ -175,7 +191,6 @@ class _HorizontalDragWidget extends State<HorizontalDragWidget> {
       newBoxId: _lists[newListIndex].box.id,
     );
   }
-
 
   _onListReorder(int oldListIndex, int newListIndex) {
     setState(() {
