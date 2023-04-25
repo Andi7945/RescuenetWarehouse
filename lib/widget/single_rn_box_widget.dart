@@ -19,7 +19,7 @@ class _SingleRNBoxWidgetState extends State<SingleRNBoxWidget> {
     RNItemsProvider rnItemsProvider = Provider.of<RNItemsProvider>(context, listen: true);
     if(widget.id == "1") {
       return Container(
-        child: Text("Unsorted"),
+        child: const Text("Unsorted"),
       );
     }
     SingleRNItemModel rnItem = rnItemsProvider.rnBoxes.firstWhere((SingleRNItemModel element) => element.id == widget.id);
@@ -43,15 +43,15 @@ class _SingleRNBoxWidgetState extends State<SingleRNBoxWidget> {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          const Text("Euro Crate", style: const TextStyle(fontSize: 10),),
+                          const Text("Euro Crate", style: TextStyle(fontSize: 10),),
                           Text(rnItem.euroCrate ?? "-"),
                         ],
                       ),
-                      SizedBox(width: 20,),
+                      const SizedBox(width: 20,),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: const [
-                          Text("Comb. Weight", style: const TextStyle(fontSize: 10),),
+                          Text("Comb. Weight", style: TextStyle(fontSize: 10),),
                           Text("-"),
                         ],
                       ),
@@ -62,13 +62,13 @@ class _SingleRNBoxWidgetState extends State<SingleRNBoxWidget> {
                     children: [
                       Column(
                         children: [
-                          const Text("Module Destination", style: const TextStyle(fontSize: 10),),
+                          const Text("Module Destination", style: TextStyle(fontSize: 10),),
                           Text(rnItem.moduleDestination ?? "-"),
                         ],
                       ),
                       Column(
                         children: [
-                          const Text("Checked", style: const TextStyle(fontSize: 10),),
+                          const Text("Checked", style: TextStyle(fontSize: 10),),
                           //checkbox
                           Checkbox(
                             value: rnItem.checked,
