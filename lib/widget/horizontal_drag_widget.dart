@@ -56,8 +56,7 @@ class _HorizontalDragWidget extends State<HorizontalDragWidget> {
           boxes[outerIndex].contains.length,
           (innerIndex) => all_items.firstWhere((element) =>
               element.id == boxes[outerIndex].contains[innerIndex]));
-      final double weight = list.fold(
-          0, (previousValue, element) => previousValue + element.weight!);
+      final double weight = list.fold(0, (previousValue, element) => previousValue + ((element.weight ?? 0) * element.amount));
 
       return InnerList(box: boxes[outerIndex], weight: weight, children: list);
     });
