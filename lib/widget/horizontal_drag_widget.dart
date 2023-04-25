@@ -39,15 +39,28 @@ class _HorizontalDragWidget extends State<HorizontalDragWidget> {
     print("Anzahl der Boxen:${boxes.length}");
     print("Anzahl der Items:${all_items.length}");
 
+
     _lists = List.generate(boxes.length, (outerIndex) {
-      //List<SingleRNItemModel> children = all_items.where((element) => boxes[outerIndex].contains.contains(element.id)).toList();
-      List<SingleRNItemModel> children = all_items.where((element) => !boxes[outerIndex].isBox).toList();
-      print("Anzahl der Kinder:${children.length}");
+      if(outerIndex == 0) {
+        return InnerList(
+          box: boxes[outerIndex],
+          children: [],
+        );
+      }
       return InnerList(
         box: boxes[outerIndex],
-        children: List.generate(children.length, (innerIndex) => children[innerIndex]),
+        children: List.generate(boxes[outerIndex].contains.length, (innerIndex) => all_items.firstWhere((element) => element.id == boxes[outerIndex].contains[innerIndex])),
       );
     });
+
+    List<SingleRNItemModel> remainingItems = List.from(all_items);
+    for(int i = 0; i < _lists.length; i++) {
+      for(int j = 0; j < _lists[i].children.length; j++) {
+        remainingItems.remove(_lists[i].children[j]);
+      }
+    }
+    _lists[0].children = remainingItems;
+
 
     return SizedBox(
       height: MediaQuery.of(context).size.height-14,
@@ -153,6 +166,7 @@ class _HorizontalDragWidget extends State<HorizontalDragWidget> {
       _lists[newListIndex].children.insert(newItemIndex, movedItem);
     });
   }
+
 
   _onListReorder(int oldListIndex, int newListIndex) {
     setState(() {
