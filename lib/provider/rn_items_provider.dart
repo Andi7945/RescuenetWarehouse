@@ -189,4 +189,21 @@ class RNItemsProvider extends ChangeNotifier {
           });
         });
   }
+
+  void updateItemPosition({required String id, required String oldBoxId, required String newBoxId}) {
+    if(oldBoxId == newBoxId) return;
+    if(oldBoxId != "1"){
+      final oldBox = _rnBoxes.firstWhere((element) => element.id == oldBoxId);
+      oldBox.contains.remove(id);
+      updateRNItemInFB(oldBox);
+    }
+    if(newBoxId != "1"){
+      final newBox = _rnBoxes.firstWhere((element) => element.id == newBoxId);
+      newBox.contains.add(id);
+      updateRNItemInFB(newBox);
+    }
+    notifyListeners();
+  }
+
+
 }
