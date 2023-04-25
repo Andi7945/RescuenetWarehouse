@@ -21,8 +21,8 @@ class _WidgetTreeState extends State<WidgetTree> {
     return StreamBuilder(
       stream: Auth().authStateChanges,
       builder: (context, snapshot) {
-        print("snapshot: $snapshot");
         if (snapshot.hasData) {
+          print("snapshot: $snapshot");
           Provider.of<SequentialBuildProvider>(context, listen: false).listenToSequentialBuildModelFromFB();
           Provider.of<RNItemsProvider>(context, listen: false).listenToRNItemsFromFB();
           // .addSequentialBuildModelToFB(SequentialBuildModel(des: "Supplies", sequentialBuildColor: Colors.blue));
