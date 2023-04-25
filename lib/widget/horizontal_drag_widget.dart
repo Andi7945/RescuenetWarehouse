@@ -159,12 +159,20 @@ class _HorizontalDragWidget extends State<HorizontalDragWidget> {
     );
   }
 
+
   _onItemReorder(
       int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
     setState(() {
       var movedItem = _lists[oldListIndex].children.removeAt(oldItemIndex);
       _lists[newListIndex].children.insert(newItemIndex, movedItem);
     });
+    print("Item ${_lists[newListIndex].children[newItemIndex].id} moved from ${_lists[oldListIndex].box.id} to ${_lists[newListIndex].box.id}");
+    // Hier den Provider aktualisieren
+    Provider.of<RNItemsProvider>(context, listen: false).updateItemPosition(
+      id: _lists[newListIndex].children[newItemIndex].id,
+      oldBoxId: _lists[oldListIndex].box.id,
+      newBoxId: _lists[newListIndex].box.id,
+    );
   }
 
 
