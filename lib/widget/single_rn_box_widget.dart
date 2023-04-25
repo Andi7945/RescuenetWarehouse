@@ -73,9 +73,8 @@ class _SingleRNBoxWidgetState extends State<SingleRNBoxWidget> {
                           Checkbox(
                             value: rnItem.checked,
                             onChanged: (bool? value) {
-                              setState(() {
                                 rnItem.checked = value!;
-                              });
+                                rnItemsProvider.updateRNItemInFB(rnItem);
                             },
                           ),
                         ],
