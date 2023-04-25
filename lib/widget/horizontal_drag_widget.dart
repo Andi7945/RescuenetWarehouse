@@ -109,6 +109,7 @@ class _HorizontalDragWidget extends State<HorizontalDragWidget> {
               padding: const EdgeInsets.all(10),
               child: SingleRNBoxWidget(
                 id: _lists[outerIndex].box.id,
+                position: outerIndex,
               ),
             ),
           ),
@@ -126,10 +127,10 @@ class _HorizontalDragWidget extends State<HorizontalDragWidget> {
               padding: const EdgeInsets.all(10),
               child: Column(
                   children: [
-                    //outerIndex == 0 ?
+                    outerIndex == 0 ?
                     ElevatedButton(onPressed: (){
                       Provider.of<RNItemsProvider>(context, listen: false).addNewRNItem(context);
-                    }, child: const Text("Add item")),// : Container(),
+                    }, child: const Text("Add item")) : Container(),
                   ]
               ),
             ),
