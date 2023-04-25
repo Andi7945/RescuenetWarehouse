@@ -8,7 +8,8 @@ import '../model/single_rn_item_model.dart';
 import '../provider/rn_items_provider.dart';
 
 class HorizontalDragWidget extends StatefulWidget {
-  const HorizontalDragWidget({Key? key}) : super(key: key);
+  final List<InnerList> lists;
+  const HorizontalDragWidget({Key? key, required this.lists}) : super(key: key);
   static const routeName = "/horizontalDragWidget";
 
   @override
@@ -24,7 +25,6 @@ class InnerList {
 }
 
 class _HorizontalDragWidget extends State<HorizontalDragWidget> {
-  late List<InnerList> _lists;
 
   /* @override
   void initState() {
@@ -34,53 +34,9 @@ class _HorizontalDragWidget extends State<HorizontalDragWidget> {
 
   @override
   Widget build(BuildContext context) {
-    RNItemsProvider rnItemsProvider =
-        Provider.of<RNItemsProvider>(context, listen: true);
-    List<SingleRNItemModel> all_items = rnItemsProvider.rnItems;
-    List<SingleRNItemModel> boxes = [
-      SingleRNItemModel(id: "1", name: "Unsorted"),
-    ];
-    boxes.addAll(rnItemsProvider.rnBoxes);
-    print("Anzahl der Boxen:${boxes.length}");
-    print("Anzahl der Items:${all_items.length}");
 
-    _lists = List.generate(boxes.length, (outerIndex) {
-      if (outerIndex == 0) {
-        return InnerList(
-          box: boxes[outerIndex],
-          children: [],
-          weight: 0,
-        );
-      }
-      final list = List.generate(
-          boxes[outerIndex].contains.length,
-          (innerIndex) => all_items.firstWhere((element) =>
-              element.id == boxes[outerIndex].contains[innerIndex]));
-      final double weight = list.fold(0, (previousValue, element) => previousValue + ((element.weight ?? 0) * element.amount));
-
-      return InnerList(box: boxes[outerIndex], weight: weight, children: list);
-    });
-
-    List<SingleRNItemModel> remainingItems = List.from(all_items);
-    for (int i = 0; i < _lists.length; i++) {
-      for (int j = 0; j < _lists[i].children.length; j++) {
-        remainingItems.remove(_lists[i].children[j]);
-      }
-    }
-    _lists[0].children = remainingItems;
-
-    return SizedBox(
-      height: MediaQuery.of(context).size.height - 14,
-      width: MediaQuery.of(context).size.width,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Warehouse'),
-        ),
-        drawer: NavigationDrawer(
-          children: [],
-        ),
-        body: DragAndDropLists(
-          children: List.generate(_lists.length, (index) => _buildList(index)),
+    return DragAndDropLists(
+          children: List.generate(widget.lists.length, (index) => _buildList(index)),
           onItemReorder: _onItemReorder,
           onListReorder: _onListReorder,
           axis: Axis.horizontal,
@@ -99,13 +55,12 @@ class _HorizontalDragWidget extends State<HorizontalDragWidget> {
             ],
           ),
           listPadding: const EdgeInsets.all(8.0),
-        ),
-      ),
+
     );
   }
 
   _buildList(int outerIndex) {
-    var innerList = _lists[outerIndex];
+    var innerList = widget.lists[outerIndex];
     return DragAndDropList(
         header: Row(
           children: <Widget>[
@@ -118,9 +73,9 @@ class _HorizontalDragWidget extends State<HorizontalDragWidget> {
                 ),
                 padding: const EdgeInsets.all(10),
                 child: SingleRNBoxWidget(
-                  id: _lists[outerIndex].box.id,
+                  id: widget.lists[outerIndex].box.id,
                   position: outerIndex,
-                  wight: _lists[outerIndex].weight,
+                  wight: widget.lists[outerIndex].weight,
                 ),
               ),
             ),
@@ -178,23 +133,23 @@ class _HorizontalDragWidget extends State<HorizontalDragWidget> {
   _onItemReorder(
       int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
     setState(() {
-      var movedItem = _lists[oldListIndex].children.removeAt(oldItemIndex);
-      _lists[newListIndex].children.insert(newItemIndex, movedItem);
+      var movedItem = widget.lists[oldListIndex].children.removeAt(oldItemIndex);
+      widget.lists[newListIndex].children.insert(newItemIndex, movedItem);
     });
     print(
-        "Item ${_lists[newListIndex].children[newItemIndex].id} moved from ${_lists[oldListIndex].box.id} to ${_lists[newListIndex].box.id}");
+        "Item ${widget.lists[newListIndex].children[newItemIndex].id} moved from ${widget.lists[oldListIndex].box.id} to ${widget.lists[newListIndex].box.id}");
     // Hier den Provider aktualisieren
     Provider.of<RNItemsProvider>(context, listen: false).updateItemPosition(
-      id: _lists[newListIndex].children[newItemIndex].id,
-      oldBoxId: _lists[oldListIndex].box.id,
-      newBoxId: _lists[newListIndex].box.id,
+      id: widget.lists[newListIndex].children[newItemIndex].id,
+      oldBoxId: widget.lists[oldListIndex].box.id,
+      newBoxId: widget.lists[newListIndex].box.id,
     );
   }
 
   _onListReorder(int oldListIndex, int newListIndex) {
     setState(() {
-      var movedList = _lists.removeAt(oldListIndex);
-      _lists.insert(newListIndex, movedList);
+      var movedList = widget.lists.removeAt(oldListIndex);
+      widget.lists.insert(newListIndex, movedList);
     });
   }
 }

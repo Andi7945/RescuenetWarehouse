@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../page/login_register_page.dart';
+import '../page/warehouse_overview_page.dart';
 import '../provider/rn_items_provider.dart';
 import '../provider/sequentialbuild_provider.dart';
-import '../widget/horizontal_drag_widget.dart';
 import 'auth_util.dart';
 
 class WidgetTree extends StatefulWidget {
@@ -26,7 +26,7 @@ class _WidgetTreeState extends State<WidgetTree> {
           Provider.of<SequentialBuildProvider>(context, listen: false).listenToSequentialBuildModelFromFB();
           Provider.of<RNItemsProvider>(context, listen: false).listenToRNItemsFromFB();
           // .addSequentialBuildModelToFB(SequentialBuildModel(des: "Supplies", sequentialBuildColor: Colors.blue));
-          return const HorizontalDragWidget();//WareHouseOverviewPage();
+          return const WareHouseOverviewPage(); // HorizontalDragWidget();//
         } else {
           return const LoginPage();
         }

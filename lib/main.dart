@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
             WareHouseOverviewPage.routeName: (ctx) =>
                 const WareHouseOverviewPage(),
             HorizontalDragWidget.routeName: (ctx) =>
-                const HorizontalDragWidget(),
+                const HorizontalDragWidget(lists: []),
             LoginPage.routeName: (ctx) => const LoginPage(),
             WidgetTree.routeName: (ctx) => const WidgetTree(),
           }),

@@ -24,7 +24,7 @@ class SequentialBuildModel {
   Map<String, dynamic> toJson() {
     return {
       'des': des,
-      'sequentialBuildColor': sequentialBuildColor!.value ?? 0,
+      'sequentialBuildColor': sequentialBuildColor!.value,
     };
   }
 
