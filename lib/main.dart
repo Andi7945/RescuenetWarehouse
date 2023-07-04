@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rescuenet_warehouse/main_page.dart';
 import 'package:rescuenet_warehouse/page/login_register_page.dart';
 import 'package:rescuenet_warehouse/page/warehouse_overview_page.dart';
 import 'package:rescuenet_warehouse/provider/rn_items_provider.dart';
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
             cardColor: const Color(0xFFF5F2E7),
             fontFamily: 'Quicksand',
           ),
-          home: const WidgetTree(),
+          home: MainPage(),
           routes: {
             // all of the routes in the app
             WareHouseOverviewPage.routeName: (ctx) =>
