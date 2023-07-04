@@ -66,13 +66,7 @@ class IndicatorExpiringDate extends StatelessWidget {
         ));
   }
 
-  Container _empty() {
-    return Container(
-      width: 46,
-      height: 48,
-      decoration: BoxDecoration(
-        border: Border.all(),
-      ),
-    );
+  Widget _empty() {
+    return const SizedBox(width: 46, height: 48);
   }
 }

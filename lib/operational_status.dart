@@ -1,0 +1,1 @@
+enum OperationalStatus { deployable, needsRepair, toBeReplaced }

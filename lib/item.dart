@@ -1,3 +1,5 @@
+import 'package:rescuenet_warehouse/operational_status.dart';
+
 import 'sign.dart';
 
 class Item {
@@ -9,7 +11,7 @@ class Item {
   int totalAmount;
   String? description;
   List<DateTime> expiringDates = List.empty();
-  String? operationalStatus;
+  OperationalStatus operationalStatus = OperationalStatus.deployable;
   String? manufacturer;
   String? brand;
   String? type;
@@ -41,7 +43,7 @@ class Item {
       this.sku,
       this.signs);
 
-  Item.simple(this.id, this.name, this.weight, this.totalAmount);
+  Item.simple(this.id, this.name, this.weight, this.totalAmount, this.operationalStatus);
 }
 
 /**

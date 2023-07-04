@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rescuenet_warehouse/indicator_expiring_date.dart';
+import 'package:rescuenet_warehouse/indicator_operational_status.dart';
 
 import 'item.dart';
 
@@ -71,7 +72,7 @@ class ItemCard extends StatelessWidget {
           _bordered(),
           _bordered(),
           IndicatorExpiringDate(_item),
-          _bordered(),
+          IndicatorOperationalStatus(_item),
         ],
       ),
     );
