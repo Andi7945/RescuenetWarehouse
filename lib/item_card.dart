@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rescuenet_warehouse/indicator_expiring_date.dart';
 import 'package:rescuenet_warehouse/indicator_operational_status.dart';
+import 'package:rescuenet_warehouse/indicator_sign.dart';
 
 import 'item.dart';
 
@@ -61,30 +62,23 @@ class ItemCard extends StatelessWidget {
 
   Container signRow() {
     return Container(
-      width: 260,
+      width: 320,
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _bordered(),
-          _bordered(),
-          _bordered(),
-          IndicatorExpiringDate(_item),
-          IndicatorOperationalStatus(_item),
+          Row(children: [
+            ..._item.signs.map((sign) => IndicatorSign(sign: sign))
+          ]),
+          Row(
+            children: [
+              IndicatorExpiringDate(_item),
+              IndicatorOperationalStatus(_item),
+            ],
+          )
         ],
-      ),
-    );
-  }
-
-  Container _bordered() {
-    return Container(
-      width: 46,
-      height: 48,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(),
       ),
     );
   }
@@ -133,7 +127,8 @@ class ItemCard extends StatelessWidget {
       height: 80.89,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: NetworkImage(_item.imagePath),
+          // image: NetworkImage(_item.imagePath),
+          image: AssetImage("assets/images/${_item.imagePath}"),
           fit: BoxFit.fill,
         ),
       ),

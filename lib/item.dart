@@ -43,7 +43,7 @@ class Item {
       this.sku,
       this.signs);
 
-  Item.simple(this.id, this.name, this.weight, this.totalAmount, this.operationalStatus);
+  Item.simple(this.id, this.name, this.weight, this.totalAmount, this.operationalStatus, this.imagePath);
 }
 
 /**
