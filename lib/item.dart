@@ -3,7 +3,10 @@ import 'sign.dart';
 class Item {
   String id;
   String? name;
+  String imagePath = "https://via.placeholder.com/90x81";
   String? rescueNetId;
+  double weight = 0.0;
+  int totalAmount;
   String? description;
   List<String> expiringDates = List.empty();
   String? operationalStatus;
@@ -13,10 +16,32 @@ class Item {
   String? supplier;
   String? website;
   String? value;
+  String? sku;
   String? notes;
   List<Sign> signs = List.empty();
 
-  Item(this.id);
+  Item(this.id, this.totalAmount);
+
+  Item.filled(this.id,
+      this.name,
+      this.imagePath,
+      this.rescueNetId,
+      this.weight,
+      this.totalAmount,
+      this.description,
+      this.expiringDates,
+      this.operationalStatus,
+      this.manufacturer,
+      this.brand,
+      this.type,
+      this.supplier,
+      this.website,
+      this.value,
+      this.notes,
+      this.sku,
+      this.signs);
+
+  Item.simple(this.id, this.name, this.weight, this.totalAmount);
 }
 
 /**

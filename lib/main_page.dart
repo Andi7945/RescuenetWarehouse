@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:rescuenet_warehouse/data_mocks.dart';
+import 'package:rescuenet_warehouse/item_card.dart';
+import 'package:rescuenet_warehouse/items_page.dart';
 import 'package:rescuenet_warehouse/menu.dart';
 
 class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-          height: double.infinity,
-          width: double.infinity,
-          padding: const EdgeInsets.all(20),
-          child: Menu()),
-    );
+        body: Column(children: [Menu(), ItemsPage()]));
   }
 }
