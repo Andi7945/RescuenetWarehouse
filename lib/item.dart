@@ -8,7 +8,7 @@ class Item {
   double weight = 0.0;
   int totalAmount;
   String? description;
-  List<String> expiringDates = List.empty();
+  List<DateTime> expiringDates = List.empty();
   String? operationalStatus;
   String? manufacturer;
   String? brand;

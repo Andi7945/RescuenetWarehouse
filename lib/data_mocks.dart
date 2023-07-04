@@ -9,7 +9,11 @@ var item1 = Item.filled(
     0.7,
     2,
     "Fire extinghuiser 500 ml",
-    ["Nov 30th, 2022", "Jun 30th, 2022", "Nov 30th, 2023"],
+    [
+      DateTime(2022, 11, 30),
+      DateTime(2022, 6, 30),
+      DateTime(2023, 11, 30),
+    ],
     "Deployable",
     "Fire products company",
     "FireEx",
