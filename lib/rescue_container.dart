@@ -1,7 +1,9 @@
+import 'container_type.dart';
+
 class RescueContainer {
   String id;
   String? name;
-  String? type;
+  ContainerType type;
   String? imagePath;
   String? sequentialBuild;
   String? moduleDestination;

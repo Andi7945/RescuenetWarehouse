@@ -1,3 +1,4 @@
+import 'package:rescuenet_warehouse/container_type.dart';
 import 'package:rescuenet_warehouse/operational_status.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 import 'package:rescuenet_warehouse/sign.dart';
@@ -48,5 +49,7 @@ var item7 = Item.simple(
 
 var assignment_item1_container1 = Assignment("1", "1", 2);
 
-var container1 = RescueContainer("1", "1 Office supplies", "Euro crate",
+var container1 = RescueContainer("1", "1 Office supplies", container_type_1,
     "folding_desk.png", "First build", "Office", "Office");
+
+var container_type_1 = ContainerType("Euro crate", 1.7, "60x40x40");

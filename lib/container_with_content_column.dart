@@ -7,7 +7,7 @@ import 'rescue_container.dart';
 
 class ContainerWithContentColumn extends StatelessWidget {
   final RescueContainer _container;
-  final List<Item> _items;
+  final Map<Item, int> _items;
 
   ContainerWithContentColumn(this._container, this._items);
 
@@ -16,7 +16,7 @@ class ContainerWithContentColumn extends StatelessWidget {
     return Column(
       children: [
         ContainerWithContentHeader(_container, _items),
-        ..._items.map((e) => ItemCard(e, 1))
+        ..._items.entries.map((e) => ItemCard(e.key, e.value))
       ],
     );
   }

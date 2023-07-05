@@ -8,7 +8,7 @@ import 'sign_row.dart';
 
 class ContainerWithContentHeader extends StatelessWidget {
   final RescueContainer _container;
-  final List<Item> _items;
+  final Map<Item, int> _items;
 
   ContainerWithContentHeader(this._container, this._items);
 
@@ -54,7 +54,6 @@ class ContainerWithContentHeader extends StatelessWidget {
             decoration: const BoxDecoration(color: Colors.white),
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
@@ -73,12 +72,12 @@ class ContainerWithContentHeader extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _text(_container.type ?? "", 16),
+                        _text(_container.type.name, 16),
                         const SizedBox(height: 10),
                         SizedBox(
                             width: 143,
                             height: 39,
-                            child: _text(_container.type ?? "", 16)),
+                            child: _text(_container.type.measurements, 16)),
                       ],
                     ),
                   ),
@@ -117,8 +116,8 @@ class ContainerWithContentHeader extends StatelessWidget {
   }
 
   _sumWeight() {
-    return _items.fold(
-        0.0, (previousValue, element) => previousValue + element.weight);
+    return _items.entries.fold(_container.type.emptyWeight,
+        (prev, e) => prev + (e.key.weight * e.value));
   }
 
   Text _text(String text, double fontSize, [TextAlign? textAlign]) => Text(
@@ -180,11 +179,11 @@ class ContainerWithContentHeader extends StatelessWidget {
   }
 
   List<Sign> _signs() {
-    return _items.expand((i) => i.signs).toList();
+    return _items.keys.expand((i) => i.signs).toList();
   }
 
   DateTime? _nextExpired() {
-    var dates = _items.expand((element) => element.expiringDates).toList();
+    var dates = _items.keys.expand((element) => element.expiringDates).toList();
     if (dates.isEmpty) {
       return null;
     }
@@ -193,7 +192,7 @@ class ContainerWithContentHeader extends StatelessWidget {
   }
 
   _operationalStatus() {
-    var status = _items.map((e) => e.operationalStatus).toSet();
+    var status = _items.keys.map((e) => e.operationalStatus).toSet();
     if (status.contains(OperationalStatus.toBeReplaced)) {
       return OperationalStatus.toBeReplaced;
     }
