@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
 
-import 'item.dart';
 import 'package:intl/intl.dart';
 
 class IndicatorExpiringDate extends StatelessWidget {
-  final Item _item;
+  final DateTime? _nextExpiringDate;
 
-  IndicatorExpiringDate(this._item);
+  IndicatorExpiringDate(this._nextExpiringDate);
 
   @override
   Widget build(BuildContext context) {
-    if (_item.expiringDates.isEmpty) {
+    final date = _nextExpiringDate;
+    if (date == null) {
       return _empty();
     }
-    var dates = List.from(_item.expiringDates);
-    dates.sort();
-    var nextExp = dates.first;
     final DateFormat formatter = DateFormat('MMM yy');
-    final String formatted = formatter.format(nextExp);
-    return _filled(formatted, _color(nextExp));
+    final String formatted = formatter.format(date);
+    return _filled(formatted, _color(date));
   }
 
   _color(DateTime exp) {

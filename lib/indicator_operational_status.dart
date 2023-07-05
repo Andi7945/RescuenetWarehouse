@@ -4,16 +4,16 @@ import 'package:rescuenet_warehouse/operational_status.dart';
 import 'item.dart';
 
 class IndicatorOperationalStatus extends StatelessWidget {
-  final Item _item;
+  final OperationalStatus _operationalStatus;
 
-  IndicatorOperationalStatus(this._item);
+  IndicatorOperationalStatus(this._operationalStatus);
 
   @override
   Widget build(BuildContext context) {
-    if (_item.operationalStatus == OperationalStatus.needsRepair) {
+    if (_operationalStatus == OperationalStatus.needsRepair) {
       return _filled("Repair", Color(0xFFE0A348));
     }
-    if (_item.operationalStatus == OperationalStatus.toBeReplaced) {
+    if (_operationalStatus == OperationalStatus.toBeReplaced) {
       return _filled("Re\nplace", Color(0xFFE0A348));
     }
     return _empty();

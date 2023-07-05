@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:rescuenet_warehouse/indicator_expiring_date.dart';
-import 'package:rescuenet_warehouse/indicator_operational_status.dart';
-import 'package:rescuenet_warehouse/indicator_sign.dart';
 
 import 'item.dart';
+import 'sign_row.dart';
 
 class ItemCard extends StatelessWidget {
   final Item _item;
   final int _amount;
 
   ItemCard(this._item, this._amount);
+
+  DateTime? _nextExpiringDate() {
+    if (_item.expiringDates.isEmpty) {
+      return null;
+    }
+    var dates = List.from(_item.expiringDates);
+    dates.sort();
+    return dates.first;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,32 +59,10 @@ class ItemCard extends StatelessWidget {
                   ],
                 ),
               ),
-              signRow(),
+              SignRow(
+                  _item.signs, _nextExpiringDate(), _item.operationalStatus),
             ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Container signRow() {
-    return Container(
-      width: 320,
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(children: [
-            ..._item.signs.map((sign) => IndicatorSign(sign: sign))
-          ]),
-          Row(
-            children: [
-              IndicatorExpiringDate(_item),
-              IndicatorOperationalStatus(_item),
-            ],
-          )
         ],
       ),
     );
