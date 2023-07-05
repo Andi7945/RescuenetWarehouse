@@ -33,12 +33,9 @@ class ContainerWithContentHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 360,
             padding: const EdgeInsets.only(top: 4, left: 4, right: 4),
-            clipBehavior: Clip.antiAlias,
-            decoration: const BoxDecoration(color: Colors.white),
             child: Row(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -51,7 +48,6 @@ class ContainerWithContentHeader extends StatelessWidget {
             ),
           ),
           Container(
-            width: 360,
             padding: const EdgeInsets.all(10),
             clipBehavior: Clip.antiAlias,
             decoration: const BoxDecoration(color: Colors.white),
@@ -68,32 +64,24 @@ class ContainerWithContentHeader extends StatelessWidget {
                       children: [
                         _text(_container.type.name, 16),
                         const SizedBox(height: 10),
-                        SizedBox(
-                            width: 143,
-                            height: 39,
-                            child: _text(_container.type.measurements, 16)),
+                        _text(_container.type.measurements, 16),
                       ],
                     ),
                   ),
                 ),
-                Container(
-                  width: 86,
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _text('Weight', 16),
-                      const SizedBox(height: 10),
-                      _text("${_sumWeight()} kg", 20)
-                    ],
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _text('Weight', 16),
+                    const SizedBox(height: 10),
+                    _text("${_sumWeight()} kg", 20)
+                  ],
                 ),
               ],
             ),
           ),
           SignRow(_signs(), _nextExpired(), _operationalStatus()),
           Container(
-            width: 360,
             padding: const EdgeInsets.all(8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -138,38 +126,28 @@ class ContainerWithContentHeader extends StatelessWidget {
         ),
       );
 
-  Container _checkboxWithLabel(String text) {
-    return Container(
+  Widget _checkboxWithLabel(String text) {
+    return SizedBox(
       width: 72,
-      clipBehavior: Clip.antiAlias,
-      decoration: const BoxDecoration(color: Colors.white),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           _text(text, 20, TextAlign.center),
-          Container(
-            clipBehavior: Clip.antiAlias,
-            decoration: const BoxDecoration(color: Colors.white),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: const ShapeDecoration(
-                    color: Colors.white,
-                    shape:
-                        RoundedRectangleBorder(side: BorderSide(width: 0.50)),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          _check1(false),
         ],
+      ),
+    );
+  }
+
+  _check1(bool checked) {
+    return Transform.scale(
+      scale: 2.5,
+      child: Checkbox(
+        value: checked,
+        onChanged: (bool? value) {
+          // rnItem.checked = value!;
+          // rnItemsProvider.updateRNItemInFB(rnItem);
+        },
       ),
     );
   }
@@ -236,15 +214,15 @@ class ContainerWithContentHeader extends StatelessWidget {
 
   Color _sequentialBuildColor() {
     if (_container.sequentialBuild == SequentialBuild.firstBuild) {
-      return Color.fromRGBO(255, 245, 0, 1);
+      return const Color.fromRGBO(255, 245, 0, 1);
     }
     if (_container.sequentialBuild == SequentialBuild.laterBuild) {
-      return Color.fromRGBO(0, 255, 41, 1);
+      return const Color.fromRGBO(0, 255, 41, 1);
     }
     if (_container.sequentialBuild == SequentialBuild.supplies) {
-      return Color.fromRGBO(0, 250, 250, 1);
+      return const Color.fromRGBO(0, 250, 250, 1);
     }
-    return Color(0xFFFFF400);
+    return const Color(0xFFFFF400);
   }
 
   String _sequentialBuildName() {
