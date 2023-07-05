@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rescuenet_warehouse/rescue_image.dart';
 
 import 'rescue_container.dart';
 import 'item.dart';
@@ -56,16 +57,7 @@ class ContainerWithContentHeader extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: 91,
-                  height: 73,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage("https://via.placeholder.com/91x73"),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                ),
+                RescueImage(_container.imagePath),
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10),

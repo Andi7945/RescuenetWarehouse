@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rescuenet_warehouse/rescue_image.dart';
 
 import 'item.dart';
 import 'sign_row.dart';
@@ -33,7 +34,7 @@ class ItemCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _image(),
+          RescueImage(_item.imagePath),
           Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -103,20 +104,6 @@ class ItemCard extends StatelessWidget {
           style: _buildTextStyle(),
         ),
       ],
-    );
-  }
-
-  Container _image() {
-    return Container(
-      width: 90,
-      height: 80.89,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          // image: NetworkImage(_item.imagePath),
-          image: AssetImage("assets/images/${_item.imagePath}"),
-          fit: BoxFit.fill,
-        ),
-      ),
     );
   }
 
