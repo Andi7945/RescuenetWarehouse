@@ -1,3 +1,5 @@
+import 'package:rescuenet_warehouse/sequential_build.dart';
+
 import 'container_type.dart';
 
 class RescueContainer {
@@ -5,7 +7,7 @@ class RescueContainer {
   String? name;
   ContainerType type;
   String? imagePath;
-  String? sequentialBuild;
+  SequentialBuild sequentialBuild;
   String? moduleDestination;
   String? currentLocation;
 

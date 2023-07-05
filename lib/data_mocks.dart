@@ -1,12 +1,13 @@
 import 'package:rescuenet_warehouse/container_type.dart';
 import 'package:rescuenet_warehouse/operational_status.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
+import 'package:rescuenet_warehouse/sequential_build.dart';
 import 'package:rescuenet_warehouse/sign.dart';
 
 import 'assignment.dart';
 import 'item.dart';
 
-var item1 = Item.filled(
+var item_fire = Item.filled(
     "1",
     "fire extinghuiser",
     "fire_ex.png",
@@ -34,22 +35,40 @@ var item1 = Item.filled(
       Sign("DGcompressedgasses.png")
     ]);
 
-var item2 = Item.simple("2", "Folding Chair", 0.8, 13,
+var item_chair = Item.simple("2", "Folding Chair", 0.8, 13,
     OperationalStatus.deployable, "folding_chair.png");
-var item3 = Item.simple(
+var item_desk = Item.simple(
     "3", "Table", 2.5, 1, OperationalStatus.needsRepair, "folding_desk.png");
-var item4 = Item.simple(
+var item_generator = Item.simple(
     "4", "Generator", 18, 1, OperationalStatus.needsRepair, "generator.png");
-var item5 = Item.simple(
+var item_cooler = Item.simple(
     "5", "Cooler", 3.4, 1, OperationalStatus.deployable, "cooler.png");
-var item6 = Item.simple("6", "Paracetamol", 0.001, 1000,
+var item_para = Item.simple("6", "Paracetamol", 0.001, 1000,
     OperationalStatus.toBeReplaced, "paracetamol.png");
-var item7 = Item.simple(
+var item_splint = Item.simple(
     "7", "Splint", 0.6, 1, OperationalStatus.deployable, "sam_splint.png");
 
 var assignment_item1_container1 = Assignment("1", "1", 2);
 
-var container1 = RescueContainer("1", "1 Office supplies", container_type_1,
-    "euro_crate.png", "First build", "Office", "Office");
+var container_office = RescueContainer(
+    "1",
+    "1 Office supplies",
+    container_type_crate,
+    "euro_crate.png",
+    SequentialBuild.firstBuild,
+    "Office",
+    "Office");
+var container_power = RescueContainer("2", "2 Power", container_type_crate,
+    "euro_crate.png", SequentialBuild.laterBuild, "Office", "Office");
+var container_medical = RescueContainer(
+    "3",
+    "3 Medical backpack team 1",
+    container_type_backpack,
+    "medical_backpack.png",
+    SequentialBuild.supplies,
+    "Office",
+    "Office");
 
-var container_type_1 = ContainerType("Euro crate", 1.7, "60x40x40");
+var container_type_crate = ContainerType("Euro crate", 1.7, "60x40x40");
+var container_type_backpack =
+    ContainerType("Medical backpack", 0.5, "60x40x32");

@@ -18,13 +18,13 @@ class ItemsPage extends StatelessWidget {
       mainAxisSpacing: 10,
       crossAxisCount: 3,
       children: <Widget>[
-        ItemCard(item1, item1.totalAmount),
-        ItemCard(item2, item2.totalAmount),
-        ItemCard(item3, item3.totalAmount),
-        ItemCard(item4, item4.totalAmount),
-        ItemCard(item5, item5.totalAmount),
-        ItemCard(item6, item6.totalAmount),
-        ItemCard(item7, item7.totalAmount)
+        ItemCard(item_fire, item_fire.totalAmount),
+        ItemCard(item_chair, item_chair.totalAmount),
+        ItemCard(item_desk, item_desk.totalAmount),
+        ItemCard(item_generator, item_generator.totalAmount),
+        ItemCard(item_cooler, item_cooler.totalAmount),
+        ItemCard(item_para, item_para.totalAmount),
+        ItemCard(item_splint, item_splint.totalAmount)
       ],
     );
   }

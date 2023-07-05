@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rescuenet_warehouse/rescue_image.dart';
+import 'package:rescuenet_warehouse/sequential_build.dart';
 
 import 'rescue_container.dart';
 import 'item.dart';
@@ -29,7 +30,6 @@ class ContainerWithContentHeader extends StatelessWidget {
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
@@ -43,7 +43,9 @@ class ContainerWithContentHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 _checkboxWithLabel("Deploy"),
-                _textBold(_container.name ?? "NO NAME", 24, TextAlign.center),
+                Flexible(
+                    child: _textBold(
+                        _container.name ?? "NO NAME", 24, TextAlign.center)),
                 _checkboxWithLabel("Ready")
               ],
             ),
@@ -108,8 +110,10 @@ class ContainerWithContentHeader extends StatelessWidget {
   }
 
   _sumWeight() {
-    return _items.entries.fold(_container.type.emptyWeight,
-        (prev, e) => prev + (e.key.weight * e.value));
+    return _items.entries
+        .fold(_container.type.emptyWeight,
+            (prev, e) => prev + (e.key.weight * e.value))
+        .toStringAsFixed(2);
   }
 
   Text _text(String text, double fontSize, [TextAlign? textAlign]) => Text(
@@ -214,16 +218,45 @@ class ContainerWithContentHeader extends StatelessWidget {
       width: 108,
       padding: const EdgeInsets.symmetric(vertical: 10),
       clipBehavior: Clip.antiAlias,
-      decoration: const ShapeDecoration(
-        color: Color(0xFFFFF400),
-        shape: RoundedRectangleBorder(side: BorderSide(width: 0.50)),
+      decoration: ShapeDecoration(
+        color: _sequentialBuildColor(),
+        shape: const RoundedRectangleBorder(side: BorderSide(width: 0.50)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [_text('Sequential Build', 12), _textBold('First build', 16)],
+        children: [
+          _text('Sequential Build', 12),
+          _textBold(_sequentialBuildName(), 16)
+        ],
       ),
     );
+  }
+
+  Color _sequentialBuildColor() {
+    if (_container.sequentialBuild == SequentialBuild.firstBuild) {
+      return Color.fromRGBO(255, 245, 0, 1);
+    }
+    if (_container.sequentialBuild == SequentialBuild.laterBuild) {
+      return Color.fromRGBO(0, 255, 41, 1);
+    }
+    if (_container.sequentialBuild == SequentialBuild.supplies) {
+      return Color.fromRGBO(0, 250, 250, 1);
+    }
+    return Color(0xFFFFF400);
+  }
+
+  String _sequentialBuildName() {
+    if (_container.sequentialBuild == SequentialBuild.firstBuild) {
+      return "First Build";
+    }
+    if (_container.sequentialBuild == SequentialBuild.laterBuild) {
+      return "Later Build";
+    }
+    if (_container.sequentialBuild == SequentialBuild.supplies) {
+      return "Supplies";
+    }
+    return "Pre Build";
   }
 }
