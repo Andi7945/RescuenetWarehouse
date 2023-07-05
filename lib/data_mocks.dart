@@ -1,4 +1,5 @@
 import 'package:rescuenet_warehouse/operational_status.dart';
+import 'package:rescuenet_warehouse/rescue_container.dart';
 import 'package:rescuenet_warehouse/sign.dart';
 
 import 'assignment.dart';
@@ -46,3 +47,6 @@ var item7 = Item.simple(
     "7", "Splint", 0.6, 1, OperationalStatus.deployable, "sam_splint.png");
 
 var assignment_item1_container1 = Assignment("1", "1", 2);
+
+var container1 = RescueContainer("1", "1 Office supplies", "Euro crate",
+    "folding_desk.png", "First build", "Office", "Office");

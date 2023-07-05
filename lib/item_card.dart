@@ -21,7 +21,7 @@ class ItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 360,
+      width: 420,
       height: 190,
       clipBehavior: Clip.antiAlias,
       decoration: const ShapeDecoration(
