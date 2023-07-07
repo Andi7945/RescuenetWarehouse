@@ -72,3 +72,8 @@ var container_medical = RescueContainer(
 var container_type_crate = ContainerType("Euro crate", 1.7, "60x40x40");
 var container_type_backpack =
     ContainerType("Medical backpack", 0.5, "60x40x32");
+
+var container_options_type = [container_type_crate, container_type_backpack];
+var container_options_sequential_build = SequentialBuild.values.map((e) => e.name).toList();
+var container_options_module_destination = ["Office", "Warehouse"];
+var container_options_current_location = ["Warehouse Shiphole NL", "Office"];
