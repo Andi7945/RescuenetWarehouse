@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/container_edit_page.dart';
 import 'package:rescuenet_warehouse/container_overview_page.dart';
 import 'package:rescuenet_warehouse/container_with_content_page.dart';
+import 'package:rescuenet_warehouse/item_edit_page.dart';
+import 'package:rescuenet_warehouse/item_edit_page_argument_extractor.dart';
 import 'package:rescuenet_warehouse/items_page.dart';
 import 'package:rescuenet_warehouse/page/login_register_page.dart';
 import 'package:rescuenet_warehouse/page/warehouse_overview_page.dart';
@@ -62,7 +64,8 @@ class MyApp extends StatelessWidget {
             routeContainerWithContent: (ctx) => ContainerWithContentPage(),
             routeContainerEditPage: (ctx) => ContainerEditPage(container_office),
             routeItemsOverview: (ctx) => ItemsPage(),
-            routeEditCustomValues: (ctx) => EditCustomValuesPage()
+            routeEditCustomValues: (ctx) => EditCustomValuesPage(),
+            routeItemEditPage: (ctx) => ItemEditPageArgumentExtractor()
           }),
     );
   }
