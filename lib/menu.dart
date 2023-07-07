@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rescuenet_warehouse/routes.dart';
 
 class Menu extends StatelessWidget {
   @override
@@ -14,17 +15,17 @@ class Menu extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _option('Container with content'),
-          _option('All Items'),
-          _option('All containers'),
-          _option('Work Log'),
-          _option('Export')
+          _option('Container with content', routeContainerWithContent, context),
+          _option('All Items', routeItemsOverview, context),
+          _option('All containers', routeContainerOverview, context),
+          _option('Work Log', routeWorkLog, context),
+          _option('Export', routeExport, context)
         ],
       ),
     );
   }
 
-  Container _option(String text) {
+  Container _option(String text, String route, BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       clipBehavior: Clip.antiAlias,
@@ -33,7 +34,13 @@ class Menu extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [Text(text, style: _textStyle())],
+        children: [
+          TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, route);
+              },
+              child: Text(text, style: _textStyle()))
+        ],
       ),
     );
   }

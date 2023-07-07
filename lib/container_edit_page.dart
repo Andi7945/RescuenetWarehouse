@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rescuenet_warehouse/data_mocks.dart';
 import 'package:rescuenet_warehouse/rescue_dropdown_button.dart';
 
+import 'menu.dart';
 import 'rescue_container.dart';
 
 class ContainerEditPage extends StatefulWidget {
@@ -26,7 +27,7 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(child: _body());
+    return Scaffold(body: Column(children: [Menu(), Expanded(child: _body())]));
   }
 
   _body() {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'container_overview_page_headline.dart';
 import 'container_overview_page_row.dart';
+import 'menu.dart';
 import 'rescue_container.dart';
 
 class ContainerOverviewPage extends StatelessWidget {
@@ -11,7 +12,7 @@ class ContainerOverviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _bodyTable();
+    return Scaffold(body: Column(children: [Menu(), _bodyTable()]));
   }
 
   _bodyTable() {

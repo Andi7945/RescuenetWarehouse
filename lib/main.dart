@@ -1,13 +1,20 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/main_page.dart';
+import 'package:rescuenet_warehouse/container_edit_page.dart';
+import 'package:rescuenet_warehouse/container_overview_page.dart';
+import 'package:rescuenet_warehouse/container_with_content_page.dart';
+import 'package:rescuenet_warehouse/items_page.dart';
 import 'package:rescuenet_warehouse/page/login_register_page.dart';
 import 'package:rescuenet_warehouse/page/warehouse_overview_page.dart';
 import 'package:rescuenet_warehouse/provider/rn_items_provider.dart';
 import 'package:rescuenet_warehouse/provider/sequentialbuild_provider.dart';
+import 'package:rescuenet_warehouse/routes.dart';
 import 'package:rescuenet_warehouse/utils/widget_tree_util.dart';
 import 'package:rescuenet_warehouse/widget/horizontal_drag_widget.dart';
+
+import 'data_mocks.dart';
+import 'edit_custom_values_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,7 +48,7 @@ class MyApp extends StatelessWidget {
             cardColor: const Color(0xFFF5F2E7),
             fontFamily: 'Quicksand',
           ),
-          home: MainPage(),
+          home: ContainerEditPage(container_office),
           routes: {
             // all of the routes in the app
             WareHouseOverviewPage.routeName: (ctx) =>
@@ -50,6 +57,12 @@ class MyApp extends StatelessWidget {
                 const HorizontalDragWidget(lists: []),
             LoginPage.routeName: (ctx) => const LoginPage(),
             WidgetTree.routeName: (ctx) => const WidgetTree(),
+
+            routeContainerOverview: (ctx) => ContainerOverviewPage([container_office, container_power, container_medical]),
+            routeContainerWithContent: (ctx) => ContainerWithContentPage(),
+            routeContainerEditPage: (ctx) => ContainerEditPage(container_office),
+            routeItemsOverview: (ctx) => ItemsPage(),
+            routeEditCustomValues: (ctx) => EditCustomValuesPage()
           }),
     );
   }
