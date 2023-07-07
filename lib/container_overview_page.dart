@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rescuenet_warehouse/routes.dart';
 
 import 'container_overview_page_headline.dart';
 import 'container_overview_page_row.dart';
@@ -12,10 +13,10 @@ class ContainerOverviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Column(children: [Menu(), _bodyTable()]));
+    return Scaffold(body: Column(children: [Menu(), _bodyTable(context)]));
   }
 
-  _bodyTable() {
+  _bodyTable(context) {
     const BorderSide side = BorderSide(
         color: Color(0xFF000000), width: 1.0, style: BorderStyle.solid);
     return Padding(
@@ -32,7 +33,10 @@ class ContainerOverviewPage extends StatelessWidget {
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           children: [
             ContainerOverviewPageHeadline().buildContainerHeadline(),
-            ..._containers.map((e) => ContainerOverviewPageRow().build(e))
+            ..._containers.map((e) => ContainerOverviewPageRow().build(
+                e,
+                (c) => Navigator.pushNamed(context, routeContainerEditPage,
+                    arguments: c)))
           ],
         ));
   }

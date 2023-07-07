@@ -2,9 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/container_edit_page.dart';
+import 'package:rescuenet_warehouse/container_edit_page_argument_extractor.dart';
 import 'package:rescuenet_warehouse/container_overview_page.dart';
 import 'package:rescuenet_warehouse/container_with_content_page.dart';
-import 'package:rescuenet_warehouse/item_edit_page.dart';
 import 'package:rescuenet_warehouse/item_edit_page_argument_extractor.dart';
 import 'package:rescuenet_warehouse/items_page.dart';
 import 'package:rescuenet_warehouse/page/login_register_page.dart';
@@ -50,7 +50,8 @@ class MyApp extends StatelessWidget {
             cardColor: const Color(0xFFF5F2E7),
             fontFamily: 'Quicksand',
           ),
-          home: ContainerEditPage(container_office),
+          home: ContainerOverviewPage(
+              [container_office, container_power, container_medical]),
           routes: {
             // all of the routes in the app
             WareHouseOverviewPage.routeName: (ctx) =>
@@ -60,9 +61,11 @@ class MyApp extends StatelessWidget {
             LoginPage.routeName: (ctx) => const LoginPage(),
             WidgetTree.routeName: (ctx) => const WidgetTree(),
 
-            routeContainerOverview: (ctx) => ContainerOverviewPage([container_office, container_power, container_medical]),
+            routeContainerOverview: (ctx) => ContainerOverviewPage(
+                [container_office, container_power, container_medical]),
             routeContainerWithContent: (ctx) => ContainerWithContentPage(),
-            routeContainerEditPage: (ctx) => ContainerEditPage(container_office),
+            routeContainerEditPage: (ctx) =>
+                ContainerEditPageArgumentExtractor(),
             routeItemsOverview: (ctx) => ItemsPage(),
             routeEditCustomValues: (ctx) => EditCustomValuesPage(),
             routeItemEditPage: (ctx) => ItemEditPageArgumentExtractor()
