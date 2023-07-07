@@ -24,7 +24,6 @@ class ItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        print("tapped");
         Navigator.pushNamed(context, routeItemEditPage, arguments: _item.name);
       },
       child: _card(),

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rescuenet_warehouse/operational_status.dart';
 
-import 'item.dart';
-
 class IndicatorOperationalStatus extends StatelessWidget {
   final OperationalStatus _operationalStatus;
 

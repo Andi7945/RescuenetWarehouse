@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:rescuenet_warehouse/data_mocks.dart';
 import 'package:rescuenet_warehouse/rescue_dropdown_button.dart';
+import 'package:rescuenet_warehouse/rescue_image.dart';
+import 'package:rescuenet_warehouse/routes.dart';
 
 import 'rescue_container.dart';
 
@@ -32,27 +34,37 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
         padding: const EdgeInsets.only(left: 40, right: 40),
         child: ListView(children: [
           _tile("Name", TextField(controller: _nameController)),
-          _tile(
+          _editableTile(
               "Type of container",
               RescueDropdownButton.custom(
-                  container_options_type, widget._container.type.name)),
+                  container_options_type, widget._container.type.name),
+              "containerTypes"),
           _tile(
               "Sequential build",
               RescueDropdownButton(container_options_sequential_build,
                   widget._container.sequentialBuild.name)),
-          _tile(
+          _editableTile(
               "Module destination",
               RescueDropdownButton(container_options_module_destination,
-                  widget._container.moduleDestination)),
-          _tile(
+                  widget._container.moduleDestination),
+              "destinations"),
+          _editableTile(
               "Current location",
               RescueDropdownButton(container_options_current_location,
-                  widget._container.currentLocation)),
+                  widget._container.currentLocation),
+              "locations"),
         ]));
   }
 
-  _tile(String label, Widget child) => ListTile(
+  _tile(String label, Widget child) =>
+      ListTile(leading: SizedBox(width: 160, child: Text(label)), title: child);
+
+  _editableTile(String label, Widget child, String type) => ListTile(
         leading: SizedBox(width: 160, child: Text(label)),
         title: child,
+        trailing: InkWell(
+            onTap: () => Navigator.pushNamed(context, routeEditCustomValues,
+                arguments: type),
+            child: RescueImage('/edit_icon.png')),
       );
 }

@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/container_edit_page.dart';
 import 'package:rescuenet_warehouse/container_edit_page_argument_extractor.dart';
 import 'package:rescuenet_warehouse/container_overview_page.dart';
 import 'package:rescuenet_warehouse/container_with_content_page.dart';
@@ -16,7 +15,7 @@ import 'package:rescuenet_warehouse/utils/widget_tree_util.dart';
 import 'package:rescuenet_warehouse/widget/horizontal_drag_widget.dart';
 
 import 'data_mocks.dart';
-import 'edit_custom_values_page.dart';
+import 'edit_custom_values_page_argument_extractor.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -67,7 +66,8 @@ class MyApp extends StatelessWidget {
             routeContainerEditPage: (ctx) =>
                 ContainerEditPageArgumentExtractor(),
             routeItemsOverview: (ctx) => ItemsPage(),
-            routeEditCustomValues: (ctx) => EditCustomValuesPage(),
+            routeEditCustomValues: (ctx) =>
+                EditCustomValuesPageArgumentExtractor(),
             routeItemEditPage: (ctx) => ItemEditPageArgumentExtractor()
           }),
     );

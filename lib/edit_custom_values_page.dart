@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'menu.dart';
-
 class EditCustomValuesPage extends StatelessWidget {
+  final String type;
+
+  EditCustomValuesPage(this.type);
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Column(children: [Menu(), Text("Edit custom values")]));
+    return Text("Edit custom values for $type");
   }
 }
