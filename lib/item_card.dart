@@ -45,7 +45,7 @@ class ItemCard extends StatelessWidget {
                 style: _buildTextStyle(),
               ),
               Container(
-                width: 260,
+                width: 300,
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 clipBehavior: Clip.antiAlias,
                 decoration: const BoxDecoration(color: Colors.white),
