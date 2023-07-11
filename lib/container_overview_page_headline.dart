@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 class ContainerOverviewPageHeadline {
   buildContainerHeadline() => TableRow(children: [
         Container(),
-        const SizedBox(width: 16),
         _headlineText("Image"),
-        const SizedBox(width: 16),
         _headlineText("Name"),
         _headlineText("Currently deployed"),
         _headlineText("Total amount")

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/menu_option.dart';
+import 'package:rescuenet_warehouse/rescue_table.dart';
 import 'package:rescuenet_warehouse/routes.dart';
 
-import 'container_overview_page_headline.dart';
 import 'container_overview_page_row.dart';
 import 'menu.dart';
 import 'rescue_container.dart';
@@ -18,26 +18,13 @@ class ContainerOverviewPage extends StatelessWidget {
   }
 
   _body(context) {
-    const BorderSide side = BorderSide(
-        color: Color(0xFF000000), width: 1.0, style: BorderStyle.solid);
     return Padding(
         padding: const EdgeInsets.only(left: 40, right: 40),
         child: Consumer<Store>(
-            builder: (ctxt, store, _) => Table(
-                  border: const TableBorder(
-                      top: side, bottom: side, horizontalInside: side),
-                  columnWidths: const <int, TableColumnWidth>{
-                    0: IntrinsicColumnWidth(),
-                    1: IntrinsicColumnWidth(),
-                    2: IntrinsicColumnWidth(),
-                    3: IntrinsicColumnWidth(),
-                  },
-                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  children: [
-                    ContainerOverviewPageHeadline().buildContainerHeadline(),
-                    ..._buildRows(context, store.containers)
-                  ],
-                )));
+            builder: (ctxt, store, _) => RescueTable(
+                const ["", "Image", "Name", "Currently deployed", "Total amount"],
+                _buildRows(context, store.containers),
+                const {0: IntrinsicColumnWidth(), 1: IntrinsicColumnWidth()})));
   }
 
   List<TableRow> _buildRows(context, List<RescueContainer> containers) =>

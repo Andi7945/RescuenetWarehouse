@@ -9,9 +9,7 @@ class ContainerOverviewPageRow {
         InkWell(
             onTap: () => onClick(container),
             child: RescueImage('edit_icon.png')),
-        const SizedBox(width: 16),
         RescueImage(container.imagePath),
-        const SizedBox(width: 16),
         _rowText(container.name ?? ""),
         _rowText("1"),
         _rowText("2")
