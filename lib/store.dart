@@ -39,6 +39,8 @@ class Store extends ChangeNotifier {
 
   UnmodifiableListView<Item> get items => UnmodifiableListView(_items);
 
+  Item itemById(String id) => _items.firstWhere((element) => element.id == id);
+
   UnmodifiableListView<RescueContainer> get containers =>
       UnmodifiableListView(_containers);
 
