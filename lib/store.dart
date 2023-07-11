@@ -40,6 +40,9 @@ class Store extends ChangeNotifier {
   UnmodifiableListView<RescueContainer> get containers =>
       UnmodifiableListView(_containers);
 
+  RescueContainer containerById(String id) =>
+      _containers.firstWhere((c) => c.id == id);
+
   UnmodifiableListView<ContainerType> get containerTypes =>
       UnmodifiableListView(_containerTypes);
 

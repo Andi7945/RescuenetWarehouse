@@ -9,7 +9,6 @@ import 'rescue_container.dart';
 import 'store.dart';
 
 class ContainerOverviewPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: Column(children: [Menu(), _body(context)]));
@@ -44,6 +43,7 @@ class ContainerOverviewPage extends StatelessWidget {
   TableRow _buildSingleRow(container, context) =>
       ContainerOverviewPageRow().build(
           container: container,
-          onClick: (c) => Navigator.pushNamed(context, routeContainerEditPage,
-              arguments: c));
+          onClick: (RescueContainer c) => Navigator.pushNamed(
+              context, routeContainerEditPage,
+              arguments: c.id));
 }
