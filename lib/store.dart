@@ -6,7 +6,6 @@ import 'package:rescuenet_warehouse/rescue_container.dart';
 
 import 'container_type.dart';
 import 'data_mocks.dart';
-import 'sequential_build.dart';
 
 class Store extends ChangeNotifier {
   final List<Item> _items = [
@@ -30,9 +29,6 @@ class Store extends ChangeNotifier {
     container_type_backpack
   ];
 
-  final List<String> _sequentialBuildNames =
-      SequentialBuild.values.map((e) => e.name).toList();
-
   final List<String> _moduleDestinations = ["Office", "Warehouse"];
 
   final List<String> _currentLocations = ["Warehouse Shiphole NL", "Office"];
@@ -46,9 +42,6 @@ class Store extends ChangeNotifier {
 
   UnmodifiableListView<ContainerType> get containerTypes =>
       UnmodifiableListView(_containerTypes);
-
-  UnmodifiableListView<String> get sequentialBuildNames =>
-      UnmodifiableListView(_sequentialBuildNames);
 
   UnmodifiableListView<String> get moduleDestinations =>
       UnmodifiableListView(_moduleDestinations);

@@ -5,6 +5,7 @@ import 'package:rescuenet_warehouse/rescue_image.dart';
 import 'package:rescuenet_warehouse/routes.dart';
 
 import 'rescue_container.dart';
+import 'sequential_build.dart';
 
 class ContainerEditPage extends StatefulWidget {
   RescueContainer _container;
@@ -16,10 +17,11 @@ class ContainerEditPage extends StatefulWidget {
 }
 
 class _ContainerEditPageState extends State<ContainerEditPage> {
-  TextEditingController _nameController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
 
   @override
   void initState() {
+    super.initState();
     var name = widget._container.name;
     if (name != null) {
       _nameController.text = name;
@@ -41,7 +43,8 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
               "containerTypes"),
           _tile(
               "Sequential build",
-              RescueDropdownButton(container_options_sequential_build,
+              RescueDropdownButton(
+                  SequentialBuild.values.map((e) => e.name).toList(),
                   widget._container.sequentialBuild.name)),
           _editableTile(
               "Module destination",
