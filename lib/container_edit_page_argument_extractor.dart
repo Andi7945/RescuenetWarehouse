@@ -8,12 +8,12 @@ import 'store.dart';
 class ContainerEditPageArgumentExtractor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var containerId =
-        ModalRoute.of(context)!.settings.arguments as String;
+    var containerId = ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
         body: Column(children: [Menu(), Expanded(child: _page(containerId))]));
   }
 
   _page(String id) => Consumer<Store>(
-      builder: (ctxt, store, _) => ContainerEditPage(store.containerById(id)));
+      builder: (ctxt, store, _) => ContainerEditPage(
+          store.containerById(id), (c) => store.updateContainer(c)));
 }

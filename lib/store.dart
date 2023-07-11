@@ -18,11 +18,11 @@ class Store extends ChangeNotifier {
     item_splint
   ];
 
-  final List<RescueContainer> _containers = [
-    container_office,
-    container_power,
-    container_medical
-  ];
+  final Map<String, RescueContainer> _containers = {
+    container_office.id: container_office,
+    container_power.id: container_power,
+    container_medical.id: container_medical
+  };
 
   final List<ContainerType> _containerTypes = [
     container_type_crate,
@@ -38,10 +38,12 @@ class Store extends ChangeNotifier {
   Item itemById(String id) => _items.firstWhere((element) => element.id == id);
 
   UnmodifiableListView<RescueContainer> get containers =>
-      UnmodifiableListView(_containers);
+      UnmodifiableListView(_containers.values);
 
-  RescueContainer containerById(String id) =>
-      _containers.firstWhere((c) => c.id == id);
+  RescueContainer containerById(String id) => _containers[id]!;
+
+  updateContainer(RescueContainer container) =>
+      _containers[container.id] = container;
 
   UnmodifiableListView<ContainerType> get containerTypes =>
       UnmodifiableListView(_containerTypes);
