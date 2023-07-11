@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/container_edit_page.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 
+import 'container_options.dart';
 import 'menu.dart';
 import 'store.dart';
 
@@ -15,15 +16,17 @@ class ContainerEditPageArgumentExtractor extends StatelessWidget {
   }
 
   _body(String id) => Consumer<Store>(
-      builder: (ctxt, store, _) =>
-          _page(store.containerById(id), (c) => store.updateContainer(c)));
+      builder: (ctxt, store, _) => _page(store.containerById(id),
+          (c) => store.updateContainer(c), store.containerOptions));
 
-  _page(RescueContainer container,
-      ValueChanged<RescueContainer> updateContainer) {
+  _page(
+      RescueContainer container,
+      ValueChanged<RescueContainer> updateContainer,
+      ContainerOptions containerOptions) {
     var cont = ValueNotifier(container);
     cont.addListener(() {
       updateContainer(cont.value);
     });
-    return ContainerEditPage(cont);
+    return ContainerEditPage(cont, containerOptions);
   }
 }

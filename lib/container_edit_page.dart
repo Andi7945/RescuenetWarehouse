@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:rescuenet_warehouse/container_type.dart';
-import 'package:rescuenet_warehouse/data_mocks.dart';
 import 'package:rescuenet_warehouse/rescue_dropdown_button.dart';
 import 'package:rescuenet_warehouse/rescue_image.dart';
 import 'package:rescuenet_warehouse/routes.dart';
 
+import 'container_options.dart';
 import 'rescue_container.dart';
 import 'sequential_build.dart';
 
 class ContainerEditPage extends StatefulWidget {
   final ValueNotifier<RescueContainer> _container;
+  final ContainerOptions _containerOptions;
 
-  ContainerEditPage(this._container);
+  ContainerEditPage(this._container, this._containerOptions);
 
   @override
   State createState() => _ContainerEditPageState();
@@ -66,22 +66,22 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
                   onChanged: (text) => _sendChangesToStore())),
           _editableTile(
               "Type of container",
-              RescueDropdownButton.custom(
-                  container_options_type, _containerTypeController),
+              RescueDropdownButton(
+                  widget._containerOptions.types.map((e) => e.name).toList(),
+                  _containerTypeController),
               routeEditContainerTypes),
           _tile(
               "Sequential build",
-              RescueDropdownButton(
-                  SequentialBuild.values.map((e) => e.name).toList(),
+              RescueDropdownButton(widget._containerOptions.sequentialBuilds,
                   _sequentialBuildController)),
           _editableTile(
               "Module destination",
-              RescueDropdownButton(container_options_module_destination,
+              RescueDropdownButton(widget._containerOptions.moduleDestinations,
                   _moduleDestinationController),
               routeEditModuleDestinations),
           _editableTile(
               "Current location",
-              RescueDropdownButton(container_options_current_location,
+              RescueDropdownButton(widget._containerOptions.currentLocations,
                   _currentLocationController),
               routeEditCurrentLocations),
         ]));
@@ -102,7 +102,8 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
     var changedContainer = RescueContainer(
         widget._container.value.id,
         _nameController.text,
-        ContainerType(_containerTypeController.value, 0.0, "0x0x0"),
+        widget._containerOptions.types.firstWhere(
+            (element) => element.name == _containerTypeController.value),
         widget._container.value.imagePath,
         SequentialBuild.values.firstWhere(
             (element) => element.name == _sequentialBuildController.value),

@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:rescuenet_warehouse/container_options.dart';
 import 'package:rescuenet_warehouse/item.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 
@@ -55,4 +56,7 @@ class Store extends ChangeNotifier {
 
   UnmodifiableListView<String> get currentLocations =>
       UnmodifiableListView(_currentLocations);
+
+  ContainerOptions get containerOptions =>
+      ContainerOptions(containerTypes, moduleDestinations, currentLocations);
 }
