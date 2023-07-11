@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/container_edit_page.dart';
+import 'package:rescuenet_warehouse/menu_option.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 
 import 'container_options.dart';
@@ -12,7 +13,10 @@ class ContainerEditPageArgumentExtractor extends StatelessWidget {
   Widget build(BuildContext context) {
     var containerId = ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
-        body: Column(children: [Menu(), Expanded(child: _body(containerId))]));
+        body: Column(children: [
+      Menu(MenuOption.containerOverview),
+      Expanded(child: _body(containerId))
+    ]));
   }
 
   _body(String id) => Consumer<Store>(

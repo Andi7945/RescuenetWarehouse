@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rescuenet_warehouse/menu_option.dart';
 import 'package:rescuenet_warehouse/routes.dart';
 
 import 'container_overview_page_headline.dart';
@@ -11,7 +12,9 @@ import 'store.dart';
 class ContainerOverviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Column(children: [Menu(), _body(context)]));
+    return Scaffold(
+        body: Column(
+            children: [Menu(MenuOption.containerOverview), _body(context)]));
   }
 
   _body(context) {
