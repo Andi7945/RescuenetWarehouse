@@ -40,7 +40,7 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
               "Type of container",
               RescueDropdownButton.custom(
                   container_options_type, widget._container.type.name),
-              "containerTypes"),
+              routeEditContainerTypes),
           _tile(
               "Sequential build",
               RescueDropdownButton(
@@ -50,24 +50,23 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
               "Module destination",
               RescueDropdownButton(container_options_module_destination,
                   widget._container.moduleDestination),
-              "destinations"),
+              routeEditModuleDestinations),
           _editableTile(
               "Current location",
               RescueDropdownButton(container_options_current_location,
                   widget._container.currentLocation),
-              "locations"),
+              routeEditCurrentLocations),
         ]));
   }
 
   _tile(String label, Widget child) =>
       ListTile(leading: SizedBox(width: 160, child: Text(label)), title: child);
 
-  _editableTile(String label, Widget child, String type) => ListTile(
+  _editableTile(String label, Widget child, String routeName) => ListTile(
         leading: SizedBox(width: 160, child: Text(label)),
         title: child,
         trailing: InkWell(
-            onTap: () => Navigator.pushNamed(context, routeEditCustomValues,
-                arguments: type),
+            onTap: () => Navigator.pushNamed(context, routeName),
             child: RescueImage('/edit_icon.png')),
       );
 }

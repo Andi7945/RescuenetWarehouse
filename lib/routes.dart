@@ -3,7 +3,10 @@ const routeContainerOverview = "/containerOverview";
 const routeContainerEditPage = "/containerEditPage";
 const routeItemsOverview = "/itemsOverview";
 const routeItemEditPage = "/editItem";
-const routeEditCustomValues = "/editCustomValues";
+
+const routeEditContainerTypes = "/editContainerTypes";
+const routeEditModuleDestinations = "/editModuleDestinations";
+const routeEditCurrentLocations = "/editCurrentLocations";
 
 const routeWorkLog = "/workLog";
 const routeExport = "/export";

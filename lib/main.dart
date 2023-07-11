@@ -4,6 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/container_edit_page_argument_extractor.dart';
 import 'package:rescuenet_warehouse/container_overview_page.dart';
 import 'package:rescuenet_warehouse/container_with_content_page.dart';
+import 'package:rescuenet_warehouse/edit_container_types.dart';
+import 'package:rescuenet_warehouse/edit_current_locations.dart';
+import 'package:rescuenet_warehouse/edit_module_destinations.dart';
 import 'package:rescuenet_warehouse/item_edit_page_argument_extractor.dart';
 import 'package:rescuenet_warehouse/items_page.dart';
 import 'package:rescuenet_warehouse/page/login_register_page.dart';
@@ -14,8 +17,6 @@ import 'package:rescuenet_warehouse/routes.dart';
 import 'package:rescuenet_warehouse/store.dart';
 import 'package:rescuenet_warehouse/utils/widget_tree_util.dart';
 import 'package:rescuenet_warehouse/widget/horizontal_drag_widget.dart';
-
-import 'edit_custom_values_page_argument_extractor.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -64,10 +65,13 @@ class MyApp extends StatelessWidget {
             routeContainerWithContent: (ctx) => ContainerWithContentPage(),
             routeContainerEditPage: (ctx) =>
                 ContainerEditPageArgumentExtractor(),
+
             routeItemsOverview: (ctx) => ItemsPage(),
-            routeEditCustomValues: (ctx) =>
-                EditCustomValuesPageArgumentExtractor(),
-            routeItemEditPage: (ctx) => ItemEditPageArgumentExtractor()
+            routeItemEditPage: (ctx) => ItemEditPageArgumentExtractor(),
+
+            routeEditModuleDestinations: (ctx) => EditModuleDestinations(),
+            routeEditCurrentLocations: (ctx) => EditCurrentLocations(),
+            routeEditContainerTypes: (ctx) => EditContainerTypes(),
           }),
     );
   }
