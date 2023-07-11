@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'data_mocks.dart';
+import 'item.dart';
 import 'item_card.dart';
 import 'menu.dart';
+import 'store.dart';
 
 class ItemsPage extends StatelessWidget {
   @override
@@ -10,23 +12,18 @@ class ItemsPage extends StatelessWidget {
     return Scaffold(body: Column(children: [Menu(), Expanded(child: _grid())]));
   }
 
-  _grid() {
-    return GridView.count(
-      primary: false,
-      padding: const EdgeInsets.all(20),
-      crossAxisSpacing: 10,
-      childAspectRatio: 2,
-      mainAxisSpacing: 10,
-      crossAxisCount: 3,
-      children: <Widget>[
-        ItemCard(item_fire, item_fire.totalAmount),
-        ItemCard(item_chair, item_chair.totalAmount),
-        ItemCard(item_desk, item_desk.totalAmount),
-        ItemCard(item_generator, item_generator.totalAmount),
-        ItemCard(item_cooler, item_cooler.totalAmount),
-        ItemCard(item_para, item_para.totalAmount),
-        ItemCard(item_splint, item_splint.totalAmount)
-      ],
-    );
-  }
+  _grid() =>
+      Consumer<Store>(builder: (ctxt, store, _) => _buildGrid(store.items));
+
+  _buildGrid(List<Item> items) => GridView.count(
+        primary: false,
+        padding: const EdgeInsets.all(20),
+        crossAxisSpacing: 10,
+        childAspectRatio: 2,
+        mainAxisSpacing: 10,
+        crossAxisCount: 3,
+        children: <Widget>[
+          ...items.map((i) => ItemCard(i, i.totalAmount)).toList()
+        ],
+      );
 }

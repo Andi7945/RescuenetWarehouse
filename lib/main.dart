@@ -11,10 +11,10 @@ import 'package:rescuenet_warehouse/page/warehouse_overview_page.dart';
 import 'package:rescuenet_warehouse/provider/rn_items_provider.dart';
 import 'package:rescuenet_warehouse/provider/sequentialbuild_provider.dart';
 import 'package:rescuenet_warehouse/routes.dart';
+import 'package:rescuenet_warehouse/store.dart';
 import 'package:rescuenet_warehouse/utils/widget_tree_util.dart';
 import 'package:rescuenet_warehouse/widget/horizontal_drag_widget.dart';
 
-import 'data_mocks.dart';
 import 'edit_custom_values_page_argument_extractor.dart';
 
 Future<void> main() async {
@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => SequentialBuildProvider(),
         ),
+        ChangeNotifierProvider(create: (ctx) => Store()),
       ],
       child: MaterialApp(
           title: 'RescueNet',
@@ -49,8 +50,7 @@ class MyApp extends StatelessWidget {
             cardColor: const Color(0xFFF5F2E7),
             fontFamily: 'Quicksand',
           ),
-          home: ContainerOverviewPage(
-              [container_office, container_power, container_medical]),
+          home: ContainerOverviewPage(),
           routes: {
             // all of the routes in the app
             WareHouseOverviewPage.routeName: (ctx) =>
@@ -60,8 +60,7 @@ class MyApp extends StatelessWidget {
             LoginPage.routeName: (ctx) => const LoginPage(),
             WidgetTree.routeName: (ctx) => const WidgetTree(),
 
-            routeContainerOverview: (ctx) => ContainerOverviewPage(
-                [container_office, container_power, container_medical]),
+            routeContainerOverview: (ctx) => ContainerOverviewPage(),
             routeContainerWithContent: (ctx) => ContainerWithContentPage(),
             routeContainerEditPage: (ctx) =>
                 ContainerEditPageArgumentExtractor(),

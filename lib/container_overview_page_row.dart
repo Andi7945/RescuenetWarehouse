@@ -4,8 +4,11 @@ import 'package:rescuenet_warehouse/rescue_container.dart';
 import 'rescue_image.dart';
 
 class ContainerOverviewPageRow {
-  build(RescueContainer container, Function onClick) => TableRow(children: [
-        InkWell(onTap: () => onClick(container), child: RescueImage('edit_icon.png')),
+  TableRow build({required RescueContainer container, required Function onClick}) =>
+      TableRow(children: [
+        InkWell(
+            onTap: () => onClick(container),
+            child: RescueImage('edit_icon.png')),
         const SizedBox(width: 16),
         RescueImage(container.imagePath),
         const SizedBox(width: 16),
