@@ -184,7 +184,7 @@ class ContainerWithContentHeader extends StatelessWidget {
         children: [
           _text('Module Destination', 16),
           const SizedBox(height: 10),
-          _textBold('Office', 24),
+          _textBold(_container.moduleDestination ?? "", 24),
         ],
       ),
     );

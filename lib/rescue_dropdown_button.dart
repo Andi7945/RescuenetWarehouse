@@ -2,42 +2,31 @@ import 'package:flutter/material.dart';
 
 import 'container_type.dart';
 
-class RescueDropdownButton extends StatefulWidget {
+class RescueDropdownButton extends StatelessWidget {
   List<String> options;
-  String? initial;
+  ValueNotifier<String> valueNotifier;
 
-  RescueDropdownButton(this.options, [this.initial]);
+  RescueDropdownButton(this.options, this.valueNotifier);
 
-  RescueDropdownButton.custom(List<ContainerType> types, [String? initial])
-      : this(types.map((e) => e.name).toList(), initial);
-
-  @override
-  State createState() => _RescueDropdownButtonState();
-}
-
-class _RescueDropdownButtonState extends State<RescueDropdownButton> {
-  String? currentValue;
-
-  @override
-  void initState() {
-    super.initState();
-    currentValue = widget.initial ?? widget.options.first;
-  }
+  RescueDropdownButton.custom(
+      List<ContainerType> types, ValueNotifier<String> vn)
+      : this(
+            types.map((e) => e.name).toList(),
+            // (s) => onValueChanged(types.firstWhere((type) => type.name == s)),
+            vn);
 
   @override
   Widget build(BuildContext context) {
     return DropdownButton(
-      items: widget.options.map<DropdownMenuItem<String>>((String value) {
+      items: options.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
           child: Text(value),
         );
       }).toList(),
-      value: currentValue,
+      value: valueNotifier.value,
       onChanged: (String? value) {
-        setState(() {
-          currentValue = value;
-        });
+        valueNotifier.value = value!;
       },
     );
   }

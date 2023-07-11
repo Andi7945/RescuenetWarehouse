@@ -42,8 +42,10 @@ class Store extends ChangeNotifier {
 
   RescueContainer containerById(String id) => _containers[id]!;
 
-  updateContainer(RescueContainer container) =>
-      _containers[container.id] = container;
+  updateContainer(RescueContainer container) {
+    _containers[container.id] = container;
+    notifyListeners();
+  }
 
   UnmodifiableListView<ContainerType> get containerTypes =>
       UnmodifiableListView(_containerTypes);
