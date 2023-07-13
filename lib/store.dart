@@ -1,4 +1,5 @@
 import 'dart:collection';
+import "package:collection/collection.dart";
 
 import 'package:flutter/material.dart';
 import 'package:rescuenet_warehouse/container_options.dart';
@@ -54,6 +55,20 @@ class Store extends ChangeNotifier {
   UnmodifiableListView<String> get moduleDestinations =>
       UnmodifiableListView(_moduleDestinations);
 
+  Map<String, Set<String>> get moduleDestinationsWithUsage {
+    Map<String, Set<String>> grouped = _containers.values
+        .where((element) => element.moduleDestination != null)
+        .groupBy((p0) => p0.moduleDestination!)
+        .map((key, value) =>
+            MapEntry(key, value.map((e) => e.name).whereNotNull().toSet()));
+
+    Map<String, Set<String>> map = {
+      for (var e in _moduleDestinations) e: grouped[e] ?? Set()
+    };
+
+    return map;
+  }
+
   addDestination(String? text) {
     if (text != null && !_moduleDestinations.contains(text)) {
       _moduleDestinations.add(text);
@@ -81,4 +96,11 @@ class Store extends ChangeNotifier {
 
   ContainerOptions get containerOptions =>
       ContainerOptions(containerTypes, moduleDestinations, currentLocations);
+}
+
+extension Iterables<E> on Iterable<E> {
+  Map<K, List<E>> groupBy<K>(K Function(E) keyFunction) => fold(
+      <K, List<E>>{},
+      (Map<K, List<E>> map, E element) =>
+          map..putIfAbsent(keyFunction(element), () => <E>[]).add(element));
 }

@@ -28,19 +28,22 @@ class _EditModuleDestinationsState extends State<EditModuleDestinations> {
     return Padding(
         padding: const EdgeInsets.only(left: 40, right: 40),
         child: Consumer<Store>(
-            builder: (ctx, store, _) => _table(store.moduleDestinations)));
+            builder: (ctx, store, _) =>
+                _table(store.moduleDestinationsWithUsage)));
   }
 
-  Widget _table(List<String> moduleDestinations) => RescueTable(
-      const ["Name", ""], [..._rows(moduleDestinations), _addingRow()], {});
+  Widget _table(Map<String, Set<String>> moduleDestinations) => RescueTable(
+      const ["Name", "Usages", ""], [..._rows(moduleDestinations), _addingRow()], {});
 
-  List<TableRow> _rows(List<String> moduleDestinations) =>
-      moduleDestinations.map((e) => _buildRow(e)).toList();
+  List<TableRow> _rows(Map<String, Set<String>> moduleDestinations) =>
+      moduleDestinations.entries.map<TableRow>(_buildRow).toList();
 
-  TableRow _buildRow(String destination) => TableRow(children: [
+  TableRow _buildRow(MapEntry<String, Set<String>> destination) =>
+      TableRow(children: [
         Padding(
             padding: const EdgeInsets.only(left: 20),
-            child: _text(destination)),
+            child: _text(destination.key)),
+        RescueText.normal("Used in: ${destination.value.join(", ")}"),
         _btnDelete(destination)
       ]);
 
@@ -52,9 +55,9 @@ class _EditModuleDestinationsState extends State<EditModuleDestinations> {
       Provider.of<Store>(context, listen: false)
           .editDestination(oldDest, newDest);
 
-  _btnDelete(String text) => TextButton(
+  _btnDelete(MapEntry<String, Set<String>> text) => TextButton(
       onPressed: () {
-        Provider.of<Store>(context, listen: false).removeDestination(text);
+        Provider.of<Store>(context, listen: false).removeDestination(text.key);
       },
       child: const RescueText(24, '-', FontWeight.w700));
 
@@ -62,6 +65,7 @@ class _EditModuleDestinationsState extends State<EditModuleDestinations> {
         Padding(
             padding: const EdgeInsets.only(left: 20),
             child: _textField(_controller)),
+        Container(),
         _btnAdd()
       ]);
 
