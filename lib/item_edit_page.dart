@@ -22,35 +22,29 @@ class _ItemEditPageState extends State<ItemEditPage> {
   }
 
   _body() {
-    return Container(
-      width: 1664,
-      height: 1013,
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            child: Column(
+    return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ItemEditPageMetaData(),
+                ItemEditPageMetaData(widget.item),
                 const SizedBox(height: 10),
                 ItemEditPageAmounts(),
                 const SizedBox(height: 10),
                 ItemEditPageAdditionalInformation()
               ],
             ),
-          ),
-          const SizedBox(width: 10),
-          ItemEditPageNotes(widget.item),
-          const SizedBox(width: 10),
-        ],
-      ),
-    );
+            const SizedBox(width: 10),
+            ItemEditPageNotes(widget.item),
+            const SizedBox(width: 10),
+          ],
+        ));
   }
 }

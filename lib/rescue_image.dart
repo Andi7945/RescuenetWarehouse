@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 
 class RescueImage extends StatelessWidget {
   final String? _imagePath;
+  final double? width;
+  final double? height;
 
-  RescueImage(this._imagePath);
+  RescueImage(this._imagePath, [this.width, this.height]);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 90,
-      height: 80.89,
+      width: width ?? 90,
+      height: height ?? 80.89,
       decoration: _imageDecoration(),
     );
   }
