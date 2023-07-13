@@ -49,6 +49,14 @@ class Store extends ChangeNotifier {
     notifyListeners();
   }
 
+  updateItem(Item item) {
+    var idx = _items.indexWhere((element) => element.id == item.id);
+    if (idx != -1) {
+      _items.replaceRange(idx, idx + 1, [item]);
+      notifyListeners();
+    }
+  }
+
   UnmodifiableListView<ContainerType> get containerTypes =>
       UnmodifiableListView(_containerTypes);
 

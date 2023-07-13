@@ -24,7 +24,8 @@ class Item {
 
   Item(this.id, this.totalAmount);
 
-  Item.filled(this.id,
+  Item.filled(
+      this.id,
       this.name,
       this.imagePath,
       this.rescueNetId,
@@ -43,29 +44,45 @@ class Item {
       this.sku,
       this.signs);
 
-  Item.simple(this.id, this.name, this.weight, this.totalAmount, this.operationalStatus, this.imagePath);
-}
+  Item.simple(this.id, this.name, this.weight, this.totalAmount,
+      this.operationalStatus, this.imagePath);
 
-/**
- * id
-    name
-    rescue net id
-    image path
-    description
-    []expiring dates
-    operational status
-    manufacturer
-    brand
-    type
-    supplier
-    website
-    value
-    notes
-    []signs
-    UN Number
-    image path
-    instructions
-    remarks
-    sds path
-    []other documents
- */
+  Item.from(
+      {required Item item,
+      String? id,
+      String? name,
+      String? imagePath,
+      String? rescueNetId,
+      double? weight,
+      int? totalAmount,
+      String? description,
+      List<DateTime>? expiringDates,
+      OperationalStatus? operationalStatus,
+      String? manufacturer,
+      String? brand,
+      String? type,
+      String? supplier,
+      String? website,
+      String? value,
+      String? sku,
+      String? notes,
+      List<Sign>? signs})
+      : this.id = id ?? item.id,
+        this.name = name ?? item.name,
+        this.imagePath = imagePath ?? item.imagePath,
+        this.rescueNetId = rescueNetId ?? item.rescueNetId,
+        this.weight = weight ?? item.weight,
+        this.totalAmount = totalAmount ?? item.totalAmount,
+        this.description = description ?? item.description,
+        this.expiringDates = expiringDates ?? item.expiringDates,
+        this.operationalStatus = operationalStatus ?? item.operationalStatus,
+        this.manufacturer = manufacturer ?? item.manufacturer,
+        this.brand = brand ?? item.brand,
+        this.type = type ?? item.type,
+        this.supplier = supplier ?? item.supplier,
+        this.website = website ?? item.website,
+        this.value = value ?? item.value,
+        this.sku = sku ?? item.sku,
+        this.notes = notes ?? item.notes,
+        this.signs = signs ?? item.signs;
+}

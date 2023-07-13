@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/item.dart';
 import 'package:rescuenet_warehouse/rescue_image.dart';
+import 'package:rescuenet_warehouse/rescue_input.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
+
+import 'store.dart';
 
 class ItemEditPageMetaData extends StatelessWidget {
   final Item item;
@@ -10,10 +14,12 @@ class ItemEditPageMetaData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _body();
+    return _body(context);
   }
 
-  _body() {
+  _body(BuildContext context) {
+    var nameController = TextEditingController(text: item.name);
+    var rescueNetIdController = TextEditingController(text: item.rescueNetId);
     return Container(
       padding: const EdgeInsets.all(10),
       child: Row(
@@ -31,34 +37,36 @@ class ItemEditPageMetaData extends StatelessWidget {
               children: [
                 RescueText.slim('Name:'),
                 const SizedBox(height: 10),
-                Container(
-                  height: 40,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                  decoration: const ShapeDecoration(
-                    shape:
-                        RoundedRectangleBorder(side: BorderSide(width: 0.50)),
-                  ),
-                  child: RescueText.slim(item.name ?? ""),
-                ),
+                SizedBox(
+                    height: 40,
+                    width: 240,
+                    child: RescueInput(
+                        nameController,
+                        (changed) => _changeItem(context,
+                            Item.from(item: item, name: nameController.text)))),
                 const SizedBox(height: 10),
                 RescueText.slim('RescueNet ID:'),
                 const SizedBox(height: 10),
-                Container(
+                SizedBox(
                     height: 40,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    decoration: const ShapeDecoration(
-                      shape:
-                          RoundedRectangleBorder(side: BorderSide(width: 0.50)),
-                    ),
-                    child: RescueText.slim(item.rescueNetId ?? "")),
+                    width: 240,
+                    child: RescueInput(
+                        rescueNetIdController,
+                        (changed) => _changeItem(
+                            context,
+                            Item.from(
+                                item: item,
+                                rescueNetId: rescueNetIdController.text)))),
               ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  _changeItem(BuildContext context, Item updated) {
+    Provider.of<Store>(context, listen: false).updateItem(updated);
   }
 
   Widget _picture() {

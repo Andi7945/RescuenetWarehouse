@@ -38,7 +38,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
                 const SizedBox(height: 10),
                 ItemEditPageAmounts(),
                 const SizedBox(height: 10),
-                ItemEditPageAdditionalInformation()
+                ItemEditPageAdditionalInformation(widget.item)
               ],
             ),
             const SizedBox(width: 10),
