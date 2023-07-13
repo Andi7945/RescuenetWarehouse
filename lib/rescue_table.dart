@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'rescue_text.dart';
+
 class RescueTable extends StatelessWidget {
   final List<String> _headline;
   final List<TableRow> _rows;
@@ -27,20 +29,13 @@ class RescueTable extends StatelessWidget {
   }
 
   TableRow _buildHeadline() {
-    var row =
-        TableRow(children: _headline.map((e) => _headlineText(e)).toList());
+    var row = TableRow(children: _headline.map(headlineCell).toList());
     return _addPaddingBoxes(row);
   }
 
-  Widget _headlineText(String text) => Text(
-        text,
-        style: const TextStyle(
-          color: Colors.black,
-          fontSize: 32,
-          fontFamily: 'Inter',
-          fontWeight: FontWeight.w700,
-        ),
-      );
+  Widget headlineCell(e) => Padding(
+      padding: const EdgeInsets.only(top: 8, bottom: 8),
+      child: RescueText.headline(e));
 
   TableRow _addPaddingBoxes(TableRow row) {
     var children =
