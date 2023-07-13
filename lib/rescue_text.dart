@@ -11,6 +11,8 @@ class RescueText extends StatelessWidget {
 
   RescueText.normal(String text) : this(24, text);
 
+  RescueText.slim(String text) : this(16, text);
+
   @override
   Widget build(BuildContext context) => Text(
         text,
