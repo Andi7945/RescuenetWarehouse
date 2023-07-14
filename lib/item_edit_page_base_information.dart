@@ -7,10 +7,10 @@ import 'package:rescuenet_warehouse/rescue_text.dart';
 
 import 'store.dart';
 
-class ItemEditPageMetaData extends StatelessWidget {
+class ItemEditPageBaseInformation extends StatelessWidget {
   final Item item;
 
-  ItemEditPageMetaData(this.item);
+  ItemEditPageBaseInformation(this.item);
 
   @override
   Widget build(BuildContext context) {

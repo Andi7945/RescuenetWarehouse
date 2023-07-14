@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:rescuenet_warehouse/item_edit_page_additional_information.dart';
 import 'package:rescuenet_warehouse/item_edit_page_amounts.dart';
+import 'package:rescuenet_warehouse/item_edit_page_base_information.dart';
 import 'package:rescuenet_warehouse/item_edit_page_notes.dart';
 
 import 'item.dart';
-import 'item_edit_page_meta_data.dart';
 
 class ItemEditPage extends StatefulWidget {
   final Item item;
@@ -34,7 +34,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ItemEditPageMetaData(widget.item),
+                ItemEditPageBaseInformation(widget.item),
                 const SizedBox(height: 10),
                 ItemEditPageAmounts(),
                 const SizedBox(height: 10),
