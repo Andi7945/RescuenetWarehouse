@@ -89,11 +89,16 @@ class ItemCard extends StatelessWidget {
         ),
         const SizedBox(height: 7),
         Text(
-          '${_item.weight * _amount} kg',
+          '${_weight()} kg',
           style: _buildTextStyle(),
         ),
       ],
     );
+  }
+
+  _weight() {
+    var w = _item.weight * _amount;
+    return double.parse(w.toStringAsFixed(2));
   }
 
   Column amountWithLabel() {
