@@ -43,6 +43,13 @@ class Store extends ChangeNotifier {
             MapEntry(key, value.fold(0, (prev, curr) => prev + curr.count)));
   }
 
+  List<RescueContainer> otherContainerOptions(Item item) {
+    return containers
+        .where(
+            (element) => !assignments.any((a) => a.containerId == element.id))
+        .toList();
+  }
+
   final List<ContainerType> _containerTypes = [
     container_type_crate,
     container_type_backpack
@@ -64,6 +71,16 @@ class Store extends ChangeNotifier {
   updateContainer(RescueContainer container) {
     _containers[container.id] = container;
     notifyListeners();
+  }
+
+  addContainer(String containerName, Item item) {
+    var container =
+        containers.firstWhere((element) => element.name == containerName);
+    if (_assignments.none((element) =>
+        element.containerId == container.id && element.itemId == item.id)) {
+      _assignments.add(Assignment(item.id, container.id, 1));
+      notifyListeners();
+    }
   }
 
   updateItem(Item item) {

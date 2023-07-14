@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rescuenet_warehouse/item_edit_page_amounts_add_container.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
 
@@ -10,7 +11,8 @@ class ItemEditPageAmounts extends StatelessWidget {
   final Item item;
   final Map<RescueContainer, int> containerWithAssignments;
 
-  ItemEditPageAmounts(this.item, this.containerWithAssignments);
+  ItemEditPageAmounts(
+      this.item, this.containerWithAssignments);
 
   @override
   Widget build(BuildContext context) {
@@ -34,30 +36,34 @@ class ItemEditPageAmounts extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          RescueText.slim('Amounts: '),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            RescueText.slim('Amounts: '),
+            ItemEditPageAmountsAddContainer(item),
+          ]),
           ...containerWithAssignments.entries.map((e) => _container(
               e.key.name!,
               "${e.value}",
               () => _increase(context, e.key.id),
               () => _reduce(context, e.key.id))),
           _container('Remaining', "$remaining"),
-          Container(
-            width: 239,
-            decoration: const ShapeDecoration(
-              shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  width: 0.50,
-                  strokeAlign: BorderSide.strokeAlignCenter,
-                ),
-              ),
-            ),
-          ),
-          _container(
-              'Total',
-              "${item.totalAmount}",
-              () => _increaseTotal(context),
-              () => _reduceTotal(context)),
+          _separator(),
+          _container('Total', "${item.totalAmount}",
+              () => _increaseTotal(context), () => _reduceTotal(context)),
         ],
+      ),
+    );
+  }
+
+  Container _separator() {
+    return Container(
+      width: 239,
+      decoration: const ShapeDecoration(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            width: 0.50,
+            strokeAlign: BorderSide.strokeAlignCenter,
+          ),
+        ),
       ),
     );
   }
@@ -85,13 +91,13 @@ class ItemEditPageAmounts extends StatelessWidget {
                 children: [
                   if (fnReduce != null)
                     TextButton(
-                        onPressed: fnReduce, child: RescueText.normal("-")),
+                        onPressed: fnReduce, child: RescueText.slim("-")),
                   const SizedBox(width: 10),
                   RescueText.normal(count),
                   const SizedBox(width: 10),
                   if (fnIncrease != null)
                     TextButton(
-                        onPressed: fnIncrease, child: RescueText.normal("+")),
+                        onPressed: fnIncrease, child: RescueText.slim("+")),
                 ],
               ),
             ),
