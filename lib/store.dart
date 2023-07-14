@@ -6,6 +6,7 @@ import 'package:rescuenet_warehouse/container_options.dart';
 import 'package:rescuenet_warehouse/item.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 
+import 'assignment.dart';
 import 'container_type.dart';
 import 'data_mocks.dart';
 
@@ -25,6 +26,22 @@ class Store extends ChangeNotifier {
     container_power.id: container_power,
     container_medical.id: container_medical
   };
+
+  final List<Assignment> _assignments = [
+    assignment_item1_container1,
+    assignment_item1_container3
+  ];
+
+  UnmodifiableListView<Assignment> get assignments =>
+      UnmodifiableListView(_assignments);
+
+  Map<RescueContainer, int> assignmentsFor(Item item) {
+    return _assignments
+        .where((a) => a.itemId == item.id)
+        .groupBy((p0) => _containers[p0.containerId]!)
+        .map((key, value) =>
+            MapEntry(key, value.fold(0, (prev, curr) => prev + curr.count)));
+  }
 
   final List<ContainerType> _containerTypes = [
     container_type_crate,
@@ -104,6 +121,22 @@ class Store extends ChangeNotifier {
 
   ContainerOptions get containerOptions =>
       ContainerOptions(containerTypes, moduleDestinations, currentLocations);
+
+  increase(Item item, String containerId) {
+    _assignments
+        .firstWhere((element) =>
+            element.itemId == item.id && element.containerId == containerId)
+        .count += 1;
+    notifyListeners();
+  }
+
+  reduce(Item item, String containerId) {
+    _assignments
+        .firstWhere((element) =>
+            element.itemId == item.id && element.containerId == containerId)
+        .count -= 1;
+    notifyListeners();
+  }
 }
 
 extension Iterables<E> on Iterable<E> {

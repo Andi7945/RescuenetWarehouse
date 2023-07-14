@@ -13,7 +13,7 @@ var item_fire = Item.filled(
     "fire_ex.png",
     "41532",
     0.7,
-    2,
+    8,
     "Fire extinghuiser 500 ml",
     [
       DateTime(2022, 11, 30),
@@ -49,6 +49,7 @@ var item_splint = Item.simple(
     "7", "Splint", 0.6, 1, OperationalStatus.deployable, "sam_splint.png");
 
 var assignment_item1_container1 = Assignment("1", "1", 2);
+var assignment_item1_container3 = Assignment("1", "3", 4);
 
 var container_office = RescueContainer(
     "1",
