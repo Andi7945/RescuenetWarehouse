@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
             cardColor: const Color(0xFFF5F2E7),
             fontFamily: 'Quicksand',
           ),
-          home: ContainerOverviewPage(),
+          home: ContainerWithContentPage(),
           routes: {
             // all of the routes in the app
             WareHouseOverviewPage.routeName: (ctx) =>

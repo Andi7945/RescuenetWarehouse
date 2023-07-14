@@ -66,6 +66,15 @@ class Store extends ChangeNotifier {
   UnmodifiableListView<RescueContainer> get containers =>
       UnmodifiableListView(_containers.values);
 
+  Map<RescueContainer, Map<Item, int>> containerWithItems() {
+    return Map.fromEntries(_containers.values.map((cont) => MapEntry(
+        cont,
+        Map.fromEntries(_assignments
+            .where((assignment) => assignment.containerId == cont.id)
+            .map((assignment) =>
+                MapEntry(itemById(assignment.itemId), assignment.count))))));
+  }
+
   RescueContainer containerById(String id) => _containers[id]!;
 
   updateContainer(RescueContainer container) {
