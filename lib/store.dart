@@ -43,10 +43,12 @@ class Store extends ChangeNotifier {
             MapEntry(key, value.fold(0, (prev, curr) => prev + curr.count)));
   }
 
-  List<RescueContainer> otherContainerOptions(Item item) {
+  List<String> otherContainerOptions(Item item) {
     return containers
-        .where(
-            (element) => !assignments.any((a) => a.containerId == element.id))
+        .where((element) => !assignments
+            .any((a) => a.containerId == element.id && a.itemId == item.id))
+        .map((e) => e.name)
+        .whereNotNull()
         .toList();
   }
 
