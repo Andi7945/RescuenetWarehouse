@@ -58,9 +58,19 @@ var container_office = RescueContainer(
     "euro_crate.png",
     SequentialBuild.firstBuild,
     "Office",
-    "Office");
-var container_power = RescueContainer("2", "2 Power", container_type_crate,
-    "euro_crate.png", SequentialBuild.laterBuild, "Office", "Office");
+    "Office",
+    false,
+    false);
+var container_power = RescueContainer(
+    "2",
+    "2 Power",
+    container_type_crate,
+    "euro_crate.png",
+    SequentialBuild.laterBuild,
+    "Office",
+    "Office",
+    false,
+    false);
 var container_medical = RescueContainer(
     "3",
     "3 Medical backpack team 1",
@@ -68,7 +78,9 @@ var container_medical = RescueContainer(
     "medical_backpack.png",
     SequentialBuild.supplies,
     "Office",
-    "Office");
+    "Office",
+    false,
+    false);
 
 var container_type_crate = ContainerType("Euro crate", 1.7, "60x40x40");
 var container_type_backpack =

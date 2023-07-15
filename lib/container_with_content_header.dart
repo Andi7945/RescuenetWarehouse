@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/rescue_image.dart';
 import 'package:rescuenet_warehouse/sequential_build.dart';
 
@@ -7,6 +8,7 @@ import 'item.dart';
 import 'operational_status.dart';
 import 'sign.dart';
 import 'sign_row.dart';
+import 'store.dart';
 
 class ContainerWithContentHeader extends StatelessWidget {
   final RescueContainer _container;
@@ -16,10 +18,10 @@ class ContainerWithContentHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _body();
+    return _body(context);
   }
 
-  _body() {
+  _body(BuildContext context) {
     return Container(
       width: 420,
       clipBehavior: Clip.antiAlias,
@@ -31,54 +33,8 @@ class ContainerWithContentHeader extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            padding: const EdgeInsets.only(top: 4, left: 4, right: 4),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _checkboxWithLabel("Deploy"),
-                Flexible(
-                    child: _textBold(
-                        _container.name ?? "NO NAME", 24, TextAlign.center)),
-                _checkboxWithLabel("Ready")
-              ],
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.all(10),
-            clipBehavior: Clip.antiAlias,
-            decoration: const BoxDecoration(color: Colors.white),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                RescueImage(_container.imagePath),
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _text(_container.type.name, 16),
-                        const SizedBox(height: 10),
-                        _text(_container.type.measurements, 16),
-                      ],
-                    ),
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _text('Weight', 16),
-                    const SizedBox(height: 10),
-                    _text("${_sumWeight()} kg", 20)
-                  ],
-                ),
-              ],
-            ),
-          ),
+          _nameAndCheckboxes(context),
+          _basicInformation(),
           SignRow(_signs(), _nextExpired(), _operationalStatus()),
           Container(
             padding: const EdgeInsets.all(8),
@@ -90,6 +46,105 @@ class ContainerWithContentHeader extends StatelessWidget {
                 _moduleDestination(),
               ],
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container _nameAndCheckboxes(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 4, left: 4, right: 4),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          _checkboxWithLabel("Deploy", _deployNotifier(context)),
+          Flexible(
+              child: _textBold(
+                  _container.name ?? "NO NAME", 24, TextAlign.center)),
+          _checkboxWithLabel("Ready", _readyNotifier(context))
+        ],
+      ),
+    );
+  }
+
+  _deployNotifier(BuildContext context) {
+    var ifier = ValueNotifier(_container.toDeploy);
+    ifier.addListener(() {
+      var updated =
+          RescueContainer.from(container: _container, toDeploy: ifier.value);
+      Provider.of<Store>(context, listen: false).updateContainer(updated);
+    });
+    return ifier;
+  }
+
+  _readyNotifier(BuildContext context) {
+    var ifier = ValueNotifier(_container.isReady);
+    ifier.addListener(() {
+      var updated =
+          RescueContainer.from(container: _container, isReady: ifier.value);
+      Provider.of<Store>(context, listen: false).updateContainer(updated);
+    });
+    return ifier;
+  }
+
+  Widget _checkboxWithLabel(String text, ValueNotifier<bool> changer) {
+    return SizedBox(
+      width: 72,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          _text(text, 20, TextAlign.center),
+          _checkbox(changer),
+        ],
+      ),
+    );
+  }
+
+  _checkbox(ValueNotifier<bool> changer) {
+    return Transform.scale(
+      scale: 2.5,
+      child: Checkbox(
+        value: changer.value,
+        onChanged: (bool? value) {
+          changer.value = value ?? false;
+        },
+      ),
+    );
+  }
+
+  Container _basicInformation() {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      clipBehavior: Clip.antiAlias,
+      decoration: const BoxDecoration(color: Colors.white),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          RescueImage(_container.imagePath),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _text(_container.type.name, 16),
+                  const SizedBox(height: 10),
+                  _text(_container.type.measurements, 16),
+                ],
+              ),
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _text('Weight', 16),
+              const SizedBox(height: 10),
+              _text("${_sumWeight()} kg", 20)
+            ],
           ),
         ],
       ),
@@ -124,32 +179,6 @@ class ContainerWithContentHeader extends StatelessWidget {
           fontWeight: FontWeight.w700,
         ),
       );
-
-  Widget _checkboxWithLabel(String text) {
-    return SizedBox(
-      width: 72,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          _text(text, 20, TextAlign.center),
-          _check1(false),
-        ],
-      ),
-    );
-  }
-
-  _check1(bool checked) {
-    return Transform.scale(
-      scale: 2.5,
-      child: Checkbox(
-        value: checked,
-        onChanged: (bool? value) {
-          // rnItem.checked = value!;
-          // rnItemsProvider.updateRNItemInFB(rnItem);
-        },
-      ),
-    );
-  }
 
   List<Sign> _signs() {
     return _items.keys.expand((i) => i.signs).toList();

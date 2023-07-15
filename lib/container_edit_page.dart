@@ -108,7 +108,10 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
         SequentialBuild.values.firstWhere(
             (element) => element.name == _sequentialBuildController.value),
         _moduleDestinationController.value,
-        _currentLocationController.value);
+        _currentLocationController.value,
+      widget._container.value.isReady,
+      widget._container.value.toDeploy,
+    );
     widget._container.value = changedContainer;
   }
 }

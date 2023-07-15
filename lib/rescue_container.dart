@@ -10,7 +10,38 @@ class RescueContainer {
   SequentialBuild sequentialBuild;
   String? moduleDestination;
   String? currentLocation;
+  bool isReady;
+  bool toDeploy;
 
-  RescueContainer(this.id, this.name, this.type, this.imagePath,
-      this.sequentialBuild, this.moduleDestination, this.currentLocation);
+  RescueContainer(
+      this.id,
+      this.name,
+      this.type,
+      this.imagePath,
+      this.sequentialBuild,
+      this.moduleDestination,
+      this.currentLocation,
+      this.isReady,
+      this.toDeploy);
+
+  RescueContainer.from({
+    required RescueContainer container,
+    String? name,
+    ContainerType? type,
+    String? imagePath,
+    SequentialBuild? sequentialBuild,
+    String? moduleDestination,
+    String? currentLocation,
+    bool? isReady,
+    bool? toDeploy,
+  })  : this.id = container.id,
+        this.name = name ?? container.name,
+        this.type = type ?? container.type,
+        this.imagePath = imagePath ?? container.imagePath,
+        this.sequentialBuild = sequentialBuild ?? container.sequentialBuild,
+        this.moduleDestination =
+            moduleDestination ?? container.moduleDestination,
+        this.currentLocation = currentLocation ?? container.currentLocation,
+        this.isReady = isReady ?? container.isReady,
+        this.toDeploy = toDeploy ?? container.toDeploy;
 }
