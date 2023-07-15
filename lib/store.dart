@@ -77,6 +77,26 @@ class Store extends ChangeNotifier {
                 MapEntry(itemById(assignment.itemId), assignment.count))))));
   }
 
+  Map<Item, int> itemsWithoutContainer() {
+    var assignedItems = _assignments.groupBy((p0) => p0.itemId).map(
+        (key, value) => MapEntry(
+            itemById(key),
+            value.fold(
+                0, (previousValue, element) => previousValue + element.count)));
+
+    var map = Map.fromEntries(_items.map((e) {
+      var assigned = assignedItems[e];
+      if (assigned == null) {
+        return MapEntry(e, e.totalAmount);
+      }
+      return MapEntry(e, e.totalAmount - assigned);
+    }));
+
+    map.removeWhere((key, value) => value == 0);
+
+    return map;
+  }
+
   RescueContainer containerById(String id) => _containers[id]!;
 
   updateContainer(RescueContainer container) {

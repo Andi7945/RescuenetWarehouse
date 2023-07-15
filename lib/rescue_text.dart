@@ -9,7 +9,7 @@ class RescueText extends StatelessWidget {
 
   RescueText.headline(String text) : this(32, text, FontWeight.w700);
 
-  RescueText.normal(String text) : this(24, text);
+  RescueText.normal(String text, [FontWeight? weight]) : this(24, text, weight);
 
   RescueText.slim(String text) : this(16, text);
 
