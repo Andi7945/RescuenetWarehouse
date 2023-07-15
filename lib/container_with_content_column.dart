@@ -13,11 +13,13 @@ class ContainerWithContentColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ContainerWithContentHeader(_container, _items),
-        ..._items.entries.map((e) => ItemCard(e.key, e.value))
-      ],
-    );
+    return Padding(
+        padding: const EdgeInsets.only(left: 4, right: 4),
+        child: Column(
+          children: [
+            ContainerWithContentHeader(_container, _items),
+            ..._items.entries.map((e) => ItemCard(e.key, e.value))
+          ],
+        ));
   }
 }
