@@ -7,8 +7,13 @@ class RescueInput extends StatelessWidget {
 
   RescueInput(this.controller, [this.onChange, this.hintText]);
 
+  RescueInput.plain(String initial,
+      [ValueChanged<String>? onChange, String? hintText])
+      : this(TextEditingController(text: initial), onChange, hintText);
+
   @override
-  Widget build(BuildContext context) => TextField(
+  Widget build(BuildContext context) =>
+      TextField(
         style: const TextStyle(fontSize: 24),
         decoration: InputDecoration(
             hintText: hintText ?? "Insert new destination here",

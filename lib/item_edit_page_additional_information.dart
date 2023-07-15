@@ -4,6 +4,7 @@ import 'package:rescuenet_warehouse/item.dart';
 import 'package:rescuenet_warehouse/item_edit_page_additional_information_exp_dates.dart';
 import 'package:rescuenet_warehouse/operational_status.dart';
 import 'package:rescuenet_warehouse/rescue_dropdown_button.dart';
+import 'package:rescuenet_warehouse/rescue_input.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
 
 import 'store.dart';
@@ -20,30 +21,57 @@ class ItemEditPageAdditionalInformation extends StatelessWidget {
 
   _body(BuildContext context) {
     return Column(children: [
-      _entry('Description:', item.description),
+      _entry(
+          'Description:',
+          _updateItem(context, (s) => Item.from(item: item, description: s)),
+          item.description),
       const SizedBox(height: 10),
       ItemEditPageAdditionalInformationExpDates(item),
       const SizedBox(height: 10),
       _operationalStatusEntry(
           context, 'Operational status:', item.operationalStatus.name),
       const SizedBox(height: 10),
-      _entry('Manufacturer:', item.manufacturer),
+      _entry(
+          'Manufacturer:',
+          _updateItem(context, (s) => Item.from(item: item, manufacturer: s)),
+          item.manufacturer),
       const SizedBox(height: 10),
-      _entry('Brand:', item.brand),
+      _entry(
+          'Brand:',
+          _updateItem(context, (s) => Item.from(item: item, brand: s)),
+          item.brand),
       const SizedBox(height: 10),
-      _entry('Type:', item.type),
+      _entry(
+          'Type:',
+          _updateItem(context, (s) => Item.from(item: item, type: s)),
+          item.type),
       const SizedBox(height: 10),
-      _entry('Supplier:', item.supplier),
+      _entry(
+          'Supplier:',
+          _updateItem(context, (s) => Item.from(item: item, supplier: s)),
+          item.supplier),
       const SizedBox(height: 10),
-      _entry('SKU:', item.sku),
+      _entry('SKU:',
+          _updateItem(context, (s) => Item.from(item: item, sku: s)), item.sku),
       const SizedBox(height: 10),
-      _entry('Website:', item.website),
+      _entry(
+          'Website:',
+          _updateItem(context, (s) => Item.from(item: item, website: s)),
+          item.website),
       const SizedBox(height: 10),
-      _entry('Value:', item.value),
+      _entry(
+          'Value:',
+          _updateItem(context, (s) => Item.from(item: item, value: s)),
+          item.value)
     ]);
   }
 
-  Widget _entry(String label, String? value) => SizedBox(
+  Function(String) _updateItem(
+          BuildContext context, Item Function(String) updateFn) =>
+      (s) => Provider.of<Store>(context, listen: false).updateItem(updateFn(s));
+
+  Widget _entry(String label, Function(String) updateFn, String? initial) =>
+      SizedBox(
         width: 562,
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -52,13 +80,9 @@ class ItemEditPageAdditionalInformation extends StatelessWidget {
           children: [
             RescueText.slim(label),
             const SizedBox(width: 10),
-            Container(
+            SizedBox(
               width: 400,
-              padding: const EdgeInsets.all(10),
-              decoration: const ShapeDecoration(
-                shape: RoundedRectangleBorder(side: BorderSide(width: 0.50)),
-              ),
-              child: RescueText.slim(value ?? ""),
+              child: RescueInput.plain(initial ?? "", updateFn),
             ),
           ],
         ),
