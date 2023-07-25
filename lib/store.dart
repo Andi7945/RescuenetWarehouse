@@ -27,10 +27,10 @@ class Store extends ChangeNotifier {
     container_medical.id: container_medical
   };
 
-  final Map<RescueContainer, bool> _containerVisibility = {
-    container_office: true,
-    container_power: true,
-    container_medical: true
+  final Map<String, bool> _containerVisibility = {
+    container_office.id: true,
+    container_power.id: true,
+    container_medical.id: true
   };
 
   final List<Assignment> _assignments = [
@@ -75,10 +75,11 @@ class Store extends ChangeNotifier {
       UnmodifiableListView(_containers.values);
 
   Map<RescueContainer, bool> containerWithVisible() =>
-      UnmodifiableMapView(_containerVisibility);
+      Map.from(_containerVisibility
+          .map((key, value) => MapEntry(_containers[key]!, value)));
 
   changeContainerVisibility(RescueContainer c) {
-    _containerVisibility[c] = !(_containerVisibility[c] ?? false);
+    _containerVisibility[c.id] = !(_containerVisibility[c] ?? false);
     notifyListeners();
   }
 

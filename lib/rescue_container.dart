@@ -2,7 +2,9 @@ import 'package:rescuenet_warehouse/sequential_build.dart';
 
 import 'container_type.dart';
 
-class RescueContainer {
+import 'package:equatable/equatable.dart';
+
+class RescueContainer extends Equatable {
   String id;
   String? name;
   ContainerType type;
@@ -44,4 +46,17 @@ class RescueContainer {
         this.currentLocation = currentLocation ?? container.currentLocation,
         this.isReady = isReady ?? container.isReady,
         this.toDeploy = toDeploy ?? container.toDeploy;
+
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        type,
+        imagePath,
+        sequentialBuild,
+        moduleDestination,
+        currentLocation,
+        isReady,
+        toDeploy
+      ];
 }

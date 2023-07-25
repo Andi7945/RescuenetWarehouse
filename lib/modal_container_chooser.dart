@@ -16,22 +16,18 @@ class ModalContainerChooser extends StatefulWidget {
 
 class _ModalContainerChooserState extends State<ModalContainerChooser> {
   @override
-  Widget build(BuildContext context) {
-    print("Rebuild");
-    return SimpleDialog(
-        title: RescueText.normal("Choose container"),
-        children: [
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            TextButton(
-                onPressed: () => _changeAll(true),
-                child: RescueText.normal("show all")),
-            TextButton(
-                onPressed: () => _changeAll(false),
-                child: RescueText.normal("show none"))
-          ]),
-          ...widget.containers.entries.map((entry) => _option(entry)).toList()
-        ]);
-  }
+  Widget build(BuildContext context) =>
+      SimpleDialog(title: RescueText.normal("Choose container"), children: [
+        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          TextButton(
+              onPressed: () => _changeAll(true),
+              child: RescueText.normal("show all")),
+          TextButton(
+              onPressed: () => _changeAll(false),
+              child: RescueText.normal("show none"))
+        ]),
+        ...widget.containers.entries.map((entry) => _option(entry)).toList()
+      ]);
 
   _changeAll(bool shown) {
     setState(() {
@@ -41,18 +37,18 @@ class _ModalContainerChooserState extends State<ModalContainerChooser> {
   }
 
   Widget _option(MapEntry<RescueContainer, bool> entry) => SimpleDialogOption(
-        onPressed: () {
-          setState(() {
-            Provider.of<Store>(context, listen: false)
-                .changeContainerVisibility(entry.key);
-          });
-        },
+        onPressed: () => _change(entry.key),
         child: ListTile(
           leading: Checkbox(
             value: entry.value,
-            onChanged: (ev) {},
+            onChanged: (ev) => _change(entry.key),
           ),
           title: RescueText.normal(entry.key.name ?? ""),
         ),
       );
+
+  _change(RescueContainer container) => setState(() {
+        Provider.of<Store>(context, listen: false)
+            .changeContainerVisibility(container);
+      });
 }

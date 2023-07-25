@@ -44,7 +44,7 @@ dependencies:
   firebase_storage: ^11.0.16
   path_provider: ^2.0.14
   image_picker: ^0.8.7
-
+  equatable: ^2.0.0
   qr_flutter: ^4.0.0
 
 dev_dependencies:
