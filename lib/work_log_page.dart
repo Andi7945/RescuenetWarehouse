@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
 import 'package:rescuenet_warehouse/store.dart';
+import 'package:rescuenet_warehouse/work_log_page_entry.dart';
 
-import 'log_entry.dart';
 import 'log_entry_expanded.dart';
 import 'menu.dart';
 import 'menu_option.dart';
@@ -26,16 +26,10 @@ class WorkLogPage extends StatelessWidget {
             .toList(),
       );
 
-  Widget _date(MapEntry<String, List<LogEntryExpanded>> date) => Column(
-        children: [
-          RescueText.headline(date.key),
-          ...date.value.map(_entry).toList(),
-        ],
-      );
+  Widget _date(MapEntry<String, List<LogEntryExpanded>> date) =>
+      Column(children: [RescueText.headline(date.key), _table(date.value)]);
 
-  Widget _entry(LogEntryExpanded entry) {
-    return ListTile(
-        title: Text(
-            "${entry.item.name} -> ${entry.container?.name}: ${entry.count}"));
-  }
+  Widget _table(List<LogEntryExpanded> entries) => Table(
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      children: entries.map(asTableRow).toList());
 }
