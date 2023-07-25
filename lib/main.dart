@@ -17,6 +17,7 @@ import 'package:rescuenet_warehouse/routes.dart';
 import 'package:rescuenet_warehouse/store.dart';
 import 'package:rescuenet_warehouse/utils/widget_tree_util.dart';
 import 'package:rescuenet_warehouse/widget/horizontal_drag_widget.dart';
+import 'package:rescuenet_warehouse/work_log_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -72,6 +73,8 @@ class MyApp extends StatelessWidget {
             routeEditModuleDestinations: (ctx) => EditModuleDestinations(),
             routeEditCurrentLocations: (ctx) => EditCurrentLocations(),
             routeEditContainerTypes: (ctx) => EditContainerTypes(),
+
+            routeWorkLog: (_) => WorkLogPage(),
           }),
     );
   }

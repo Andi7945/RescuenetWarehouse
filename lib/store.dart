@@ -1,5 +1,6 @@
 import 'dart:collection';
 import "package:collection/collection.dart";
+import 'package:equatable/equatable.dart';
 
 import 'package:flutter/material.dart';
 import 'package:rescuenet_warehouse/container_options.dart';
@@ -9,6 +10,11 @@ import 'package:rescuenet_warehouse/rescue_container.dart';
 import 'assignment.dart';
 import 'container_type.dart';
 import 'data_mocks.dart';
+import 'log_entry.dart';
+
+import 'package:intl/intl.dart';
+
+import 'log_entry_expanded.dart';
 
 class Store extends ChangeNotifier {
   final List<Item> _items = [
@@ -40,6 +46,35 @@ class Store extends ChangeNotifier {
 
   UnmodifiableListView<Assignment> get assignments =>
       UnmodifiableListView(_assignments);
+
+  final List<LogEntry> _logEntries = [];
+
+  final DateFormat formatter = DateFormat('MMM d, yyyy');
+
+  UnmodifiableMapView<String, List<LogEntryExpanded>> get logEntries {
+    var groupedEntries = groupBy(_logEntries, (p0) => formatter.format(p0.date))
+        .map((key, value) => MapEntry(key, _expandAndSum(value)));
+    return UnmodifiableMapView(groupedEntries);
+  }
+
+  List<LogEntryExpanded> _expandAndSum(List<LogEntry> entries) {
+    return entries
+        .groupBy((p0) =>
+            ItemAndContainer(p0.assignment.itemId, p0.assignment.containerId))
+        .map((key, value) => MapEntry(
+            key,
+            value.fold(
+                0,
+                (previousValue, element) =>
+                    previousValue + element.assignment.count)))
+        .entries
+        .map(_expandEntry)
+        .toList();
+  }
+
+  LogEntryExpanded _expandEntry(MapEntry<ItemAndContainer, int> e) =>
+      LogEntryExpanded(
+          itemById(e.key.itemId), _containers[e.key.containerId], e.value);
 
   Map<RescueContainer, int> assignmentsFor(Item item) {
     return _assignments
@@ -74,12 +109,11 @@ class Store extends ChangeNotifier {
   UnmodifiableListView<RescueContainer> get containers =>
       UnmodifiableListView(_containers.values);
 
-  Map<RescueContainer, bool> containerWithVisible() =>
-      Map.from(_containerVisibility
-          .map((key, value) => MapEntry(_containers[key]!, value)));
+  Map<RescueContainer, bool> containerWithVisible() => _containerVisibility
+      .map((key, value) => MapEntry(_containers[key]!, value));
 
   changeContainerVisibility(RescueContainer c) {
-    _containerVisibility[c.id] = !(_containerVisibility[c] ?? false);
+    _containerVisibility.update(c.id, (value) => !value);
     notifyListeners();
   }
 
@@ -129,7 +163,9 @@ class Store extends ChangeNotifier {
         containers.firstWhere((element) => element.name == containerName);
     if (_assignments.none((element) =>
         element.containerId == container.id && element.itemId == item.id)) {
-      _assignments.add(Assignment(item.id, container.id, 1));
+      var assignment = Assignment(item.id, container.id, 1);
+      _assignments.add(assignment);
+      _logEntries.add(LogEntry(assignment, DateTime.now()));
       notifyListeners();
     }
   }
@@ -195,6 +231,8 @@ class Store extends ChangeNotifier {
         .firstWhere((element) =>
             element.itemId == item.id && element.containerId == containerId)
         .count += 1;
+    _logEntries
+        .add(LogEntry(Assignment(item.id, containerId, 1), DateTime.now()));
     notifyListeners();
   }
 
@@ -203,6 +241,8 @@ class Store extends ChangeNotifier {
         .firstWhere((element) =>
             element.itemId == item.id && element.containerId == containerId)
         .count -= 1;
+    _logEntries
+        .add(LogEntry(Assignment(item.id, containerId, -1), DateTime.now()));
     notifyListeners();
   }
 }
@@ -212,4 +252,14 @@ extension Iterables<E> on Iterable<E> {
       <K, List<E>>{},
       (Map<K, List<E>> map, E element) =>
           map..putIfAbsent(keyFunction(element), () => <E>[]).add(element));
+}
+
+class ItemAndContainer extends Equatable {
+  final String itemId;
+  final String containerId;
+
+  ItemAndContainer(this.itemId, this.containerId);
+
+  @override
+  List<Object> get props => [itemId, containerId];
 }

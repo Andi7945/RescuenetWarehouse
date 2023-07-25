@@ -23,8 +23,7 @@ class ContainerWithContentPage extends StatelessWidget {
         TextButton(
             onPressed: () {
               showDialog(
-                  context: ctxt,
-                  builder: (ctx) => ModalContainerChooser(containers));
+                  context: ctxt, builder: (ctx) => ModalContainerChooser());
             },
             child: RescueText.normal(
                 "Choose container (${visible.length} / ${containers.length})")),

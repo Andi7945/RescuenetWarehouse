@@ -5,50 +5,48 @@ import 'package:rescuenet_warehouse/rescue_text.dart';
 import 'rescue_container.dart';
 import 'store.dart';
 
-class ModalContainerChooser extends StatefulWidget {
-  final Map<RescueContainer, bool> containers;
-
-  const ModalContainerChooser(this.containers, {super.key});
-
-  @override
-  State createState() => _ModalContainerChooserState();
-}
-
-class _ModalContainerChooserState extends State<ModalContainerChooser> {
+class ModalContainerChooser extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
-      SimpleDialog(title: RescueText.normal("Choose container"), children: [
-        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          TextButton(
-              onPressed: () => _changeAll(true),
-              child: RescueText.normal("show all")),
-          TextButton(
-              onPressed: () => _changeAll(false),
-              child: RescueText.normal("show none"))
-        ]),
-        ...widget.containers.entries.map((entry) => _option(entry)).toList()
+      Consumer<Store>(builder: (ctxt, store, _) {
+        return SimpleDialog(
+            title: RescueText.normal("Choose container"),
+            children: [_buttonRow(context), ..._options(store, context)]);
+      });
+
+  Row _buttonRow(BuildContext context) =>
+      Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        TextButton(
+            onPressed: () => _changeAll(context, true),
+            child: RescueText.normal("show all")),
+        TextButton(
+            onPressed: () => _changeAll(context, false),
+            child: RescueText.normal("show none"))
       ]);
 
-  _changeAll(bool shown) {
-    setState(() {
+  _changeAll(BuildContext context, bool shown) =>
       Provider.of<Store>(context, listen: false)
           .changeAllContainerVisibility(shown);
-    });
-  }
 
-  Widget _option(MapEntry<RescueContainer, bool> entry) => SimpleDialogOption(
-        onPressed: () => _change(entry.key),
+  List<Widget> _options(Store store, BuildContext context) => store
+      .containerWithVisible()
+      .entries
+      .map((entry) => _option(context, entry))
+      .toList();
+
+  Widget _option(BuildContext context, MapEntry<RescueContainer, bool> entry) =>
+      SimpleDialogOption(
+        onPressed: () => _change(context, entry.key),
         child: ListTile(
           leading: Checkbox(
             value: entry.value,
-            onChanged: (ev) => _change(entry.key),
+            onChanged: (ev) => _change(context, entry.key),
           ),
           title: RescueText.normal(entry.key.name ?? ""),
         ),
       );
 
-  _change(RescueContainer container) => setState(() {
-        Provider.of<Store>(context, listen: false)
-            .changeContainerVisibility(container);
-      });
+  _change(BuildContext context, RescueContainer container) =>
+      Provider.of<Store>(context, listen: false)
+          .changeContainerVisibility(container);
 }
