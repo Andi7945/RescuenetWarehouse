@@ -16,17 +16,9 @@ class ContainerWithContentPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(body: Consumer<Store>(builder: (ctxt, store, _) {
       var containers = store.containerWithVisible();
-      var visible =
-          containers.entries.where((element) => element.value).toList();
       return Column(children: [
         Menu(MenuOption.containerWithContent),
-        TextButton(
-            onPressed: () {
-              showDialog(
-                  context: ctxt, builder: (ctx) => ModalContainerChooser());
-            },
-            child: RescueText.normal(
-                "Choose container (${visible.length} / ${containers.length})")),
+        _btnChooseContainer(ctxt, containers),
         _body(
             store.itemsWithoutContainer(),
             Map.fromEntries(store
@@ -35,6 +27,17 @@ class ContainerWithContentPage extends StatelessWidget {
                 .where((element) => containers[element.key] ?? false)))
       ]);
     }));
+  }
+
+  TextButton _btnChooseContainer(
+      BuildContext ctxt, Map<RescueContainer, bool> containers) {
+    var visible = containers.entries.where((element) => element.value).toList();
+    return TextButton(
+        onPressed: () {
+          showDialog(context: ctxt, builder: (ctx) => ModalContainerChooser());
+        },
+        child: RescueText.normal(
+            "Choose container (${visible.length} / ${containers.length})"));
   }
 
   Widget _body(Map<Item, int> itemsWithoutContainer,

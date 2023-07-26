@@ -8,17 +8,43 @@ import 'package:rescuenet_warehouse/work_log_page_entry.dart';
 import 'log_entry_expanded.dart';
 import 'menu.dart';
 import 'menu_option.dart';
+import 'modal_container_chooser.dart';
 
 class WorkLogPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-            children: [Menu(MenuOption.workLog), Expanded(child: _body())]));
+        body: Consumer<Store>(
+            builder: (ctxt, store, _) => Column(children: [
+                  Menu(MenuOption.workLog),
+                  _btnChooseContainer(ctxt, store.containerWithVisible()),
+                  Expanded(
+                      child: _page(_visibleEntries(
+                          store.logEntries,
+                          store
+                              .containerWithVisible()
+                              .map((key, value) => MapEntry(key.id, value)))))
+                ])));
   }
 
-  _body() =>
-      Consumer<Store>(builder: (ctxt, store, _) => _page(store.logEntries));
+  TextButton _btnChooseContainer(
+      BuildContext ctxt, Map<RescueContainer, bool> containers) {
+    var visible = containers.entries.where((element) => element.value).toList();
+    return TextButton(
+        onPressed: () {
+          showDialog(context: ctxt, builder: (ctx) => ModalContainerChooser());
+        },
+        child: RescueText.normal(
+            "Choose container (${visible.length} / ${containers.length})"));
+  }
+
+  Map<String, List<LogEntryExpanded>> _visibleEntries(
+          Map<String, List<LogEntryExpanded>> log,
+          Map<String, bool> containers) =>
+      log.mapValues((p0) => p0
+          .where((e) =>
+              e.container != null && (containers[e.container?.id] ?? false))
+          .toList());
 
   _page(Map<String, List<LogEntryExpanded>> log) => ListView(
         shrinkWrap: true,
