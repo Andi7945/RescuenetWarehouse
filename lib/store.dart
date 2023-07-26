@@ -53,7 +53,7 @@ class Store extends ChangeNotifier {
 
   UnmodifiableMapView<String, List<LogEntryExpanded>> get logEntries {
     var groupedEntries = groupBy(_logEntries, (p0) => formatter.format(p0.date))
-        .map((key, value) => MapEntry(key, _expandAndSum(value)));
+        .mapValues(_expandAndSum);
     return UnmodifiableMapView(groupedEntries);
   }
 
@@ -61,12 +61,10 @@ class Store extends ChangeNotifier {
     return entries
         .groupBy((p0) =>
             ItemAndContainer(p0.assignment.itemId, p0.assignment.containerId))
-        .map((key, value) => MapEntry(
-            key,
-            value.fold(
-                0,
-                (previousValue, element) =>
-                    previousValue + element.assignment.count)))
+        .mapValues((value) => value.fold(
+            0,
+            (previousValue, element) =>
+                previousValue + element.assignment.count))
         .entries
         .map(_expandEntry)
         .toList();
@@ -80,8 +78,7 @@ class Store extends ChangeNotifier {
     return _assignments
         .where((a) => a.itemId == item.id)
         .groupBy((p0) => _containers[p0.containerId]!)
-        .map((key, value) =>
-            MapEntry(key, value.fold(0, (prev, curr) => prev + curr.count)));
+        .mapValues((value) => value.fold(0, (prev, curr) => prev + curr.count));
   }
 
   List<String> otherContainerOptions(Item item) {
@@ -188,8 +185,7 @@ class Store extends ChangeNotifier {
     Map<String, Set<String>> grouped = _containers.values
         .where((element) => element.moduleDestination != null)
         .groupBy((p0) => p0.moduleDestination!)
-        .map((key, value) =>
-            MapEntry(key, value.map((e) => e.name).whereNotNull().toSet()));
+        .mapValues((value) => value.map((e) => e.name).whereNotNull().toSet());
 
     Map<String, Set<String>> map = {
       for (var e in _moduleDestinations) e: grouped[e] ?? Set()
@@ -252,6 +248,11 @@ extension Iterables<E> on Iterable<E> {
       <K, List<E>>{},
       (Map<K, List<E>> map, E element) =>
           map..putIfAbsent(keyFunction(element), () => <E>[]).add(element));
+}
+
+extension MapValues<E, F> on Map<E, F> {
+  Map<E, Z> mapValues<Z>(Z Function(F) valueFunction) =>
+      map((key, value) => MapEntry(key, valueFunction(value)));
 }
 
 class ItemAndContainer extends Equatable {
