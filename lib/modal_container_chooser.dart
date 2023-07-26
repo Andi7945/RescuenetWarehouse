@@ -11,7 +11,8 @@ class ModalContainerChooser extends StatelessWidget {
       Consumer<Store>(builder: (ctxt, store, _) {
         return SimpleDialog(
             title: RescueText.normal("Choose container"),
-            children: [_buttonRow(context), ..._options(store, context)]);
+            insetPadding: EdgeInsets.zero,
+            children: [_buttonRow(context), _table(store, context)]);
       });
 
   Row _buttonRow(BuildContext context) =>
@@ -28,25 +29,66 @@ class ModalContainerChooser extends StatelessWidget {
       Provider.of<Store>(context, listen: false)
           .changeAllContainerVisibility(shown);
 
-  List<Widget> _options(Store store, BuildContext context) => store
+  Widget _table(Store store, BuildContext context) {
+    return Table(columnWidths: const {
+      0: FixedColumnWidth(100),
+      1: FixedColumnWidth(700),
+      2: FixedColumnWidth(100),
+      3: FixedColumnWidth(100)
+    }, children: [
+      _header(),
+      ..._options(store, context)
+    ]);
+  }
+
+  TableRow _header() => TableRow(children: [
+        Align(child: RescueText.normal("shown", FontWeight.w700)),
+        RescueText.normal("name", FontWeight.w700),
+        Align(child: RescueText.normal("deploy", FontWeight.w700)),
+        Align(child: RescueText.normal("ready", FontWeight.w700)),
+      ]);
+
+  List<TableRow> _options(Store store, BuildContext context) => store
       .containerWithVisible()
       .entries
       .map((entry) => _option(context, entry))
       .toList();
 
-  Widget _option(BuildContext context, MapEntry<RescueContainer, bool> entry) =>
-      SimpleDialogOption(
-        onPressed: () => _change(context, entry.key),
-        child: ListTile(
-          leading: Checkbox(
-            value: entry.value,
-            onChanged: (ev) => _change(context, entry.key),
-          ),
-          title: RescueText.normal(entry.key.name ?? ""),
-        ),
-      );
+  TableRow _option(
+      BuildContext context, MapEntry<RescueContainer, bool> entry) {
+    s(Widget w) => _selectable(w, context, entry);
 
-  _change(BuildContext context, RescueContainer container) =>
-      Provider.of<Store>(context, listen: false)
-          .changeContainerVisibility(container);
+    return TableRow(children: [
+      s(_scaledCheckbox(entry.value, context, entry)),
+      s(RescueText.normal(entry.key.name ?? "")),
+      s(_scaledCheckbox(entry.key.toDeploy, context, entry)),
+      s(_scaledCheckbox(entry.key.isReady, context, entry)),
+    ]);
+  }
+
+  _scaledCheckbox(bool value, BuildContext context,
+          MapEntry<RescueContainer, bool> entry) =>
+      Transform.scale(
+          scale: 2,
+          child: Checkbox(
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              value: value,
+              onChanged: (_) => _change(context, entry.key)));
+
+  Widget _selectable(
+      Widget w, BuildContext context, MapEntry<RescueContainer, bool> entry) {
+    return InkWell(
+      onTap: () => _change(context, entry.key),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
+        child: SizedBox(
+            height: 40,
+            child: Align(alignment: Alignment.centerLeft, child: w)),
+      ),
+    );
+  }
 }
+
+_change(BuildContext context, RescueContainer container) =>
+    Provider.of<Store>(context, listen: false)
+        .changeContainerVisibility(container);
