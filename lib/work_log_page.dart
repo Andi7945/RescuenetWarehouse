@@ -66,9 +66,11 @@ class WorkLogPage extends StatelessWidget {
             _tables(date.value)
           ])));
 
-  Widget _tables(List<LogEntryExpanded> entries) => Column(
-      children:
-          entries.groupBy((p0) => p0.container).entries.map(_table).toList());
+  Widget _tables(List<LogEntryExpanded> entries) {
+    var x = entries.groupBy((p0) => p0.container).entries.toList();
+    x.sort((a, b) => (a.key?.id ?? "").compareTo(b.key?.id ?? ""));
+    return Column(children: x.map(_table).toList());
+  }
 
   Widget _table(MapEntry<RescueContainer?, List<LogEntryExpanded>> entry) =>
       Padding(

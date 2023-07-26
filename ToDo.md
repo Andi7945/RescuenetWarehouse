@@ -11,4 +11,6 @@
 * Make adding new items possible
 * Make adding new containers possible
 
+* Remove item with size 0 on leave item page
+
 Galaxy Tab A8 SMX200

@@ -11,8 +11,7 @@ class ItemEditPageAmounts extends StatelessWidget {
   final Item item;
   final Map<RescueContainer, int> containerWithAssignments;
 
-  ItemEditPageAmounts(
-      this.item, this.containerWithAssignments);
+  ItemEditPageAmounts(this.item, this.containerWithAssignments);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +39,7 @@ class ItemEditPageAmounts extends StatelessWidget {
             RescueText.slim('Amounts: '),
             ItemEditPageAmountsAddContainer(item),
           ]),
-          ...containerWithAssignments.entries.map((e) => _container(
+          ..._sortedEntries().map((e) => _container(
               e.key.name!,
               "${e.value}",
               () => _increase(context, e.key.id),
@@ -52,6 +51,12 @@ class ItemEditPageAmounts extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  List<MapEntry<RescueContainer, int>> _sortedEntries() {
+    var x = containerWithAssignments.entries.toList();
+    x.sort((a, b) => a.key.id.compareTo(b.key.id));
+    return x;
   }
 
   Container _separator() {

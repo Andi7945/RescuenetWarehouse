@@ -11,7 +11,6 @@ class ModalContainerChooser extends StatelessWidget {
       Consumer<Store>(builder: (ctxt, store, _) {
         return SimpleDialog(
             title: RescueText.normal("Choose container"),
-            insetPadding: EdgeInsets.zero,
             children: [_buttonRow(context), _table(store, context)]);
       });
 
@@ -48,11 +47,11 @@ class ModalContainerChooser extends StatelessWidget {
         Align(child: RescueText.normal("ready", FontWeight.w700)),
       ]);
 
-  List<TableRow> _options(Store store, BuildContext context) => store
-      .containerWithVisible()
-      .entries
-      .map((entry) => _option(context, entry))
-      .toList();
+  List<TableRow> _options(Store store, BuildContext context) {
+    var entries = store.containerWithVisible().entries.toList();
+    entries.sort((a, b) => a.key.id.compareTo(b.key.id));
+    return entries.map((entry) => _option(context, entry)).toList();
+  }
 
   TableRow _option(
       BuildContext context, MapEntry<RescueContainer, bool> entry) {
@@ -87,8 +86,8 @@ class ModalContainerChooser extends StatelessWidget {
       ),
     );
   }
-}
 
-_change(BuildContext context, RescueContainer container) =>
-    Provider.of<Store>(context, listen: false)
-        .changeContainerVisibility(container);
+  _change(BuildContext context, RescueContainer container) =>
+      Provider.of<Store>(context, listen: false)
+          .changeContainerVisibility(container);
+}
