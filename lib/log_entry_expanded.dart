@@ -5,6 +5,7 @@ class LogEntryExpanded {
   Item item;
   RescueContainer? container;
   int count;
+  String user;
 
-  LogEntryExpanded(this.item, this.container, this.count);
+  LogEntryExpanded(this.item, this.container, this.count, this.user);
 }

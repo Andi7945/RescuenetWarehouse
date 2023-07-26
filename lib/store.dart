@@ -15,6 +15,7 @@ import 'log_entry.dart';
 import 'package:intl/intl.dart';
 
 import 'log_entry_expanded.dart';
+import 'utils/auth_util.dart';
 
 class Store extends ChangeNotifier {
   final List<Item> _items = [
@@ -62,17 +63,20 @@ class Store extends ChangeNotifier {
         .groupBy((p0) =>
             ItemAndContainer(p0.assignment.itemId, p0.assignment.containerId))
         .mapValues((value) => value.fold(
-            0,
-            (previousValue, element) =>
-                previousValue + element.assignment.count))
+            CountAndUser("", 0),
+            (previousValue, element) => CountAndUser(
+                {previousValue.user, element.user}
+                    .whereNot((element) => element == "")
+                    .join(","),
+                previousValue.count + element.assignment.count)))
         .entries
         .map(_expandEntry)
         .toList();
   }
 
-  LogEntryExpanded _expandEntry(MapEntry<ItemAndContainer, int> e) =>
-      LogEntryExpanded(
-          itemById(e.key.itemId), _containers[e.key.containerId], e.value);
+  LogEntryExpanded _expandEntry(MapEntry<ItemAndContainer, CountAndUser> e) =>
+      LogEntryExpanded(itemById(e.key.itemId), _containers[e.key.containerId],
+          e.value.count, e.value.user);
 
   Map<RescueContainer, int> assignmentsFor(Item item) {
     return _assignments
@@ -160,9 +164,9 @@ class Store extends ChangeNotifier {
         containers.firstWhere((element) => element.name == containerName);
     if (_assignments.none((element) =>
         element.containerId == container.id && element.itemId == item.id)) {
-      var assignment = Assignment(item.id, container.id, 1);
-      _assignments.add(assignment);
-      _logEntries.add(LogEntry(assignment, DateTime.now()));
+      _assignments.add(Assignment(item.id, container.id, 1));
+      _logEntries.add(LogEntry(Assignment(item.id, container.id, 1),
+          DateTime.now(), Auth().currentUser?.displayName ?? "NO_NAME"));
       notifyListeners();
     }
   }
@@ -227,8 +231,8 @@ class Store extends ChangeNotifier {
         .firstWhere((element) =>
             element.itemId == item.id && element.containerId == containerId)
         .count += 1;
-    _logEntries
-        .add(LogEntry(Assignment(item.id, containerId, 1), DateTime.now()));
+    _logEntries.add(LogEntry(Assignment(item.id, containerId, 1),
+        DateTime.now(), Auth().currentUser?.displayName ?? "NO_NAME"));
     notifyListeners();
   }
 
@@ -237,8 +241,8 @@ class Store extends ChangeNotifier {
         .firstWhere((element) =>
             element.itemId == item.id && element.containerId == containerId)
         .count -= 1;
-    _logEntries
-        .add(LogEntry(Assignment(item.id, containerId, -1), DateTime.now()));
+    _logEntries.add(LogEntry(Assignment(item.id, containerId, -1),
+        DateTime.now(), Auth().currentUser?.displayName ?? "NO_NAME"));
     notifyListeners();
   }
 }
@@ -263,4 +267,14 @@ class ItemAndContainer extends Equatable {
 
   @override
   List<Object> get props => [itemId, containerId];
+}
+
+class CountAndUser extends Equatable {
+  final String user;
+  final int count;
+
+  CountAndUser(this.user, this.count);
+
+  @override
+  List<Object> get props => [user, count];
 }

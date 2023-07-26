@@ -20,7 +20,7 @@ TableRow item(LogEntryExpanded entry) => TableRow(
       children: [
         RescueText.normal(entry.item.name ?? ""),
         RescueText.normal("${entry.count}"),
-        RescueText.normal("Heinz")
+        RescueText.normal(entry.user)
       ],
     );
 
