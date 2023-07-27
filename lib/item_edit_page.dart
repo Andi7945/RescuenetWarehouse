@@ -4,6 +4,7 @@ import 'package:rescuenet_warehouse/item_edit_page_additional_information.dart';
 import 'package:rescuenet_warehouse/item_edit_page_amounts.dart';
 import 'package:rescuenet_warehouse/item_edit_page_base_information.dart';
 import 'package:rescuenet_warehouse/item_edit_page_notes.dart';
+import 'package:rescuenet_warehouse/item_edit_page_signs.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 
 import 'item.dart';
@@ -47,7 +48,10 @@ class _ItemEditPageState extends State<ItemEditPage> {
               ],
             ),
             const SizedBox(width: 10),
-            ItemEditPageNotes(widget.item),
+            Column(children: [
+              ItemEditPageNotes(widget.item),
+              ItemEditPageSigns(widget.item)
+            ]),
             const SizedBox(width: 10),
           ],
         ));

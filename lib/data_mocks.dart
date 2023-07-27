@@ -30,9 +30,9 @@ var item_fire = Item.filled(
     "",
     "324278",
     [
-      Sign("DGcompressedgasses2.png"),
-      Sign("coldchain.png"),
-      Sign("DGcompressedgasses.png")
+      Sign("1", "DGcompressedgasses2.png"),
+      Sign("2", "coldchain.png"),
+      Sign("3", "DGcompressedgasses.png")
     ]);
 
 var item_chair = Item.simple("2", "Folding Chair", 0.8, 13,

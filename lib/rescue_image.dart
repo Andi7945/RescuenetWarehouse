@@ -4,8 +4,9 @@ class RescueImage extends StatelessWidget {
   final String? _imagePath;
   final double? width;
   final double? height;
+  final Widget? child;
 
-  RescueImage(this._imagePath, [this.width, this.height]);
+  RescueImage(this._imagePath, [this.width, this.height, this.child]);
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +14,7 @@ class RescueImage extends StatelessWidget {
       width: width ?? 90,
       height: height ?? 80.89,
       decoration: _imageDecoration(),
+      child: child,
     );
   }
 

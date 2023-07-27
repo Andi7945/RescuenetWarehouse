@@ -9,20 +9,21 @@ class RescueInput extends StatelessWidget {
 
   RescueInput.plain(String initial,
       [ValueChanged<String>? onChange, String? hintText])
-      : this(TextEditingController(text: initial), onChange, hintText);
+      : this(controllerWithListener(initial, onChange), onChange, hintText);
 
   @override
-  Widget build(BuildContext context) =>
-      TextField(
-        style: const TextStyle(fontSize: 24),
-        decoration: InputDecoration(
-            hintText: hintText ?? "Insert new destination here",
-            hintStyle: const TextStyle(fontSize: 24)),
-        controller: controller,
-        onTapOutside: (_) {
-          if (onChange != null) {
-            onChange!(controller.text);
-          }
-        },
-      );
+  Widget build(BuildContext context) => TextField(
+      style: const TextStyle(fontSize: 24),
+      decoration: InputDecoration(
+          hintText: hintText ?? "Insert new value here",
+          hintStyle: const TextStyle(fontSize: 24)),
+      controller: controller);
+}
+
+controllerWithListener(String initial, ValueChanged<String>? onChange) {
+  var controller = TextEditingController(text: initial);
+  controller.addListener(() {
+    if (onChange != null) onChange(controller.text);
+  });
+  return controller;
 }

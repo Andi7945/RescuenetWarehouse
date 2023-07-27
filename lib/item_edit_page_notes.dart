@@ -17,7 +17,7 @@ class ItemEditPageNotes extends StatelessWidget {
       width: 562,
       padding: const EdgeInsets.all(10),
       clipBehavior: Clip.antiAlias,
-      decoration: ShapeDecoration(
+      decoration: const ShapeDecoration(
         shape: RoundedRectangleBorder(side: BorderSide(width: 0.50)),
       ),
       child: Column(
