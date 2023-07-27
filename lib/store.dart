@@ -231,6 +231,7 @@ class Store extends ChangeNotifier {
         .firstWhere((element) =>
             element.itemId == item.id && element.containerId == containerId)
         .count += 1;
+    _assignments.removeWhere((element) => element.count == 0);
     _logEntries.add(LogEntry(Assignment(item.id, containerId, 1),
         DateTime.now(), Auth().currentUser?.displayName ?? "NO_NAME"));
     notifyListeners();
@@ -241,6 +242,7 @@ class Store extends ChangeNotifier {
         .firstWhere((element) =>
             element.itemId == item.id && element.containerId == containerId)
         .count -= 1;
+    _assignments.removeWhere((element) => element.count == 0);
     _logEntries.add(LogEntry(Assignment(item.id, containerId, -1),
         DateTime.now(), Auth().currentUser?.displayName ?? "NO_NAME"));
     notifyListeners();
