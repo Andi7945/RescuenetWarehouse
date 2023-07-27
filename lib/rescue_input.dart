@@ -1,29 +1,35 @@
 import 'package:flutter/material.dart';
 
-class RescueInput extends StatelessWidget {
-  TextEditingController controller;
+class RescueInput extends StatefulWidget {
   ValueChanged<String>? onChange;
+  String? initial;
   String? hintText;
 
-  RescueInput(this.controller, [this.onChange, this.hintText]);
+  RescueInput(this.initial, this.onChange, [this.hintText]);
 
-  RescueInput.plain(String initial,
-      [ValueChanged<String>? onChange, String? hintText])
-      : this(controllerWithListener(initial, onChange), onChange, hintText);
+  @override
+  State createState() => _RescueInputState();
+}
+
+class _RescueInputState extends State<RescueInput> {
+  TextEditingController controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    controller.text = widget.initial ?? "";
+    if (widget.onChange != null) {
+      controller.addListener(() {
+        widget.onChange!(controller.text);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) => TextField(
       style: const TextStyle(fontSize: 24),
       decoration: InputDecoration(
-          hintText: hintText ?? "Insert new value here",
+          hintText: widget.hintText ?? "Insert new value here",
           hintStyle: const TextStyle(fontSize: 24)),
       controller: controller);
-}
-
-controllerWithListener(String initial, ValueChanged<String>? onChange) {
-  var controller = TextEditingController(text: initial);
-  controller.addListener(() {
-    if (onChange != null) onChange(controller.text);
-  });
-  return controller;
 }

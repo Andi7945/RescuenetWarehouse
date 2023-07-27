@@ -42,7 +42,7 @@ class ItemEditPageBaseInformation extends StatelessWidget {
                 SizedBox(
                     height: 40,
                     width: 240,
-                    child: RescueInput.plain(
+                    child: RescueInput(
                         item.name ?? "",
                         (changed) => _changeItem(
                             context, Item.from(item: item, name: changed)))),
@@ -52,7 +52,7 @@ class ItemEditPageBaseInformation extends StatelessWidget {
                 SizedBox(
                     height: 40,
                     width: 240,
-                    child: RescueInput.plain(
+                    child: RescueInput(
                         item.rescueNetId ?? "",
                         (changed) => _changeItem(context,
                             Item.from(item: item, rescueNetId: changed)))),

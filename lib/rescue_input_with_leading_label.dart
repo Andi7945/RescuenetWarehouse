@@ -23,7 +23,7 @@ class RescueInputWithLeadingLabel extends StatelessWidget {
           const SizedBox(width: 10),
           SizedBox(
             width: 400,
-            child: RescueInput.plain(initial ?? "", updateFn),
+            child: RescueInput(initial ?? "", updateFn),
           ),
         ],
       ),

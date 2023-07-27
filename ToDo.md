@@ -12,12 +12,15 @@
 * Make adding new containers possible
 
 * Remove item with size 0 on leave item page
+* Add button to add sign
+* Add button to remove sign
 
 Galaxy Tab A8 SMX200
 
-
-### 27. Jul Session 07:15 - 09:00
+## Change log
+### 27. Jul
+#### Session 07:15 - 09:00
 Add Labels to Items
 
-### Session 11:00 - 13:00
+#### Session 11:00 - 13:00
 Add Firebase to new structure
