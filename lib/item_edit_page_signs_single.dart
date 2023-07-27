@@ -16,6 +16,8 @@ class ItemEditPageSignsSingle extends StatelessWidget {
   Widget build(BuildContext context) => _sign(context);
 
   Widget _sign(BuildContext context) {
+    padded(Widget w) =>
+        Padding(padding: const EdgeInsets.symmetric(horizontal: 8), child: w);
     return Container(
         padding: const EdgeInsets.all(4),
         clipBehavior: Clip.antiAlias,
@@ -29,22 +31,26 @@ class ItemEditPageSignsSingle extends StatelessWidget {
               RescuePickableImage(sign.imagePath ?? ""),
               _unNumber()
             ]),
-            RescueInputWithLeadingLabel(
+            padded(RescueInputWithLeadingLabel(
                 "Instructions",
                 (p0) => fnUpdated(Sign.from(sign: sign, instructions: p0)),
-                sign.instructions),
-            RescueInputWithLeadingLabel(
+                sign.instructions,
+                546)),
+            padded(RescueInputWithLeadingLabel(
                 "Remarks",
                 (p0) => fnUpdated(Sign.from(sign: sign, remarks: p0)),
-                sign.remarks),
-            RescueInputWithLeadingLabel(
+                sign.remarks,
+                546)),
+            padded(RescueInputWithLeadingLabel(
                 "SDS",
                 (p0) => fnUpdated(Sign.from(sign: sign, sdsPath: p0)),
-                sign.sdsPath),
-            RescueInputWithLeadingLabel(
+                sign.sdsPath,
+                546)),
+            padded(RescueInputWithLeadingLabel(
                 "Other documents",
                 (p0) => fnUpdated(Sign.from(sign: sign, otherDocuments: [p0])),
-                sign.otherDocuments.join()),
+                sign.otherDocuments.join(),
+                546)),
           ],
         ));
   }

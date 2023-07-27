@@ -7,20 +7,25 @@ import 'package:rescuenet_warehouse/rescue_text.dart';
 import 'item.dart';
 import 'store.dart';
 
-class ItemEditPageAmounts extends StatelessWidget {
+class ItemEditPageAmounts extends StatefulWidget {
   final Item item;
   final Map<RescueContainer, int> containerWithAssignments;
 
   ItemEditPageAmounts(this.item, this.containerWithAssignments);
 
   @override
+  State createState() => _ItemEditPageAmountsState();
+}
+
+class _ItemEditPageAmountsState extends State<ItemEditPageAmounts> {
+  @override
   Widget build(BuildContext context) {
     return _body(context);
   }
 
   _body(BuildContext context) {
-    var remaining = item.totalAmount -
-        containerWithAssignments.values
+    var remaining = widget.item.totalAmount -
+        widget.containerWithAssignments.values
             .fold(0, (previousValue, element) => previousValue + element);
     return Container(
       width: 562,
@@ -37,7 +42,7 @@ class ItemEditPageAmounts extends StatelessWidget {
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             RescueText.slim('Amounts: '),
-            ItemEditPageAmountsAddContainer(item),
+            ItemEditPageAmountsAddContainer(widget.item),
           ]),
           ..._sortedEntries().map((e) => _container(
               e.key.name!,
@@ -46,7 +51,7 @@ class ItemEditPageAmounts extends StatelessWidget {
               () => _reduce(context, e.key.id))),
           _container('Remaining', "$remaining"),
           _separator(),
-          _container('Total', "${item.totalAmount}",
+          _container('Total', "${widget.item.totalAmount}",
               () => _increaseTotal(context), () => _reduceTotal(context)),
         ],
       ),
@@ -54,7 +59,7 @@ class ItemEditPageAmounts extends StatelessWidget {
   }
 
   List<MapEntry<RescueContainer, int>> _sortedEntries() {
-    var x = containerWithAssignments.entries.toList();
+    var x = widget.containerWithAssignments.entries.toList();
     x.sort((a, b) => a.key.id.compareTo(b.key.id));
     return x;
   }
@@ -111,20 +116,20 @@ class ItemEditPageAmounts extends StatelessWidget {
   }
 
   _reduce(BuildContext context, String containerId) {
-    Provider.of<Store>(context, listen: false).reduce(item, containerId);
+    Provider.of<Store>(context, listen: false).reduce(widget.item, containerId);
   }
 
   _increase(BuildContext context, String containerId) {
-    Provider.of<Store>(context, listen: false).increase(item, containerId);
+    Provider.of<Store>(context, listen: false).increase(widget.item, containerId);
   }
 
   _reduceTotal(BuildContext context) {
     Provider.of<Store>(context, listen: false)
-        .updateItem(Item.from(item: item, totalAmount: item.totalAmount - 1));
+        .updateItem(Item.from(item: widget.item, totalAmount: widget.item.totalAmount - 1));
   }
 
   _increaseTotal(BuildContext context) {
     Provider.of<Store>(context, listen: false)
-        .updateItem(Item.from(item: item, totalAmount: item.totalAmount + 1));
+        .updateItem(Item.from(item: widget.item, totalAmount: widget.item.totalAmount + 1));
   }
 }

@@ -7,13 +7,15 @@ class RescueInputWithLeadingLabel extends StatelessWidget {
   final String label;
   final String? initial;
   final Function(String) updateFn;
+  final double? width;
 
-  RescueInputWithLeadingLabel(this.label, this.updateFn, this.initial);
+  RescueInputWithLeadingLabel(this.label, this.updateFn, this.initial,
+      [this.width]);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 562,
+      width: width ?? 562,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -22,11 +24,15 @@ class RescueInputWithLeadingLabel extends StatelessWidget {
           RescueText.slim(label),
           const SizedBox(width: 10),
           SizedBox(
-            width: 400,
+            width: _width(),
             child: RescueInput(initial ?? "", updateFn),
           ),
         ],
       ),
     );
+  }
+
+  double _width() {
+    return (width ?? 562) - 162;
   }
 }
