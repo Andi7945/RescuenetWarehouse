@@ -28,7 +28,8 @@ class ItemEditPageSignsSingle extends StatelessWidget {
         child: Column(
           children: [
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              RescuePickableImage(sign.imagePath ?? ""),
+              RescuePickableImage(sign.imagePath ?? "",
+                  (path) => fnUpdated(Sign.from(sign: sign, imagePath: path))),
               _unNumber(),
               _removeButton()
             ]),

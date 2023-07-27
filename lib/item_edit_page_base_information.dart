@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/item.dart';
-import 'package:rescuenet_warehouse/rescue_image.dart';
 import 'package:rescuenet_warehouse/rescue_input.dart';
 import 'package:rescuenet_warehouse/rescue_pickable_image.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
@@ -29,7 +28,10 @@ class ItemEditPageBaseInformation extends StatelessWidget {
           SizedBox(
               width: 202,
               height: 195,
-              child: RescuePickableImage(item.imagePath)),
+              child: RescuePickableImage(
+                  item.imagePath,
+                  (path) => _changeItem(
+                      context, Item.from(item: item, imagePath: path)))),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
             child: Column(

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class RescueImage extends StatelessWidget {
@@ -25,9 +27,16 @@ class RescueImage extends StatelessWidget {
     return BoxDecoration(
       image: DecorationImage(
         // image: NetworkImage(_item.imagePath),
-        image: AssetImage("assets/images/$_imagePath"),
+        image: _image(),
         fit: BoxFit.fill,
       ),
     );
+  }
+
+  _image() {
+    if (_imagePath?.endsWith(".jpg") ?? false) {
+      return FileImage(File(_imagePath!));
+    }
+    return AssetImage("assets/images/$_imagePath");
   }
 }
