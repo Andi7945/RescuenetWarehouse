@@ -18,8 +18,12 @@ class ItemEditPageAmounts extends StatefulWidget {
 }
 
 class _ItemEditPageAmountsState extends State<ItemEditPageAmounts> {
+  // Saved so when decreasing to zero the entries are only removed after page reload
+  Set<RescueContainer> knownContainers = {};
+
   @override
   Widget build(BuildContext context) {
+    knownContainers.addAll(widget.containerWithAssignments.keys);
     return _body(context);
   }
 
@@ -42,13 +46,11 @@ class _ItemEditPageAmountsState extends State<ItemEditPageAmounts> {
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             RescueText.slim('Amounts: '),
-            ItemEditPageAmountsAddContainer(widget.item),
+            ItemEditPageAmountsAddContainer(
+                widget.item, knownContainers.map((e) => e.name).toSet()),
           ]),
-          ..._sortedEntries().map((e) => _container(
-              e.key.name!,
-              "${e.value}",
-              () => _increase(context, e.key.id),
-              () => _reduce(context, e.key.id))),
+          ..._sortedEntries().map((e) => _container(e.key.name, "${e.value}",
+              () => _increase(context, e.key), () => _reduce(context, e.key))),
           _container('Remaining', "$remaining"),
           _separator(),
           _container('Total', "${widget.item.totalAmount}",
@@ -59,7 +61,9 @@ class _ItemEditPageAmountsState extends State<ItemEditPageAmounts> {
   }
 
   List<MapEntry<RescueContainer, int>> _sortedEntries() {
-    var x = widget.containerWithAssignments.entries.toList();
+    var x = knownContainers
+        .map((e) => MapEntry(e, widget.containerWithAssignments[e] ?? 0))
+        .toList();
     x.sort((a, b) => a.key.id.compareTo(b.key.id));
     return x;
   }
@@ -115,21 +119,30 @@ class _ItemEditPageAmountsState extends State<ItemEditPageAmounts> {
         ));
   }
 
-  _reduce(BuildContext context, String containerId) {
-    Provider.of<Store>(context, listen: false).reduce(widget.item, containerId);
+  _reduce(BuildContext context, RescueContainer container) {
+    if (widget.containerWithAssignments.containsKey(container)) {
+      Provider.of<Store>(context, listen: false)
+          .reduce(widget.item, container.id);
+    }
   }
 
-  _increase(BuildContext context, String containerId) {
-    Provider.of<Store>(context, listen: false).increase(widget.item, containerId);
+  _increase(BuildContext context, RescueContainer container) {
+    if (widget.containerWithAssignments.containsKey(container)) {
+      Provider.of<Store>(context, listen: false)
+          .increase(widget.item, container.id);
+    } else {
+      Provider.of<Store>(context, listen: false)
+          .addContainer(container.name, widget.item);
+    }
   }
 
   _reduceTotal(BuildContext context) {
-    Provider.of<Store>(context, listen: false)
-        .updateItem(Item.from(item: widget.item, totalAmount: widget.item.totalAmount - 1));
+    Provider.of<Store>(context, listen: false).updateItem(
+        Item.from(item: widget.item, totalAmount: widget.item.totalAmount - 1));
   }
 
   _increaseTotal(BuildContext context) {
-    Provider.of<Store>(context, listen: false)
-        .updateItem(Item.from(item: widget.item, totalAmount: widget.item.totalAmount + 1));
+    Provider.of<Store>(context, listen: false).updateItem(
+        Item.from(item: widget.item, totalAmount: widget.item.totalAmount + 1));
   }
 }

@@ -8,8 +8,9 @@ import 'store.dart';
 
 class ItemEditPageAmountsAddContainer extends StatefulWidget {
   final Item item;
+  final Set<String> knownNames;
 
-  ItemEditPageAmountsAddContainer(this.item);
+  ItemEditPageAmountsAddContainer(this.item, this.knownNames);
 
   @override
   State createState() => _ItemEditPageAmountsAddContainerState();
@@ -20,9 +21,15 @@ class _ItemEditPageAmountsAddContainerState
   ValueNotifier<String> valueNotifier = ValueNotifier("");
 
   @override
-  Widget build(BuildContext context) => Consumer<Store>(
-      builder: (ctx, store, _) =>
-          _body(store.otherContainerOptions(widget.item)));
+  Widget build(BuildContext context) =>
+      Consumer<Store>(builder: (ctx, store, _) => _body(_options(store)));
+
+  List<String> _options(Store store) {
+    var availableOptions = [...store.otherContainerOptions(widget.item)];
+    availableOptions
+        .removeWhere((element) => widget.knownNames.contains(element));
+    return availableOptions;
+  }
 
   @override
   void initState() {
