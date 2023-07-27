@@ -11,9 +11,7 @@
 * Make adding new items possible
 * Make adding new containers possible
 
-* Remove item with size 0 on leave item page
-* Add button to add sign
-* Add button to remove sign
+* Change picture picker
 
 Galaxy Tab A8 SMX200
 
@@ -24,3 +22,5 @@ Add Labels to Items
 
 #### Session 11:00 - 13:00
 * Remove item with size 0 on leave item page
+* Add button to add sign
+* Add button to remove sign

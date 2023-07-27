@@ -18,12 +18,15 @@ import 'package:rescuenet_warehouse/store.dart';
 import 'package:rescuenet_warehouse/utils/widget_tree_util.dart';
 import 'package:rescuenet_warehouse/widget/horizontal_drag_widget.dart';
 import 'package:rescuenet_warehouse/work_log_page.dart';
+import 'package:uuid/uuid.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
 }
+
+var uuid = const Uuid();
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

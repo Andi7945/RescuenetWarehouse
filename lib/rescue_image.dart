@@ -19,7 +19,7 @@ class RescueImage extends StatelessWidget {
   }
 
   _imageDecoration() {
-    if (_imagePath == null) {
+    if (_imagePath == null || _imagePath == "") {
       return;
     }
     return BoxDecoration(

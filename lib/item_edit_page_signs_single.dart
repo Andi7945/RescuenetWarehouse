@@ -7,7 +7,7 @@ import 'rescue_input.dart';
 import 'sign.dart';
 
 class ItemEditPageSignsSingle extends StatelessWidget {
-  final Function(Sign) fnUpdated;
+  final Function(Sign?) fnUpdated;
   final Sign sign;
 
   ItemEditPageSignsSingle(this.sign, this.fnUpdated);
@@ -27,9 +27,10 @@ class ItemEditPageSignsSingle extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Row(children: [
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               RescuePickableImage(sign.imagePath ?? ""),
-              _unNumber()
+              _unNumber(),
+              _removeButton()
             ]),
             padded(RescueInputWithLeadingLabel(
                 "Instructions",
@@ -68,4 +69,10 @@ class ItemEditPageSignsSingle extends StatelessWidget {
                 (changed) =>
                     fnUpdated(Sign.from(sign: sign, unNumber: changed)))),
       ]));
+
+  Widget _removeButton() {
+    return InkWell(
+        onTap: () => fnUpdated(null),
+        child: Center(child: RescueText.headline('-')));
+  }
 }

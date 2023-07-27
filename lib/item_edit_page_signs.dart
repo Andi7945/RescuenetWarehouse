@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/item_edit_page_signs_single.dart';
 
 import 'item.dart';
+import 'main.dart';
+import 'rescue_text.dart';
 import 'sign.dart';
 import 'store.dart';
 
@@ -24,19 +26,35 @@ class ItemEditPageSigns extends StatelessWidget {
   }
 
   Widget _body(BuildContext context) {
-    return ListView(
-        shrinkWrap: true,
-        children: item.signs
-            .map((s) =>
-                ItemEditPageSignsSingle(s, (u) => _changeItem(context, u)))
-            .toList());
+    return Column(children: [_addButton(context), ..._signs(context)]);
   }
 
-  _changeItem(BuildContext context, Sign updated) {
+  _addButton(BuildContext context) {
+    return TextButton(
+        onPressed: () => _changeItem(context, "", Sign(uuid.v4(), "")),
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              RescueText.headline('+ '),
+              RescueText.slim("Add Sign")
+            ]));
+  }
+
+  List<ItemEditPageSignsSingle> _signs(BuildContext context) {
+    return item.signs
+        .map((s) =>
+            ItemEditPageSignsSingle(s, (u) => _changeItem(context, s.id, u)))
+        .toList();
+  }
+
+  _changeItem(BuildContext context, String idToReplace, Sign? updated) {
     var updatedSigns = [
-      updated,
-      ...item.signs.where((element) => element.id != updated.id)
+      ...item.signs.where((element) => element.id != idToReplace)
     ];
+    if (updated != null) {
+      updatedSigns.add(updated);
+    }
     updatedSigns.sort((s1, s2) => s1.id.compareTo(s2.id));
     var updatedItem = Item.from(item: item, signs: updatedSigns);
     Provider.of<Store>(context, listen: false).updateItem(updatedItem);

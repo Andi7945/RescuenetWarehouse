@@ -8,6 +8,9 @@ class IndicatorSign extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset("assets/signes/${sign.imagePath}");
+    if (sign.imagePath != null && sign.imagePath != "") {
+      return Image.asset("assets/signes/${sign.imagePath}");
+    }
+    return Container();
   }
 }
