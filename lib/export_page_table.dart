@@ -4,28 +4,15 @@ import 'rescue_container.dart';
 import 'rescue_table.dart';
 import 'rescue_text.dart';
 
-class ExportPageTable extends StatefulWidget {
-  final List<RescueContainer> containers;
+class ExportPageTable extends StatelessWidget {
+  final List<ContainerPrintingOptions> options;
+  final Function(ContainerPrintingOptions) fnAdjustOption;
 
-  ExportPageTable(this.containers);
-
-  @override
-  State createState() => _ExportPageTableState();
-}
-
-class _ExportPageTableState extends State<ExportPageTable> {
-  final List<ContainerPrintingOptions> options = [];
+  ExportPageTable(this.options, this.fnAdjustOption);
 
   @override
   Widget build(BuildContext context) {
     return RescueTable(_headline, _rows(), {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    options.addAll(widget.containers.map((e) => ContainerPrintingOptions(e)));
   }
 
   final _headline = [
@@ -42,19 +29,16 @@ class _ExportPageTableState extends State<ExportPageTable> {
         RescueText.normal(option.container.name),
         _checkbox(option.container.toDeploy, null),
         _checkbox(option.printLabel, (v) {
-          setState(() {
-            option.printLabel = v ?? false;
-          });
+          fnAdjustOption(ContainerPrintingOptions.from(
+              options: option, printLabel: v ?? false));
         }),
         _checkbox(option.printPackingList, (v) {
-          setState(() {
-            option.printPackingList = v ?? false;
-          });
+          fnAdjustOption(ContainerPrintingOptions.from(
+              options: option, printPackingList: v ?? false));
         }),
         _checkbox(option.printSafetyDatasheet, (v) {
-          setState(() {
-            option.printSafetyDatasheet = v ?? false;
-          });
+          fnAdjustOption(ContainerPrintingOptions.from(
+              options: option, printSafetyDatasheet: v ?? false));
         })
       ]);
 
@@ -71,4 +55,15 @@ class ContainerPrintingOptions {
   bool printSafetyDatasheet = false;
 
   ContainerPrintingOptions(this.container);
+
+  ContainerPrintingOptions.from(
+      {required ContainerPrintingOptions options,
+      bool? printLabel,
+      bool? printPackingList,
+      bool? printSafetyDatasheet})
+      : container = options.container,
+        printLabel = printLabel ?? options.printLabel,
+        printPackingList = printPackingList ?? options.printPackingList,
+        printSafetyDatasheet =
+            printSafetyDatasheet ?? options.printSafetyDatasheet;
 }
