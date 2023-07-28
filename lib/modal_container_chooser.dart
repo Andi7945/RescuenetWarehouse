@@ -58,21 +58,25 @@ class ModalContainerChooser extends StatelessWidget {
     s(Widget w) => _selectable(w, context, entry);
 
     return TableRow(children: [
-      s(_scaledCheckbox(entry.value, context, entry)),
+      s(_scaledCheckbox(
+          entry.value, context, entry, (_) => _change(context, entry.key))),
       s(RescueText.normal(entry.key.name ?? "")),
-      s(_scaledCheckbox(entry.key.toDeploy, context, entry)),
-      s(_scaledCheckbox(entry.key.isReady, context, entry)),
+      s(_scaledCheckbox(entry.key.toDeploy, context, entry, null)),
+      s(_scaledCheckbox(entry.key.isReady, context, entry, null)),
     ]);
   }
 
-  _scaledCheckbox(bool value, BuildContext context,
-          MapEntry<RescueContainer, bool> entry) =>
+  _scaledCheckbox(
+          bool value,
+          BuildContext context,
+          MapEntry<RescueContainer, bool> entry,
+          ValueChanged<bool?>? onChanged) =>
       Transform.scale(
           scale: 2,
           child: Checkbox(
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               value: value,
-              onChanged: (_) => _change(context, entry.key)));
+              onChanged: onChanged));
 
   Widget _selectable(
       Widget w, BuildContext context, MapEntry<RescueContainer, bool> entry) {

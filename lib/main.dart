@@ -7,6 +7,7 @@ import 'package:rescuenet_warehouse/container_with_content_page.dart';
 import 'package:rescuenet_warehouse/edit_container_types.dart';
 import 'package:rescuenet_warehouse/edit_current_locations.dart';
 import 'package:rescuenet_warehouse/edit_module_destinations.dart';
+import 'package:rescuenet_warehouse/export_page.dart';
 import 'package:rescuenet_warehouse/item_edit_page_argument_extractor.dart';
 import 'package:rescuenet_warehouse/items_page.dart';
 import 'package:rescuenet_warehouse/page/login_register_page.dart';
@@ -78,6 +79,7 @@ class MyApp extends StatelessWidget {
             routeEditContainerTypes: (ctx) => EditContainerTypes(),
 
             routeWorkLog: (_) => WorkLogPage(),
+            routeExport: (_) => ExportPage(),
           }),
     );
   }
