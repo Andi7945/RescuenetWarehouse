@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:rescuenet_warehouse/pdf-service.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 
+import 'data_mock_pdf.dart';
 import 'export_page_table.dart';
+import 'pdf-container-mapper-service.dart';
 import 'rescue_text.dart';
 
 class ExportPageBody extends StatefulWidget {
@@ -61,7 +64,10 @@ class _ExportPageBodyState extends State<ExportPageBody> {
           RescueText.headline(
               "All containers marked as ready ($countReadyContainers / $countAllContainers)"),
           TextButton(
-              onPressed: () {},
+              onPressed: () {
+                createPdf(summaryContainer);
+                // createPdf(mapForPdf(widget.containers));
+              },
               child: RescueText.normal("Print selected documents"))
         ],
       );

@@ -12,7 +12,7 @@ class ExportPageTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RescueTable(_headline, _rows(), {});
+    return RescueTable(_headline, _rows(), const {});
   }
 
   final _headline = [
