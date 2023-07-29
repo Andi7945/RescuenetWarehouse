@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rescuenet_warehouse/pdf/pdf_service.dart';
+import 'package:rescuenet_warehouse/pdf/pdf_creator_summary.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 
 import 'pdf/data_mock_pdf.dart';
