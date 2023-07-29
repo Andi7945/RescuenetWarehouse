@@ -4,11 +4,14 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:rescuenet_warehouse/summary_container.dart';
+import 'package:rescuenet_warehouse/summary_list.dart';
+import 'package:rescuenet_warehouse/summary_pdf.dart';
+import 'package:intl/intl.dart';
 
-createPdf(List<SummaryContainer> container) async {
+createPdf(SummaryPdf summary) async {
   final pdf = pw.Document();
 
-  var body = await _body(container);
+  var body = await _body(summary);
 
   const double inch = 72.0;
   const double cm = inch / 2.54;
@@ -28,20 +31,20 @@ createPdf(List<SummaryContainer> container) async {
   await file.writeAsBytes(await pdf.save());
 }
 
-_body(List<SummaryContainer> container) async {
-  var headerRow = await _headerRow();
+_body(SummaryPdf summary) async {
+  var headerRow = await _headerRow(summary.list);
   return pw.Column(children: [
     headerRow,
     pw.Padding(
         padding: const pw.EdgeInsets.only(top: 16.0),
-        child: _entries(container))
+        child: _entries(summary.containers))
   ]);
 }
 
-_headerRow() async {
+_headerRow(SummaryList summaryList) async {
   var logo = await _logo();
   return pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
-    pw.Expanded(child: _summary(), flex: 5),
+    pw.Expanded(child: _summary(summaryList), flex: 5),
     pw.Expanded(
         child: pw.Padding(
             padding: const pw.EdgeInsets.symmetric(horizontal: 8.0),
@@ -67,42 +70,51 @@ _exec() => pw.Container(
         children: [
           _smallText("backoffice@rescuenet.net"),
           _smallText("+31-6-14419988"),
-          _smallText("-"),
+          _empty,
           _smallText("Printed by: GJP"),
-          _smallText("Date: April 19th 2023"),
-          _smallText("-"),
+          _smallText("Date: ${_now()}"),
+          _empty,
         ]));
+
+String _now() {
+  final DateFormat formatter = DateFormat.yMMMMd('en_US');
+  return formatter.format(DateTime.now());
+}
 
 _smallText(String text) =>
     pw.Text(text, style: const pw.TextStyle(fontSize: 10.0));
 
-_summary() {
+var _empty = pw.SizedBox(height: 10);
+
+_summary(SummaryList summaryList) {
   return pw.Container(
       padding: const pw.EdgeInsets.all(4.0),
       decoration: pw.BoxDecoration(border: pw.Border.all(width: 0.5)),
       child: pw.Table(children: [
         pw.TableRow(children: [_bigger("Summary list"), pw.Container()]),
+        pw.TableRow(
+            verticalAlignment: pw.TableCellVerticalAlignment.bottom,
+            children: [
+              _smallText("Total amount of containers:"),
+              _biggerAndFat(summaryList.count)
+            ]),
         pw.TableRow(children: [
-          pw.Text("Total amount of containers:"),
-          _biggerAndFat("22")
-        ]),
-        pw.TableRow(children: [
-          pw.Text("Amount per type of containers:"),
+          _smallText("Amount per type of containers:"),
           pw.Container()
         ]),
-        pw.TableRow(children: [pw.Text("Euro L60xW40xH32"), pw.Text("9x")]),
-        pw.TableRow(children: [pw.Text("Euro L60xW40xH40"), pw.Text("4x")]),
-        pw.TableRow(children: [pw.Text("General use backpack"), pw.Text("6x")]),
-        pw.TableRow(children: [pw.Text("Medical backpack"), pw.Text("2x")]),
-        pw.TableRow(children: [pw.Text("Cooler"), pw.Text("1x")]),
-        pw.TableRow(children: [pw.Text("-"), pw.Container()]),
-        pw.TableRow(children: [pw.Text("Total value"), pw.Text("EUR 2088,-")]),
-        pw.TableRow(children: [pw.Text("-"), pw.Container()]),
+        ...summaryList.amountPerType.entries.map((e) =>
+            pw.TableRow(children: [_smallText(e.key), _smallText(e.value)])),
+        pw.TableRow(children: [_empty, pw.Container()]),
         pw.TableRow(children: [
-          pw.Text("Total weight"),
-          _biggerAndFat("504.5 kg"),
+          _smallText("Total value"),
+          _smallText("EUR ${summaryList.totalValue},-")
         ]),
-        pw.TableRow(children: [pw.Text("-"), pw.Container()]),
+        pw.TableRow(children: [_empty, pw.Container()]),
+        pw.TableRow(children: [
+          _smallText("Total weight"),
+          _biggerAndFat("${summaryList.totalWeight.toStringAsFixed(2)} kg"),
+        ]),
+        pw.TableRow(children: [_empty, pw.Container()]),
       ]));
 }
 
@@ -149,9 +161,8 @@ _tableHeadline(String text) => pw.Padding(
     child: pw.Text(text,
         style: pw.TextStyle(fontSize: 10.0, fontWeight: pw.FontWeight.bold)));
 
-_tableCell(String text) => pw.Padding(
-    padding: const pw.EdgeInsets.all(2.0),
-    child: pw.Text(text, style: const pw.TextStyle(fontSize: 10.0)));
+_tableCell(String text) =>
+    pw.Padding(padding: const pw.EdgeInsets.all(2.0), child: _smallText(text));
 
 _lines(List<SummaryContainer> container) => container.map(_line).toList();
 
@@ -160,8 +171,8 @@ pw.TableRow _line(SummaryContainer container) => pw.TableRow(children: [
       _tableCell(container.name),
       _tableCell(container.description),
       _tableCell(container.type),
-      _tableCell(container.value),
-      _tableCell(container.weight),
+      _tableCell("EUR ${container.value},-"),
+      _tableCell("${container.weight.toStringAsFixed(2)} kg"),
       _tableCell(container.expirationDate),
       _tableCell(container.dangerousGoods),
       _tableCell(container.coldChain),

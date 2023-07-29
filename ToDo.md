@@ -12,7 +12,10 @@
 * Make adding new containers possible
 
 * PDF printing
-* 
+
+* Fix bug: Value amount delete all => not parseable to int
+
+* Add numeric input field with validation
 
 Galaxy Tab A8 SMX200
 

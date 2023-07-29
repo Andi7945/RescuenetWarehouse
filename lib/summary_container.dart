@@ -3,8 +3,8 @@ class SummaryContainer {
   final String name;
   final String description;
   final String type;
-  final String value;
-  final String weight;
+  final int value;
+  final double weight;
   final String expirationDate;
   final String dangerousGoods;
   final String coldChain;
