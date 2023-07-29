@@ -17,6 +17,12 @@
 
 * Add numeric input field with validation
 
+* PDF Container Summary
+  * Logo higher quality + size
+  * Sequential Build Priority color + not only enum names
+
+
+
 Galaxy Tab A8 SMX200
 
 # To Discuss

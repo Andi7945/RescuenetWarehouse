@@ -1,4 +1,4 @@
-import 'package:rescuenet_warehouse/summary_container.dart';
+import 'package:rescuenet_warehouse/pdf/summary_container.dart';
 
 var summaryContainer = [
   SummaryContainer(

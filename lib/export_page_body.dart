@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:rescuenet_warehouse/pdf-service.dart';
+import 'package:rescuenet_warehouse/pdf/pdf-service.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 
-import 'data_mock_pdf.dart';
+import 'pdf/data_mock_pdf.dart';
 import 'export_page_table.dart';
 import 'item.dart';
-import 'pdf-container-mapper-service.dart';
+import 'pdf/pdf-container-mapper-service.dart';
 import 'rescue_text.dart';
 
 class ExportPageBody extends StatefulWidget {

@@ -1,4 +1,4 @@
-import 'package:rescuenet_warehouse/summary_list.dart';
+import 'package:rescuenet_warehouse/pdf/summary_list.dart';
 
 import 'summary_container.dart';
 
