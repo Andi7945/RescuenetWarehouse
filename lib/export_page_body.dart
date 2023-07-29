@@ -4,13 +4,14 @@ import 'package:rescuenet_warehouse/rescue_container.dart';
 
 import 'data_mock_pdf.dart';
 import 'export_page_table.dart';
+import 'item.dart';
 import 'pdf-container-mapper-service.dart';
 import 'rescue_text.dart';
 
 class ExportPageBody extends StatefulWidget {
-  final List<RescueContainer> containers;
+  final Map<RescueContainer, Map<Item, int>> containerWithItems;
 
-  ExportPageBody(this.containers);
+  ExportPageBody(this.containerWithItems);
 
   @override
   State createState() => _ExportPageBodyState();
@@ -28,12 +29,12 @@ class _ExportPageBodyState extends State<ExportPageBody> {
   void initState() {
     super.initState();
 
-    options.addAll(widget.containers
+    options.addAll(widget.containerWithItems.keys
         .where((element) => element.isReady)
         .map((e) => ContainerPrintingOptions(e))
         .toList());
 
-    countAllContainers = widget.containers.length;
+    countAllContainers = widget.containerWithItems.length;
     countReadyContainers = options.length;
   }
 
@@ -65,8 +66,8 @@ class _ExportPageBodyState extends State<ExportPageBody> {
               "All containers marked as ready ($countReadyContainers / $countAllContainers)"),
           TextButton(
               onPressed: () {
-                createPdf(summaryContainer);
-                // createPdf(mapForPdf(widget.containers));
+                // createPdf(summaryContainer);
+                createPdf(mapForPdf(widget.containerWithItems));
               },
               child: RescueText.normal("Print selected documents"))
         ],

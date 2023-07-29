@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rescuenet_warehouse/item_service.dart';
 import 'package:rescuenet_warehouse/rescue_image.dart';
 import 'package:rescuenet_warehouse/sequential_build.dart';
 
@@ -61,9 +62,7 @@ class ContainerWithContentHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           _checkboxWithLabel("Deploy", _deployNotifier(context)),
-          Flexible(
-              child: _textBold(
-                  _container.name ?? "NO NAME", 24, TextAlign.center)),
+          Flexible(child: _textBold(_container.name, 24, TextAlign.center)),
           _checkboxWithLabel("Ready", _readyNotifier(context))
         ],
       ),
@@ -151,12 +150,7 @@ class ContainerWithContentHeader extends StatelessWidget {
     );
   }
 
-  _sumWeight() {
-    return _items.entries
-        .fold(_container.type.emptyWeight,
-            (prev, e) => prev + (e.key.weight * e.value))
-        .toStringAsFixed(2);
-  }
+  _sumWeight() => sumItemWeight(_container, _items.keys);
 
   Text _text(String text, double fontSize, [TextAlign? textAlign]) => Text(
         text,

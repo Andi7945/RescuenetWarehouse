@@ -17,7 +17,7 @@ class Item {
   String? type;
   String? supplier;
   String? website;
-  String? value;
+  int value = 0;
   String? sku;
   String? notes;
   List<Sign> signs = List.empty();
@@ -63,7 +63,7 @@ class Item {
       String? type,
       String? supplier,
       String? website,
-      String? value,
+      int? value,
       String? sku,
       String? notes,
       List<Sign>? signs})

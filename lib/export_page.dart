@@ -25,5 +25,5 @@ class _ExportPageState extends State<ExportPage> {
   }
 
   _body() => Consumer<Store>(
-      builder: (ctxt, store, _) => ExportPageBody(store.containers));
+      builder: (ctxt, store, _) => ExportPageBody(store.containerWithItems()));
 }

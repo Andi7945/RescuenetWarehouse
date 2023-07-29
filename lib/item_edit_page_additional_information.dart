@@ -4,7 +4,6 @@ import 'package:rescuenet_warehouse/item.dart';
 import 'package:rescuenet_warehouse/item_edit_page_additional_information_exp_dates.dart';
 import 'package:rescuenet_warehouse/operational_status.dart';
 import 'package:rescuenet_warehouse/rescue_dropdown_button.dart';
-import 'package:rescuenet_warehouse/rescue_input.dart';
 import 'package:rescuenet_warehouse/rescue_input_with_leading_label.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
 
@@ -62,8 +61,9 @@ class ItemEditPageAdditionalInformation extends StatelessWidget {
       const SizedBox(height: 10),
       RescueInputWithLeadingLabel(
           'Value:',
-          _updateItem(context, (s) => Item.from(item: item, value: s)),
-          item.value)
+          _updateItem(
+              context, (s) => Item.from(item: item, value: int.parse(s))),
+          "${item.value}")
     ]);
   }
 

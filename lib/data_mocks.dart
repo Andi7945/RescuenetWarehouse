@@ -26,7 +26,7 @@ var item_fire = Item.filled(
     "600",
     "Fire & Co",
     "www.fireco.com/fireex600",
-    "EUR 100,00",
+    100,
     "",
     "324278",
     [
