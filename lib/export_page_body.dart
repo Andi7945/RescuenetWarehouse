@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:rescuenet_warehouse/pdf/packing_list_mapper.dart';
 import 'package:rescuenet_warehouse/pdf/pdf_creator_summary.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 
 import 'pdf/data_mock_pdf.dart';
 import 'export_page_table.dart';
 import 'item.dart';
-import 'pdf/pdf_container_mapper_service.dart';
+import 'pdf/summary_mapper.dart';
 import 'pdf/pdf_creator_packing_list.dart';
 import 'rescue_text.dart';
 
@@ -73,8 +74,9 @@ class _ExportPageBodyState extends State<ExportPageBody> {
               child: RescueText.normal("Print container summary")),
           TextButton(
               onPressed: () {
-                // createPdf(summaryContainer);
-                createPackingListPdf(packingList);
+                // createPackingListPdf(packingList);
+                createPackingListPdf(
+                    mapPackingList(widget.containerWithItems).first);
               },
               child: RescueText.normal("Print packing lists"))
         ],

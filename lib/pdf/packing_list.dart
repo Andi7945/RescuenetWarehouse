@@ -11,7 +11,7 @@ class PackingList {
 
   String destination;
   String sequentialBuildPrio;
-  DateTime expirationDate;
+  DateTime? expirationDate;
 
   List<PackingDangerousGood> dangerousGoods;
 

@@ -28,7 +28,11 @@ _upperLeft(PackingList list) {
     pw.Row(children: [
       _valueBox("Destination:", list.destination),
       _valueBox("Seq. build prio:", list.sequentialBuildPrio),
-      _valueBox("Expiration:", formatter.format(list.expirationDate)),
+      _valueBox(
+          "Expiration:",
+          list.expirationDate != null
+              ? formatter.format(list.expirationDate!)
+              : ""),
     ])
   ]);
 }
@@ -135,8 +139,10 @@ pw.TableRow _line(PackingItem item) => pw.TableRow(children: [
     ]);
 
 pw.TableRow _sumRow(List<PackingItem> items) {
-  var summed = items.fold(0.0,
-      (previousValue, itm) => previousValue + (itm.amount * itm.piecePrice));
+  var summed = items
+      .fold(0.0,
+          (previousValue, itm) => previousValue + (itm.amount * itm.piecePrice))
+      .toStringAsFixed(0);
   return pw.TableRow(children: [
     tableCell("Combined:"),
     tableCell(""),

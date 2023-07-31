@@ -5,9 +5,8 @@ import 'package:rescuenet_warehouse/pdf/summary_pdf.dart';
 
 import '../item.dart';
 import '../rescue_container.dart';
+import 'pdf_mapper_utils.dart';
 import 'summary_container.dart';
-
-import 'package:intl/intl.dart';
 
 SummaryPdf mapForPdf(Map<RescueContainer, Map<Item, int>> containerWithItems) {
   var containers = containerWithItems.entries.map(_mapSingle).toList();
@@ -29,37 +28,13 @@ SummaryContainer _mapSingle(MapEntry<RescueContainer, Map<Item, int>> entry) =>
         entry.key.name,
         "description",
         entry.key.type.name,
-        _calcValue(entry.value),
+        calcValue(entry.value),
         _calcWeight(entry),
-        _nextExpirationDate(entry.value),
+        nextExpirationDateFormatted(entry.value),
         _dangerousGoods(entry.value),
         _hasColdChainItem(entry.value),
         entry.key.moduleDestination ?? "",
         entry.key.sequentialBuild.name);
-
-_calcValue(Map<Item, int> items) => items.entries.fold(
-    0,
-    (previousValue, itmWithCount) =>
-        previousValue + itmWithCount.key.value * itmWithCount.value);
-
-final DateFormat formatter = DateFormat('MMM yy');
-
-_nextExpirationDate(Map<Item, int> items) {
-  var starTrek = DateTime.utc(9999);
-
-  var nextDate = items.keys.expand((e) => e.expiringDates).fold(starTrek,
-      (previousValue, element) {
-    if (element.isBefore(previousValue)) {
-      return element;
-    }
-    return previousValue;
-  });
-
-  if (nextDate == starTrek) {
-    return "";
-  }
-  return formatter.format(nextDate);
-}
 
 _dangerousGoods(Map<Item, int> items) => items.keys
     .expand((e) => e.signs)
