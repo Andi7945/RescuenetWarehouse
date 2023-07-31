@@ -6,6 +6,7 @@ import 'pdf/data_mock_pdf.dart';
 import 'export_page_table.dart';
 import 'item.dart';
 import 'pdf/pdf_container_mapper_service.dart';
+import 'pdf/pdf_creator_packing_list.dart';
 import 'rescue_text.dart';
 
 class ExportPageBody extends StatefulWidget {
@@ -67,9 +68,15 @@ class _ExportPageBodyState extends State<ExportPageBody> {
           TextButton(
               onPressed: () {
                 // createPdf(summaryContainer);
-                createPdf(mapForPdf(widget.containerWithItems));
+                createSummaryPdf(mapForPdf(widget.containerWithItems));
               },
-              child: RescueText.normal("Print selected documents"))
+              child: RescueText.normal("Print container summary")),
+          TextButton(
+              onPressed: () {
+                // createPdf(summaryContainer);
+                createPackingListPdf(packingList);
+              },
+              child: RescueText.normal("Print packing lists"))
         ],
       );
 }

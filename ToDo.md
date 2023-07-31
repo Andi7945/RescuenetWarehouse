@@ -30,4 +30,4 @@ Galaxy Tab A8 SMX200
 * Description of container - is not planned but in the PDF
 * Dangerous Goods in PDF - is it the label? What text should be in the PDF, the remarks? Or a new field?
 * Cold chain -> checkbox in label? Or do we have one label which will be defined here?
-* 
+* How does the PDF Packing List look with multiple dangerous goods?
