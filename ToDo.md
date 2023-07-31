@@ -21,7 +21,8 @@
   * Logo higher quality + size
   * Sequential Build Priority color + not only enum names
 
-
+* PDF Packing List
+  * Sequential Build Priority color + not only enum names
 
 Galaxy Tab A8 SMX200
 

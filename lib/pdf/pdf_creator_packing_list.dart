@@ -1,4 +1,5 @@
 import 'package:rescuenet_warehouse/pdf/packing_dangerous_good.dart';
+import 'package:rescuenet_warehouse/pdf/packing_item.dart';
 import 'package:rescuenet_warehouse/pdf/packing_list.dart';
 import 'package:pdf/widgets.dart' as pw;
 
@@ -16,7 +17,8 @@ Future<pw.Column> _body(PackingList list) async {
   var upperLeft = _upperLeft(list);
   var rightChild = await _dangerousGoods(list.dangerousGoods.first);
   var row = await headerRow(upperLeft, rightChild);
-  return pw.Column(children: [row]);
+  return pw.Column(
+      children: [row, pw.SizedBox(height: 24), _packingTable(list)]);
 }
 
 _upperLeft(PackingList list) {
@@ -86,3 +88,64 @@ pw.Widget _dangerousGoodsTable(PackingDangerousGood good) =>
           "Max weight Cargo:", "${good.maxWeightCargo.toStringAsFixed(1)} kg"),
       smallRow("Remarks:", good.remarks),
     ]);
+
+pw.Widget _packingTable(PackingList list) =>
+    pw.Table(border: pw.TableBorder.all(width: 0.5), columnWidths: {
+      0: const pw.FixedColumnWidth(128),
+      1: const pw.FixedColumnWidth(200),
+      2: const pw.FixedColumnWidth(112),
+      3: const pw.FixedColumnWidth(104),
+      4: const pw.FixedColumnWidth(104),
+      5: const pw.FixedColumnWidth(112),
+      6: const pw.FixedColumnWidth(136),
+      7: const pw.FixedColumnWidth(184),
+      8: const pw.FixedColumnWidth(416),
+    }, children: [
+      _headlines(),
+      ...list.items.map(_line),
+      _sumRow(list.items)
+    ]);
+
+pw.TableRow _headlines() => pw.TableRow(children: [
+      tableHeadline("Item"),
+      tableHeadline("Description"),
+      tableHeadline("Amount"),
+      tableHeadline("Price each"),
+      tableHeadline("Price total"),
+      tableHeadline("Weight total"),
+      tableHeadline("Expiration date"),
+      tableHeadline("Dangerous goods"),
+      tableHeadline("Remarks"),
+    ]);
+
+final DateFormat formatter = DateFormat('MMM d, yyyy');
+
+pw.TableRow _line(PackingItem item) => pw.TableRow(children: [
+      tableCell(item.name),
+      tableCell(item.description),
+      tableCell(item.amount.toStringAsFixed(0)),
+      tableCell("EUR ${item.piecePrice.toStringAsFixed(0)},-"),
+      tableCell("EUR ${(item.piecePrice * item.amount).toStringAsFixed(0)},-"),
+      tableCell("${item.weightTotal} kg"),
+      tableCell(item.expirationDate != null
+          ? formatter.format(item.expirationDate!)
+          : ""),
+      tableCell(item.dangerousGoods),
+      tableCell(item.remarks),
+    ]);
+
+pw.TableRow _sumRow(List<PackingItem> items) {
+  var summed = items.fold(0.0,
+      (previousValue, itm) => previousValue + (itm.amount * itm.piecePrice));
+  return pw.TableRow(children: [
+    tableCell("Combined:"),
+    tableCell(""),
+    tableCell(""),
+    tableCell(""),
+    tableCell("EUR $summed,-"),
+    tableCell(""),
+    tableCell(""),
+    tableCell(""),
+    tableCell(""),
+  ]);
+}
