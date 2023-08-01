@@ -18,22 +18,15 @@ tableHeadline(String text) => pw.Padding(
 tableCell(String text) =>
     pw.Padding(padding: const pw.EdgeInsets.all(2.0), child: smallText(text));
 
-Future<pw.Document> basicPdf(pw.Widget w) async {
-  final pdf = pw.Document();
+const double inch = 72.0;
+const double cm = inch / 2.54;
 
-  const double inch = 72.0;
-  const double cm = inch / 2.54;
-
-  pdf.addPage(
-    pw.Page(
+pw.Page basicPage(pw.Widget w) => pw.Page(
       pageFormat:
           const PdfPageFormat(21.0 * cm, 29.7 * cm, marginAll: 1.0 * cm),
       orientation: pw.PageOrientation.landscape,
       build: (pw.Context context) => w,
-    ),
-  );
-  return pdf;
-}
+    );
 
 Future<void> saveAndPrint(pw.Document pdf) async {
   final output = await getTemporaryDirectory();
@@ -64,10 +57,17 @@ pw.TableRow smallLabelFatValueRow(String label, String value) => pw.TableRow(
 
 pw.TableRow blankRow() => pw.TableRow(children: [empty, pw.Container()]);
 
+Future<pw.Image> loadImage(String path) async => path.endsWith(".jpg")
+    ? _loadImageFromFile(path)
+    : _loadImageFromAssets(path);
 
-Future<pw.Image> loadImage(String path) async {
-  final img = await rootBundle.load(path);
+Future<pw.Image> _loadImageFromAssets(String path) async {
+  final img = await rootBundle.load('assets/images/$path');
   final imageBytes = img.buffer.asUint8List();
-  pw.Image image1 = pw.Image(pw.MemoryImage(imageBytes));
-  return image1;
+  return pw.Image(pw.MemoryImage(imageBytes));
+}
+
+Future<pw.Image> _loadImageFromFile(String path) async {
+  Uint8List x = File(path).readAsBytesSync();
+  return pw.Image(pw.MemoryImage(x));
 }

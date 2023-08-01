@@ -76,7 +76,7 @@ class _ExportPageBodyState extends State<ExportPageBody> {
               onPressed: () {
                 // createPackingListPdf(packingList);
                 createPackingListPdf(
-                    mapPackingList(widget.containerWithItems).first);
+                    mapPackingList(widget.containerWithItems));
               },
               child: RescueText.normal("Print packing lists"))
         ],

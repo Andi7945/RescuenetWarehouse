@@ -7,8 +7,10 @@ import 'pdf_header_row.dart';
 import 'pdf_utils.dart';
 
 createSummaryPdf(SummaryPdf summary) async {
-  var body = await _body(summary);
-  await saveAndPrint(await basicPdf(body));
+  final pdf = pw.Document();
+  var page = basicPage(await _body(summary));
+  pdf.addPage(page);
+  await saveAndPrint(pdf);
 }
 
 Future<pw.Column> _body(SummaryPdf summary) async {

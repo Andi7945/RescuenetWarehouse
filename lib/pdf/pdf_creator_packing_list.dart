@@ -8,14 +8,19 @@ import 'pdf_utils.dart';
 
 import 'package:intl/intl.dart';
 
-createPackingListPdf(PackingList list) async {
-  var body = await _body(list);
-  await saveAndPrint(await basicPdf(body));
+createPackingListPdf(List<PackingList> lists) async {
+  final pdf = pw.Document();
+  var pages = lists.map(_body).map((e) async => basicPage(await e));
+  var builded = await Future.wait(pages);
+  for (var page in builded) {
+    pdf.addPage(page);
+  }
+  await saveAndPrint(pdf);
 }
 
 Future<pw.Column> _body(PackingList list) async {
   var upperLeft = _upperLeft(list);
-  var rightChild = await _dangerousGoods(list.dangerousGoods.first);
+  var rightChild = await _dangerousGoods(list.dangerousGoods);
   var row = await headerRow(upperLeft, rightChild);
   return pw.Column(
       children: [row, pw.SizedBox(height: 24), _packingTable(list)]);
@@ -68,18 +73,22 @@ pw.Widget _valueBox(String label, String value) => pw.Padding(
               style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 14))
         ])));
 
-Future<pw.Widget> _dangerousGoods(PackingDangerousGood good) async {
+Future<pw.Widget> _dangerousGoods(List<PackingDangerousGood> goods) async {
+  var w =
+      goods.isEmpty ? _noDangerousGoods() : await _dangerousGood(goods.first);
   return pw.Container(
       decoration: pw.BoxDecoration(border: pw.Border.all(width: 0.5)),
       padding: const pw.EdgeInsets.all(4.0),
-      child: pw.Row(
-          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: pw.CrossAxisAlignment.end,
-          children: [
-            _dangerousGoodsTable(good),
-            await loadImage('assets/images/${good.imagePath}')
-          ]));
+      child: w);
 }
+
+pw.Widget _noDangerousGoods() =>
+    pw.Table(children: [smallLabelFatValueRow("Dangerous goods:", "No")]);
+
+Future<pw.Widget> _dangerousGood(PackingDangerousGood good) async => pw.Row(
+    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+    crossAxisAlignment: pw.CrossAxisAlignment.end,
+    children: [_dangerousGoodsTable(good), await loadImage(good.imagePath)]);
 
 pw.Widget _dangerousGoodsTable(PackingDangerousGood good) =>
     pw.Table(children: [
