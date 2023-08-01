@@ -1,4 +1,3 @@
-import 'package:rescuenet_warehouse/pdf/packing_dangerous_good.dart';
 import 'package:rescuenet_warehouse/pdf/packing_item.dart';
 import 'package:rescuenet_warehouse/pdf/packing_list.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -20,7 +19,7 @@ createPackingListPdf(List<PackingList> lists) async {
 
 Future<pw.Column> _body(PackingList list) async {
   var upperLeft = _upperLeft(list);
-  var rightChild = await _dangerousGoods(list.dangerousGoods);
+  var rightChild = await dangerousGoodsPackingList(list.dangerousGoods);
   var row = await headerRow(upperLeft, rightChild);
   return pw.Column(
       children: [row, pw.SizedBox(height: 24), _packingTable(list)]);
@@ -31,9 +30,9 @@ _upperLeft(PackingList list) {
   return pw.Column(children: [
     summaryTable(_summaryRows(list)),
     pw.Row(children: [
-      _valueBox("Destination:", list.destination),
-      _valueBox("Seq. build prio:", list.sequentialBuildPrio),
-      _valueBox(
+      valueBox("Destination:", list.destination),
+      valueBox("Seq. build prio:", list.sequentialBuildPrio),
+      valueBox(
           "Expiration:",
           list.expirationDate != null
               ? formatter.format(list.expirationDate!)
@@ -42,65 +41,10 @@ _upperLeft(PackingList list) {
   ]);
 }
 
-List<pw.TableRow> _summaryRows(PackingList list) {
-  return [
-    pw.TableRow(children: [bigger("Packing list"), pw.Container()]),
-    smallLabelFatValueRow("Container no:", list.containerNo),
-    smallRow("Type container:", list.containerType),
-    blankRow(),
-    smallRow("Name:", list.containerName),
-    smallRow("Description:", list.containerDescription),
-    blankRow(),
-    blankRow(),
-    smallLabelFatValueRow("Weight:", "${list.totalWeight} kg"),
-    blankRow(),
-  ];
-}
-
-pw.Widget _valueBox(String label, String value) => pw.Padding(
-    padding: const pw.EdgeInsets.only(right: 12.0, top: 12.0),
-    child: pw.Container(
-        width: 92,
-        height: 40,
-        padding: const pw.EdgeInsets.all(2.0),
-        decoration: pw.BoxDecoration(border: pw.Border.all(width: 0.5)),
-        child: pw
-            .Column(mainAxisAlignment: pw.MainAxisAlignment.center, children: [
-          pw.Padding(
-              padding: const pw.EdgeInsets.only(bottom: 4.0),
-              child: pw.Text(label, style: const pw.TextStyle(fontSize: 10.0))),
-          pw.Text(value,
-              style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 14))
-        ])));
-
-Future<pw.Widget> _dangerousGoods(List<PackingDangerousGood> goods) async {
-  var w =
-      goods.isEmpty ? _noDangerousGoods() : await _dangerousGood(goods.first);
-  return pw.Container(
-      decoration: pw.BoxDecoration(border: pw.Border.all(width: 0.5)),
-      padding: const pw.EdgeInsets.all(4.0),
-      child: w);
-}
-
-pw.Widget _noDangerousGoods() =>
-    pw.Table(children: [smallLabelFatValueRow("Dangerous goods:", "No")]);
-
-Future<pw.Widget> _dangerousGood(PackingDangerousGood good) async => pw.Row(
-    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-    crossAxisAlignment: pw.CrossAxisAlignment.end,
-    children: [_dangerousGoodsTable(good), await loadImage(good.imagePath)]);
-
-pw.Widget _dangerousGoodsTable(PackingDangerousGood good) =>
-    pw.Table(children: [
-      smallLabelFatValueRow("Dangerous goods:", "Yes"),
-      smallRow("Type:", good.dangerType),
-      smallRow("IATA ID:", good.iataId),
-      smallRow("Proper shipping name:", good.properShippingName),
-      smallRow("Max weight PAX:", "${good.maxWeightPAX.toStringAsFixed(1)} kg"),
-      smallRow(
-          "Max weight Cargo:", "${good.maxWeightCargo.toStringAsFixed(1)} kg"),
-      smallRow("Remarks:", good.remarks),
-    ]);
+_summaryRows(PackingList list) => [
+      pw.TableRow(children: [bigger("Packing list"), pw.Container()]),
+      ...summaryRows(list)
+    ];
 
 pw.Widget _packingTable(PackingList list) =>
     pw.Table(border: pw.TableBorder.all(width: 0.5), columnWidths: {

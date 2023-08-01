@@ -24,6 +24,11 @@
 * PDF Packing List
   * Sequential Build Priority color + not only enum names
 
+* PDF Labels
+  * Sequential Build Priority color + not only enum names
+  * Make right side take all the space
+  * Make it invincible against long names
+
 Galaxy Tab A8 SMX200
 
 # To Discuss

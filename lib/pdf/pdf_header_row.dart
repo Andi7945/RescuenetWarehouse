@@ -5,20 +5,21 @@ import 'package:intl/intl.dart';
 import 'pdf_utils.dart';
 
 Future<pw.Row> headerRow(pw.Widget leftCorner, [pw.Widget? rightSide]) async {
-  var logo = await _logo();
   return pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
     pw.Expanded(child: leftCorner, flex: 5),
     pw.SizedBox(width: 8),
-    pw.Expanded(child: _rightSide(logo, rightSide), flex: 5)
+    pw.Expanded(child: await rightSideHeader(rightSide), flex: 5)
   ]);
 }
 
-pw.Widget _rightSide(pw.Widget logo, pw.Widget? rightSide) {
-  return pw.Column(children: [
-    _logoAndCompanyInformation(logo),
-    pw.SizedBox(height: 8),
-    rightSide ?? pw.Container()
-  ]);
+Future<pw.Widget> rightSideHeader(pw.Widget? rightSide) async {
+  return pw.Container(
+      width: double.infinity,
+      child: pw.Column(children: [
+        _logoAndCompanyInformation(await _logo()),
+        pw.SizedBox(height: 8),
+        rightSide ?? pw.Container()
+      ]));
 }
 
 _logoAndCompanyInformation(pw.Widget logo) => pw.Row(children: [
@@ -29,7 +30,7 @@ _logoAndCompanyInformation(pw.Widget logo) => pw.Row(children: [
       pw.Expanded(child: logo, flex: 3)
     ]);
 
-Future<pw.Image> _logo() async => loadImage('LogoRN.png');
+Future<pw.Image> _logo() async => loadImage('rn_logo_big.png');
 
 pw.Container _exec() => pw.Container(
     padding: const pw.EdgeInsets.all(4.0),

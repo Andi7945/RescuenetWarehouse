@@ -5,6 +5,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
+import 'packing_dangerous_good.dart';
+import 'packing_list.dart';
+
 smallText(String text) =>
     pw.Text(text, style: const pw.TextStyle(fontSize: 10.0));
 
@@ -23,7 +26,7 @@ const double cm = inch / 2.54;
 
 pw.Page basicPage(pw.Widget w) => pw.Page(
       pageFormat:
-          const PdfPageFormat(21.0 * cm, 29.7 * cm, marginAll: 1.0 * cm),
+          const PdfPageFormat(29.7 * cm, 21.0 * cm, marginAll: 1.0 * cm),
       orientation: pw.PageOrientation.landscape,
       build: (pw.Context context) => w,
     );
@@ -37,6 +40,7 @@ Future<void> saveAndPrint(pw.Document pdf) async {
 
 summaryTable(List<pw.TableRow> rows) {
   return pw.Container(
+      width: double.infinity,
       padding: const pw.EdgeInsets.all(4.0),
       decoration: pw.BoxDecoration(border: pw.Border.all(width: 0.5)),
       child: pw.Table(children: rows));
@@ -71,3 +75,84 @@ Future<pw.Image> _loadImageFromFile(String path) async {
   Uint8List x = File(path).readAsBytesSync();
   return pw.Image(pw.MemoryImage(x));
 }
+
+List<pw.TableRow> summaryRows(PackingList list) {
+  return [
+    smallLabelFatValueRow("Container no:", list.containerNo),
+    smallRow("Type container:", list.containerType),
+    blankRow(),
+    smallRow("Name:", list.containerName),
+    smallRow("Description:", list.containerDescription),
+    blankRow(),
+    smallLabelFatValueRow("Weight:", "${list.totalWeight} kg"),
+    blankRow(),
+  ];
+}
+
+pw.Widget valueBox(String label, String value, [double? paddingRight]) =>
+    pw.Padding(
+        padding: pw.EdgeInsets.only(right: paddingRight ?? 12.0, top: 12.0),
+        child: pw.Container(
+            width: 90,
+            height: 40,
+            padding: const pw.EdgeInsets.all(2.0),
+            decoration: pw.BoxDecoration(border: pw.Border.all(width: 0.5)),
+            child: pw.Column(
+                mainAxisAlignment: pw.MainAxisAlignment.center,
+                children: [
+                  pw.Padding(
+                      padding: const pw.EdgeInsets.only(bottom: 4.0),
+                      child: pw.Text(label,
+                          style: const pw.TextStyle(fontSize: 10.0))),
+                  pw.Text(value,
+                      style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold, fontSize: 14))
+                ])));
+
+Future<pw.Widget> dangerousGoodsLabels(List<PackingDangerousGood> goods) async {
+  return dangerousGoods(
+      goods,
+      (ws) => pw.Column(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          children: ws));
+}
+
+Future<pw.Widget> dangerousGoodsPackingList(
+    List<PackingDangerousGood> goods) async {
+  return dangerousGoods(
+      goods,
+      (ws) => pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: pw.CrossAxisAlignment.end,
+          children: ws));
+}
+
+Future<pw.Widget> dangerousGoods(List<PackingDangerousGood> goods,
+    pw.Widget Function(List<pw.Widget> ws) fn) async {
+  List<pw.Widget> w =
+      goods.isEmpty ? [_noDangerousGoods()] : await _dangerousGood(goods.first);
+  return pw.Container(
+      decoration: pw.BoxDecoration(
+          border: pw.Border.all(width: 0.5), color: PdfColors.amber200),
+      padding: const pw.EdgeInsets.all(4.0),
+      child: fn(w));
+}
+
+pw.Widget _noDangerousGoods() =>
+    pw.Table(children: [smallLabelFatValueRow("Dangerous goods:", "No")]);
+
+Future<List<pw.Widget>> _dangerousGood(PackingDangerousGood good) async =>
+    [_dangerousGoodsTable(good), await loadImage(good.imagePath)];
+
+pw.Widget _dangerousGoodsTable(PackingDangerousGood good) =>
+    pw.Table(children: [
+      smallLabelFatValueRow("Dangerous goods:", "Yes"),
+      smallRow("Type:", good.dangerType),
+      smallRow("IATA ID:", good.iataId),
+      smallRow("Proper shipping name:", good.properShippingName),
+      smallRow("Max weight PAX:", "${good.maxWeightPAX.toStringAsFixed(1)} kg"),
+      smallRow(
+          "Max weight Cargo:", "${good.maxWeightCargo.toStringAsFixed(1)} kg"),
+      smallRow("Remarks:", good.remarks),
+    ]);
