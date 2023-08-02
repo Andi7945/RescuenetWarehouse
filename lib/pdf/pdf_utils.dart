@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:pdf/widgets.dart';
 import 'package:printing/printing.dart';
 
 import 'packing_dangerous_good.dart';
@@ -31,7 +32,19 @@ const pageFormatLandscape =
     PdfPageFormat(29.7 * cm, 21.0 * cm, marginAll: 1.0 * cm);
 const pageFormatLabels = PdfPageFormat(14.8 * cm, 10.51 * cm, marginAll: 10);
 
-pw.Page basicPage(pw.Widget w) => pw.Page(
+Future<pw.ThemeData> basicTheme() async => ThemeData.withFont(
+      base: Font.ttf(await rootBundle
+          .load("assets/fonts/liberation_sans/LiberationSans-Regular.ttf")),
+      bold: Font.ttf(await rootBundle
+          .load("assets/fonts/liberation_sans/LiberationSans-Bold.ttf")),
+      italic: Font.ttf(await rootBundle
+          .load("assets/fonts/liberation_sans/LiberationSans-Italic.ttf")),
+      boldItalic: Font.ttf(await rootBundle
+          .load("assets/fonts/liberation_sans/LiberationSans-BoldItalic.ttf")),
+    );
+
+Future<pw.Page> basicPage(pw.Widget w) async => pw.Page(
+      theme: await basicTheme(),
       pageFormat: pageFormatLandscape,
       orientation: pw.PageOrientation.landscape,
       build: (pw.Context context) => w,

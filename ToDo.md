@@ -23,11 +23,6 @@
 
 Galaxy Tab A8 SMX200
 
-PDF Fonts:
-strings ~/Downloads/RN\ Summary\ list.pdf | grep -i FontName                                             
-<</Type/FontDescriptor/FontName/BAAAAA+LiberationSans
-<</Type/FontDescriptor/FontName/CAAAAA+LiberationSans-Bold
-
 # To Discuss
 * Pretty sure we need drag and drop for usability
 * Description of container - is not planned but in the PDF

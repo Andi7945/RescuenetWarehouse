@@ -9,7 +9,7 @@ import 'pdf_utils.dart';
 
 Future<pw.Document> createSummaryPdf(SummaryPdf summary) async {
   final pdf = pw.Document();
-  var page = basicPage(await _body(summary));
+  var page = await basicPage(await _body(summary));
   pdf.addPage(page);
   return pdf;
 }
@@ -31,7 +31,7 @@ List<pw.TableRow> _summaryRows(SummaryList summaryList) {
     smallRow("Amount per type of containers:", ""),
     ...summaryList.amountPerType.entries.map((e) => smallRow(e.key, e.value)),
     blankRow(),
-    smallRow("Total value", "EUR ${summaryList.totalValue},-"),
+    smallRow("Total value", "€${summaryList.totalValue},-"),
     blankRow(),
     smallLabelFatValueRow(
         "Total weight", "${summaryList.totalWeight.toStringAsFixed(2)} kg"),
@@ -79,7 +79,7 @@ pw.TableRow _line(SummaryContainer container) => pw.TableRow(children: [
       tableCell(container.name),
       tableCell(container.description),
       tableCell(container.type),
-      tableCell("EUR ${container.value},-"),
+      tableCell("€${container.value},-"),
       tableCell("${container.weight.toStringAsFixed(2)} kg"),
       tableCell(container.expirationDate),
       tableCell(container.dangerousGoods),

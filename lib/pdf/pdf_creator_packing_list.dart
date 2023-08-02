@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 
 Future<pw.Document> createPackingListPdf(List<PackingList> lists) async {
   final pdf = pw.Document();
-  var pages = lists.map(_body).map((e) async => basicPage(await e));
+  var pages = lists.map(_body).map((e) async => await basicPage(await e));
   var builded = await Future.wait(pages);
   for (var page in builded) {
     pdf.addPage(page);
@@ -83,8 +83,8 @@ pw.TableRow _line(PackingItem item) => pw.TableRow(children: [
       tableCell(item.name),
       tableCell(item.description),
       tableCell(item.amount.toStringAsFixed(0)),
-      tableCell("EUR ${item.piecePrice.toStringAsFixed(0)},-"),
-      tableCell("EUR ${(item.piecePrice * item.amount).toStringAsFixed(0)},-"),
+      tableCell("€${item.piecePrice.toStringAsFixed(0)},-"),
+      tableCell("€${(item.piecePrice * item.amount).toStringAsFixed(0)},-"),
       tableCell("${item.weightTotal} kg"),
       tableCell(item.expirationDate != null
           ? formatter.format(item.expirationDate!)
@@ -103,7 +103,7 @@ pw.TableRow _sumRow(List<PackingItem> items) {
     tableCell(""),
     tableCell(""),
     tableCell(""),
-    tableCell("EUR $summed,-"),
+    tableCell("€$summed,-"),
     tableCell(""),
     tableCell(""),
     tableCell(""),
