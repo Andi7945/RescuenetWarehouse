@@ -63,7 +63,17 @@ class ItemEditPageAdditionalInformation extends StatelessWidget {
           'Value:',
           _updateItem(
               context, (s) => Item.from(item: item, value: int.parse(s))),
-          "${item.value}")
+          "${item.value}",
+          null,
+          true),
+      const SizedBox(height: 10),
+      RescueInputWithLeadingLabel(
+          'Weight:',
+          _updateItem(
+              context, (s) => Item.from(item: item, weight: double.parse(s))),
+          "${item.weight}",
+          null,
+          true)
     ]);
   }
 

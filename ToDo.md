@@ -11,8 +11,6 @@
 * Make adding new items possible
 * Make adding new containers possible
 
-* Fix bug: Value amount delete all => not parseable to int
-
 * Add numeric input field with validation
 
 * PDF Labels

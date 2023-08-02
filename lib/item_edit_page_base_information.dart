@@ -45,8 +45,8 @@ class ItemEditPageBaseInformation extends StatelessWidget {
                     height: 40,
                     width: 240,
                     child: RescueInput(
-                        item.name ?? "",
-                        (changed) => _changeItem(
+                        initial: item.name,
+                        onChange: (changed) => _changeItem(
                             context, Item.from(item: item, name: changed)))),
                 const SizedBox(height: 10),
                 RescueText.slim('RescueNet ID:'),
@@ -55,8 +55,8 @@ class ItemEditPageBaseInformation extends StatelessWidget {
                     height: 40,
                     width: 240,
                     child: RescueInput(
-                        item.rescueNetId ?? "",
-                        (changed) => _changeItem(context,
+                        initial: item.rescueNetId,
+                        onChange: (changed) => _changeItem(context,
                             Item.from(item: item, rescueNetId: changed)))),
               ],
             ),

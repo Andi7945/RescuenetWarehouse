@@ -8,9 +8,10 @@ class RescueInputWithLeadingLabel extends StatelessWidget {
   final String? initial;
   final Function(String) updateFn;
   final double? width;
+  final bool? digitsOnly;
 
   RescueInputWithLeadingLabel(this.label, this.updateFn, this.initial,
-      [this.width]);
+      [this.width, this.digitsOnly]);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class RescueInputWithLeadingLabel extends StatelessWidget {
           const SizedBox(width: 10),
           SizedBox(
             width: _width(),
-            child: RescueInput(initial ?? "", updateFn),
+            child: RescueInput(initial: initial, onChange: updateFn),
           ),
         ],
       ),

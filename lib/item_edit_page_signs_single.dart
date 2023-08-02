@@ -66,8 +66,8 @@ class ItemEditPageSignsSingle extends StatelessWidget {
             height: 40,
             width: 240,
             child: RescueInput(
-                sign.unNumber ?? "",
-                (changed) =>
+                initial: sign.unNumber,
+                onChange: (changed) =>
                     fnUpdated(Sign.from(sign: sign, unNumber: changed)))),
       ]));
 
