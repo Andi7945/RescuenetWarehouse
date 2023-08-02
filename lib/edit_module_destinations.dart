@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rescuenet_warehouse/edit_custom_value_delete_button.dart';
+import 'package:rescuenet_warehouse/edit_custom_value_text_field.dart';
 import 'package:rescuenet_warehouse/menu_option.dart';
 import 'package:rescuenet_warehouse/rescue_table.dart';
 
@@ -13,13 +15,16 @@ class EditModuleDestinations extends StatefulWidget {
 }
 
 class _EditModuleDestinationsState extends State<EditModuleDestinations> {
-  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _addController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(children: [
+        body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Menu(MenuOption.containerOverview),
+      Padding(
+          padding: const EdgeInsets.only(left: 40, bottom: 24),
+          child: RescueText.headline("Edit module destinations")),
       Expanded(child: _body())
     ]));
   }
@@ -33,60 +38,40 @@ class _EditModuleDestinationsState extends State<EditModuleDestinations> {
   }
 
   Widget _table(Map<String, Set<String>> moduleDestinations) => RescueTable(
-      const ["Name", "Usages", ""], [..._rows(moduleDestinations), _addingRow()], {});
+      const ["Name", ""],
+      [..._rows(moduleDestinations), _addingRow()],
+      const {});
 
   List<TableRow> _rows(Map<String, Set<String>> moduleDestinations) =>
       moduleDestinations.entries.map<TableRow>(_buildRow).toList();
 
   TableRow _buildRow(MapEntry<String, Set<String>> destination) =>
       TableRow(children: [
-        Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: _text(destination.key)),
-        RescueText.normal("Used in: ${destination.value.join(", ")}"),
-        _btnDelete(destination)
+        _textField(destination.key),
+        EditCustomValueDeleteButton(destination.key, destination.value)
       ]);
 
-  _text(String destination) => _textField(
-      TextEditingController(text: destination),
-      (newText) => _changeText(destination, newText));
-
-  _changeText(String oldDest, String newDest) =>
-      Provider.of<Store>(context, listen: false)
-          .editDestination(oldDest, newDest);
-
-  _btnDelete(MapEntry<String, Set<String>> text) => TextButton(
-      onPressed: () {
-        Provider.of<Store>(context, listen: false).removeDestination(text.key);
-      },
-      child: const RescueText(24, '-', FontWeight.w700));
+  _textField(String oldDest) {
+    return Padding(
+        padding: const EdgeInsets.only(left: 20),
+        child: EditCustomValueTextField(
+            TextEditingController(text: oldDest),
+            (newDest) => Provider.of<Store>(context, listen: false)
+                .editDestination(oldDest, newDest)));
+  }
 
   TableRow _addingRow() => TableRow(children: [
         Padding(
             padding: const EdgeInsets.only(left: 20),
-            child: _textField(_controller)),
-        Container(),
+            child: EditCustomValueTextField(_addController)),
         _btnAdd()
       ]);
 
   _btnAdd() => TextButton(
       onPressed: () {
         Provider.of<Store>(context, listen: false)
-            .addDestination(_controller.text);
-        _controller.clear();
+            .addDestination(_addController.text);
+        _addController.clear();
       },
       child: const RescueText(24, '+', FontWeight.w700));
-
-  Widget _textField(TextEditingController controller,
-          [ValueChanged<String>? onChange]) =>
-      TextField(
-        style: const TextStyle(fontSize: 24),
-        decoration: const InputDecoration(
-            hintText: "Insert new destination here",
-            hintStyle: TextStyle(fontSize: 24)),
-        controller: controller,
-        onTapOutside: (_) {
-          if (onChange != null) onChange(controller.text);
-        },
-      );
 }
