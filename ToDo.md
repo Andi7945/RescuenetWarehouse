@@ -11,8 +11,6 @@
 * Make adding new items possible
 * Make adding new containers possible
 
-* PDF printing
-
 * Fix bug: Value amount delete all => not parseable to int
 
 * Add numeric input field with validation
@@ -30,6 +28,11 @@
   * Make it invincible against long names
 
 Galaxy Tab A8 SMX200
+
+PDF Fonts:
+strings ~/Downloads/RN\ Summary\ list.pdf | grep -i FontName                                             
+<</Type/FontDescriptor/FontName/BAAAAA+LiberationSans
+<</Type/FontDescriptor/FontName/CAAAAA+LiberationSans-Bold
 
 # To Discuss
 * Pretty sure we need drag and drop for usability

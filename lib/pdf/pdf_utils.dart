@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 import 'packing_dangerous_good.dart';
 import 'packing_list.dart';
@@ -24,9 +25,12 @@ tableCell(String text) =>
 const double inch = 72.0;
 const double cm = inch / 2.54;
 
+const pageFormatLandscape =
+    PdfPageFormat(29.7 * cm, 21.0 * cm, marginAll: 1.0 * cm);
+const pageFormatLabels = PdfPageFormat(14.8 * cm, 10.51 * cm, marginAll: 10);
+
 pw.Page basicPage(pw.Widget w) => pw.Page(
-      pageFormat:
-          const PdfPageFormat(29.7 * cm, 21.0 * cm, marginAll: 1.0 * cm),
+      pageFormat: pageFormatLandscape,
       orientation: pw.PageOrientation.landscape,
       build: (pw.Context context) => w,
     );
@@ -65,11 +69,8 @@ Future<pw.Image> loadImage(String path) async => path.endsWith(".jpg")
     ? _loadImageFromFile(path)
     : _loadImageFromAssets(path);
 
-Future<pw.Image> _loadImageFromAssets(String path) async {
-  final img = await rootBundle.load('assets/images/$path');
-  final imageBytes = img.buffer.asUint8List();
-  return pw.Image(pw.MemoryImage(imageBytes));
-}
+Future<pw.Image> _loadImageFromAssets(String path) async =>
+    pw.Image(await imageFromAssetBundle('assets/images/$path'));
 
 Future<pw.Image> _loadImageFromFile(String path) async {
   Uint8List x = File(path).readAsBytesSync();

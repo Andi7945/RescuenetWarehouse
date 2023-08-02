@@ -6,11 +6,11 @@ import 'package:rescuenet_warehouse/pdf/summary_pdf.dart';
 import 'pdf_header_row.dart';
 import 'pdf_utils.dart';
 
-createSummaryPdf(SummaryPdf summary) async {
+Future<pw.Document> createSummaryPdf(SummaryPdf summary) async {
   final pdf = pw.Document();
   var page = basicPage(await _body(summary));
   pdf.addPage(page);
-  await saveAndPrint(pdf);
+  return pdf;
 }
 
 Future<pw.Column> _body(SummaryPdf summary) async {

@@ -1,22 +1,21 @@
-import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 import 'packing_list.dart';
 import 'pdf_header_row.dart';
 import 'pdf_utils.dart';
 
-createLabelPdf(List<PackingList> lists) async {
+Future<pw.Document> createLabelPdf(List<PackingList> lists) async {
   final pdf = pw.Document();
   var pages = lists.map((e) async => _labelPage(await _body(e)));
   var builded = await Future.wait(pages);
   for (var page in builded) {
     pdf.addPage(page);
   }
-  await saveAndPrint(pdf);
+  return pdf;
 }
 
 _labelPage(pw.Widget w) => pw.Page(
-      pageFormat: const PdfPageFormat(14.8 * cm, 10.51 * cm, marginAll: 10),
+      pageFormat: pageFormatLabels,
       orientation: pw.PageOrientation.landscape,
       build: (pw.Context context) => w,
     );

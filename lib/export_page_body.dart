@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:printing/printing.dart';
 import 'package:rescuenet_warehouse/pdf/packing_list_mapper.dart';
 import 'package:rescuenet_warehouse/pdf/pdf_creator_label.dart';
 import 'package:rescuenet_warehouse/pdf/pdf_creator_summary.dart';
@@ -68,20 +69,26 @@ class _ExportPageBodyState extends State<ExportPageBody> {
           RescueText.headline(
               "All containers marked as ready ($countReadyContainers / $countAllContainers)"),
           TextButton(
-              onPressed: () {
+              onPressed: () async {
                 // createPdf(summaryContainer);
-                createSummaryPdf(mapForPdf(widget.containerWithItems));
+                var summaryPdf = await createSummaryPdf(
+                    mapForPdf(widget.containerWithItems));
+                Printing.sharePdf(bytes: await summaryPdf.save());
               },
               child: RescueText.normal("Print summary")),
           TextButton(
-              onPressed: () {
+              onPressed: () async {
                 // createPackingListPdf(packingList);
-                createPackingListPdf(mapPackingList(widget.containerWithItems));
+                var packingListPdf = await createPackingListPdf(
+                    mapPackingList(widget.containerWithItems));
+                Printing.sharePdf(bytes: await packingListPdf.save());
               },
               child: RescueText.normal("Print lists")),
           TextButton(
-              onPressed: () {
-                createLabelPdf(mapPackingList(widget.containerWithItems));
+              onPressed: () async {
+                var labelPdf = await createLabelPdf(
+                    mapPackingList(widget.containerWithItems));
+                Printing.sharePdf(bytes: await labelPdf.save());
               },
               child: RescueText.normal("Print labels"))
         ],
