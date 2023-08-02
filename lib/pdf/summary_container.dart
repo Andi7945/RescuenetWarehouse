@@ -1,3 +1,5 @@
+import 'package:rescuenet_warehouse/sequential_build.dart';
+
 class SummaryContainer {
   final String containerNr;
   final String name;
@@ -9,7 +11,7 @@ class SummaryContainer {
   final String dangerousGoods;
   final String coldChain;
   final String moduleDestination;
-  final String sequentialBuildPriority;
+  final SequentialBuild sequentialBuild;
 
   SummaryContainer(
       this.containerNr,
@@ -22,5 +24,5 @@ class SummaryContainer {
       this.dangerousGoods,
       this.coldChain,
       this.moduleDestination,
-      this.sequentialBuildPriority);
+      this.sequentialBuild);
 }

@@ -2,6 +2,7 @@ import 'package:rescuenet_warehouse/pdf/packing_dangerous_good.dart';
 import 'package:rescuenet_warehouse/pdf/packing_item.dart';
 import 'package:rescuenet_warehouse/pdf/packing_list.dart';
 import 'package:rescuenet_warehouse/pdf/summary_container.dart';
+import 'package:rescuenet_warehouse/sequential_build.dart';
 
 var summaryContainer = [
   SummaryContainer(
@@ -15,17 +16,27 @@ var summaryContainer = [
       "Aerosol, non-flammable",
       "",
       "Office",
-      "First build"),
+      SequentialBuild.firstBuild),
   SummaryContainer("2", "Cooler", "With cold packs and meds", "Cooler", 540, 12,
-      "Dec 12th, 2023", "", "Yes", "Storage", "Pre build"),
+      "Dec 12th, 2023", "", "Yes", "Storage", SequentialBuild.preBuild),
   SummaryContainer("3", "Fridge", "Electrical fridge", "Euro 60-40-32", 300, 20,
-      "", "", "Yes", "Storage", "Pre build"),
+      "", "", "Yes", "Storage", SequentialBuild.preBuild),
   SummaryContainer("4", "Tents", "Meeting tent", "Euro 60-40-32", 300, 31, "",
-      "", "", "Meeting area", "Later build"),
+      "", "", "Meeting area", SequentialBuild.laterBuild),
   SummaryContainer("5", "Sanitation", "Toilets, shower", "Euro 60-40-32", 300,
-      25, "", "", "", "Meeting area", "First build"),
-  SummaryContainer("6", "Water filter 1", "Water filter for base camp",
-      "Euro 60-40-32", 300, 28.5, "", "", "", "Water treatment", "Later build"),
+      25, "", "", "", "Meeting area", SequentialBuild.firstBuild),
+  SummaryContainer(
+      "6",
+      "Water filter 1",
+      "Water filter for base camp",
+      "Euro 60-40-32",
+      300,
+      28.5,
+      "",
+      "",
+      "",
+      "Water treatment",
+      SequentialBuild.laterBuild),
   SummaryContainer(
       "7",
       "Water raw storage",
@@ -37,11 +48,21 @@ var summaryContainer = [
       "",
       "",
       "Water treatment",
-      "Later build"),
-  SummaryContainer("8", "Power 1", "For fridge", "Euro 60-40-32", 300, 30.5, "",
-      "Flammable liquid Aerosol, non-flammable", "Yes", "Storage", "Pre build"),
+      SequentialBuild.laterBuild),
+  SummaryContainer(
+      "8",
+      "Power 1",
+      "For fridge",
+      "Euro 60-40-32",
+      300,
+      30.5,
+      "",
+      "Flammable liquid Aerosol, non-flammable",
+      "Yes",
+      "Storage",
+      SequentialBuild.preBuild),
   SummaryContainer("9", "Medical backpack 1", "", "Medical backpack", 300, 18.5,
-      "March 20th, 2024", "", "", "Storage", "Storage supply"),
+      "March 20th, 2024", "", "", "Storage", SequentialBuild.supplies),
 ];
 
 var packingList = PackingList(
@@ -51,7 +72,7 @@ var packingList = PackingList(
     "Printer, tables, etc,",
     20.5,
     "Office",
-    "First Build",
+    SequentialBuild.firstBuild,
     DateTime(2023, 5),
     [packingDangerousGood],
     [packingItem1, packingItem2, packingItem3]);

@@ -1,3 +1,4 @@
+import 'package:pdf/pdf.dart';
 import 'package:rescuenet_warehouse/pdf/packing_item.dart';
 import 'package:rescuenet_warehouse/pdf/packing_list.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -31,7 +32,8 @@ _upperLeft(PackingList list) {
     summaryTable(_summaryRows(list)),
     pw.Row(children: [
       valueBox("Destination:", list.destination),
-      valueBox("Seq. build prio:", list.sequentialBuildPrio),
+      valueBox("Seq. build prio:", list.sequentialBuild.displayName, 12.0,
+          PdfColor.fromInt(list.sequentialBuild.color.value)),
       valueBox(
           "Expiration:",
           list.expirationDate != null

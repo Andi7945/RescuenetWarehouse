@@ -1,3 +1,4 @@
+import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 import 'packing_list.dart';
@@ -40,6 +41,7 @@ _left(PackingList list) =>
       summaryTable(summaryRows(list)),
       pw.Row(children: [
         valueBox("Destination:", list.destination),
-        valueBox("Seq. build prio:", list.sequentialBuildPrio, 0.0)
+        valueBox("Seq. build prio:", list.sequentialBuild.displayName, 0.0,
+            PdfColor.fromInt(list.sequentialBuild.color.value))
       ])
     ]);

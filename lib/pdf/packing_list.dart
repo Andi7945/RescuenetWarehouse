@@ -1,4 +1,5 @@
 import 'package:rescuenet_warehouse/pdf/packing_dangerous_good.dart';
+import 'package:rescuenet_warehouse/sequential_build.dart';
 
 import 'packing_item.dart';
 
@@ -10,7 +11,7 @@ class PackingList {
   double totalWeight;
 
   String destination;
-  String sequentialBuildPrio;
+  SequentialBuild sequentialBuild;
   DateTime? expirationDate;
 
   List<PackingDangerousGood> dangerousGoods;
@@ -24,7 +25,7 @@ class PackingList {
       this.containerDescription,
       this.totalWeight,
       this.destination,
-      this.sequentialBuildPrio,
+      this.sequentialBuild,
       this.expirationDate,
       this.dangerousGoods,
       this.items);

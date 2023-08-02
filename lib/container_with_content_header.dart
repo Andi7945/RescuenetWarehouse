@@ -219,7 +219,7 @@ class ContainerWithContentHeader extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10),
       clipBehavior: Clip.antiAlias,
       decoration: ShapeDecoration(
-        color: _sequentialBuildColor(),
+        color: _container.sequentialBuild.color,
         shape: const RoundedRectangleBorder(side: BorderSide(width: 0.50)),
       ),
       child: Column(
@@ -228,35 +228,9 @@ class ContainerWithContentHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           _text('Sequential Build', 12),
-          _textBold(_sequentialBuildName(), 16)
+          _textBold(_container.sequentialBuild.displayName, 16)
         ],
       ),
     );
-  }
-
-  Color _sequentialBuildColor() {
-    if (_container.sequentialBuild == SequentialBuild.firstBuild) {
-      return const Color.fromRGBO(255, 245, 0, 1);
-    }
-    if (_container.sequentialBuild == SequentialBuild.laterBuild) {
-      return const Color.fromRGBO(0, 255, 41, 1);
-    }
-    if (_container.sequentialBuild == SequentialBuild.supplies) {
-      return const Color.fromRGBO(0, 250, 250, 1);
-    }
-    return const Color(0xFFFFF400);
-  }
-
-  String _sequentialBuildName() {
-    if (_container.sequentialBuild == SequentialBuild.firstBuild) {
-      return "First Build";
-    }
-    if (_container.sequentialBuild == SequentialBuild.laterBuild) {
-      return "Later Build";
-    }
-    if (_container.sequentialBuild == SequentialBuild.supplies) {
-      return "Supplies";
-    }
-    return "Pre Build";
   }
 }

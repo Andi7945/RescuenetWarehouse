@@ -15,17 +15,11 @@
 
 * Add numeric input field with validation
 
-* PDF Container Summary
-  * Logo higher quality + size
-  * Sequential Build Priority color + not only enum names
-
-* PDF Packing List
-  * Sequential Build Priority color + not only enum names
-
 * PDF Labels
-  * Sequential Build Priority color + not only enum names
   * Make right side take all the space
   * Make it invincible against long names
+
+* Print safety datasheet if available
 
 Galaxy Tab A8 SMX200
 
@@ -41,4 +35,4 @@ strings ~/Downloads/RN\ Summary\ list.pdf | grep -i FontName
 * Cold chain -> checkbox in label? Or do we have one label which will be defined here?
 * How does the PDF Packing List look with multiple dangerous goods?
 * Dangerous Goods: IATA Number = UN Number?
-* 
+* Should the summary list always be printed?

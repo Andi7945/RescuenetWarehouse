@@ -34,7 +34,7 @@ SummaryContainer _mapSingle(MapEntry<RescueContainer, Map<Item, int>> entry) =>
         _dangerousGoods(entry.value),
         _hasColdChainItem(entry.value),
         entry.key.moduleDestination ?? "",
-        entry.key.sequentialBuild.name);
+        entry.key.sequentialBuild);
 
 _dangerousGoods(Map<Item, int> items) => items.keys
     .expand((e) => e.signs)

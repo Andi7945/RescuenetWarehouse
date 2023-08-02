@@ -9,8 +9,9 @@ import 'package:printing/printing.dart';
 import 'packing_dangerous_good.dart';
 import 'packing_list.dart';
 
-smallText(String text) =>
-    pw.Text(text, style: const pw.TextStyle(fontSize: 10.0));
+smallText(String text, [PdfColor? backgroundColor]) => pw.Text(text,
+    style: pw.TextStyle(
+        fontSize: 10.0, background: pw.BoxDecoration(color: backgroundColor)));
 
 var empty = pw.SizedBox(height: 10);
 
@@ -19,8 +20,9 @@ tableHeadline(String text) => pw.Padding(
     child: pw.Text(text,
         style: pw.TextStyle(fontSize: 10.0, fontWeight: pw.FontWeight.bold)));
 
-tableCell(String text) =>
-    pw.Padding(padding: const pw.EdgeInsets.all(2.0), child: smallText(text));
+tableCell(String text, [PdfColor? textBackgroundColor]) => pw.Padding(
+    padding: const pw.EdgeInsets.all(2.0),
+    child: smallText(text, textBackgroundColor));
 
 const double inch = 72.0;
 const double cm = inch / 2.54;
@@ -90,14 +92,18 @@ List<pw.TableRow> summaryRows(PackingList list) {
   ];
 }
 
-pw.Widget valueBox(String label, String value, [double? paddingRight]) =>
+pw.Widget valueBox(String label, String value,
+        [double? paddingRight, PdfColor? backgroundColor]) =>
     pw.Padding(
         padding: pw.EdgeInsets.only(right: paddingRight ?? 12.0, top: 12.0),
         child: pw.Container(
             width: 90,
             height: 40,
             padding: const pw.EdgeInsets.all(2.0),
-            decoration: pw.BoxDecoration(border: pw.Border.all(width: 0.5)),
+            decoration: pw.BoxDecoration(
+              border: pw.Border.all(width: 0.5),
+              color: backgroundColor,
+            ),
             child: pw.Column(
                 mainAxisAlignment: pw.MainAxisAlignment.center,
                 children: [

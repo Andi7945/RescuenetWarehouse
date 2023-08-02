@@ -1,3 +1,4 @@
+import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:rescuenet_warehouse/pdf/summary_container.dart';
 import 'package:rescuenet_warehouse/pdf/summary_list.dart';
@@ -84,5 +85,6 @@ pw.TableRow _line(SummaryContainer container) => pw.TableRow(children: [
       tableCell(container.dangerousGoods),
       tableCell(container.coldChain),
       tableCell(container.moduleDestination),
-      tableCell(container.sequentialBuildPriority),
+      tableCell(container.sequentialBuild.displayName,
+          PdfColor.fromInt(container.sequentialBuild.color.value)),
     ]);
