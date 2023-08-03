@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/store_module_destination.dart';
+import 'package:rescuenet_warehouse/edit_custom_values/store_module_destination.dart';
 
-import 'rescue_text.dart';
+import '../rescue_text.dart';
 
 class EditCustomValueDeleteButton extends StatelessWidget {
   final String name;

@@ -1,6 +1,6 @@
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/container_options.dart';
-import 'package:rescuenet_warehouse/store_module_destination.dart';
+import 'package:rescuenet_warehouse/edit_custom_values/store_module_destination.dart';
 
 import 'store.dart';
 

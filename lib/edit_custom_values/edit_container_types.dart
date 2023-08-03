@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rescuenet_warehouse/menu_option.dart';
 
-import 'menu.dart';
+import '../menu.dart';
 
 class EditContainerTypes extends StatelessWidget {
   @override
