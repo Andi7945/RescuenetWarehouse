@@ -16,10 +16,14 @@ import 'package:rescuenet_warehouse/provider/rn_items_provider.dart';
 import 'package:rescuenet_warehouse/provider/sequentialbuild_provider.dart';
 import 'package:rescuenet_warehouse/routes.dart';
 import 'package:rescuenet_warehouse/store.dart';
+import 'package:rescuenet_warehouse/store_module_destination.dart';
 import 'package:rescuenet_warehouse/utils/widget_tree_util.dart';
 import 'package:rescuenet_warehouse/widget/horizontal_drag_widget.dart';
 import 'package:rescuenet_warehouse/work_log_page.dart';
 import 'package:uuid/uuid.dart';
+
+import 'proxy_container_options.dart';
+import 'proxy_module_destination_usage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,6 +47,9 @@ class MyApp extends StatelessWidget {
           create: (ctx) => SequentialBuildProvider(),
         ),
         ChangeNotifierProvider(create: (ctx) => Store()),
+        ChangeNotifierProvider(create: (_) => StoreModuleDestination()),
+        proxyModuleDestinationUsage(),
+        proxyContainerOptions()
       ],
       child: MaterialApp(
           title: 'RescueNet',

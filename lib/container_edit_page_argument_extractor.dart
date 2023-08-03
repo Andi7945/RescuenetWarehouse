@@ -19,9 +19,10 @@ class ContainerEditPageArgumentExtractor extends StatelessWidget {
     ]));
   }
 
-  _body(String id) => Consumer<Store>(
-      builder: (ctxt, store, _) => _page(store.containerById(id),
-          (c) => store.updateContainer(c), store.containerOptions));
+  _body(String id) => Consumer<ContainerOptions>(
+      builder: (ctx, options, _) => Consumer<Store>(
+          builder: (ctxt, store, _) => _page(store.containerById(id),
+              (c) => store.updateContainer(c), options)));
 
   _page(
       RescueContainer container,

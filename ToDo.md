@@ -1,8 +1,4 @@
 # next steps
-* Add edit/add/remove custom values page
-  * Type
-  * Current Location
-
 * Change names of custom values (mod dest etc)
 * RescueNet ID: Not Changeable, Auto Increment
 

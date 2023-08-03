@@ -3,7 +3,6 @@ import "package:collection/collection.dart";
 import 'package:equatable/equatable.dart';
 
 import 'package:flutter/material.dart';
-import 'package:rescuenet_warehouse/container_options.dart';
 import 'package:rescuenet_warehouse/item.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 
@@ -99,8 +98,6 @@ class Store extends ChangeNotifier {
     container_type_backpack
   ];
 
-  final List<String> _moduleDestinations = ["Office", "Warehouse"];
-
   final List<String> _currentLocations = ["Warehouse Shiphole NL", "Office"];
 
   UnmodifiableListView<Item> get items => UnmodifiableListView(_items);
@@ -182,49 +179,8 @@ class Store extends ChangeNotifier {
   UnmodifiableListView<ContainerType> get containerTypes =>
       UnmodifiableListView(_containerTypes);
 
-  UnmodifiableListView<String> get moduleDestinations =>
-      UnmodifiableListView(_moduleDestinations);
-
-  Map<String, Set<String>> get moduleDestinationsWithUsage {
-    Map<String, Set<String>> grouped = _containers.values
-        .where((element) => element.moduleDestination != null)
-        .groupBy((p0) => p0.moduleDestination!)
-        .mapValues((value) => value.map((e) => e.name).whereNotNull().toSet());
-
-    Map<String, Set<String>> map = {
-      for (var e in _moduleDestinations) e: grouped[e] ?? Set()
-    };
-
-    return map;
-  }
-
-  addDestination(String? text) {
-    if (text != null && !_moduleDestinations.contains(text)) {
-      _moduleDestinations.add(text);
-      notifyListeners();
-    }
-  }
-
-  removeDestination(String? text) {
-    if (_moduleDestinations.contains(text)) {
-      _moduleDestinations.remove(text);
-      notifyListeners();
-    }
-  }
-
-  editDestination(String oldDest, String newDest) {
-    var idx = _moduleDestinations.indexOf(oldDest);
-    if (idx != -1) {
-      _moduleDestinations.replaceRange(idx, idx + 1, [newDest]);
-      notifyListeners();
-    }
-  }
-
   UnmodifiableListView<String> get currentLocations =>
       UnmodifiableListView(_currentLocations);
-
-  ContainerOptions get containerOptions =>
-      ContainerOptions(containerTypes, moduleDestinations, currentLocations);
 
   increase(Item item, String containerId) {
     _assignments

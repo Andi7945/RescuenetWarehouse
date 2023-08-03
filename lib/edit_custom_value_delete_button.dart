@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rescuenet_warehouse/store_module_destination.dart';
 
 import 'rescue_text.dart';
-import 'store.dart';
 
 class EditCustomValueDeleteButton extends StatelessWidget {
   final String name;
@@ -19,7 +19,7 @@ class EditCustomValueDeleteButton extends StatelessWidget {
 
   _btnDeleteEnabled(BuildContext context) => TextButton(
       onPressed: () {
-        Provider.of<Store>(context, listen: false).removeDestination(name);
+        Provider.of<StoreModuleDestination>(context, listen: false).removeDestination(name);
       },
       child: const RescueText(24, '-', FontWeight.w700));
 

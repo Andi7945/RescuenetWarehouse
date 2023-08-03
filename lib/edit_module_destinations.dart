@@ -4,10 +4,11 @@ import 'package:rescuenet_warehouse/edit_custom_value_delete_button.dart';
 import 'package:rescuenet_warehouse/edit_custom_value_text_field.dart';
 import 'package:rescuenet_warehouse/menu_option.dart';
 import 'package:rescuenet_warehouse/rescue_table.dart';
+import 'package:rescuenet_warehouse/store_module_destination.dart';
 
 import 'menu.dart';
+import 'proxy_module_destination_usage.dart';
 import 'rescue_text.dart';
-import 'store.dart';
 
 class EditModuleDestinations extends StatefulWidget {
   @override
@@ -32,9 +33,8 @@ class _EditModuleDestinationsState extends State<EditModuleDestinations> {
   _body() {
     return Padding(
         padding: const EdgeInsets.only(left: 40, right: 40),
-        child: Consumer<Store>(
-            builder: (ctx, store, _) =>
-                _table(store.moduleDestinationsWithUsage)));
+        child: Consumer<ModuleDestinationWithUsage>(
+            builder: (ctx, store, _) => _table(store.destinationWithUsage)));
   }
 
   Widget _table(Map<String, Set<String>> moduleDestinations) => RescueTable(
@@ -56,8 +56,9 @@ class _EditModuleDestinationsState extends State<EditModuleDestinations> {
         padding: const EdgeInsets.only(left: 20),
         child: EditCustomValueTextField(
             TextEditingController(text: oldDest),
-            (newDest) => Provider.of<Store>(context, listen: false)
-                .editDestination(oldDest, newDest)));
+            (newDest) =>
+                Provider.of<StoreModuleDestination>(context, listen: false)
+                    .editDestination(oldDest, newDest)));
   }
 
   TableRow _addingRow() => TableRow(children: [
@@ -69,7 +70,7 @@ class _EditModuleDestinationsState extends State<EditModuleDestinations> {
 
   _btnAdd() => TextButton(
       onPressed: () {
-        Provider.of<Store>(context, listen: false)
+        Provider.of<StoreModuleDestination>(context, listen: false)
             .addDestination(_addController.text);
         _addController.clear();
       },
