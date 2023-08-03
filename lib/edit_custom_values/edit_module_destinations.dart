@@ -48,7 +48,7 @@ class _EditModuleDestinationsState extends State<EditModuleDestinations> {
   TableRow _buildRow(MapEntry<String, Set<String>> destination) =>
       TableRow(children: [
         _textField(destination.key),
-        EditCustomValueDeleteButton(destination.key, destination.value, () {
+        EditCustomValueDeleteButton(destination.value, () {
           Provider.of<StoreModuleDestination>(context, listen: false)
               .removeDestination(destination.key);
         })

@@ -9,4 +9,13 @@ class ContainerType extends Equatable {
 
   @override
   List<Object> get props => [name, emptyWeight, measurements];
+
+  ContainerType.from(
+      {required ContainerType type,
+      String? name,
+      double? emptyWeight,
+      String? measurements})
+      : name = name ?? type.name,
+        emptyWeight = emptyWeight ?? type.emptyWeight,
+        measurements = measurements ?? type.measurements;
 }

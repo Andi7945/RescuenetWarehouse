@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import '../rescue_text.dart';
 
 class EditCustomValueDeleteButton extends StatelessWidget {
-  final String name;
   final Set<String>? usedIn;
   final VoidCallback? onDelete;
 
-  EditCustomValueDeleteButton(this.name, this.usedIn, this.onDelete);
+  EditCustomValueDeleteButton(this.usedIn, this.onDelete);
 
   @override
   Widget build(BuildContext context) {

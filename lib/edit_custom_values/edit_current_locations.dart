@@ -47,7 +47,7 @@ class _EditCurrentLocationsState extends State<EditCurrentLocations> {
   TableRow _buildRow(MapEntry<String, Set<String>> withUsage) =>
       TableRow(children: [
         _textField(withUsage.key),
-        EditCustomValueDeleteButton(withUsage.key, withUsage.value, () {
+        EditCustomValueDeleteButton(withUsage.value, () {
           Provider.of<StoreCurrentLocations>(context, listen: false)
               .remove(withUsage.key);
         })

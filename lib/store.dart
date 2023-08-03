@@ -7,7 +7,6 @@ import 'package:rescuenet_warehouse/item.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 
 import 'assignment.dart';
-import 'container_type.dart';
 import 'data_mocks.dart';
 import 'log_entry.dart';
 
@@ -93,11 +92,6 @@ class Store extends ChangeNotifier {
         .toList();
   }
 
-  final List<ContainerType> _containerTypes = [
-    container_type_crate,
-    container_type_backpack
-  ];
-
   UnmodifiableListView<Item> get items => UnmodifiableListView(_items);
 
   Item itemById(String id) => _items.firstWhere((element) => element.id == id);
@@ -173,9 +167,6 @@ class Store extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-  UnmodifiableListView<ContainerType> get containerTypes =>
-      UnmodifiableListView(_containerTypes);
 
   increase(Item item, String containerId) {
     _assignments
