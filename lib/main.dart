@@ -7,6 +7,7 @@ import 'package:rescuenet_warehouse/container_with_content_page.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/edit_container_types.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/edit_current_locations.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/edit_module_destinations.dart';
+import 'package:rescuenet_warehouse/edit_custom_values/store_current_locations.dart';
 import 'package:rescuenet_warehouse/export_page.dart';
 import 'package:rescuenet_warehouse/item_edit_page_argument_extractor.dart';
 import 'package:rescuenet_warehouse/items_page.dart';
@@ -22,6 +23,7 @@ import 'package:rescuenet_warehouse/widget/horizontal_drag_widget.dart';
 import 'package:rescuenet_warehouse/work_log_page.dart';
 import 'package:uuid/uuid.dart';
 
+import 'edit_custom_values/proxy_current_location_usage.dart';
 import 'proxy_container_options.dart';
 import 'edit_custom_values/proxy_module_destination_usage.dart';
 
@@ -48,7 +50,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(create: (ctx) => Store()),
         ChangeNotifierProvider(create: (_) => StoreModuleDestination()),
+        ChangeNotifierProvider(create: (_) => StoreCurrentLocations()),
         proxyModuleDestinationUsage(),
+        proxyCurrentLocationUsage(),
         proxyContainerOptions()
       ],
       child: MaterialApp(

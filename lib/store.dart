@@ -98,8 +98,6 @@ class Store extends ChangeNotifier {
     container_type_backpack
   ];
 
-  final List<String> _currentLocations = ["Warehouse Shiphole NL", "Office"];
-
   UnmodifiableListView<Item> get items => UnmodifiableListView(_items);
 
   Item itemById(String id) => _items.firstWhere((element) => element.id == id);
@@ -178,9 +176,6 @@ class Store extends ChangeNotifier {
 
   UnmodifiableListView<ContainerType> get containerTypes =>
       UnmodifiableListView(_containerTypes);
-
-  UnmodifiableListView<String> get currentLocations =>
-      UnmodifiableListView(_currentLocations);
 
   increase(Item item, String containerId) {
     _assignments

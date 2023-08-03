@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/edit_custom_values/store_module_destination.dart';
 
 import '../rescue_text.dart';
 
 class EditCustomValueDeleteButton extends StatelessWidget {
   final String name;
   final Set<String>? usedIn;
+  final VoidCallback? onDelete;
 
-  EditCustomValueDeleteButton(this.name, this.usedIn);
+  EditCustomValueDeleteButton(this.name, this.usedIn, this.onDelete);
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +17,7 @@ class EditCustomValueDeleteButton extends StatelessWidget {
   }
 
   _btnDeleteEnabled(BuildContext context) => TextButton(
-      onPressed: () {
-        Provider.of<StoreModuleDestination>(context, listen: false).removeDestination(name);
-      },
+      onPressed: onDelete,
       child: const RescueText(24, '-', FontWeight.w700));
 
   _btnDeleteDisabled() => Tooltip(
