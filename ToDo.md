@@ -1,4 +1,5 @@
 # next steps
+
 * Change names of custom values (mod dest etc)
 * RescueNet ID: Not Changeable, Auto Increment
 
@@ -10,14 +11,17 @@
 * Add numeric input field with validation
 
 * PDF Labels
-  * Make right side take all the space
-  * Make it invincible against long names
+    * Make right side take all the space
+    * Make it invincible against long names
 
 * Print safety datasheet if available
+
+* Make container from store result of proxy provider (if type/other custom values change it should be updated)
 
 Galaxy Tab A8 SMX200
 
 # To Discuss
+
 * Pretty sure we need drag and drop for usability
 * Description of container - is not planned but in the PDF
 * Dangerous Goods in PDF - is it the label? What text should be in the PDF, the remarks? Or a new field?

@@ -22,11 +22,13 @@ import 'package:rescuenet_warehouse/edit_custom_values/store_module_destination.
 import 'package:rescuenet_warehouse/utils/widget_tree_util.dart';
 import 'package:rescuenet_warehouse/widget/horizontal_drag_widget.dart';
 import 'package:rescuenet_warehouse/work_log_page.dart';
+import 'package:rescuenet_warehouse/work_log_store.dart';
 import 'package:uuid/uuid.dart';
 
 import 'edit_custom_values/proxy_current_location_usage.dart';
 import 'proxy_container_options.dart';
 import 'edit_custom_values/proxy_module_destination_usage.dart';
+import 'proxy_work_log.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,9 +55,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => StoreModuleDestination()),
         ChangeNotifierProvider(create: (_) => StoreCurrentLocations()),
         ChangeNotifierProvider(create: (_) => StoreContainerTypes()),
+        ChangeNotifierProvider(create: (_) => WorkLogStore()),
         proxyModuleDestinationUsage(),
         proxyCurrentLocationUsage(),
-        proxyContainerOptions()
+        proxyContainerOptions(),
+        proxyWorkLog()
       ],
       child: MaterialApp(
           title: 'RescueNet',

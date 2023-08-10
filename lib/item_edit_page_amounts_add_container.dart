@@ -63,7 +63,7 @@ class _ItemEditPageAmountsAddContainerState
 
   _addNewContainer(String containerToAdd) =>
       Provider.of<Store>(context, listen: false)
-          .addContainer(containerToAdd, widget.item);
+          .addContainer(context, containerToAdd, widget.item);
 
   _newListener(String selectedValue) {
     ValueNotifier<String> valueNotifier = ValueNotifier(selectedValue);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rescuenet_warehouse/main.dart';
 import 'package:rescuenet_warehouse/menu_option.dart';
 
 import '../container_type.dart';
@@ -92,6 +93,7 @@ class _EditContainerTypesState extends State<EditContainerTypes> {
       onPressed: () {
         Provider.of<StoreContainerTypes>(context, listen: false).add(
             ContainerType(
+                uuid.v4(),
                 _addControllerName.text,
                 double.tryParse(_addControllerEmptyWeight.text) ?? 0.0,
                 _addControllerMeasurements.text));

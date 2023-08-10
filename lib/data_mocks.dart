@@ -82,9 +82,9 @@ var container_medical = RescueContainer(
     false,
     false);
 
-var container_type_crate = ContainerType("Euro crate", 1.7, "60x40x40");
+var container_type_crate = ContainerType("1", "Euro crate", 1.7, "60x40x40");
 var container_type_backpack =
-    ContainerType("Medical backpack", 0.5, "60x40x32");
+    ContainerType("2", "Medical backpack", 0.5, "60x40x32");
 
 var container_options_type = [container_type_crate, container_type_backpack];
 var container_options_module_destination = ["Office", "Warehouse"];

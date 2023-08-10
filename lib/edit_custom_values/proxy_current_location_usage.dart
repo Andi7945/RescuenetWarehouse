@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rescuenet_warehouse/collection_extensions.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/store_current_locations.dart';
 
 import "package:collection/collection.dart";

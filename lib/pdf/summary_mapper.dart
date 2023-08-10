@@ -1,5 +1,5 @@
+import 'package:rescuenet_warehouse/collection_extensions.dart';
 import 'package:rescuenet_warehouse/item_service.dart';
-import 'package:rescuenet_warehouse/store.dart';
 import 'package:rescuenet_warehouse/pdf/summary_list.dart';
 import 'package:rescuenet_warehouse/pdf/summary_pdf.dart';
 

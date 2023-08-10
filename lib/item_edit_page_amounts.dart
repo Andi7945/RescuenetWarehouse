@@ -122,17 +122,17 @@ class _ItemEditPageAmountsState extends State<ItemEditPageAmounts> {
   _reduce(BuildContext context, RescueContainer container) {
     if (widget.containerWithAssignments.containsKey(container)) {
       Provider.of<Store>(context, listen: false)
-          .reduce(widget.item, container.id);
+          .reduce(context, widget.item, container.id);
     }
   }
 
   _increase(BuildContext context, RescueContainer container) {
     if (widget.containerWithAssignments.containsKey(container)) {
       Provider.of<Store>(context, listen: false)
-          .increase(widget.item, container.id);
+          .increase(context, widget.item, container.id);
     } else {
       Provider.of<Store>(context, listen: false)
-          .addContainer(container.name, widget.item);
+          .addContainer(context, container.name, widget.item);
     }
   }
 
