@@ -17,6 +17,9 @@ class ContainerService {
 
   ContainerService(this.store, this.storeContainerTypes, this.assignmentStore);
 
+  List<RescueContainer> containers() =>
+      store.containers.values.map(fromDao).toList();
+
   Map<RescueContainer, bool> containerWithVisible() => store.containerVisibility
       .map((key, value) => MapEntry(fromDao(store.containers[key]!), value));
 

@@ -5,6 +5,7 @@ import 'package:rescuenet_warehouse/rescue_table.dart';
 import 'package:rescuenet_warehouse/routes.dart';
 
 import 'container_overview_page_row.dart';
+import 'container_service.dart';
 import 'menu.dart';
 import 'rescue_container.dart';
 
@@ -19,10 +20,16 @@ class ContainerOverviewPage extends StatelessWidget {
   _body(context) {
     return Padding(
         padding: const EdgeInsets.only(left: 40, right: 40),
-        child: Consumer<List<RescueContainer>>(
-            builder: (ctxt, containers, _) => RescueTable(
-                const ["", "Image", "Name", "Currently deployed", "Total amount"],
-                _buildRows(context, containers),
+        child: Consumer<ContainerService>(
+            builder: (ctxt, service, _) => RescueTable(
+                const [
+                  "",
+                  "Image",
+                  "Name",
+                  "Currently deployed",
+                  "Total amount"
+                ],
+                _buildRows(context, service.containers()),
                 const {0: IntrinsicColumnWidth(), 1: IntrinsicColumnWidth()})));
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/container_edit_page.dart';
+import 'package:rescuenet_warehouse/container_service.dart';
 import 'package:rescuenet_warehouse/menu_option.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 
@@ -20,9 +21,9 @@ class ContainerEditPageArgumentExtractor extends StatelessWidget {
     ]));
   }
 
-  _body(String id) => Consumer3<ContainerOptions, Store, List<RescueContainer>>(
-      builder: (ctxt, options, store, containers, _) => _page(
-          containers.firstWhere((c) => c.id == id),
+  _body(String id) => Consumer3<ContainerOptions, Store, ContainerService>(
+      builder: (ctxt, options, store, service, _) => _page(
+          service.containers().firstWhere((c) => c.id == id),
           (c) => store.updateContainer(c),
           options));
 
