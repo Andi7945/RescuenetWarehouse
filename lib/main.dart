@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rescuenet_warehouse/assignment_service.dart';
+import 'package:rescuenet_warehouse/assignment_store.dart';
 import 'package:rescuenet_warehouse/container_edit_page_argument_extractor.dart';
 import 'package:rescuenet_warehouse/container_overview_page.dart';
 import 'package:rescuenet_warehouse/container_with_content_page.dart';
@@ -16,7 +18,6 @@ import 'package:rescuenet_warehouse/page/login_register_page.dart';
 import 'package:rescuenet_warehouse/page/warehouse_overview_page.dart';
 import 'package:rescuenet_warehouse/provider/rn_items_provider.dart';
 import 'package:rescuenet_warehouse/provider/sequentialbuild_provider.dart';
-import 'package:rescuenet_warehouse/proxy_container_service.dart';
 import 'package:rescuenet_warehouse/routes.dart';
 import 'package:rescuenet_warehouse/store.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/store_module_destination.dart';
@@ -26,6 +27,7 @@ import 'package:rescuenet_warehouse/work_log_page.dart';
 import 'package:rescuenet_warehouse/work_log_store.dart';
 import 'package:uuid/uuid.dart';
 
+import 'container_service.dart';
 import 'edit_custom_values/proxy_current_location_usage.dart';
 import 'proxy_container_options.dart';
 import 'edit_custom_values/proxy_module_destination_usage.dart';
@@ -57,11 +59,13 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => StoreCurrentLocations()),
         ChangeNotifierProvider(create: (_) => StoreContainerTypes()),
         ChangeNotifierProvider(create: (_) => WorkLogStore()),
+        ChangeNotifierProvider(create: (_) => AssignmentStore()),
         proxyContainerService(),
         proxyModuleDestinationUsage(),
         proxyCurrentLocationUsage(),
         proxyContainerOptions(),
-        proxyWorkLog()
+        proxyWorkLog(),
+        provideAssignmentService(),
       ],
       child: MaterialApp(
           title: 'RescueNet',

@@ -9,7 +9,6 @@ import 'package:rescuenet_warehouse/rescue_container.dart';
 
 import 'container_service.dart';
 import 'item.dart';
-import 'store.dart';
 
 class ItemEditPage extends StatefulWidget {
   final Item item;
@@ -23,13 +22,12 @@ class ItemEditPage extends StatefulWidget {
 class _ItemEditPageState extends State<ItemEditPage> {
   @override
   Widget build(BuildContext context) {
-    return _body();
+    return Consumer<ContainerService>(
+        builder: (ctx, service, _) =>
+            _body(service.assignmentsFor(widget.item)));
   }
 
-  _body() {
-    Map<RescueContainer, int> assignments =
-        Provider.of<ContainerService>(context, listen: false)
-            .assignmentsFor(widget.item);
+  _body(Map<RescueContainer, int> assignments) {
     return SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Row(

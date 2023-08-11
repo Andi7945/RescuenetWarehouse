@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rescuenet_warehouse/assignment_service.dart';
 import 'package:rescuenet_warehouse/item_edit_page_amounts_add_container.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
@@ -121,18 +122,18 @@ class _ItemEditPageAmountsState extends State<ItemEditPageAmounts> {
 
   _reduce(BuildContext context, RescueContainer container) {
     if (widget.containerWithAssignments.containsKey(container)) {
-      Provider.of<Store>(context, listen: false)
-          .reduce(context, widget.item, container.id);
+      Provider.of<AssignmentService>(context, listen: false)
+          .reduce(widget.item, container.id);
     }
   }
 
   _increase(BuildContext context, RescueContainer container) {
     if (widget.containerWithAssignments.containsKey(container)) {
-      Provider.of<Store>(context, listen: false)
-          .increase(context, widget.item, container.id);
+      Provider.of<AssignmentService>(context, listen: false)
+          .increase(widget.item, container.id);
     } else {
-      Provider.of<Store>(context, listen: false)
-          .addContainer(context, container.name, widget.item);
+      Provider.of<AssignmentService>(context, listen: false)
+          .addContainer(container.name, widget.item);
     }
   }
 

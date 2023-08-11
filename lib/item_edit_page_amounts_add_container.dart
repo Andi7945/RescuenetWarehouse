@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rescuenet_warehouse/assignment_service.dart';
+import 'package:rescuenet_warehouse/container_service.dart';
 
 import 'item.dart';
 import 'rescue_dropdown_button.dart';
 import 'rescue_text.dart';
-import 'store.dart';
 
 class ItemEditPageAmountsAddContainer extends StatefulWidget {
   final Item item;
@@ -21,11 +22,12 @@ class _ItemEditPageAmountsAddContainerState
   ValueNotifier<String> valueNotifier = ValueNotifier("");
 
   @override
-  Widget build(BuildContext context) =>
-      Consumer<Store>(builder: (ctx, store, _) => _body(_options(store)));
+  Widget build(BuildContext context) => Consumer<ContainerService>(
+      builder: (ctx, service, _) =>
+          _body(_options(service.otherContainerOptions(widget.item))));
 
-  List<String> _options(Store store) {
-    var availableOptions = [...store.otherContainerOptions(widget.item)];
+  List<String> _options(List<String> otherOptions) {
+    var availableOptions = [...otherOptions];
     availableOptions
         .removeWhere((element) => widget.knownNames.contains(element));
     return availableOptions;
@@ -62,8 +64,8 @@ class _ItemEditPageAmountsAddContainerState
   }
 
   _addNewContainer(String containerToAdd) =>
-      Provider.of<Store>(context, listen: false)
-          .addContainer(context, containerToAdd, widget.item);
+      Provider.of<AssignmentService>(context, listen: false)
+          .addContainer(containerToAdd, widget.item);
 
   _newListener(String selectedValue) {
     ValueNotifier<String> valueNotifier = ValueNotifier(selectedValue);
