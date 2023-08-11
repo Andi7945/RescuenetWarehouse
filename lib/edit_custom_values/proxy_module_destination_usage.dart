@@ -5,11 +5,11 @@ import 'package:rescuenet_warehouse/edit_custom_values/store_module_destination.
 
 import "package:collection/collection.dart";
 
-import '../store.dart';
+import '../container_store.dart';
 
-ProxyProvider2 proxyModuleDestinationUsage() =>
-    ProxyProvider2<Store, StoreModuleDestination, ModuleDestinationWithUsage>(
-        update: (BuildContext context, Store store,
+ProxyProvider2 proxyModuleDestinationUsage() => ProxyProvider2<ContainerStore,
+            StoreModuleDestination, ModuleDestinationWithUsage>(
+        update: (BuildContext context, ContainerStore store,
             StoreModuleDestination storeModuleDestination, previous) {
       Map<String, Set<String>> grouped = store.containerValues
           .where((element) => element.moduleDestination != null)

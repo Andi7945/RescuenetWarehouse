@@ -5,11 +5,11 @@ import 'package:rescuenet_warehouse/edit_custom_values/store_current_locations.d
 
 import "package:collection/collection.dart";
 
-import '../store.dart';
+import '../container_store.dart';
 
-ProxyProvider2 proxyCurrentLocationUsage() =>
-    ProxyProvider2<Store, StoreCurrentLocations, CurrentLocationsWithUsage>(
-        update: (BuildContext context, Store store,
+ProxyProvider2 proxyCurrentLocationUsage() => ProxyProvider2<ContainerStore,
+            StoreCurrentLocations, CurrentLocationsWithUsage>(
+        update: (BuildContext context, ContainerStore store,
             StoreCurrentLocations storeCurrentLocations, previous) {
       Map<String, Set<String>> grouped = store.containerValues
           .where((element) => element.currentLocation != null)

@@ -24,7 +24,7 @@ class ContainerEditPageArgumentExtractor extends StatelessWidget {
   _body(String id) => Consumer3<ContainerOptions, Store, ContainerService>(
       builder: (ctxt, options, store, service, _) => _page(
           service.containers().firstWhere((c) => c.id == id),
-          (c) => store.updateContainer(c),
+          (c) => service.updateContainer(c),
           options));
 
   _page(RescueContainer container, ValueChanged<ContainerDao> updateContainer,

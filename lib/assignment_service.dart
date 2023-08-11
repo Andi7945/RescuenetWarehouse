@@ -5,6 +5,7 @@ import 'package:rescuenet_warehouse/work_log_store.dart';
 
 import 'assignment.dart';
 import 'container_dao.dart';
+import 'container_store.dart';
 import 'item.dart';
 import 'store.dart';
 
@@ -13,8 +14,9 @@ class AssignmentService extends ChangeNotifier {
   WorkLogStore? workLogStore;
   AssignmentStore? store;
 
-  update(Store mainStore, WorkLogStore workLogStore, AssignmentStore store) {
-    knownContainerValues = mainStore.containerValues;
+  update(ContainerStore containerStore, WorkLogStore workLogStore,
+      AssignmentStore store) {
+    knownContainerValues = containerStore.containerValues;
     this.workLogStore = workLogStore;
     this.store = store;
   }
@@ -48,8 +50,8 @@ class AssignmentService extends ChangeNotifier {
 }
 
 ChangeNotifierProxyProvider3 provideAssignmentService() =>
-    ChangeNotifierProxyProvider3<AssignmentStore, WorkLogStore, Store,
+    ChangeNotifierProxyProvider3<AssignmentStore, WorkLogStore, ContainerStore,
             AssignmentService>(
         create: (ctx) => AssignmentService(),
-        update: (ctx, store, workLogStore, mainStore, service) =>
-            service!..update(mainStore, workLogStore, store));
+        update: (ctx, store, workLogStore, containerStore, service) =>
+            service!..update(containerStore, workLogStore, store));
