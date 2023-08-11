@@ -1,8 +1,22 @@
-import 'package:rescuenet_warehouse/rescue_container.dart';
+import 'package:provider/provider.dart';
+import 'package:rescuenet_warehouse/item_store.dart';
 
 import 'item.dart';
 
-double sumItemWeight(RescueContainer container, Iterable<Item> items) {
-  return items.fold(container.type.emptyWeight,
-      (prev, e) => prev + (e.weight * e.totalAmount));
+class ItemService {
+  final ItemStore itemStore;
+
+  ItemService(this.itemStore);
+
+  List<Item> get items => itemStore.items;
+
+  Item itemById(String id) =>
+      itemStore.items.firstWhere((element) => element.id == id);
+
+  updateItem(Item item) {
+    itemStore.updateItem(item);
+  }
 }
+
+ProxyProvider provideItemService() => ProxyProvider<ItemStore, ItemService>(
+    update: (ctx, ItemStore itemStore, prev) => ItemService(itemStore));

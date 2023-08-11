@@ -7,7 +7,6 @@ import 'assignment.dart';
 import 'container_dao.dart';
 import 'container_store.dart';
 import 'item.dart';
-import 'store.dart';
 
 class AssignmentService extends ChangeNotifier {
   List<ContainerDao> knownContainerValues = [];
@@ -21,9 +20,9 @@ class AssignmentService extends ChangeNotifier {
     this.store = store;
   }
 
-  addContainer(String containerName, Item item) {
-    var container = knownContainerValues
-        .firstWhere((element) => element.name == containerName);
+  addContainer(String containerId, Item item) {
+    var container =
+        knownContainerValues.firstWhere((element) => element.id == containerId);
     var assignment = Assignment(item.id, container.id, 1);
 
     if (store?.add(assignment) ?? false) {

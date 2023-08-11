@@ -26,10 +26,10 @@ class _ItemEditPageAmountsAddContainerState
       builder: (ctx, service, _) =>
           _body(_options(service.otherContainerOptions(widget.item))));
 
-  List<String> _options(List<String> otherOptions) {
-    var availableOptions = [...otherOptions];
+  Map<String, String> _options(Map<String, String> otherOptions) {
+    var availableOptions = {...otherOptions};
     availableOptions
-        .removeWhere((element) => widget.knownNames.contains(element));
+        .removeWhere((_, name) => widget.knownNames.contains(name));
     return availableOptions;
   }
 
@@ -42,17 +42,18 @@ class _ItemEditPageAmountsAddContainerState
     });
   }
 
-  _body(List<String> otherContainerOptions) {
+  _body(Map<String, String> otherContainerOptions) {
     if (otherContainerOptions.isEmpty) {
       return RescueText.slim("No new containers available");
     }
     return _containerSelector(otherContainerOptions);
   }
 
-  _containerSelector(List<String> otherContainerOptions) {
-    if (!otherContainerOptions.contains(valueNotifier.value)) {
+  _containerSelector(Map<String, String> otherContainerOptions) {
+    if (otherContainerOptions[valueNotifier.value] == null) {
       valueNotifier.dispose();
-      valueNotifier = _newListener(otherContainerOptions[0]);
+      var options = otherContainerOptions.entries.first;
+      valueNotifier = _newListener(options.key);
     }
 
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -63,9 +64,9 @@ class _ItemEditPageAmountsAddContainerState
     ]);
   }
 
-  _addNewContainer(String containerToAdd) =>
+  _addNewContainer(String containerIdToAdd) =>
       Provider.of<AssignmentService>(context, listen: false)
-          .addContainer(containerToAdd, widget.item);
+          .addContainer(containerIdToAdd, widget.item);
 
   _newListener(String selectedValue) {
     ValueNotifier<String> valueNotifier = ValueNotifier(selectedValue);

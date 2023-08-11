@@ -6,7 +6,7 @@ import 'package:rescuenet_warehouse/rescue_container.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
 
 import 'item.dart';
-import 'store.dart';
+import 'item_service.dart';
 
 class ItemEditPageAmounts extends StatefulWidget {
   final Item item;
@@ -133,17 +133,17 @@ class _ItemEditPageAmountsState extends State<ItemEditPageAmounts> {
           .increase(widget.item, container.id);
     } else {
       Provider.of<AssignmentService>(context, listen: false)
-          .addContainer(container.name, widget.item);
+          .addContainer(container.id, widget.item);
     }
   }
 
   _reduceTotal(BuildContext context) {
-    Provider.of<Store>(context, listen: false).updateItem(
+    Provider.of<ItemService>(context, listen: false).updateItem(
         Item.from(item: widget.item, totalAmount: widget.item.totalAmount - 1));
   }
 
   _increaseTotal(BuildContext context) {
-    Provider.of<Store>(context, listen: false).updateItem(
+    Provider.of<ItemService>(context, listen: false).updateItem(
         Item.from(item: widget.item, totalAmount: widget.item.totalAmount + 1));
   }
 }

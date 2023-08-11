@@ -8,7 +8,6 @@ import 'package:rescuenet_warehouse/rescue_container.dart';
 import 'container_dao.dart';
 import 'container_options.dart';
 import 'menu.dart';
-import 'store.dart';
 
 class ContainerEditPageArgumentExtractor extends StatelessWidget {
   @override
@@ -21,8 +20,8 @@ class ContainerEditPageArgumentExtractor extends StatelessWidget {
     ]));
   }
 
-  _body(String id) => Consumer3<ContainerOptions, Store, ContainerService>(
-      builder: (ctxt, options, store, service, _) => _page(
+  _body(String id) => Consumer2<ContainerOptions, ContainerService>(
+      builder: (ctxt, options, service, _) => _page(
           service.containers().firstWhere((c) => c.id == id),
           (c) => service.updateContainer(c),
           options));

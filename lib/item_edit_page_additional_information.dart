@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/item.dart';
 import 'package:rescuenet_warehouse/item_edit_page_additional_information_exp_dates.dart';
+import 'package:rescuenet_warehouse/item_service.dart';
 import 'package:rescuenet_warehouse/operational_status.dart';
 import 'package:rescuenet_warehouse/rescue_dropdown_button.dart';
 import 'package:rescuenet_warehouse/rescue_input_with_leading_label.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
-
-import 'store.dart';
 
 class ItemEditPageAdditionalInformation extends StatelessWidget {
   final Item item;
@@ -79,7 +78,8 @@ class ItemEditPageAdditionalInformation extends StatelessWidget {
 
   Function(String) _updateItem(
           BuildContext context, Item Function(String) updateFn) =>
-      (s) => Provider.of<Store>(context, listen: false).updateItem(updateFn(s));
+      (s) => Provider.of<ItemService>(context, listen: false)
+          .updateItem(updateFn(s));
 
   Widget _operationalStatusEntry(
       BuildContext context, String label, String value) {
@@ -89,7 +89,7 @@ class ItemEditPageAdditionalInformation extends StatelessWidget {
           item: item,
           operationalStatus: OperationalStatus.values
               .firstWhere((element) => element.name == notifier.value));
-      Provider.of<Store>(context, listen: false).updateItem(changedItem);
+      Provider.of<ItemService>(context, listen: false).updateItem(changedItem);
     });
     return SizedBox(
       width: 562,
@@ -101,7 +101,9 @@ class ItemEditPageAdditionalInformation extends StatelessWidget {
           RescueText.slim(label),
           const SizedBox(width: 10),
           RescueDropdownButton(
-              OperationalStatus.values.map((e) => e.name).toList(), notifier),
+              Map.fromEntries(OperationalStatus.values
+                  .map((e) => MapEntry(e.name, e.name))),
+              notifier),
         ],
       ),
     );

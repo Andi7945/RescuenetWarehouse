@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/container_dao.dart';
 import 'package:rescuenet_warehouse/container_service.dart';
-import 'package:rescuenet_warehouse/item_service.dart';
 import 'package:rescuenet_warehouse/rescue_image.dart';
 
+import 'item_utils.dart';
 import 'rescue_container.dart';
 import 'item.dart';
 import 'operational_status.dart';

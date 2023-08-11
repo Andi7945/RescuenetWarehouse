@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rescuenet_warehouse/item_service.dart';
 import 'package:rescuenet_warehouse/menu_option.dart';
 
 import 'item.dart';
 import 'item_card.dart';
 import 'menu.dart';
-import 'store.dart';
 
 class ItemsPage extends StatelessWidget {
   @override
@@ -17,8 +17,8 @@ class ItemsPage extends StatelessWidget {
     ]));
   }
 
-  _grid() =>
-      Consumer<Store>(builder: (ctxt, store, _) => _buildGrid(store.items));
+  _grid() => Consumer<ItemService>(
+      builder: (ctxt, itemService, _) => _buildGrid(itemService.items));
 
   _buildGrid(List<Item> items) => GridView.count(
         primary: false,

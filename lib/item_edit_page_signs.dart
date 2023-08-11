@@ -3,10 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/item_edit_page_signs_single.dart';
 
 import 'item.dart';
+import 'item_service.dart';
 import 'main.dart';
 import 'rescue_text.dart';
 import 'sign.dart';
-import 'store.dart';
 
 class ItemEditPageSigns extends StatelessWidget {
   final Item item;
@@ -57,6 +57,6 @@ class ItemEditPageSigns extends StatelessWidget {
     }
     updatedSigns.sort((s1, s2) => s1.id.compareTo(s2.id));
     var updatedItem = Item.from(item: item, signs: updatedSigns);
-    Provider.of<Store>(context, listen: false).updateItem(updatedItem);
+    Provider.of<ItemService>(context, listen: false).updateItem(updatedItem);
   }
 }

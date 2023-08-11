@@ -5,22 +5,20 @@ import 'package:rescuenet_warehouse/container_store.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/store_container_types.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 
-import "package:collection/collection.dart";
-
 import 'container_dao.dart';
 import 'container_visibility_service.dart';
 import 'item.dart';
-import 'store.dart';
+import 'item_service.dart';
 
 class ContainerService {
-  final Store store;
+  final ItemService itemService;
   final ContainerStore containerStore;
   final StoreContainerTypes storeContainerTypes;
   final AssignmentStore assignmentStore;
   final ContainerVisibilityService visibilityService;
 
-  ContainerService(this.store, this.containerStore, this.storeContainerTypes,
-      this.assignmentStore, this.visibilityService);
+  ContainerService(this.itemService, this.containerStore,
+      this.storeContainerTypes, this.assignmentStore, this.visibilityService);
 
   List<RescueContainer> containers() =>
       containerStore.containers.values.map(fromDao).toList();
@@ -45,18 +43,19 @@ class ContainerService {
             Map.fromEntries(assignmentStore.assignments
                 .where((assignment) => assignment.containerId == cont.id)
                 .map((assignment) => MapEntry(
-                    store.itemById(assignment.itemId), assignment.count))))));
+                    itemService.itemById(assignment.itemId),
+                    assignment.count))))));
   }
 
   Map<Item, int> itemsWithoutContainer() {
     var assignedItems = assignmentStore.assignments
         .groupBy((p0) => p0.itemId)
         .map((key, value) => MapEntry(
-            store.itemById(key),
+            itemService.itemById(key),
             value.fold(
                 0, (previousValue, element) => previousValue + element.count)));
 
-    var map = Map.fromEntries(store.items.map((e) {
+    var map = Map.fromEntries(itemService.items.map((e) {
       var assigned = assignedItems[e];
       if (assigned == null) {
         return MapEntry(e, e.totalAmount);
@@ -79,24 +78,22 @@ class ContainerService {
   List<RescueContainer> get containerValues =>
       containerStore.containerValues.map(fromDao).toList();
 
-  List<String> otherContainerOptions(Item item) {
-    return containerValues
+  Map<String, String> otherContainerOptions(Item item) {
+    return Map.fromEntries(containerValues
         .where((element) => !assignmentStore.assignments
             .any((a) => a.containerId == element.id && a.itemId == item.id))
-        .map((e) => e.name)
-        .whereNotNull()
-        .toList();
+        .map((e) => MapEntry(e.id, e.name)));
   }
 }
 
 ProxyProvider5 proxyContainerService() => ProxyProvider5<
-        Store,
+        ItemService,
         ContainerStore,
         StoreContainerTypes,
         AssignmentStore,
         ContainerVisibilityService,
         ContainerService>(
-    update: (ctx, store, containerStore, storeContainerTypes, assignmentStore,
-            visibilityService, prev) =>
-        ContainerService(store, containerStore, storeContainerTypes,
+    update: (ctx, itemService, containerStore, storeContainerTypes,
+            assignmentStore, visibilityService, prev) =>
+        ContainerService(itemService, containerStore, storeContainerTypes,
             assignmentStore, visibilityService));

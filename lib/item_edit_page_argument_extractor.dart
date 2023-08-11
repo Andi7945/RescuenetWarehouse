@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/item_edit_page.dart';
 import 'package:rescuenet_warehouse/menu_option.dart';
 
+import 'item_service.dart';
 import 'menu.dart';
-import 'store.dart';
 
 class ItemEditPageArgumentExtractor extends StatelessWidget {
   @override
@@ -17,6 +17,7 @@ class ItemEditPageArgumentExtractor extends StatelessWidget {
     ]));
   }
 
-  _page(String id) => Consumer<Store>(
-      builder: (ctxt, store, _) => ItemEditPage(store.itemById(id)));
+  _page(String id) => Consumer<ItemService>(
+      builder: (ctxt, itemService, _) =>
+          ItemEditPage(itemService.itemById(id)));
 }

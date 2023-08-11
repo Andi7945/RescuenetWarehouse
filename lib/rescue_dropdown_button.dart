@@ -3,31 +3,33 @@ import 'package:flutter/material.dart';
 import 'container_type.dart';
 
 class RescueDropdownButton extends StatelessWidget {
-  List<String> options;
+  Map<String, String> optionToDisplayName;
   ValueNotifier<String> valueNotifier;
 
-  RescueDropdownButton(this.options, this.valueNotifier);
+  RescueDropdownButton(this.optionToDisplayName, this.valueNotifier);
 
   RescueDropdownButton.custom(
       List<ContainerType> types, ValueNotifier<String> vn)
       : this(
-            types.map((e) => e.name).toList(),
+            Map.fromEntries(types.map((e) => MapEntry(e.id, e.name))),
             // (s) => onValueChanged(types.firstWhere((type) => type.name == s)),
             vn);
 
   @override
   Widget build(BuildContext context) {
     return DropdownButton(
-      items: options.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
+      items: optionToDisplayName.entries.map(_createItem).toList(),
       value: valueNotifier.value,
       onChanged: (String? value) {
         valueNotifier.value = value!;
       },
     );
   }
+
+  DropdownMenuItem<String> _createItem(
+          MapEntry<String, String> optionToDisplayName) =>
+      DropdownMenuItem<String>(
+        value: optionToDisplayName.key,
+        child: Text(optionToDisplayName.value),
+      );
 }

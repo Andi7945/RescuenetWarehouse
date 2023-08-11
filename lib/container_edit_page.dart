@@ -53,6 +53,13 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    _containerTypeController.value = widget._container.value.type.name;
+  }
+
+  @override
   Widget build(BuildContext context) => _body();
 
   _body() {
@@ -67,21 +74,28 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
           _editableTile(
               "Type of container",
               RescueDropdownButton(
-                  widget._containerOptions.types.map((e) => e.name).toList(),
+                  Map.fromEntries(widget._containerOptions.types
+                      .map((e) => MapEntry(e.id, e.name))),
                   _containerTypeController),
               routeEditContainerTypes),
           _tile(
               "Sequential build",
-              RescueDropdownButton(widget._containerOptions.sequentialBuilds,
+              RescueDropdownButton(
+                  Map.fromEntries(widget._containerOptions.sequentialBuilds
+                      .map((e) => MapEntry(e, e))),
                   _sequentialBuildController)),
           _editableTile(
               "Module destination",
-              RescueDropdownButton(widget._containerOptions.moduleDestinations,
+              RescueDropdownButton(
+                  Map.fromEntries(widget._containerOptions.moduleDestinations
+                      .map((e) => MapEntry(e, e))),
                   _moduleDestinationController),
               routeEditModuleDestinations),
           _editableTile(
               "Current location",
-              RescueDropdownButton(widget._containerOptions.currentLocations,
+              RescueDropdownButton(
+                  Map.fromEntries(widget._containerOptions.currentLocations
+                      .map((e) => MapEntry(e, e))),
                   _currentLocationController),
               routeEditCurrentLocations),
         ]));
@@ -100,15 +114,15 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
 
   _sendChangesToStore() {
     var changedContainer = RescueContainer(
-        widget._container.value.id,
-        _nameController.text,
-        widget._containerOptions.types.firstWhere(
-            (element) => element.name == _containerTypeController.value),
-        widget._container.value.imagePath,
-        SequentialBuild.values.firstWhere(
-            (element) => element.name == _sequentialBuildController.value),
-        _moduleDestinationController.value,
-        _currentLocationController.value,
+      widget._container.value.id,
+      _nameController.text,
+      widget._containerOptions.types.firstWhere(
+          (element) => element.name == _containerTypeController.value),
+      widget._container.value.imagePath,
+      SequentialBuild.values.firstWhere(
+          (element) => element.name == _sequentialBuildController.value),
+      _moduleDestinationController.value,
+      _currentLocationController.value,
       widget._container.value.isReady,
       widget._container.value.toDeploy,
     );

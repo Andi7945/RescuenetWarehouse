@@ -15,13 +15,14 @@ import 'package:rescuenet_warehouse/edit_custom_values/store_container_types.dar
 import 'package:rescuenet_warehouse/edit_custom_values/store_current_locations.dart';
 import 'package:rescuenet_warehouse/export_page.dart';
 import 'package:rescuenet_warehouse/item_edit_page_argument_extractor.dart';
+import 'package:rescuenet_warehouse/item_service.dart';
+import 'package:rescuenet_warehouse/item_store.dart';
 import 'package:rescuenet_warehouse/items_page.dart';
 import 'package:rescuenet_warehouse/page/login_register_page.dart';
 import 'package:rescuenet_warehouse/page/warehouse_overview_page.dart';
 import 'package:rescuenet_warehouse/provider/rn_items_provider.dart';
 import 'package:rescuenet_warehouse/provider/sequentialbuild_provider.dart';
 import 'package:rescuenet_warehouse/routes.dart';
-import 'package:rescuenet_warehouse/store.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/store_module_destination.dart';
 import 'package:rescuenet_warehouse/utils/widget_tree_util.dart';
 import 'package:rescuenet_warehouse/widget/horizontal_drag_widget.dart';
@@ -56,14 +57,15 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => SequentialBuildProvider(),
         ),
-        ChangeNotifierProvider(create: (ctx) => Store()),
         ChangeNotifierProvider(create: (ctx) => ContainerStore()),
+        ChangeNotifierProvider(create: (ctx) => ItemStore()),
         ChangeNotifierProvider(create: (_) => StoreModuleDestination()),
         ChangeNotifierProvider(create: (_) => StoreCurrentLocations()),
         ChangeNotifierProvider(create: (_) => StoreContainerTypes()),
         ChangeNotifierProvider(create: (_) => WorkLogStore()),
         ChangeNotifierProvider(create: (_) => AssignmentStore()),
         ChangeNotifierProvider(create: (_) => ContainerVisibilityService()),
+        provideItemService(),
         proxyContainerService(),
         proxyModuleDestinationUsage(),
         proxyCurrentLocationUsage(),

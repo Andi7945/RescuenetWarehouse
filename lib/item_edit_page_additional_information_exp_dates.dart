@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/store.dart';
+import 'package:rescuenet_warehouse/item_service.dart';
 
 import 'item.dart';
 import 'rescue_text.dart';
@@ -109,7 +109,7 @@ class ItemEditPageAdditionalInformationExpDates extends StatelessWidget {
 
   _updateItem(BuildContext context, List<DateTime> dates) {
     var updated = Item.from(item: item, expiringDates: dates);
-    Provider.of<Store>(context, listen: false).updateItem(updated);
+    Provider.of<ItemService>(context, listen: false).updateItem(updated);
   }
 
   Future<DateTime?> _dialogBuilder(BuildContext context, [DateTime? initial]) {

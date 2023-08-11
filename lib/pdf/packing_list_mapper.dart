@@ -4,7 +4,7 @@ import 'package:rescuenet_warehouse/pdf/packing_list.dart';
 import 'package:rescuenet_warehouse/pdf/pdf_mapper_utils.dart';
 
 import '../item.dart';
-import '../item_service.dart';
+import '../item_utils.dart';
 import '../rescue_container.dart';
 import '../sign.dart';
 

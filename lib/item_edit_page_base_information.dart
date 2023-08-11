@@ -5,7 +5,7 @@ import 'package:rescuenet_warehouse/rescue_input.dart';
 import 'package:rescuenet_warehouse/rescue_pickable_image.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
 
-import 'store.dart';
+import 'item_service.dart';
 
 class ItemEditPageBaseInformation extends StatelessWidget {
   final Item item;
@@ -67,6 +67,6 @@ class ItemEditPageBaseInformation extends StatelessWidget {
   }
 
   _changeItem(BuildContext context, Item updated) {
-    Provider.of<Store>(context, listen: false).updateItem(updated);
+    Provider.of<ItemService>(context, listen: false).updateItem(updated);
   }
 }

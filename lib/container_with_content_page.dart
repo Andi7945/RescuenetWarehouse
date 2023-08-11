@@ -10,7 +10,6 @@ import 'item.dart';
 import 'menu.dart';
 import 'rescue_container.dart';
 import 'rescue_text.dart';
-import 'store.dart';
 
 class ContainerWithContentPage extends StatelessWidget {
   @override
