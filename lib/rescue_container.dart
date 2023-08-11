@@ -1,5 +1,6 @@
 import 'package:rescuenet_warehouse/sequential_build.dart';
 
+import 'container_dao.dart';
 import 'container_type.dart';
 
 import 'package:equatable/equatable.dart';
@@ -36,16 +37,25 @@ class RescueContainer extends Equatable {
     String? currentLocation,
     bool? isReady,
     bool? toDeploy,
-  })  : this.id = container.id,
-        this.name = name ?? container.name,
-        this.type = type ?? container.type,
-        this.imagePath = imagePath ?? container.imagePath,
-        this.sequentialBuild = sequentialBuild ?? container.sequentialBuild,
-        this.moduleDestination =
-            moduleDestination ?? container.moduleDestination,
-        this.currentLocation = currentLocation ?? container.currentLocation,
-        this.isReady = isReady ?? container.isReady,
-        this.toDeploy = toDeploy ?? container.toDeploy;
+  })  : id = container.id,
+        name = name ?? container.name,
+        type = type ?? container.type,
+        imagePath = imagePath ?? container.imagePath,
+        sequentialBuild = sequentialBuild ?? container.sequentialBuild,
+        moduleDestination = moduleDestination ?? container.moduleDestination,
+        currentLocation = currentLocation ?? container.currentLocation,
+        isReady = isReady ?? container.isReady,
+        toDeploy = toDeploy ?? container.toDeploy;
+
+  RescueContainer.fromDao(ContainerDao dao, this.type)
+      : id = dao.id,
+        name = dao.name,
+        imagePath = dao.imagePath,
+        sequentialBuild = dao.sequentialBuild,
+        moduleDestination = dao.moduleDestination,
+        currentLocation = dao.currentLocation,
+        isReady = dao.isReady,
+        toDeploy = dao.toDeploy;
 
   @override
   List<Object?> get props => [

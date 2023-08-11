@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rescuenet_warehouse/container_dao.dart';
 import 'package:rescuenet_warehouse/item_service.dart';
 import 'package:rescuenet_warehouse/rescue_image.dart';
-import 'package:rescuenet_warehouse/sequential_build.dart';
 
 import 'rescue_container.dart';
 import 'item.dart';
@@ -72,8 +72,8 @@ class ContainerWithContentHeader extends StatelessWidget {
   _deployNotifier(BuildContext context) {
     var ifier = ValueNotifier(_container.toDeploy);
     ifier.addListener(() {
-      var updated =
-          RescueContainer.from(container: _container, toDeploy: ifier.value);
+      var updated = ContainerDao.fromContainer(
+          RescueContainer.from(container: _container, toDeploy: ifier.value));
       Provider.of<Store>(context, listen: false).updateContainer(updated);
     });
     return ifier;
@@ -82,8 +82,8 @@ class ContainerWithContentHeader extends StatelessWidget {
   _readyNotifier(BuildContext context) {
     var ifier = ValueNotifier(_container.isReady);
     ifier.addListener(() {
-      var updated =
-          RescueContainer.from(container: _container, isReady: ifier.value);
+      var updated = ContainerDao.fromContainer(
+          RescueContainer.from(container: _container, isReady: ifier.value));
       Provider.of<Store>(context, listen: false).updateContainer(updated);
     });
     return ifier;

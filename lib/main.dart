@@ -16,6 +16,7 @@ import 'package:rescuenet_warehouse/page/login_register_page.dart';
 import 'package:rescuenet_warehouse/page/warehouse_overview_page.dart';
 import 'package:rescuenet_warehouse/provider/rn_items_provider.dart';
 import 'package:rescuenet_warehouse/provider/sequentialbuild_provider.dart';
+import 'package:rescuenet_warehouse/proxy_container_service.dart';
 import 'package:rescuenet_warehouse/routes.dart';
 import 'package:rescuenet_warehouse/store.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/store_module_destination.dart';
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => StoreCurrentLocations()),
         ChangeNotifierProvider(create: (_) => StoreContainerTypes()),
         ChangeNotifierProvider(create: (_) => WorkLogStore()),
+        proxyContainerService(),
         proxyModuleDestinationUsage(),
         proxyCurrentLocationUsage(),
         proxyContainerOptions(),

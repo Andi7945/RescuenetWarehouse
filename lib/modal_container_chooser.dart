@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rescuenet_warehouse/container_service.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
 
 import 'rescue_container.dart';
@@ -8,10 +9,10 @@ import 'store.dart';
 class ModalContainerChooser extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
-      Consumer<Store>(builder: (ctxt, store, _) {
+      Consumer<ContainerService>(builder: (ctxt, service, _) {
         return SimpleDialog(
             title: RescueText.normal("Choose container"),
-            children: [_buttonRow(context), _table(store, context)]);
+            children: [_buttonRow(context), _table(service, context)]);
       });
 
   Row _buttonRow(BuildContext context) =>
@@ -28,7 +29,7 @@ class ModalContainerChooser extends StatelessWidget {
       Provider.of<Store>(context, listen: false)
           .changeAllContainerVisibility(shown);
 
-  Widget _table(Store store, BuildContext context) {
+  Widget _table(ContainerService service, BuildContext context) {
     return Table(columnWidths: const {
       0: FixedColumnWidth(100),
       1: FixedColumnWidth(700),
@@ -36,7 +37,7 @@ class ModalContainerChooser extends StatelessWidget {
       3: FixedColumnWidth(100)
     }, children: [
       _header(),
-      ..._options(store, context)
+      ..._options(service, context)
     ]);
   }
 
@@ -47,8 +48,8 @@ class ModalContainerChooser extends StatelessWidget {
         Align(child: RescueText.normal("ready", FontWeight.w700)),
       ]);
 
-  List<TableRow> _options(Store store, BuildContext context) {
-    var entries = store.containerWithVisible().entries.toList();
+  List<TableRow> _options(ContainerService service, BuildContext context) {
+    var entries = service.containerWithVisible().entries.toList();
     entries.sort((a, b) => a.key.id.compareTo(b.key.id));
     return entries.map((entry) => _option(context, entry)).toList();
   }

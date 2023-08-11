@@ -14,6 +14,9 @@ class StoreContainerTypes extends ChangeNotifier {
   UnmodifiableListView<ContainerType> get containerTypes =>
       UnmodifiableListView(_list);
 
+  ContainerType get(String? typeId) =>
+      _list.firstWhere((element) => element.id == typeId);
+
   add(ContainerType? type) {
     if (type != null && !_list.contains(type)) {
       _list.add(type);

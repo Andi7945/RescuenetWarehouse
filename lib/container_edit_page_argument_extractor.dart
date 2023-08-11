@@ -4,6 +4,7 @@ import 'package:rescuenet_warehouse/container_edit_page.dart';
 import 'package:rescuenet_warehouse/menu_option.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 
+import 'container_dao.dart';
 import 'container_options.dart';
 import 'menu.dart';
 import 'store.dart';
@@ -19,18 +20,17 @@ class ContainerEditPageArgumentExtractor extends StatelessWidget {
     ]));
   }
 
-  _body(String id) => Consumer<ContainerOptions>(
-      builder: (ctx, options, _) => Consumer<Store>(
-          builder: (ctxt, store, _) => _page(store.containerById(id),
-              (c) => store.updateContainer(c), options)));
+  _body(String id) => Consumer3<ContainerOptions, Store, List<RescueContainer>>(
+      builder: (ctxt, options, store, containers, _) => _page(
+          containers.firstWhere((c) => c.id == id),
+          (c) => store.updateContainer(c),
+          options));
 
-  _page(
-      RescueContainer container,
-      ValueChanged<RescueContainer> updateContainer,
+  _page(RescueContainer container, ValueChanged<ContainerDao> updateContainer,
       ContainerOptions containerOptions) {
     var cont = ValueNotifier(container);
     cont.addListener(() {
-      updateContainer(cont.value);
+      updateContainer(ContainerDao.fromContainer(cont.value));
     });
     return ContainerEditPage(cont, containerOptions);
   }

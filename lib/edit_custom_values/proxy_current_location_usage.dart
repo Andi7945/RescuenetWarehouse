@@ -11,7 +11,7 @@ ProxyProvider2 proxyCurrentLocationUsage() =>
     ProxyProvider2<Store, StoreCurrentLocations, CurrentLocationsWithUsage>(
         update: (BuildContext context, Store store,
             StoreCurrentLocations storeCurrentLocations, previous) {
-      Map<String, Set<String>> grouped = store.containers
+      Map<String, Set<String>> grouped = store.containerValues
           .where((element) => element.currentLocation != null)
           .groupBy((p0) => p0.currentLocation!)
           .mapValues(

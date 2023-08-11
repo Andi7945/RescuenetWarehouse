@@ -11,7 +11,7 @@ ProxyProvider2 proxyModuleDestinationUsage() =>
     ProxyProvider2<Store, StoreModuleDestination, ModuleDestinationWithUsage>(
         update: (BuildContext context, Store store,
             StoreModuleDestination storeModuleDestination, previous) {
-      Map<String, Set<String>> grouped = store.containers
+      Map<String, Set<String>> grouped = store.containerValues
           .where((element) => element.moduleDestination != null)
           .groupBy((p0) => p0.moduleDestination!)
           .mapValues(

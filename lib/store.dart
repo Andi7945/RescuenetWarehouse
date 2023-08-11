@@ -3,12 +3,12 @@ import "package:collection/collection.dart";
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/collection_extensions.dart';
 import 'package:rescuenet_warehouse/item.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 import 'package:rescuenet_warehouse/work_log_store.dart';
 
 import 'assignment.dart';
+import 'container_dao.dart';
 import 'data_mocks.dart';
 
 class Store extends ChangeNotifier {
@@ -22,13 +22,13 @@ class Store extends ChangeNotifier {
     item_splint
   ];
 
-  final Map<String, RescueContainer> _containers = {
+  final Map<String, ContainerDao> containers = {
     container_office.id: container_office,
     container_power.id: container_power,
     container_medical.id: container_medical
   };
 
-  final Map<String, bool> _containerVisibility = {
+  final Map<String, bool> containerVisibility = {
     container_office.id: true,
     container_power.id: true,
     container_medical.id: true
@@ -42,15 +42,8 @@ class Store extends ChangeNotifier {
   UnmodifiableListView<Assignment> get assignments =>
       UnmodifiableListView(_assignments);
 
-  Map<RescueContainer, int> assignmentsFor(Item item) {
-    return _assignments
-        .where((a) => a.itemId == item.id)
-        .groupBy((p0) => _containers[p0.containerId]!)
-        .mapValues((value) => value.fold(0, (prev, curr) => prev + curr.count));
-  }
-
   List<String> otherContainerOptions(Item item) {
-    return containers
+    return containerValues
         .where((element) => !assignments
             .any((a) => a.containerId == element.id && a.itemId == item.id))
         .map((e) => e.name)
@@ -62,61 +55,29 @@ class Store extends ChangeNotifier {
 
   Item itemById(String id) => _items.firstWhere((element) => element.id == id);
 
-  UnmodifiableListView<RescueContainer> get containers =>
-      UnmodifiableListView(_containers.values);
-
-  Map<RescueContainer, bool> containerWithVisible() => _containerVisibility
-      .map((key, value) => MapEntry(_containers[key]!, value));
+  UnmodifiableListView<ContainerDao> get containerValues =>
+      UnmodifiableListView(containers.values);
 
   changeContainerVisibility(RescueContainer c) {
-    _containerVisibility.update(c.id, (value) => !value);
+    containerVisibility.update(c.id, (value) => !value);
     notifyListeners();
   }
 
   changeAllContainerVisibility(bool shown) {
-    _containerVisibility.updateAll((key, value) => value = shown);
+    containerVisibility.updateAll((key, value) => value = shown);
     notifyListeners();
   }
 
-  Map<RescueContainer, Map<Item, int>> containerWithItems() {
-    return Map.fromEntries(_containers.values.map((cont) => MapEntry(
-        cont,
-        Map.fromEntries(_assignments
-            .where((assignment) => assignment.containerId == cont.id)
-            .map((assignment) =>
-                MapEntry(itemById(assignment.itemId), assignment.count))))));
-  }
+  ContainerDao containerById(String id) => containers[id]!;
 
-  Map<Item, int> itemsWithoutContainer() {
-    var assignedItems = _assignments.groupBy((p0) => p0.itemId).map(
-        (key, value) => MapEntry(
-            itemById(key),
-            value.fold(
-                0, (previousValue, element) => previousValue + element.count)));
-
-    var map = Map.fromEntries(_items.map((e) {
-      var assigned = assignedItems[e];
-      if (assigned == null) {
-        return MapEntry(e, e.totalAmount);
-      }
-      return MapEntry(e, e.totalAmount - assigned);
-    }));
-
-    map.removeWhere((key, value) => value == 0);
-
-    return map;
-  }
-
-  RescueContainer containerById(String id) => _containers[id]!;
-
-  updateContainer(RescueContainer container) {
-    _containers[container.id] = container;
+  updateContainer(ContainerDao container) {
+    containers[container.id] = container;
     notifyListeners();
   }
 
   addContainer(BuildContext context, String containerName, Item item) {
     var container =
-        containers.firstWhere((element) => element.name == containerName);
+        containerValues.firstWhere((element) => element.name == containerName);
     if (_assignments.none((element) =>
         element.containerId == container.id && element.itemId == item.id)) {
       _assignments.add(Assignment(item.id, container.id, 1));

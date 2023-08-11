@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rescuenet_warehouse/container_service.dart';
 import 'package:rescuenet_warehouse/container_with_content_column.dart';
 import 'package:rescuenet_warehouse/container_with_content_unassigned.dart';
 import 'package:rescuenet_warehouse/menu_option.dart';
@@ -14,14 +15,14 @@ import 'store.dart';
 class ContainerWithContentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Consumer<Store>(builder: (ctxt, store, _) {
-      var containers = store.containerWithVisible();
+    return Scaffold(body: Consumer<ContainerService>(builder: (ctxt, service, _) {
+      var containers = service.containerWithVisible();
       return Column(children: [
         Menu(MenuOption.containerWithContent),
         _btnChooseContainer(ctxt, containers),
         _body(
-            store.itemsWithoutContainer(),
-            Map.fromEntries(store
+            service.itemsWithoutContainer(),
+            Map.fromEntries(service
                 .containerWithItems()
                 .entries
                 .where((element) => containers[element.key] ?? false)))

@@ -5,6 +5,7 @@ import 'package:rescuenet_warehouse/sequential_build.dart';
 import 'package:rescuenet_warehouse/sign.dart';
 
 import 'assignment.dart';
+import 'container_dao.dart';
 import 'item.dart';
 
 var item_fire = Item.filled(
@@ -51,30 +52,30 @@ var item_splint = Item.simple(
 var assignment_item1_container1 = Assignment("1", "1", 2);
 var assignment_item1_container3 = Assignment("1", "3", 4);
 
-var container_office = RescueContainer(
+var container_office = ContainerDao(
     "1",
     "1 Office supplies",
-    container_type_crate,
+    container_type_crate.id,
     "euro_crate.png",
     SequentialBuild.firstBuild,
     "Office",
     "Office",
     false,
     false);
-var container_power = RescueContainer(
+var container_power = ContainerDao(
     "2",
     "2 Power",
-    container_type_crate,
+    container_type_crate.id,
     "euro_crate.png",
     SequentialBuild.laterBuild,
     "Office",
     "Office",
     false,
     false);
-var container_medical = RescueContainer(
+var container_medical = ContainerDao(
     "3",
     "3 Medical backpack team 1",
-    container_type_backpack,
+    container_type_backpack.id,
     "medical_backpack.png",
     SequentialBuild.supplies,
     "Office",

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rescuenet_warehouse/container_service.dart';
 import 'package:rescuenet_warehouse/export_page_body.dart';
 
 import 'menu.dart';
 import 'menu_option.dart';
-import 'store.dart';
 
 class ExportPage extends StatefulWidget {
   @override
@@ -24,6 +24,7 @@ class _ExportPageState extends State<ExportPage> {
     ]));
   }
 
-  _body() => Consumer<Store>(
-      builder: (ctxt, store, _) => ExportPageBody(store.containerWithItems()));
+  _body() => Consumer<ContainerService>(
+      builder: (ctxt, service, _) =>
+          ExportPageBody(service.containerWithItems()));
 }

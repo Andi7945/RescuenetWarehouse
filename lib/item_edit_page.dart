@@ -7,6 +7,7 @@ import 'package:rescuenet_warehouse/item_edit_page_notes.dart';
 import 'package:rescuenet_warehouse/item_edit_page_signs.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 
+import 'container_service.dart';
 import 'item.dart';
 import 'store.dart';
 
@@ -27,7 +28,8 @@ class _ItemEditPageState extends State<ItemEditPage> {
 
   _body() {
     Map<RescueContainer, int> assignments =
-        Provider.of<Store>(context, listen: false).assignmentsFor(widget.item);
+        Provider.of<ContainerService>(context, listen: false)
+            .assignmentsFor(widget.item);
     return SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Row(

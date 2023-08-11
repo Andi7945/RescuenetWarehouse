@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/collection_extensions.dart';
+import 'package:rescuenet_warehouse/container_service.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
-import 'package:rescuenet_warehouse/store.dart';
 import 'package:rescuenet_warehouse/work_log_page_entry.dart';
 
 import 'log_entry_expanded.dart';
@@ -14,22 +14,23 @@ import 'modal_container_chooser.dart';
 class WorkLogPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Consumer2<Store, Map<String, List<LogEntryExpanded>>>(
-            builder: (ctxt, store, entries, _) => Column(children: [
-                  Menu(MenuOption.workLog),
-                  _btnChooseContainer(ctxt, store.containerWithVisible()),
-                  _body(store, entries)
-                ])));
+    return Scaffold(body:
+        Consumer2<ContainerService, Map<String, List<LogEntryExpanded>>>(
+            builder: (ctxt, service, entries, _) {
+      var withVisibility = service.containerWithVisible();
+      return Column(children: [
+        Menu(MenuOption.workLog),
+        _btnChooseContainer(ctxt, withVisibility),
+        _body(withVisibility, entries)
+      ]);
+    }));
   }
 
-  Expanded _body(Store store, Map<String, List<LogEntryExpanded>> entries) {
+  Expanded _body(Map<RescueContainer, bool> withVisibility,
+      Map<String, List<LogEntryExpanded>> entries) {
     return Expanded(
-        child: _page(_visibleEntries(
-            entries,
-            store
-                .containerWithVisible()
-                .map((key, value) => MapEntry(key.id, value)))));
+        child: _page(_visibleEntries(entries,
+            withVisibility.map((key, value) => MapEntry(key.id, value)))));
   }
 
   TextButton _btnChooseContainer(
