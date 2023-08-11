@@ -17,6 +17,7 @@
 * Print safety datasheet if available
 
 * Make container from store result of proxy provider (if type/other custom values change it should be updated)
+* Packing List: round KG digits
 
 Galaxy Tab A8 SMX200
 

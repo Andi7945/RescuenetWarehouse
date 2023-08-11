@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/container_service.dart';
+import 'package:rescuenet_warehouse/container_visibility_service.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
 
 import 'rescue_container.dart';
-import 'store.dart';
 
 class ModalContainerChooser extends StatelessWidget {
   @override
@@ -26,7 +26,7 @@ class ModalContainerChooser extends StatelessWidget {
       ]);
 
   _changeAll(BuildContext context, bool shown) =>
-      Provider.of<Store>(context, listen: false)
+      Provider.of<ContainerVisibilityService>(context, listen: false)
           .changeAllContainerVisibility(shown);
 
   Widget _table(ContainerService service, BuildContext context) {
@@ -61,7 +61,7 @@ class ModalContainerChooser extends StatelessWidget {
     return TableRow(children: [
       s(_scaledCheckbox(
           entry.value, context, entry, (_) => _change(context, entry.key))),
-      s(RescueText.normal(entry.key.name ?? "")),
+      s(RescueText.normal(entry.key.name)),
       s(_scaledCheckbox(entry.key.toDeploy, context, entry, null)),
       s(_scaledCheckbox(entry.key.isReady, context, entry, null)),
     ]);
@@ -93,6 +93,6 @@ class ModalContainerChooser extends StatelessWidget {
   }
 
   _change(BuildContext context, RescueContainer container) =>
-      Provider.of<Store>(context, listen: false)
+      Provider.of<ContainerVisibilityService>(context, listen: false)
           .changeContainerVisibility(container);
 }

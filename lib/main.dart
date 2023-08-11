@@ -5,6 +5,7 @@ import 'package:rescuenet_warehouse/assignment_service.dart';
 import 'package:rescuenet_warehouse/assignment_store.dart';
 import 'package:rescuenet_warehouse/container_edit_page_argument_extractor.dart';
 import 'package:rescuenet_warehouse/container_overview_page.dart';
+import 'package:rescuenet_warehouse/container_visibility_service.dart';
 import 'package:rescuenet_warehouse/container_with_content_page.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/edit_container_types.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/edit_current_locations.dart';
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => StoreContainerTypes()),
         ChangeNotifierProvider(create: (_) => WorkLogStore()),
         ChangeNotifierProvider(create: (_) => AssignmentStore()),
+        ChangeNotifierProvider(create: (_) => ContainerVisibilityService()),
         proxyContainerService(),
         proxyModuleDestinationUsage(),
         proxyCurrentLocationUsage(),

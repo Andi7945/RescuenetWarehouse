@@ -3,7 +3,6 @@ import "package:collection/collection.dart";
 
 import 'package:flutter/material.dart';
 import 'package:rescuenet_warehouse/item.dart';
-import 'package:rescuenet_warehouse/rescue_container.dart';
 
 import 'container_dao.dart';
 import 'data_mocks.dart';
@@ -25,28 +24,12 @@ class Store extends ChangeNotifier {
     container_medical.id: container_medical
   };
 
-  final Map<String, bool> containerVisibility = {
-    container_office.id: true,
-    container_power.id: true,
-    container_medical.id: true
-  };
-
   UnmodifiableListView<Item> get items => UnmodifiableListView(_items);
 
   Item itemById(String id) => _items.firstWhere((element) => element.id == id);
 
   UnmodifiableListView<ContainerDao> get containerValues =>
       UnmodifiableListView(containers.values);
-
-  changeContainerVisibility(RescueContainer c) {
-    containerVisibility.update(c.id, (value) => !value);
-    notifyListeners();
-  }
-
-  changeAllContainerVisibility(bool shown) {
-    containerVisibility.updateAll((key, value) => value = shown);
-    notifyListeners();
-  }
 
   updateContainer(ContainerDao container) {
     containers[container.id] = container;
