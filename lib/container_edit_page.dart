@@ -20,8 +20,8 @@ class ContainerEditPage extends StatefulWidget {
 class _ContainerEditPageState extends State<ContainerEditPage> {
   final TextEditingController _nameController = TextEditingController();
   late ValueNotifier<String> _containerTypeController;
-  late ValueNotifier<String> _moduleDestinationController;
-  late ValueNotifier<String> _currentLocationController;
+  late ValueNotifier<String?> _moduleDestinationController;
+  late ValueNotifier<String?> _currentLocationController;
   late ValueNotifier<String> _sequentialBuildController;
 
   @override
@@ -29,14 +29,11 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
     super.initState();
     var container = widget._container.value;
 
-    var name = container.name;
-    if (name != null) {
-      _nameController.text = name;
-    }
-    _containerTypeController = ValueNotifier(container.type.name);
+    _nameController.text = container.name;
+    _containerTypeController = ValueNotifier(container.type.id);
     _moduleDestinationController =
-        ValueNotifier(container.moduleDestination ?? "");
-    _currentLocationController = ValueNotifier(container.currentLocation ?? "");
+        ValueNotifier(container.moduleDestination?.id);
+    _currentLocationController = ValueNotifier(container.currentLocation?.id);
     _sequentialBuildController = ValueNotifier(container.sequentialBuild.name);
 
     for (var controller in [
@@ -56,7 +53,7 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _containerTypeController.value = widget._container.value.type.name;
+    _containerTypeController.value = widget._container.value.type.id;
   }
 
   @override
@@ -88,14 +85,14 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
               "Module destination",
               RescueDropdownButton(
                   Map.fromEntries(widget._containerOptions.moduleDestinations
-                      .map((e) => MapEntry(e, e))),
+                      .map((e) => MapEntry(e.id, e.name))),
                   _moduleDestinationController),
               routeEditModuleDestinations),
           _editableTile(
               "Current location",
               RescueDropdownButton(
                   Map.fromEntries(widget._containerOptions.currentLocations
-                      .map((e) => MapEntry(e, e))),
+                      .map((e) => MapEntry(e.id, e.name))),
                   _currentLocationController),
               routeEditCurrentLocations),
         ]));
@@ -117,12 +114,14 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
       widget._container.value.id,
       _nameController.text,
       widget._containerOptions.types.firstWhere(
-          (element) => element.name == _containerTypeController.value),
+          (element) => element.id == _containerTypeController.value),
       widget._container.value.imagePath,
       SequentialBuild.values.firstWhere(
           (element) => element.name == _sequentialBuildController.value),
-      _moduleDestinationController.value,
-      _currentLocationController.value,
+      widget._containerOptions.moduleDestinations.firstWhere(
+          (element) => element.id == _moduleDestinationController.value),
+      widget._containerOptions.currentLocations.firstWhere(
+          (element) => element.id == _currentLocationController.value),
       widget._container.value.isReady,
       widget._container.value.toDeploy,
     );

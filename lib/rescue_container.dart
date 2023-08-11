@@ -1,3 +1,5 @@
+import 'package:rescuenet_warehouse/current_location.dart';
+import 'package:rescuenet_warehouse/module_destination.dart';
 import 'package:rescuenet_warehouse/sequential_build.dart';
 
 import 'container_dao.dart';
@@ -11,8 +13,8 @@ class RescueContainer extends Equatable {
   ContainerType type;
   String? imagePath;
   SequentialBuild sequentialBuild;
-  String? moduleDestination;
-  String? currentLocation;
+  ModuleDestination? moduleDestination;
+  CurrentLocation? currentLocation;
   bool isReady;
   bool toDeploy;
 
@@ -33,8 +35,8 @@ class RescueContainer extends Equatable {
     ContainerType? type,
     String? imagePath,
     SequentialBuild? sequentialBuild,
-    String? moduleDestination,
-    String? currentLocation,
+    ModuleDestination? moduleDestination,
+    CurrentLocation? currentLocation,
     bool? isReady,
     bool? toDeploy,
   })  : id = container.id,
@@ -47,13 +49,12 @@ class RescueContainer extends Equatable {
         isReady = isReady ?? container.isReady,
         toDeploy = toDeploy ?? container.toDeploy;
 
-  RescueContainer.fromDao(ContainerDao dao, this.type)
+  RescueContainer.fromDao(
+      ContainerDao dao, this.type, this.moduleDestination, this.currentLocation)
       : id = dao.id,
         name = dao.name,
         imagePath = dao.imagePath,
         sequentialBuild = dao.sequentialBuild,
-        moduleDestination = dao.moduleDestination,
-        currentLocation = dao.currentLocation,
         isReady = dao.isReady,
         toDeploy = dao.toDeploy;
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/container_service.dart';
 import 'package:rescuenet_warehouse/container_visibility_service.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
 
@@ -9,7 +8,7 @@ import 'rescue_container.dart';
 class ModalContainerChooser extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
-      Consumer<ContainerService>(builder: (ctxt, service, _) {
+      Consumer<ContainerVisibilityService>(builder: (ctxt, service, _) {
         return SimpleDialog(
             title: RescueText.normal("Choose container"),
             children: [_buttonRow(context), _table(service, context)]);
@@ -29,7 +28,7 @@ class ModalContainerChooser extends StatelessWidget {
       Provider.of<ContainerVisibilityService>(context, listen: false)
           .changeAllContainerVisibility(shown);
 
-  Widget _table(ContainerService service, BuildContext context) {
+  Widget _table(ContainerVisibilityService service, BuildContext context) {
     return Table(columnWidths: const {
       0: FixedColumnWidth(100),
       1: FixedColumnWidth(700),
@@ -48,7 +47,8 @@ class ModalContainerChooser extends StatelessWidget {
         Align(child: RescueText.normal("ready", FontWeight.w700)),
       ]);
 
-  List<TableRow> _options(ContainerService service, BuildContext context) {
+  List<TableRow> _options(
+      ContainerVisibilityService service, BuildContext context) {
     var entries = service.containerWithVisible().entries.toList();
     entries.sort((a, b) => a.key.id.compareTo(b.key.id));
     return entries.map((entry) => _option(context, entry)).toList();

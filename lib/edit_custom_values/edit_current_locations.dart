@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rescuenet_warehouse/current_location.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/proxy_current_location_usage.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/store_current_locations.dart';
 import 'package:rescuenet_warehouse/menu_option.dart';
@@ -38,13 +39,13 @@ class _EditCurrentLocationsState extends State<EditCurrentLocations> {
                 _table(store.currentLocationsWithUsage)));
   }
 
-  Widget _table(Map<String, Set<String>> withUsage) => RescueTable(
+  Widget _table(Map<CurrentLocation, Set<String>> withUsage) => RescueTable(
       const ["Name", ""], [..._rows(withUsage), _addingRow()], const {});
 
-  List<TableRow> _rows(Map<String, Set<String>> withUsage) =>
+  List<TableRow> _rows(Map<CurrentLocation, Set<String>> withUsage) =>
       withUsage.entries.map<TableRow>(_buildRow).toList();
 
-  TableRow _buildRow(MapEntry<String, Set<String>> withUsage) =>
+  TableRow _buildRow(MapEntry<CurrentLocation, Set<String>> withUsage) =>
       TableRow(children: [
         _textField(withUsage.key),
         EditCustomValueDeleteButton(withUsage.value, () {
@@ -53,14 +54,14 @@ class _EditCurrentLocationsState extends State<EditCurrentLocations> {
         })
       ]);
 
-  _textField(String old) {
+  _textField(CurrentLocation old) {
     return Padding(
         padding: const EdgeInsets.only(left: 20),
         child: EditCustomValueTextField(
-            TextEditingController(text: old),
+            TextEditingController(text: old.name),
             (newValue) =>
                 Provider.of<StoreCurrentLocations>(context, listen: false)
-                    .edit(old, newValue)));
+                    .edit(CurrentLocation(old.id, newValue))));
   }
 
   TableRow _addingRow() => TableRow(children: [

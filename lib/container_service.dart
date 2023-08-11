@@ -1,8 +1,8 @@
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/assignment_store.dart';
 import 'package:rescuenet_warehouse/collection_extensions.dart';
+import 'package:rescuenet_warehouse/container_mapper_service.dart';
 import 'package:rescuenet_warehouse/container_store.dart';
-import 'package:rescuenet_warehouse/edit_custom_values/store_container_types.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 
 import 'container_dao.dart';
@@ -13,33 +13,29 @@ import 'item_service.dart';
 class ContainerService {
   final ItemService itemService;
   final ContainerStore containerStore;
-  final StoreContainerTypes storeContainerTypes;
+  final ContainerMapperService containerMapperService;
   final AssignmentStore assignmentStore;
   final ContainerVisibilityService visibilityService;
 
-  ContainerService(this.itemService, this.containerStore,
-      this.storeContainerTypes, this.assignmentStore, this.visibilityService);
+  ContainerService(
+      this.itemService,
+      this.containerStore,
+      this.containerMapperService,
+      this.assignmentStore,
+      this.visibilityService);
 
-  List<RescueContainer> containers() =>
-      containerStore.containers.values.map(fromDao).toList();
+  List<RescueContainer> containers() => containerStore.containers.values
+      .map(containerMapperService.fromDao)
+      .toList();
 
   updateContainer(ContainerDao container) {
     containerStore.updateContainer(container);
   }
 
-  Map<RescueContainer, bool> containerWithVisible() =>
-      visibilityService.containerVisibility.map((key, value) =>
-          MapEntry(fromDao(containerStore.containers[key]!), value));
-
-  RescueContainer fromDao(ContainerDao dao) => RescueContainer.fromDao(
-      dao,
-      storeContainerTypes.containerTypes
-          .firstWhere((type) => type.id == dao.typeId));
-
   Map<RescueContainer, Map<Item, int>> containerWithItems() {
     return Map.fromEntries(containerStore.containers.values.map((cont) =>
         MapEntry(
-            fromDao(cont),
+            containerMapperService.fromDao(cont),
             Map.fromEntries(assignmentStore.assignments
                 .where((assignment) => assignment.containerId == cont.id)
                 .map((assignment) => MapEntry(
@@ -71,12 +67,14 @@ class ContainerService {
   Map<RescueContainer, int> assignmentsFor(Item item) {
     return assignmentStore.assignments
         .where((a) => a.itemId == item.id)
-        .groupBy((p0) => fromDao(containerStore.containers[p0.containerId]!))
+        .groupBy((p0) => containerMapperService
+            .fromDao(containerStore.containers[p0.containerId]!))
         .mapValues((value) => value.fold(0, (prev, curr) => prev + curr.count));
   }
 
-  List<RescueContainer> get containerValues =>
-      containerStore.containerValues.map(fromDao).toList();
+  List<RescueContainer> get containerValues => containerStore.containerValues
+      .map(containerMapperService.fromDao)
+      .toList();
 
   Map<String, String> otherContainerOptions(Item item) {
     return Map.fromEntries(containerValues
@@ -89,11 +87,11 @@ class ContainerService {
 ProxyProvider5 proxyContainerService() => ProxyProvider5<
         ItemService,
         ContainerStore,
-        StoreContainerTypes,
+        ContainerMapperService,
         AssignmentStore,
         ContainerVisibilityService,
         ContainerService>(
-    update: (ctx, itemService, containerStore, storeContainerTypes,
-            assignmentStore, visibilityService, prev) =>
-        ContainerService(itemService, containerStore, storeContainerTypes,
+    update: (ctx, itemService, containerStore, mapperService, assignmentStore,
+            visibilityService, prev) =>
+        ContainerService(itemService, containerStore, mapperService,
             assignmentStore, visibilityService));

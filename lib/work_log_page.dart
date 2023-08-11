@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/collection_extensions.dart';
-import 'package:rescuenet_warehouse/container_service.dart';
+import 'package:rescuenet_warehouse/container_visibility_service.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
 import 'package:rescuenet_warehouse/work_log_page_entry.dart';
@@ -14,9 +14,9 @@ import 'modal_container_chooser.dart';
 class WorkLogPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body:
-        Consumer2<ContainerService, Map<String, List<LogEntryExpanded>>>(
-            builder: (ctxt, service, entries, _) {
+    return Scaffold(body: Consumer2<ContainerVisibilityService,
+            Map<String, List<LogEntryExpanded>>>(
+        builder: (ctxt, service, entries, _) {
       var withVisibility = service.containerWithVisible();
       return Column(children: [
         Menu(MenuOption.workLog),

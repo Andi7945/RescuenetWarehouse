@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/container_service.dart';
+import 'package:rescuenet_warehouse/container_visibility_service.dart';
 import 'package:rescuenet_warehouse/container_with_content_column.dart';
 import 'package:rescuenet_warehouse/container_with_content_unassigned.dart';
 import 'package:rescuenet_warehouse/menu_option.dart';
@@ -14,8 +15,10 @@ import 'rescue_text.dart';
 class ContainerWithContentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Consumer<ContainerService>(builder: (ctxt, service, _) {
-      var containers = service.containerWithVisible();
+    return Scaffold(body:
+        Consumer2<ContainerVisibilityService, ContainerService>(
+            builder: (ctxt, visibilityService, service, _) {
+      var containers = visibilityService.containerWithVisible();
       return Column(children: [
         Menu(MenuOption.containerWithContent),
         _btnChooseContainer(ctxt, containers),

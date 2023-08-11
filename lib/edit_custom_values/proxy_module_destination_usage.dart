@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/collection_extensions.dart';
+import 'package:rescuenet_warehouse/container_service.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/store_module_destination.dart';
 
 import "package:collection/collection.dart";
+import 'package:rescuenet_warehouse/module_destination.dart';
 
-import '../container_store.dart';
-
-ProxyProvider2 proxyModuleDestinationUsage() => ProxyProvider2<ContainerStore,
+ProxyProvider2 proxyModuleDestinationUsage() => ProxyProvider2<ContainerService,
             StoreModuleDestination, ModuleDestinationWithUsage>(
-        update: (BuildContext context, ContainerStore store,
+        update: (BuildContext context, ContainerService service,
             StoreModuleDestination storeModuleDestination, previous) {
-      Map<String, Set<String>> grouped = store.containerValues
+      Map<ModuleDestination, Set<String>> grouped = service.containerValues
           .where((element) => element.moduleDestination != null)
           .groupBy((p0) => p0.moduleDestination!)
           .mapValues(
               (value) => value.map((e) => e.name).whereNotNull().toSet());
 
-      Map<String, Set<String>> map = {
+      Map<ModuleDestination, Set<String>> map = {
         for (var e in storeModuleDestination.moduleDestinations)
           e: grouped[e] ?? Set()
       };
@@ -26,7 +26,7 @@ ProxyProvider2 proxyModuleDestinationUsage() => ProxyProvider2<ContainerStore,
     });
 
 class ModuleDestinationWithUsage {
-  final Map<String, Set<String>> destinationWithUsage;
+  final Map<ModuleDestination, Set<String>> destinationWithUsage;
 
   ModuleDestinationWithUsage(this.destinationWithUsage);
 }

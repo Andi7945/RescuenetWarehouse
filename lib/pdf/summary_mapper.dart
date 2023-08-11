@@ -33,7 +33,7 @@ SummaryContainer _mapSingle(MapEntry<RescueContainer, Map<Item, int>> entry) =>
         nextExpirationDateFormatted(entry.value),
         _dangerousGoods(entry.value),
         _hasColdChainItem(entry.value),
-        entry.key.moduleDestination ?? "",
+        entry.key.moduleDestination?.name ?? "",
         entry.key.sequentialBuild);
 
 _dangerousGoods(Map<Item, int> items) => items.keys

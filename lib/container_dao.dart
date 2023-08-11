@@ -9,8 +9,8 @@ class ContainerDao extends Equatable {
   String? typeId;
   String? imagePath;
   SequentialBuild sequentialBuild;
-  String? moduleDestination;
-  String? currentLocation;
+  String? moduleDestinationId;
+  String? currentLocationId;
   bool isReady;
   bool toDeploy;
 
@@ -20,8 +20,8 @@ class ContainerDao extends Equatable {
       this.typeId,
       this.imagePath,
       this.sequentialBuild,
-      this.moduleDestination,
-      this.currentLocation,
+      this.moduleDestinationId,
+      this.currentLocationId,
       this.isReady,
       this.toDeploy);
 
@@ -31,8 +31,8 @@ class ContainerDao extends Equatable {
         typeId = container.type.id,
         imagePath = container.imagePath,
         sequentialBuild = container.sequentialBuild,
-        moduleDestination = container.moduleDestination,
-        currentLocation = container.currentLocation,
+        moduleDestinationId = container.moduleDestination?.id,
+        currentLocationId = container.currentLocation?.id,
         isReady = container.isReady,
         toDeploy = container.toDeploy;
 
@@ -43,8 +43,8 @@ class ContainerDao extends Equatable {
         typeId,
         imagePath,
         sequentialBuild,
-        moduleDestination,
-        currentLocation,
+        moduleDestinationId,
+        currentLocationId,
         isReady,
         toDeploy
       ];

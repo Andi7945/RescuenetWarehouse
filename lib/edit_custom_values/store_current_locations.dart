@@ -1,32 +1,36 @@
+import "package:collection/collection.dart";
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:rescuenet_warehouse/current_location.dart';
+import 'package:rescuenet_warehouse/main.dart';
 
 class StoreCurrentLocations extends ChangeNotifier {
-  final List<String> _list = ["Warehouse Shiphole NL", "Office"];
+  final List<CurrentLocation> _list = [
+    CurrentLocation("1", "Warehouse Shiphole NL"),
+    CurrentLocation("2", "Office")
+  ];
 
-  UnmodifiableListView<String> get currentLocations =>
+  UnmodifiableListView<CurrentLocation> get currentLocations =>
       UnmodifiableListView(_list);
 
+  CurrentLocation get(String? id) =>
+      _list.firstWhere((element) => element.id == id);
+
   add(String? text) {
-    if (text != null && !_list.contains(text)) {
-      _list.add(text);
+    if (text != null && _list.none((l) => l.name == text)) {
+      _list.add(CurrentLocation(uuid.v4(), text));
       notifyListeners();
     }
   }
 
-  remove(String? text) {
-    if (_list.contains(text)) {
-      _list.remove(text);
-      notifyListeners();
-    }
+  remove(CurrentLocation location) {
+    _list.remove(location);
+    notifyListeners();
   }
 
-  edit(String oldDest, String newDest) {
-    var idx = _list.indexOf(oldDest);
-    if (idx != -1) {
-      _list.replaceRange(idx, idx + 1, [newDest]);
-      notifyListeners();
-    }
+  edit(CurrentLocation edited) {
+    _list.firstWhere((element) => element.id == edited.id).name = edited.name;
+    notifyListeners();
   }
 }

@@ -19,7 +19,7 @@ PackingList _single(MapEntry<RescueContainer, Map<Item, int>> entry) =>
         entry.key.name,
         "containerDescription",
         sumItemWeight(entry.key, entry.value.keys),
-        entry.key.moduleDestination ?? "",
+        entry.key.moduleDestination?.name ?? "",
         entry.key.sequentialBuild,
         nextExpirationDate(entry.value),
         _dangerousGoods(entry.value.keys.expand((element) => element.signs)),
