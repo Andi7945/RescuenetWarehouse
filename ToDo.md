@@ -12,7 +12,6 @@
 
 * PDF Labels
     * Make right side take all the space
-    * Make it invincible against long names
 
 * Print safety datasheet if available
 

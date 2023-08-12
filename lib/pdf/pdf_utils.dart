@@ -62,7 +62,10 @@ summaryTable(List<pw.TableRow> rows) {
       width: double.infinity,
       padding: const pw.EdgeInsets.all(4.0),
       decoration: pw.BoxDecoration(border: pw.Border.all(width: 0.5)),
-      child: pw.Table(children: rows));
+      child: pw.Table(children: rows, columnWidths: {
+        0: const pw.FixedColumnWidth(160),
+        1: const pw.FixedColumnWidth(220),
+      }));
 }
 
 bigger(String text) => pw.Text(text, style: const pw.TextStyle(fontSize: 16.0));
