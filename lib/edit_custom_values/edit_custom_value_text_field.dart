@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 
-class EditCustomValueTextField extends StatelessWidget {
+class EditCustomValueTextField extends StatefulWidget {
   final TextEditingController controller;
   final ValueChanged<String>? onChange;
 
   EditCustomValueTextField(this.controller, [this.onChange]);
+
+  @override
+  State createState() => _EditCustomValueTextFieldState();
+}
+
+class _EditCustomValueTextFieldState extends State<EditCustomValueTextField> {
+  bool _focussed = false;
 
   @override
   Widget build(BuildContext context) => TextField(
@@ -12,9 +19,15 @@ class EditCustomValueTextField extends StatelessWidget {
         decoration: const InputDecoration(
             hintText: "Insert new value here",
             hintStyle: TextStyle(fontSize: 24)),
-        controller: controller,
+        controller: widget.controller,
+        onTap: () {
+          _focussed = true;
+        },
         onTapOutside: (_) {
-          if (onChange != null) onChange!(controller.text);
+          if (widget.onChange != null && _focussed) {
+            _focussed = false;
+            widget.onChange!(widget.controller.text);
+          }
         },
       );
 }

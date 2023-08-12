@@ -81,13 +81,14 @@ class _EditContainerTypesState extends State<EditContainerTypes> {
               measurements: measurements));
 
   TableRow _addingRow() => TableRow(children: [
-        Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: EditCustomValueTextField(_addControllerName)),
+        _leftPadded(EditCustomValueTextField(_addControllerName)),
         EditCustomValueTextField(_addControllerEmptyWeight),
         EditCustomValueTextField(_addControllerMeasurements),
         _btnAdd()
       ]);
+
+  _leftPadded(Widget w) =>
+      Padding(padding: const EdgeInsets.only(left: 20), child: w);
 
   _btnAdd() => TextButton(
       onPressed: () {
