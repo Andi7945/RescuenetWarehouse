@@ -7,9 +7,9 @@ import 'pdf_utils.dart';
 
 Future<pw.Document> createLabelPdf(List<PackingList> lists) async {
   final pdf = pw.Document();
-  var pages = lists.map((e) async => _labelPage(await _body(e)));
-  var builded = await Future.wait(pages);
-  for (var page in builded) {
+  var fPages = lists.map((e) async => _labelPage(await _body(e)));
+  var pages = await Future.wait(fPages);
+  for (var page in pages) {
     pdf.addPage(page);
   }
   return pdf;
