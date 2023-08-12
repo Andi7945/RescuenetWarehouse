@@ -40,7 +40,7 @@ class AssignmentService extends ChangeNotifier {
   }
 
   reduce(Item item, String containerId) {
-    var assignment = Assignment(item.id, containerId, 1);
+    var assignment = Assignment(item.id, containerId, -1);
     if (store?.reduce(assignment) ?? false) {
       workLogStore?.add(assignment);
       notifyListeners();

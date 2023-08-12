@@ -42,4 +42,4 @@ ChangeNotifierProxyProvider2 provideVisibilityService() =>
             ContainerVisibilityService>(
         create: (ctx) => ContainerVisibilityService(),
         update: (ctx, store, mapperService, prev) =>
-            prev!.updateContainers(store.containers, mapperService));
+            prev!..updateContainers(store.containers, mapperService));

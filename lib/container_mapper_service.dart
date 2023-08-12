@@ -32,5 +32,6 @@ ProxyProvider3 provideMapperService() => ProxyProvider3<StoreContainerTypes,
     create: (ctx) => ContainerMapperService(),
     update: (ctx, storeContainerTypes, storeModuleDestination,
             storeCurrentLocations, prev) =>
-        prev?.setStores(storeContainerTypes, storeModuleDestination,
-            storeCurrentLocations));
+        prev!
+          ..setStores(storeContainerTypes, storeModuleDestination,
+              storeCurrentLocations));

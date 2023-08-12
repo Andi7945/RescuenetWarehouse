@@ -1,6 +1,5 @@
 import 'package:rescuenet_warehouse/container_type.dart';
 import 'package:rescuenet_warehouse/operational_status.dart';
-import 'package:rescuenet_warehouse/rescue_container.dart';
 import 'package:rescuenet_warehouse/sequential_build.dart';
 import 'package:rescuenet_warehouse/sign.dart';
 
@@ -58,28 +57,20 @@ var container_office = ContainerDao(
     container_type_crate.id,
     "euro_crate.png",
     SequentialBuild.firstBuild,
-    "Office",
-    "Office",
+    "1",
+    "1",
     false,
     false);
-var container_power = ContainerDao(
-    "2",
-    "2 Power",
-    container_type_crate.id,
-    "euro_crate.png",
-    SequentialBuild.laterBuild,
-    "Office",
-    "Office",
-    false,
-    false);
+var container_power = ContainerDao("2", "2 Power", container_type_crate.id,
+    "euro_crate.png", SequentialBuild.laterBuild, "1", "2", false, false);
 var container_medical = ContainerDao(
     "3",
     "3 Medical backpack team 1",
     container_type_backpack.id,
     "medical_backpack.png",
     SequentialBuild.supplies,
-    "Office",
-    "Office",
+    "2",
+    "1",
     false,
     false);
 
