@@ -5,16 +5,28 @@ import 'package:rescuenet_warehouse/container_store.dart';
 
 import 'container_dao.dart';
 import 'data_mocks.dart';
+import 'filter.dart';
 import 'rescue_container.dart';
 
 class ContainerVisibilityService extends ChangeNotifier {
   late ContainerMapperService mapperService;
   Map<String, ContainerDao> containers = {};
+  ValueNotifier<Filter> currentFilter =
+      ValueNotifier(Filter(FilterField.containerName, ""));
+  VoidCallback? listener;
 
   updateContainers(Map<String, ContainerDao> containers,
       ContainerMapperService mapperService) {
     this.containers = containers;
     this.mapperService = mapperService;
+
+    if (listener != null) {
+      currentFilter.removeListener(listener!);
+      listener = null;
+    }
+    currentFilter.addListener(() {
+      notifyListeners();
+    });
   }
 
   final Map<String, bool> containerVisibility = {
@@ -35,6 +47,15 @@ class ContainerVisibilityService extends ChangeNotifier {
 
   Map<RescueContainer, bool> containerWithVisible() => containerVisibility.map(
       (key, value) => MapEntry(mapperService.fromDao(containers[key]!), value));
+
+  Map<RescueContainer, bool> get filteredContainer {
+    var containers = containerWithVisible();
+    if (currentFilter.value.value != null) {
+      containers
+          .removeWhere((key, value) => !currentFilter.value.fn(key));
+    }
+    return containers;
+  }
 }
 
 ChangeNotifierProxyProvider2 provideVisibilityService() =>

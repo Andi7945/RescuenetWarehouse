@@ -7,9 +7,11 @@ import 'package:rescuenet_warehouse/container_with_content_unassigned.dart';
 import 'package:rescuenet_warehouse/menu_option.dart';
 import 'package:rescuenet_warehouse/modal_container_chooser.dart';
 
+import 'filter.dart';
 import 'item.dart';
 import 'menu.dart';
 import 'rescue_container.dart';
+import 'rescue_filter_dropdown.dart';
 import 'rescue_text.dart';
 
 class ContainerWithContentPage extends StatelessWidget {
@@ -18,10 +20,10 @@ class ContainerWithContentPage extends StatelessWidget {
     return Scaffold(body:
         Consumer2<ContainerVisibilityService, ContainerService>(
             builder: (ctxt, visibilityService, service, _) {
-      var containers = visibilityService.containerWithVisible();
+      var containers = visibilityService.filteredContainer;
       return Column(children: [
         Menu(MenuOption.containerWithContent),
-        _btnChooseContainer(ctxt, containers),
+        _btnRow(ctxt, visibilityService.currentFilter, containers),
         _body(
             service.itemsWithoutContainer(),
             Map.fromEntries(service
@@ -31,6 +33,16 @@ class ContainerWithContentPage extends StatelessWidget {
       ]);
     }));
   }
+
+  Widget _btnRow(BuildContext ctxt, ValueNotifier<Filter> filterNotifier,
+          Map<RescueContainer, bool> containers) =>
+      Row(children: [
+        _filter(filterNotifier),
+        _btnChooseContainer(ctxt, containers)
+      ]);
+
+  Widget _filter(ValueNotifier<Filter> filterNotifier) =>
+      RescueFilterDropdown(filterNotifier);
 
   TextButton _btnChooseContainer(
       BuildContext ctxt, Map<RescueContainer, bool> containers) {

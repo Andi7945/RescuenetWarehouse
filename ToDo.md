@@ -14,6 +14,8 @@
 * Packing List: round KG digits
 
 * Add Filter container by X
+  * Add more possibilities
+  * Set initial
 
 Galaxy Tab A8 SMX200
 
