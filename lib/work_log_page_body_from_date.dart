@@ -1,24 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:rescuenet_warehouse/rescue_container.dart';
 
 import 'log_entry_expanded.dart';
 import 'rescue_text.dart';
 import 'work_log_page_entry.dart';
 
-class WorkLogPageBodyFromDate extends StatelessWidget {
-  final ValueChanged<DateTime>? dateChanger;
-  final Map<String, List<LogEntryExpanded>> entriesByContainer;
+import 'package:intl/intl.dart';
 
-  WorkLogPageBodyFromDate(this.dateChanger, this.entriesByContainer);
+class WorkLogPageBodyFromDate extends StatelessWidget {
+  final DateTime since;
+  final Map<RescueContainer, List<LogEntryExpanded>> entriesByContainer;
+  final DateFormat formatter = DateFormat('MMM d, yyyy');
+
+  WorkLogPageBodyFromDate(this.since, this.entriesByContainer);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-        children:
-            entriesByContainer.entries.map(_tablePerDateAndContainer).toList());
+    return _bordered(Column(children: [
+      Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: RescueText.headline(
+              "All changes since ${formatter.format(since)}")),
+      ...entriesByContainer.entries.map(_tablePerDateAndContainer).toList()
+    ]));
   }
 
+  Widget _bordered(Widget w) => Padding(
+      padding: const EdgeInsets.only(top: 32, bottom: 8),
+      child: Container(
+          decoration: const ShapeDecoration(
+            shape: RoundedRectangleBorder(side: BorderSide(width: 0.50)),
+          ),
+          child: w));
+
   Widget _tablePerDateAndContainer(
-          MapEntry<String, List<LogEntryExpanded>> entry) =>
+          MapEntry<RescueContainer, List<LogEntryExpanded>> entry) =>
       Padding(
           padding:
               const EdgeInsets.only(top: 24, bottom: 24, left: 8, right: 8),
@@ -26,7 +42,7 @@ class WorkLogPageBodyFromDate extends StatelessWidget {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Padding(
                 padding: const EdgeInsets.only(bottom: 8),
-                child: RescueText.headline("Container: ${entry.key}")),
+                child: RescueText.headline("Container: ${entry.key.name}")),
             Table(
                 defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                 children: [header(), ...entry.value.map(item).toList()])

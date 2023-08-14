@@ -19,11 +19,13 @@ class WorkLogStore extends ChangeNotifier {
     LogEntry(Assignment("1", "1", -1), DateTime(2023, 6, 28), "Gert Jan"),
     LogEntry(Assignment("1", "3", -1), DateTime(2023, 6, 28), "Gert Jan"),
     LogEntry(Assignment("6", "3", 200), DateTime(2023, 6, 28), "Michael"),
+    LogEntry(Assignment("1", "3", 2), DateTime(2023, 6, 28), "Michael"),
     LogEntry(Assignment("2", "1", -1), DateTime(2023, 6, 26), "Andi"),
     LogEntry(Assignment("1", "1", -1), DateTime(2023, 6, 26), "Gert Jan"),
   ];
 
-  UnmodifiableListView<LogEntry> get entries => UnmodifiableListView(_logEntries);
+  UnmodifiableListView<LogEntry> get entries =>
+      UnmodifiableListView(_logEntries);
 
   UnmodifiableMapView<String, Map<ItemAndContainer, CountAndUser>>
       get logEntries {

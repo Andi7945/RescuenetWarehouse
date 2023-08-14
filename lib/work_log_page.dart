@@ -38,7 +38,8 @@ class _WorkLogPageState extends State<WorkLogPage> {
 
   Widget _body(WorkLogService workLogService) => onlyFromDate == null
       ? WorkLogPageBodyAll(workLogService.byDateAndContainerName())
-      : WorkLogPageBodyFromDate((d) => _chooseNewDate(), {});
+      : WorkLogPageBodyFromDate(
+          onlyFromDate!, workLogService.fromDate(onlyFromDate!));
 
   _padded(Widget w) =>
       Padding(padding: const EdgeInsets.only(left: 40, right: 40), child: w);
@@ -49,10 +50,6 @@ class _WorkLogPageState extends State<WorkLogPage> {
         _dateChooser(),
         _btnChooseContainer(ctxt, withVisibility)
       ]);
-
-  Widget _caption() => onlyFromDate == null
-      ? RescueText.headline("All changes")
-      : RescueText.headline("Changes from ${formatter.format(onlyFromDate!)}");
 
   Widget _allChangesButton() => TextButton(
       onPressed: () => setState(() {
@@ -69,7 +66,7 @@ class _WorkLogPageState extends State<WorkLogPage> {
       ]);
 
   Future<void> _chooseNewDate() async {
-    var newDate = await _dialogBuilder(context, null);
+    var newDate = await _dialogBuilder(context, DateTime(2023, 6, 1));
     if (newDate != null) {
       setState(() {
         onlyFromDate = newDate;

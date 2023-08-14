@@ -22,20 +22,23 @@ class WorkLogService {
 
   Map<DateTime, Map<RescueContainer, List<LogEntryExpanded>>>
       byDateAndContainerName() {
+    Map<DateTime, List<LogEntry>> byDate =
+        _visibleEntries().groupBy((y) => y.date);
+    return byDate.mapValues(_sumDailyChanges).mapValues(
+        (v) => v.entries.map(_expandEntry).groupBy((p0) => p0.container));
+  }
+
+  List<LogEntry> _visibleEntries() {
     var visible = visibilityService.containerVisibility;
 
     List<LogEntry> areVisible = workLogStore.entries
         .where((element) => visible[element.assignment.containerId] == true)
         .toList();
-
-    // byContainer.sort((a, b) => (a.key?.id ?? "").compareTo(b.key?.id ?? ""));
-
-    Map<DateTime, List<LogEntry>> byDate = areVisible.groupBy((y) => y.date);
-    return byDate.mapValues(_sumDailyChanges).mapValues(
-        (v) => v.entries.map(_expandEntry).groupBy((p0) => p0.container));
+    return areVisible;
   }
 
-  Map<ItemAndContainer, CountAndUser> _sumDailyChanges(List<LogEntry> entries) {
+  Map<ItemAndContainer, CountAndUser> _sumDailyChanges(
+      Iterable<LogEntry> entries) {
     return entries
         .groupBy((p0) =>
             ItemAndContainer(p0.assignment.itemId, p0.assignment.containerId))
@@ -55,6 +58,15 @@ class WorkLogService {
               .firstWhere((element) => element.id == e.key.containerId),
           e.value.count,
           e.value.user);
+
+  Map<RescueContainer, List<LogEntryExpanded>> fromDate(DateTime onlyFromDate) {
+    var filtered = _visibleEntries().where(
+        (e) => e.date.add(const Duration(days: 1)).isAfter(onlyFromDate));
+    return _sumDailyChanges(filtered)
+        .entries
+        .map(_expandEntry)
+        .groupBy((p0) => p0.container);
+  }
 }
 
 ProxyProvider4 provideWorkLogService() => ProxyProvider4<

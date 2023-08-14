@@ -25,18 +25,20 @@ class WorkLogPageBodyAll extends StatelessWidget {
   Widget _date(
           MapEntry<DateTime, Map<RescueContainer, List<LogEntryExpanded>>>
               date) =>
-      Padding(
-          padding: const EdgeInsets.only(top: 8, bottom: 8),
-          child: Container(
-              decoration: const ShapeDecoration(
-                shape: RoundedRectangleBorder(side: BorderSide(width: 0.50)),
-              ),
-              child: Column(children: [
-                Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: RescueText.headline(formatter.format(date.key))),
-                _tablesPerDate(date.value)
-              ])));
+      _bordered(Column(children: [
+        Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: RescueText.headline(formatter.format(date.key))),
+        _tablesPerDate(date.value)
+      ]));
+
+  Widget _bordered(Widget w) => Padding(
+      padding: const EdgeInsets.only(top: 8, bottom: 8),
+      child: Container(
+          decoration: const ShapeDecoration(
+            shape: RoundedRectangleBorder(side: BorderSide(width: 0.50)),
+          ),
+          child: w));
 
   Widget _tablesPerDate(
       Map<RescueContainer, List<LogEntryExpanded>> entriesPerDate) {

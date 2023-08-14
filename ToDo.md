@@ -1,8 +1,6 @@
 # next steps
 * RescueNet ID: Not Changeable, Auto Increment
 
-* Add work log filter by date
-
 * Make adding new items possible
 * Make adding new containers possible
 
