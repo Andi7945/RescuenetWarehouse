@@ -3,7 +3,7 @@ import 'package:rescuenet_warehouse/rescue_container.dart';
 
 class LogEntryExpanded {
   Item item;
-  RescueContainer? container;
+  RescueContainer container;
   int count;
   String user;
 

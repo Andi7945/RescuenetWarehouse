@@ -1,6 +1,4 @@
 # next steps
-
-* Change names of custom values (mod dest etc)
 * RescueNet ID: Not Changeable, Auto Increment
 
 * Add work log filter by date
@@ -16,6 +14,8 @@
 * Print safety datasheet if available
 
 * Packing List: round KG digits
+
+* Add Filter container by X
 
 Galaxy Tab A8 SMX200
 

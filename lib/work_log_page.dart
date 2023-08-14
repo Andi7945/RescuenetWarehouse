@@ -1,36 +1,80 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/collection_extensions.dart';
 import 'package:rescuenet_warehouse/container_visibility_service.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
-import 'package:rescuenet_warehouse/work_log_page_entry.dart';
+import 'package:rescuenet_warehouse/work_log_page_body_from_date.dart';
+import 'package:rescuenet_warehouse/work_log_service.dart';
 
-import 'log_entry_expanded.dart';
 import 'menu.dart';
 import 'menu_option.dart';
 import 'modal_container_chooser.dart';
 
-class WorkLogPage extends StatelessWidget {
+import 'package:intl/intl.dart';
+
+import 'work_log_page_body_all.dart';
+
+class WorkLogPage extends StatefulWidget {
+  @override
+  State createState() => _WorkLogPageState();
+}
+
+class _WorkLogPageState extends State<WorkLogPage> {
+  final DateFormat formatter = DateFormat('MMM d, yyyy');
+  DateTime? onlyFromDate;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Consumer2<ContainerVisibilityService,
-            Map<String, List<LogEntryExpanded>>>(
-        builder: (ctxt, service, entries, _) {
-      var withVisibility = service.containerWithVisible();
+    return Scaffold(body: Consumer2<ContainerVisibilityService, WorkLogService>(
+        builder: (ctxt, visibilityService, workLogService, _) {
+      var withVisibility = visibilityService.containerWithVisible();
       return Column(children: [
         Menu(MenuOption.workLog),
-        _btnChooseContainer(ctxt, withVisibility),
-        _body(withVisibility, entries)
+        _padded(_btnRow(ctxt, withVisibility)),
+        _padded(_body(workLogService))
       ]);
     }));
   }
 
-  Expanded _body(Map<RescueContainer, bool> withVisibility,
-      Map<String, List<LogEntryExpanded>> entries) {
-    return Expanded(
-        child: _page(_visibleEntries(entries,
-            withVisibility.map((key, value) => MapEntry(key.id, value)))));
+  Widget _body(WorkLogService workLogService) => onlyFromDate == null
+      ? WorkLogPageBodyAll(workLogService.byDateAndContainerName())
+      : WorkLogPageBodyFromDate((d) => _chooseNewDate(), {});
+
+  _padded(Widget w) =>
+      Padding(padding: const EdgeInsets.only(left: 40, right: 40), child: w);
+
+  Row _btnRow(BuildContext ctxt, Map<RescueContainer, bool> withVisibility) =>
+      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        _allChangesButton(),
+        _dateChooser(),
+        _btnChooseContainer(ctxt, withVisibility)
+      ]);
+
+  Widget _caption() => onlyFromDate == null
+      ? RescueText.headline("All changes")
+      : RescueText.headline("Changes from ${formatter.format(onlyFromDate!)}");
+
+  Widget _allChangesButton() => TextButton(
+      onPressed: () => setState(() {
+            onlyFromDate = null;
+          }),
+      child: RescueText.normal("Show all changes"));
+
+  Widget _dateChooser() => Row(mainAxisSize: MainAxisSize.min, children: [
+        TextButton(
+            onPressed: () async {
+              await _chooseNewDate();
+            },
+            child: RescueText.normal("Show accumulated changes from date"))
+      ]);
+
+  Future<void> _chooseNewDate() async {
+    var newDate = await _dialogBuilder(context, null);
+    if (newDate != null) {
+      setState(() {
+        onlyFromDate = newDate;
+      });
+    }
   }
 
   TextButton _btnChooseContainer(
@@ -44,52 +88,18 @@ class WorkLogPage extends StatelessWidget {
             "Choose container (${visible.length} / ${containers.length})"));
   }
 
-  Map<String, List<LogEntryExpanded>> _visibleEntries(
-          Map<String, List<LogEntryExpanded>> log,
-          Map<String, bool> containers) =>
-      log.mapValues((p0) => p0
-          .where((e) =>
-              e.container != null && (containers[e.container?.id] ?? false))
-          .toList());
-
-  _page(Map<String, List<LogEntryExpanded>> log) => ListView(
-        shrinkWrap: true,
-        children: log.entries
-            .map((MapEntry<String, List<LogEntryExpanded>> date) => _date(date))
-            .toList(),
-      );
-
-  Widget _date(MapEntry<String, List<LogEntryExpanded>> date) => Padding(
-      padding: const EdgeInsets.only(left: 40, right: 40, top: 8, bottom: 8),
-      child: Container(
-          decoration: const ShapeDecoration(
-            shape: RoundedRectangleBorder(side: BorderSide(width: 0.50)),
-          ),
-          child: Column(children: [
-            Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: RescueText.headline(date.key)),
-            _tables(date.value)
-          ])));
-
-  Widget _tables(List<LogEntryExpanded> entries) {
-    var x = entries.groupBy((p0) => p0.container).entries.toList();
-    x.sort((a, b) => (a.key?.id ?? "").compareTo(b.key?.id ?? ""));
-    return Column(children: x.map(_table).toList());
+  Future<DateTime?> _dialogBuilder(BuildContext context, [DateTime? initial]) {
+    return showDialog<DateTime?>(
+      context: context,
+      builder: (BuildContext context) {
+        return DatePickerDialog(
+          restorationId: 'date_picker_dialog',
+          initialEntryMode: DatePickerEntryMode.calendarOnly,
+          initialDate: initial ?? DateTime.now(),
+          firstDate: DateTime(2020),
+          lastDate: DateTime.now(),
+        );
+      },
+    );
   }
-
-  Widget _table(MapEntry<RescueContainer?, List<LogEntryExpanded>> entry) =>
-      Padding(
-          padding:
-              const EdgeInsets.only(top: 24, bottom: 24, left: 8, right: 8),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child:
-                    RescueText.headline("Container: ${entry.key?.name ?? ""}")),
-            Table(
-                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                children: [header(), ...entry.value.map(item).toList()])
-          ]));
 }
