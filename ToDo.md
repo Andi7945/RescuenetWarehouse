@@ -1,7 +1,4 @@
 # next steps
-* RescueNet ID: Not Changeable, Auto Increment
-
-* Make adding new items possible
 * Make adding new containers possible
 
 * Add numeric input field with validation

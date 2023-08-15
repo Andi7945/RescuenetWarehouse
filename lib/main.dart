@@ -18,7 +18,6 @@ import 'package:rescuenet_warehouse/export_page.dart';
 import 'package:rescuenet_warehouse/item_edit_page_argument_extractor.dart';
 import 'package:rescuenet_warehouse/item_service.dart';
 import 'package:rescuenet_warehouse/item_store.dart';
-import 'package:rescuenet_warehouse/items_page.dart';
 import 'package:rescuenet_warehouse/page/login_register_page.dart';
 import 'package:rescuenet_warehouse/page/warehouse_overview_page.dart';
 import 'package:rescuenet_warehouse/provider/rn_items_provider.dart';
@@ -34,6 +33,7 @@ import 'package:uuid/uuid.dart';
 
 import 'container_service.dart';
 import 'edit_custom_values/proxy_current_location_usage.dart';
+import 'item_overview_page.dart';
 import 'proxy_container_options.dart';
 import 'edit_custom_values/proxy_module_destination_usage.dart';
 
@@ -102,7 +102,7 @@ class MyApp extends StatelessWidget {
             routeContainerEditPage: (ctx) =>
                 ContainerEditPageArgumentExtractor(),
 
-            routeItemsOverview: (ctx) => ItemsPage(),
+            routeItemsOverview: (ctx) => ItemOverviewPage(),
             routeItemEditPage: (ctx) => ItemEditPageArgumentExtractor(),
 
             routeEditModuleDestinations: (ctx) => EditModuleDestinations(),

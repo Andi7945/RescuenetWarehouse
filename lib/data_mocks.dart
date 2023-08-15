@@ -11,7 +11,7 @@ var item_fire = Item.filled(
     "1",
     "fire extinghuiser",
     "fire_ex.png",
-    "41532",
+    41532,
     0.7,
     8,
     "Fire extinghuiser 500 ml",
@@ -36,17 +36,17 @@ var item_fire = Item.filled(
     ]);
 
 var item_chair = Item.simple("2", "Folding Chair", 0.8, 13,
-    OperationalStatus.deployable, "folding_chair.png", "10000");
+    OperationalStatus.deployable, "folding_chair.png", 10000);
 var item_desk = Item.simple("3", "Table", 2.5, 1, OperationalStatus.needsRepair,
-    "folding_desk.png", "10001");
+    "folding_desk.png", 10001);
 var item_generator = Item.simple("4", "Generator", 18, 1,
-    OperationalStatus.needsRepair, "generator.png", "10002");
+    OperationalStatus.needsRepair, "generator.png", 10002);
 var item_cooler = Item.simple(
-    "5", "Cooler", 3.4, 1, OperationalStatus.deployable, "cooler.png", "10003");
+    "5", "Cooler", 3.4, 1, OperationalStatus.deployable, "cooler.png", 10003);
 var item_para = Item.simple("6", "Paracetamol", 0.001, 1000,
-    OperationalStatus.toBeReplaced, "paracetamol.png", "10004");
+    OperationalStatus.toBeReplaced, "paracetamol.png", 10004);
 var item_splint = Item.simple("7", "Splint", 0.6, 1,
-    OperationalStatus.deployable, "sam_splint.png", "10005");
+    OperationalStatus.deployable, "sam_splint.png", 10005);
 
 var assignment_item1_container1 = Assignment("1", "1", 2);
 var assignment_item1_container3 = Assignment("1", "3", 4);

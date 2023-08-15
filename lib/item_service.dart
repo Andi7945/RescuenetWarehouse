@@ -10,6 +10,8 @@ class ItemService {
 
   List<Item> get items => itemStore.items;
 
+  Item newItem() => itemStore.newItem();
+
   Item itemById(String id) =>
       itemStore.items.firstWhere((element) => element.id == id);
 

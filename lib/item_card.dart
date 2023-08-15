@@ -21,14 +21,12 @@ class ItemCard extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.pushNamed(context, routeItemEditPage, arguments: _item.id);
-      },
-      child: _card(),
-    );
-  }
+  Widget build(BuildContext context) => InkWell(
+        onTap: () {
+          Navigator.pushNamed(context, routeItemEditPage, arguments: _item.id);
+        },
+        child: _card(),
+      );
 
   _card() => Container(
         width: 420,

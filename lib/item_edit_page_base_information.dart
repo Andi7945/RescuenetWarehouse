@@ -43,8 +43,8 @@ class ItemEditPageBaseInformation extends StatelessWidget {
         children: [
           ..._widgetWithLabel("Name:", _nameInput(context)),
           const SizedBox(height: 10),
-          ..._widgetWithLabel(
-              "RescueNet ID:", RescueText.normal(item.rescueNetId))
+          ..._widgetWithLabel("RescueNet ID:",
+              RescueText.normal(item.rescueNetId.toStringAsFixed(0)))
         ],
       ),
     );

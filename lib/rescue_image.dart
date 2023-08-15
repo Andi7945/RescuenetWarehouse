@@ -34,6 +34,9 @@ class RescueImage extends StatelessWidget {
   }
 
   _image() {
+    if (_imagePath?.contains("https") ?? false) {
+      return NetworkImage(_imagePath!);
+    }
     if (_imagePath?.endsWith(".jpg") ?? false) {
       return FileImage(File(_imagePath!));
     }

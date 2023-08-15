@@ -1,6 +1,8 @@
 import 'dart:collection';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:rescuenet_warehouse/main.dart';
 
 import 'data_mocks.dart';
 import 'item.dart';
@@ -24,5 +26,12 @@ class ItemStore extends ChangeNotifier {
       _items.replaceRange(idx, idx + 1, [item]);
       notifyListeners();
     }
+  }
+
+  newItem() {
+    var newRescueNetId = _items.map((e) => e.rescueNetId).reduce(max) + 1;
+    var item = Item(uuid.v4(), 0, newRescueNetId);
+    _items.add(item);
+    return item;
   }
 }

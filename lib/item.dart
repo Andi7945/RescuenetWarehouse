@@ -6,7 +6,7 @@ class Item {
   String id;
   String? name;
   String imagePath = "https://via.placeholder.com/90x81";
-  String rescueNetId;
+  double rescueNetId;
   double weight = 0.0;
   int totalAmount;
   String? description;
@@ -52,7 +52,7 @@ class Item {
       String? id,
       String? name,
       String? imagePath,
-      String? rescueNetId,
+      double? rescueNetId,
       double? weight,
       int? totalAmount,
       String? description,
