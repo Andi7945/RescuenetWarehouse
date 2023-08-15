@@ -8,7 +8,8 @@ import '../item_utils.dart';
 import '../rescue_container.dart';
 import '../sign.dart';
 
-List<PackingList> mapPackingList(Map<RescueContainer, Map<Item, int>> containerWithItems) {
+List<PackingList> mapPackingList(
+    Map<RescueContainer, Map<Item, int>> containerWithItems) {
   return containerWithItems.entries.map(_single).toList();
 }
 
@@ -18,14 +19,15 @@ PackingList _single(MapEntry<RescueContainer, Map<Item, int>> entry) =>
         entry.key.type?.name ?? "",
         entry.key.name,
         "containerDescription",
-        sumItemWeight(entry.key, entry.value.keys),
+        sumItemWeight(entry.key, entry.value),
         entry.key.moduleDestination?.name ?? "",
         entry.key.sequentialBuild,
         nextExpirationDate(entry.value),
         _dangerousGoods(entry.value.keys.expand((element) => element.signs)),
         _items(entry.value));
 
-List<PackingDangerousGood> _dangerousGoods(Iterable<Sign> signs) => signs.map(_singleGood).toList();
+List<PackingDangerousGood> _dangerousGoods(Iterable<Sign> signs) =>
+    signs.map(_singleGood).toList();
 
 PackingDangerousGood _singleGood(Sign sign) => PackingDangerousGood(
     "dangerType",

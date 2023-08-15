@@ -52,4 +52,4 @@ _hasColdChainItem(Map<Item, int> items) {
 }
 
 _calcWeight(MapEntry<RescueContainer, Map<Item, int>> entry) =>
-    sumItemWeight(entry.key, entry.value.keys);
+    sumItemWeight(entry.key, entry.value);
