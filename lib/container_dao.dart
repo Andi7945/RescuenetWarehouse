@@ -28,7 +28,7 @@ class ContainerDao extends Equatable {
   ContainerDao.fromContainer(RescueContainer container)
       : id = container.id,
         name = container.name,
-        typeId = container.type.id,
+        typeId = container.type?.id,
         imagePath = container.imagePath,
         sequentialBuild = container.sequentialBuild,
         moduleDestinationId = container.moduleDestination?.id,

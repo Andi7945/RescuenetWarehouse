@@ -8,29 +8,39 @@ import 'container_overview_page_row.dart';
 import 'container_service.dart';
 import 'menu.dart';
 import 'rescue_container.dart';
+import 'rescue_text.dart';
 
 class ContainerOverviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-            children: [Menu(MenuOption.containerOverview), _body(context)]));
+        body: Consumer<ContainerService>(
+            builder: (ctxt, service, _) => Column(children: [
+                  Menu(MenuOption.containerOverview),
+                  _buttons(context, service),
+                  _body(context, service)
+                ])));
   }
 
-  _body(context) {
+  _buttons(BuildContext context, ContainerService service) => Padding(
+      padding: const EdgeInsets.only(left: 16.0),
+      child: Row(children: [
+        TextButton(
+            onPressed: () {
+              var id = service.newContainer().id;
+              Navigator.pushNamed(context, routeContainerEditPage,
+                  arguments: id);
+            },
+            child: RescueText.normal("Add container"))
+      ]));
+
+  _body(context, ContainerService service) {
     return Padding(
         padding: const EdgeInsets.only(left: 40, right: 40),
-        child: Consumer<ContainerService>(
-            builder: (ctxt, service, _) => RescueTable(
-                const [
-                  "",
-                  "Image",
-                  "Name",
-                  "Currently deployed",
-                  "Total amount"
-                ],
-                _buildRows(context, service.containers()),
-                const {0: IntrinsicColumnWidth(), 1: IntrinsicColumnWidth()})));
+        child: RescueTable(
+            const ["", "Image", "Name", "Currently deployed", "Total amount"],
+            _buildRows(context, service.containers()),
+            const {0: IntrinsicColumnWidth(), 1: IntrinsicColumnWidth()}));
   }
 
   List<TableRow> _buildRows(context, List<RescueContainer> containers) =>

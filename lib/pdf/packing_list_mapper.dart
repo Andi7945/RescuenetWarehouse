@@ -15,7 +15,7 @@ List<PackingList> mapPackingList(Map<RescueContainer, Map<Item, int>> containerW
 PackingList _single(MapEntry<RescueContainer, Map<Item, int>> entry) =>
     PackingList(
         entry.key.id,
-        entry.key.type.name,
+        entry.key.type?.name ?? "",
         entry.key.name,
         "containerDescription",
         sumItemWeight(entry.key, entry.value.keys),

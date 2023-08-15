@@ -19,7 +19,7 @@ class ContainerEditPage extends StatefulWidget {
 
 class _ContainerEditPageState extends State<ContainerEditPage> {
   final TextEditingController _nameController = TextEditingController();
-  late ValueNotifier<String> _containerTypeController;
+  late ValueNotifier<String?> _containerTypeController;
   late ValueNotifier<String?> _moduleDestinationController;
   late ValueNotifier<String?> _currentLocationController;
   late ValueNotifier<String> _sequentialBuildController;
@@ -30,7 +30,7 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
     var container = widget._container.value;
 
     _nameController.text = container.name;
-    _containerTypeController = ValueNotifier(container.type.id);
+    _containerTypeController = ValueNotifier(container.type?.id);
     _moduleDestinationController =
         ValueNotifier(container.moduleDestination?.id);
     _currentLocationController = ValueNotifier(container.currentLocation?.id);
@@ -53,7 +53,7 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _containerTypeController.value = widget._container.value.type.id;
+    _containerTypeController.value = widget._container.value.type?.id;
   }
 
   @override
@@ -113,18 +113,30 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
     var changedContainer = RescueContainer(
       widget._container.value.id,
       _nameController.text,
-      widget._containerOptions.types.firstWhere(
-          (element) => element.id == _containerTypeController.value),
+      _type(),
       widget._container.value.imagePath,
       SequentialBuild.values.firstWhere(
           (element) => element.name == _sequentialBuildController.value),
-      widget._containerOptions.moduleDestinations.firstWhere(
-          (element) => element.id == _moduleDestinationController.value),
-      widget._containerOptions.currentLocations.firstWhere(
-          (element) => element.id == _currentLocationController.value),
+      _destination(),
+      _location(),
       widget._container.value.isReady,
       widget._container.value.toDeploy,
     );
     widget._container.value = changedContainer;
   }
+
+  _type() => _containerTypeController.value == null
+      ? null
+      : widget._containerOptions.types.firstWhere(
+          (element) => element.id == _containerTypeController.value);
+
+  _destination() => _moduleDestinationController.value == null
+      ? null
+      : widget._containerOptions.moduleDestinations.firstWhere(
+          (element) => element.id == _moduleDestinationController.value);
+
+  _location() => _currentLocationController.value == null
+      ? null
+      : widget._containerOptions.currentLocations.firstWhere(
+          (element) => element.id == _currentLocationController.value);
 }

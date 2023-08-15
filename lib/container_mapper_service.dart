@@ -22,9 +22,13 @@ class ContainerMapperService {
 
   RescueContainer fromDao(ContainerDao dao) => RescueContainer.fromDao(
       dao,
-      storeContainerTypes.get(dao.typeId),
-      storeModuleDestination.get(dao.moduleDestinationId),
-      storeCurrentLocations.get(dao.currentLocationId));
+      dao.typeId == null ? null : storeContainerTypes.get(dao.typeId),
+      dao.moduleDestinationId == null
+          ? null
+          : storeModuleDestination.get(dao.moduleDestinationId),
+      dao.currentLocationId == null
+          ? null
+          : storeCurrentLocations.get(dao.currentLocationId));
 }
 
 ProxyProvider3 provideMapperService() => ProxyProvider3<StoreContainerTypes,

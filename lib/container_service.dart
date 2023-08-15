@@ -82,6 +82,9 @@ class ContainerService {
             .any((a) => a.containerId == element.id && a.itemId == item.id))
         .map((e) => MapEntry(e.id, e.name)));
   }
+
+  RescueContainer newContainer() =>
+      containerMapperService.fromDao(containerStore.newContainer());
 }
 
 ProxyProvider5 proxyContainerService() => ProxyProvider5<

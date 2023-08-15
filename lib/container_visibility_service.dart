@@ -27,6 +27,10 @@ class ContainerVisibilityService extends ChangeNotifier {
     currentFilter.addListener(() {
       notifyListeners();
     });
+
+    for (var e in containers.keys) {
+      containerVisibility.putIfAbsent(e, () => true);
+    }
   }
 
   final Map<String, bool> containerVisibility = {
@@ -51,8 +55,7 @@ class ContainerVisibilityService extends ChangeNotifier {
   Map<RescueContainer, bool> get filteredContainer {
     var containers = containerWithVisible();
     if (currentFilter.value.value != null) {
-      containers
-          .removeWhere((key, value) => !currentFilter.value.fn(key));
+      containers.removeWhere((key, value) => !currentFilter.value.fn(key));
     }
     return containers;
   }

@@ -1,6 +1,8 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:rescuenet_warehouse/main.dart';
+import 'package:rescuenet_warehouse/sequential_build.dart';
 
 import 'container_dao.dart';
 import 'data_mocks.dart';
@@ -18,5 +20,12 @@ class ContainerStore extends ChangeNotifier {
   updateContainer(ContainerDao container) {
     containers[container.id] = container;
     notifyListeners();
+  }
+
+  ContainerDao newContainer() {
+    var newContainer = ContainerDao(uuid.v4(), "", null, null,
+        SequentialBuild.firstBuild, null, null, false, false);
+    containers[newContainer.id] = newContainer;
+    return newContainer;
   }
 }

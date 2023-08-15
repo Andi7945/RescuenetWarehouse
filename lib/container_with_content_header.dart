@@ -74,7 +74,8 @@ class ContainerWithContentHeader extends StatelessWidget {
     ifier.addListener(() {
       var updated = ContainerDao.fromContainer(
           RescueContainer.from(container: _container, toDeploy: ifier.value));
-      Provider.of<ContainerService>(context, listen: false).updateContainer(updated);
+      Provider.of<ContainerService>(context, listen: false)
+          .updateContainer(updated);
     });
     return ifier;
   }
@@ -84,7 +85,8 @@ class ContainerWithContentHeader extends StatelessWidget {
     ifier.addListener(() {
       var updated = ContainerDao.fromContainer(
           RescueContainer.from(container: _container, isReady: ifier.value));
-      Provider.of<ContainerService>(context, listen: false).updateContainer(updated);
+      Provider.of<ContainerService>(context, listen: false)
+          .updateContainer(updated);
     });
     return ifier;
   }
@@ -130,9 +132,9 @@ class ContainerWithContentHeader extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _text(_container.type.name, 16),
+                  _text(_container.type?.name ?? "", 16),
                   const SizedBox(height: 10),
-                  _text(_container.type.measurements, 16),
+                  _text(_container.type?.measurements ?? "", 16),
                 ],
               ),
             ),

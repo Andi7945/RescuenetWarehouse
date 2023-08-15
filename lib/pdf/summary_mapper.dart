@@ -27,7 +27,7 @@ SummaryContainer _mapSingle(MapEntry<RescueContainer, Map<Item, int>> entry) =>
         entry.key.id,
         entry.key.name,
         "description",
-        entry.key.type.name,
+        entry.key.type?.name ?? "",
         calcValue(entry.value),
         _calcWeight(entry),
         nextExpirationDateFormatted(entry.value),

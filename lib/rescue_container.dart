@@ -10,7 +10,7 @@ import 'package:equatable/equatable.dart';
 class RescueContainer extends Equatable {
   String id;
   String name;
-  ContainerType type;
+  ContainerType? type;
   String? imagePath;
   SequentialBuild sequentialBuild;
   ModuleDestination? moduleDestination;
