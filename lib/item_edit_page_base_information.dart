@@ -17,53 +17,50 @@ class ItemEditPageBaseInformation extends StatelessWidget {
     return _body(context);
   }
 
-  _body(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      child: Row(
+  _body(BuildContext context) => Padding(
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [_leftSide(context), _rightSide(context)],
+        ),
+      );
+
+  SizedBox _leftSide(BuildContext context) => SizedBox(
+      width: 202,
+      height: 195,
+      child: RescuePickableImage(
+          item.imagePath,
+          (path) =>
+              _changeItem(context, Item.from(item: item, imagePath: path))));
+
+  Widget _rightSide(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
+      child: Column(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-              width: 202,
-              height: 195,
-              child: RescuePickableImage(
-                  item.imagePath,
-                  (path) => _changeItem(
-                      context, Item.from(item: item, imagePath: path)))),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                RescueText.slim('Name:'),
-                const SizedBox(height: 10),
-                SizedBox(
-                    height: 40,
-                    width: 240,
-                    child: RescueInput(
-                        initial: item.name,
-                        onChange: (changed) => _changeItem(
-                            context, Item.from(item: item, name: changed)))),
-                const SizedBox(height: 10),
-                RescueText.slim('RescueNet ID:'),
-                const SizedBox(height: 10),
-                SizedBox(
-                    height: 40,
-                    width: 240,
-                    child: RescueInput(
-                        initial: item.rescueNetId,
-                        onChange: (changed) => _changeItem(context,
-                            Item.from(item: item, rescueNetId: changed)))),
-              ],
-            ),
-          ),
+          ..._widgetWithLabel("Name:", _nameInput(context)),
+          const SizedBox(height: 10),
+          ..._widgetWithLabel(
+              "RescueNet ID:", RescueText.normal(item.rescueNetId))
         ],
       ),
     );
+  }
+
+  RescueInput _nameInput(BuildContext context) => RescueInput(
+      initial: item.name,
+      onChange: (changed) =>
+          _changeItem(context, Item.from(item: item, name: changed)));
+
+  List<Widget> _widgetWithLabel(String label, Widget w) {
+    return [
+      RescueText.slim(label),
+      const SizedBox(height: 10),
+      SizedBox(height: 40, width: 240, child: w)
+    ];
   }
 
   _changeItem(BuildContext context, Item updated) {

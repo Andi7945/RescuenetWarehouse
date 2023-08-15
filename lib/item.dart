@@ -6,7 +6,7 @@ class Item {
   String id;
   String? name;
   String imagePath = "https://via.placeholder.com/90x81";
-  String? rescueNetId;
+  String rescueNetId;
   double weight = 0.0;
   int totalAmount;
   String? description;
@@ -22,7 +22,7 @@ class Item {
   String? notes;
   List<Sign> signs = List.empty();
 
-  Item(this.id, this.totalAmount);
+  Item(this.id, this.totalAmount, this.rescueNetId);
 
   Item.filled(
       this.id,
@@ -45,7 +45,7 @@ class Item {
       this.signs);
 
   Item.simple(this.id, this.name, this.weight, this.totalAmount,
-      this.operationalStatus, this.imagePath);
+      this.operationalStatus, this.imagePath, this.rescueNetId);
 
   Item.from(
       {required Item item,
@@ -67,22 +67,22 @@ class Item {
       String? sku,
       String? notes,
       List<Sign>? signs})
-      : this.id = id ?? item.id,
-        this.name = name ?? item.name,
-        this.imagePath = imagePath ?? item.imagePath,
-        this.rescueNetId = rescueNetId ?? item.rescueNetId,
-        this.weight = weight ?? item.weight,
-        this.totalAmount = totalAmount ?? item.totalAmount,
-        this.description = description ?? item.description,
-        this.expiringDates = expiringDates ?? item.expiringDates,
-        this.operationalStatus = operationalStatus ?? item.operationalStatus,
-        this.manufacturer = manufacturer ?? item.manufacturer,
-        this.brand = brand ?? item.brand,
-        this.type = type ?? item.type,
-        this.supplier = supplier ?? item.supplier,
-        this.website = website ?? item.website,
-        this.value = value ?? item.value,
-        this.sku = sku ?? item.sku,
-        this.notes = notes ?? item.notes,
-        this.signs = signs ?? item.signs;
+      : id = id ?? item.id,
+        name = name ?? item.name,
+        imagePath = imagePath ?? item.imagePath,
+        rescueNetId = rescueNetId ?? item.rescueNetId,
+        weight = weight ?? item.weight,
+        totalAmount = totalAmount ?? item.totalAmount,
+        description = description ?? item.description,
+        expiringDates = expiringDates ?? item.expiringDates,
+        operationalStatus = operationalStatus ?? item.operationalStatus,
+        manufacturer = manufacturer ?? item.manufacturer,
+        brand = brand ?? item.brand,
+        type = type ?? item.type,
+        supplier = supplier ?? item.supplier,
+        website = website ?? item.website,
+        value = value ?? item.value,
+        sku = sku ?? item.sku,
+        notes = notes ?? item.notes,
+        signs = signs ?? item.signs;
 }
