@@ -1,6 +1,4 @@
 # next steps
-* Make adding new containers possible
-
 * Add numeric input field with validation
 
 * PDF Labels
