@@ -3,7 +3,6 @@
 
 * Print safety datasheet if available
 
-* Make container image changeable
 * Make container overview page useful
 
 * Make initial date on work log accumulated -1W
@@ -29,8 +28,6 @@ Galaxy Tab A8 SMX200
 * Page 2: Container No, Printing Date, Table of items
 * Container No in PDF - Auto Increment? Or editable field? Auto next free number -> Not editable
 * How does the PDF Packing List look with multiple dangerous goods?
-* Container Picture - By Type or By Container?
-  * -> Type, add in table
 
 
 ### Random Thoughts

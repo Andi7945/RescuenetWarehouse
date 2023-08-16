@@ -114,7 +114,6 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
       widget._container.value.id,
       _nameController.text,
       _type(),
-      widget._container.value.imagePath,
       SequentialBuild.values.firstWhere(
           (element) => element.name == _sequentialBuildController.value),
       _destination(),

@@ -6,13 +6,16 @@ import 'rescue_text.dart';
 
 class RescuePickableImage extends StatelessWidget {
   final Function(String) picked;
-  final String path;
+  final double? height;
+  final double? width;
+  final String? path;
 
-  RescuePickableImage(this.path, this.picked);
+  RescuePickableImage(this.path, this.picked, [this.height, this.width]);
 
   @override
   Widget build(BuildContext context) {
-    return RescueImage(path, 168, 151, _changePictureOverview(context));
+    return RescueImage(
+        path, height ?? 168, width ?? 151, _changePictureOverview(context));
   }
 
   _changePictureOverview(BuildContext context) => Center(

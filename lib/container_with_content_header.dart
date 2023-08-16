@@ -125,7 +125,7 @@ class ContainerWithContentHeader extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          RescueImage(_container.imagePath),
+          RescueImage(_container.type?.imagePath),
           Expanded(
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10),

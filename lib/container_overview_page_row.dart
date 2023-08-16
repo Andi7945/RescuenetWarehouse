@@ -11,8 +11,8 @@ class ContainerOverviewPageRow {
         InkWell(
             onTap: () => onClick(container),
             child: RescueImage('edit_icon.png')),
-        RescueImage(container.imagePath),
-        RescueText.normal(container.name ?? ""),
+        RescueImage(container.type?.imagePath),
+        RescueText.normal(container.name),
         RescueText.normal("1"),
         RescueText.normal("2")
       ]);

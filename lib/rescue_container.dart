@@ -11,7 +11,6 @@ class RescueContainer extends Equatable {
   double id;
   String name;
   ContainerType? type;
-  String? imagePath;
   SequentialBuild sequentialBuild;
   ModuleDestination? moduleDestination;
   CurrentLocation? currentLocation;
@@ -22,7 +21,6 @@ class RescueContainer extends Equatable {
       this.id,
       this.name,
       this.type,
-      this.imagePath,
       this.sequentialBuild,
       this.moduleDestination,
       this.currentLocation,
@@ -33,7 +31,6 @@ class RescueContainer extends Equatable {
     required RescueContainer container,
     String? name,
     ContainerType? type,
-    String? imagePath,
     SequentialBuild? sequentialBuild,
     ModuleDestination? moduleDestination,
     CurrentLocation? currentLocation,
@@ -42,7 +39,6 @@ class RescueContainer extends Equatable {
   })  : id = container.id,
         name = name ?? container.name,
         type = type ?? container.type,
-        imagePath = imagePath ?? container.imagePath,
         sequentialBuild = sequentialBuild ?? container.sequentialBuild,
         moduleDestination = moduleDestination ?? container.moduleDestination,
         currentLocation = currentLocation ?? container.currentLocation,
@@ -53,7 +49,6 @@ class RescueContainer extends Equatable {
       ContainerDao dao, this.type, this.moduleDestination, this.currentLocation)
       : id = dao.id,
         name = dao.name,
-        imagePath = dao.imagePath,
         sequentialBuild = dao.sequentialBuild,
         isReady = dao.isReady,
         toDeploy = dao.toDeploy;
@@ -63,7 +58,6 @@ class RescueContainer extends Equatable {
         id,
         name,
         type,
-        imagePath,
         sequentialBuild,
         moduleDestination,
         currentLocation,

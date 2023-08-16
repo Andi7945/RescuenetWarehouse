@@ -28,7 +28,7 @@ class RescueImage extends StatelessWidget {
       image: DecorationImage(
         // image: NetworkImage(_item.imagePath),
         image: _image(),
-        fit: BoxFit.fill,
+        fit: BoxFit.fitHeight,
       ),
     );
   }

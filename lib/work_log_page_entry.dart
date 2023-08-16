@@ -11,10 +11,10 @@ List<TableRow> asTableRow(
 }
 
 TableRow header() => TableRow(children: [
-  RescueText.normal("Name", FontWeight.w700),
-  RescueText.normal("Amount", FontWeight.w700),
-  RescueText.normal("User", FontWeight.w700),
-]);
+      RescueText.normal("Name", FontWeight.w700),
+      RescueText.normal("Amount", FontWeight.w700),
+      RescueText.normal("User", FontWeight.w700),
+    ]);
 
 TableRow item(LogEntryExpanded entry) => TableRow(
       children: [
@@ -25,7 +25,7 @@ TableRow item(LogEntryExpanded entry) => TableRow(
     );
 
 TableRow _container(RescueContainer? container) => TableRow(children: [
-      _imageCell(container?.imagePath, 80, 160),
+      _imageCell(container?.type?.imagePath, 80, 160),
       RescueText.slim(container?.name ?? ""),
       Container()
     ]);

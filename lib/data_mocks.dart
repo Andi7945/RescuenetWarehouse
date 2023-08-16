@@ -55,28 +55,27 @@ var container_office = ContainerDao(
     1,
     "1 Office supplies",
     container_type_crate.id,
-    "euro_crate.png",
     SequentialBuild.firstBuild,
     "1",
     "1",
     false,
     false);
 var container_power = ContainerDao(2, "2 Power", container_type_crate.id,
-    "euro_crate.png", SequentialBuild.laterBuild, "1", "2", false, false);
+    SequentialBuild.laterBuild, "1", "2", false, false);
 var container_medical = ContainerDao(
     3,
     "3 Medical backpack team 1",
     container_type_backpack.id,
-    "medical_backpack.png",
     SequentialBuild.supplies,
     "2",
     "1",
     false,
     false);
 
-var container_type_crate = ContainerType("1", "Euro crate", 1.7, "60x40x40");
-var container_type_backpack =
-    ContainerType("2", "Medical backpack", 0.5, "60x40x32");
+var container_type_crate =
+    ContainerType("1", "Euro crate", "euro_crate.png", 1.7, "60x40x40");
+var container_type_backpack = ContainerType(
+    "2", "Medical backpack", "medical_backpack.png", 0.5, "60x40x32");
 
 var container_options_type = [container_type_crate, container_type_backpack];
 var container_options_module_destination = ["Office", "Warehouse"];
