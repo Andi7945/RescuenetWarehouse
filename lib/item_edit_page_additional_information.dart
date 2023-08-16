@@ -28,7 +28,7 @@ class ItemEditPageAdditionalInformation extends StatelessWidget {
       ItemEditPageAdditionalInformationExpDates(item),
       const SizedBox(height: 10),
       _operationalStatusEntry(
-          context, 'Operational status:', item.operationalStatus.name),
+          context, 'Operational status:', item.operationalStatus),
       const SizedBox(height: 10),
       RescueInputWithLeadingLabel(
           'Manufacturer:',
@@ -82,13 +82,13 @@ class ItemEditPageAdditionalInformation extends StatelessWidget {
           .updateItem(updateFn(s));
 
   Widget _operationalStatusEntry(
-      BuildContext context, String label, String value) {
+      BuildContext context, String label, OperationalStatus value) {
     var notifier = ValueNotifier(value);
     notifier.addListener(() {
       var changedItem = Item.from(
           item: item,
           operationalStatus: OperationalStatus.values
-              .firstWhere((element) => element.name == notifier.value));
+              .firstWhere((element) => element == notifier.value));
       Provider.of<ItemService>(context, listen: false).updateItem(changedItem);
     });
     return SizedBox(
@@ -102,7 +102,7 @@ class ItemEditPageAdditionalInformation extends StatelessWidget {
           const SizedBox(width: 10),
           RescueDropdownButton(
               Map.fromEntries(OperationalStatus.values
-                  .map((e) => MapEntry(e.name, e.name))),
+                  .map((e) => MapEntry(e, e.displayName))),
               notifier),
         ],
       ),

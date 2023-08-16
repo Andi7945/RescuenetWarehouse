@@ -4,7 +4,6 @@
 * Print safety datasheet if available
 
 * Add Filter container by X
-  * Add more possibilities
   * Set initial
   * Make it look good
 

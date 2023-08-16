@@ -4,21 +4,24 @@ import 'package:rescuenet_warehouse/container_mapper_service.dart';
 import 'package:rescuenet_warehouse/container_store.dart';
 
 import 'container_dao.dart';
+import 'container_service.dart';
 import 'data_mocks.dart';
 import 'filter.dart';
 import 'rescue_container.dart';
 
 class ContainerVisibilityService extends ChangeNotifier {
   late ContainerMapperService mapperService;
+  late ContainerService containerService;
   Map<double, ContainerDao> containers = {};
   ValueNotifier<Filter> currentFilter =
       ValueNotifier(Filter(FilterField.containerName, ""));
   VoidCallback? listener;
 
   updateContainers(Map<double, ContainerDao> containers,
-      ContainerMapperService mapperService) {
+      ContainerMapperService mapperService, ContainerService containerService) {
     this.containers = containers;
     this.mapperService = mapperService;
+    this.containerService = containerService;
 
     if (listener != null) {
       currentFilter.removeListener(listener!);
@@ -54,16 +57,20 @@ class ContainerVisibilityService extends ChangeNotifier {
 
   Map<RescueContainer, bool> get filteredContainer {
     var containers = containerWithVisible();
+    var withItems = containerService.containerWithItems();
     if (currentFilter.value.value != null) {
-      containers.removeWhere((key, value) => !currentFilter.value.fn(key));
+      containers.removeWhere((key, value) {
+        var currentWithItems = withItems[key];
+        return !currentFilter.value.fn(key, currentWithItems?.keys ?? []);
+      });
     }
     return containers;
   }
 }
 
-ChangeNotifierProxyProvider2 provideVisibilityService() =>
-    ChangeNotifierProxyProvider2<ContainerStore, ContainerMapperService,
-            ContainerVisibilityService>(
+ChangeNotifierProxyProvider3 provideVisibilityService() =>
+    ChangeNotifierProxyProvider3<ContainerStore, ContainerMapperService,
+            ContainerService, ContainerVisibilityService>(
         create: (ctx) => ContainerVisibilityService(),
-        update: (ctx, store, mapperService, prev) =>
-            prev!..updateContainers(store.containers, mapperService));
+        update: (ctx, store, mapperService, service, prev) =>
+            prev!..updateContainers(store.containers, mapperService, service));

@@ -6,7 +6,6 @@ import 'package:rescuenet_warehouse/container_store.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 
 import 'container_dao.dart';
-import 'container_visibility_service.dart';
 import 'item.dart';
 import 'item_service.dart';
 
@@ -15,14 +14,9 @@ class ContainerService {
   final ContainerStore containerStore;
   final ContainerMapperService containerMapperService;
   final AssignmentStore assignmentStore;
-  final ContainerVisibilityService visibilityService;
 
-  ContainerService(
-      this.itemService,
-      this.containerStore,
-      this.containerMapperService,
-      this.assignmentStore,
-      this.visibilityService);
+  ContainerService(this.itemService, this.containerStore,
+      this.containerMapperService, this.assignmentStore);
 
   List<RescueContainer> containers() => containerStore.containers.values
       .map(containerMapperService.fromDao)
@@ -87,14 +81,13 @@ class ContainerService {
       containerMapperService.fromDao(containerStore.newContainer());
 }
 
-ProxyProvider5 proxyContainerService() => ProxyProvider5<
+ProxyProvider4 proxyContainerService() => ProxyProvider4<
         ItemService,
         ContainerStore,
         ContainerMapperService,
         AssignmentStore,
-        ContainerVisibilityService,
         ContainerService>(
     update: (ctx, itemService, containerStore, mapperService, assignmentStore,
-            visibilityService, prev) =>
-        ContainerService(itemService, containerStore, mapperService,
-            assignmentStore, visibilityService));
+            prev) =>
+        ContainerService(
+            itemService, containerStore, mapperService, assignmentStore));
