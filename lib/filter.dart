@@ -13,26 +13,32 @@ calcFn(FilterField field, String? value) {
     return true;
   }
   if (field == FilterField.containerName) {
-    return (RescueContainer a) =>
-        a.name.toLowerCase().contains(value.toLowerCase());
+    return (RescueContainer a) => contains(a.name, value);
   }
   if (field == FilterField.containerLocation) {
-    return (RescueContainer a) =>
-        a.currentLocation != null &&
-        a.currentLocation!.name.toLowerCase().contains(value.toLowerCase());
+    return (RescueContainer a) => contains(a.currentLocation?.name, value);
   }
   if (field == FilterField.containerDestination) {
-    return (RescueContainer c) =>
-        c.moduleDestination != null &&
-        c.moduleDestination!.name.toLowerCase().contains(value.toLowerCase());
+    return (RescueContainer c) => contains(c.moduleDestination?.name, value);
+  }
+  if (field == FilterField.containerType) {
+    return (RescueContainer c) => contains(c.type?.name, value);
+  }
+  if (field == FilterField.containerSequentialBuild) {
+    return (RescueContainer c) => contains(c.sequentialBuild.name, value);
   }
   return true;
 }
 
+bool contains(String? field, String value) =>
+    field != null && field.toLowerCase().contains(value.toLowerCase());
+
 enum FilterField {
   containerName(displayName: "Container Name"),
   containerLocation(displayName: "Current Location"),
-  containerDestination(displayName: "Module Destination");
+  containerDestination(displayName: "Module Destination"),
+  containerType(displayName: "Container Type"),
+  containerSequentialBuild(displayName: "Sequential Build");
 
   const FilterField({required this.displayName});
 
