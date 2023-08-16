@@ -15,16 +15,25 @@
 
 * Item Amounts: Make TextField to adjust it directly
 
+* PDF Images from all sources
+
 Galaxy Tab A8 SMX200
 
 # To Discuss
 
-* Pretty sure we need drag and drop for usability
+# Answered
+* Should the summary list always be printed? -> Deploy + Ready
+* Dangerous Goods: IATA Number = UN Number? -> ItemPage: IATA ID / UN Number
+* Dangerous Goods in SummaryList PDF - What text should be in the PDF, the remarks? Or a new field?
 * Description of container - is not planned but in the PDF
-* Dangerous Goods in PDF - is it the label? What text should be in the PDF, the remarks? Or a new field?
 * Cold chain -> checkbox in label? Or do we have one label which will be defined here?
+  * Checkbox in item
+* Page 2: Container No, Printing Date, Table of items
+* Container No in PDF - Auto Increment? Or editable field? Auto next free number -> Not editable
 * How does the PDF Packing List look with multiple dangerous goods?
-* Dangerous Goods: IATA Number = UN Number?
-* Should the summary list always be printed?
 * Container Picture - By Type or By Container?
-* Container No in PDF - Auto Increment? Or editable field?
+  * -> Type, add in table
+
+
+### Random Thoughts
+* Pretty sure we need drag and drop for usability
