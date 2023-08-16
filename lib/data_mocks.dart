@@ -48,11 +48,11 @@ var item_para = Item.simple("6", "Paracetamol", 0.001, 1000,
 var item_splint = Item.simple("7", "Splint", 0.6, 1,
     OperationalStatus.deployable, "sam_splint.png", 10005);
 
-var assignment_item1_container1 = Assignment("1", "1", 2);
-var assignment_item1_container3 = Assignment("1", "3", 4);
+var assignment_item1_container1 = Assignment("1", 1, 2);
+var assignment_item1_container3 = Assignment("1", 3, 4);
 
 var container_office = ContainerDao(
-    "1",
+    1,
     "1 Office supplies",
     container_type_crate.id,
     "euro_crate.png",
@@ -61,10 +61,10 @@ var container_office = ContainerDao(
     "1",
     false,
     false);
-var container_power = ContainerDao("2", "2 Power", container_type_crate.id,
+var container_power = ContainerDao(2, "2 Power", container_type_crate.id,
     "euro_crate.png", SequentialBuild.laterBuild, "1", "2", false, false);
 var container_medical = ContainerDao(
-    "3",
+    3,
     "3 Medical backpack team 1",
     container_type_backpack.id,
     "medical_backpack.png",

@@ -4,7 +4,7 @@ import 'package:rescuenet_warehouse/rescue_container.dart';
 import 'sequential_build.dart';
 
 class ContainerDao extends Equatable {
-  String id;
+  double id;
   String name;
   String? typeId;
   String? imagePath;

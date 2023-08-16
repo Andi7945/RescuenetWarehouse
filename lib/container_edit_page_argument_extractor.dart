@@ -12,7 +12,7 @@ import 'menu.dart';
 class ContainerEditPageArgumentExtractor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var containerId = ModalRoute.of(context)!.settings.arguments as String;
+    var containerId = ModalRoute.of(context)!.settings.arguments as double;
     return Scaffold(
         body: Column(children: [
       Menu(MenuOption.containerOverview),
@@ -20,7 +20,7 @@ class ContainerEditPageArgumentExtractor extends StatelessWidget {
     ]));
   }
 
-  _body(String id) => Consumer2<ContainerOptions, ContainerService>(
+  _body(double id) => Consumer2<ContainerOptions, ContainerService>(
       builder: (ctxt, options, service, _) => _page(
           service.containers().firstWhere((c) => c.id == id),
           (c) => service.updateContainer(c),

@@ -6,7 +6,7 @@ import 'package:rescuenet_warehouse/sequential_build.dart';
 
 var summaryContainer = [
   SummaryContainer(
-      "1",
+      1,
       "Office supplies",
       "Printer, tables, etc.",
       "Euro 60-40-32",
@@ -17,16 +17,16 @@ var summaryContainer = [
       "",
       "Office",
       SequentialBuild.firstBuild),
-  SummaryContainer("2", "Cooler", "With cold packs and meds", "Cooler", 540, 12,
+  SummaryContainer(2, "Cooler", "With cold packs and meds", "Cooler", 540, 12,
       "Dec 12th, 2023", "", "Yes", "Storage", SequentialBuild.preBuild),
-  SummaryContainer("3", "Fridge", "Electrical fridge", "Euro 60-40-32", 300, 20,
+  SummaryContainer(3, "Fridge", "Electrical fridge", "Euro 60-40-32", 300, 20,
       "", "", "Yes", "Storage", SequentialBuild.preBuild),
-  SummaryContainer("4", "Tents", "Meeting tent", "Euro 60-40-32", 300, 31, "",
-      "", "", "Meeting area", SequentialBuild.laterBuild),
-  SummaryContainer("5", "Sanitation", "Toilets, shower", "Euro 60-40-32", 300,
-      25, "", "", "", "Meeting area", SequentialBuild.firstBuild),
+  SummaryContainer(4, "Tents", "Meeting tent", "Euro 60-40-32", 300, 31, "", "",
+      "", "Meeting area", SequentialBuild.laterBuild),
+  SummaryContainer(5, "Sanitation", "Toilets, shower", "Euro 60-40-32", 300, 25,
+      "", "", "", "Meeting area", SequentialBuild.firstBuild),
   SummaryContainer(
-      "6",
+      6,
       "Water filter 1",
       "Water filter for base camp",
       "Euro 60-40-32",
@@ -38,7 +38,7 @@ var summaryContainer = [
       "Water treatment",
       SequentialBuild.laterBuild),
   SummaryContainer(
-      "7",
+      7,
       "Water raw storage",
       "Storage 3800 liter raw water base camp",
       "Euro 60-40-32",
@@ -50,7 +50,7 @@ var summaryContainer = [
       "Water treatment",
       SequentialBuild.laterBuild),
   SummaryContainer(
-      "8",
+      8,
       "Power 1",
       "For fridge",
       "Euro 60-40-32",
@@ -61,7 +61,7 @@ var summaryContainer = [
       "Yes",
       "Storage",
       SequentialBuild.preBuild),
-  SummaryContainer("9", "Medical backpack 1", "", "Medical backpack", 300, 18.5,
+  SummaryContainer(9, "Medical backpack 1", "", "Medical backpack", 300, 18.5,
       "March 20th, 2024", "", "", "Storage", SequentialBuild.supplies),
 ];
 

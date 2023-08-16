@@ -20,7 +20,7 @@ class AssignmentService extends ChangeNotifier {
     this.store = store;
   }
 
-  addContainer(String containerId, Item item) {
+  addContainer(double containerId, Item item) {
     var container =
         knownContainerValues.firstWhere((element) => element.id == containerId);
     var assignment = Assignment(item.id, container.id, 1);
@@ -31,7 +31,7 @@ class AssignmentService extends ChangeNotifier {
     }
   }
 
-  increase(Item item, String containerId) {
+  increase(Item item, double containerId) {
     var assignment = Assignment(item.id, containerId, 1);
     if (store?.increase(assignment) ?? false) {
       workLogStore?.add(assignment);
@@ -39,7 +39,7 @@ class AssignmentService extends ChangeNotifier {
     }
   }
 
-  reduce(Item item, String containerId) {
+  reduce(Item item, double containerId) {
     var assignment = Assignment(item.id, containerId, -1);
     if (store?.reduce(assignment) ?? false) {
       workLogStore?.add(assignment);

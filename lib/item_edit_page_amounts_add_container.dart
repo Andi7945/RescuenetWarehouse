@@ -19,14 +19,14 @@ class ItemEditPageAmountsAddContainer extends StatefulWidget {
 
 class _ItemEditPageAmountsAddContainerState
     extends State<ItemEditPageAmountsAddContainer> {
-  ValueNotifier<String> valueNotifier = ValueNotifier("");
+  ValueNotifier<double> valueNotifier = ValueNotifier(0.0);
 
   @override
   Widget build(BuildContext context) => Consumer<ContainerService>(
       builder: (ctx, service, _) =>
           _body(_options(service.otherContainerOptions(widget.item))));
 
-  Map<String, String> _options(Map<String, String> otherOptions) {
+  Map<double, String> _options(Map<double, String> otherOptions) {
     var availableOptions = {...otherOptions};
     availableOptions
         .removeWhere((_, name) => widget.knownNames.contains(name));
@@ -42,14 +42,14 @@ class _ItemEditPageAmountsAddContainerState
     });
   }
 
-  _body(Map<String, String> otherContainerOptions) {
+  _body(Map<double, String> otherContainerOptions) {
     if (otherContainerOptions.isEmpty) {
       return RescueText.slim("No new containers available");
     }
     return _containerSelector(otherContainerOptions);
   }
 
-  _containerSelector(Map<String, String> otherContainerOptions) {
+  _containerSelector(Map<double, String> otherContainerOptions) {
     if (otherContainerOptions[valueNotifier.value] == null) {
       valueNotifier.dispose();
       var options = otherContainerOptions.entries.first;
@@ -64,12 +64,12 @@ class _ItemEditPageAmountsAddContainerState
     ]);
   }
 
-  _addNewContainer(String containerIdToAdd) =>
+  _addNewContainer(double containerIdToAdd) =>
       Provider.of<AssignmentService>(context, listen: false)
           .addContainer(containerIdToAdd, widget.item);
 
-  _newListener(String selectedValue) {
-    ValueNotifier<String> valueNotifier = ValueNotifier(selectedValue);
+  _newListener(double selectedValue) {
+    ValueNotifier<double> valueNotifier = ValueNotifier(selectedValue);
     valueNotifier.addListener(() {
       setState(() {});
     });

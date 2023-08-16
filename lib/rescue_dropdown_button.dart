@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class RescueDropdownButton extends StatelessWidget {
-  Map<String, String> optionToDisplayName;
-  ValueNotifier<String?> valueNotifier;
+class RescueDropdownButton<T> extends StatelessWidget {
+  Map<T, String> optionToDisplayName;
+  ValueNotifier<T?> valueNotifier;
 
   RescueDropdownButton(this.optionToDisplayName, this.valueNotifier);
 
@@ -11,15 +11,14 @@ class RescueDropdownButton extends StatelessWidget {
     return DropdownButton(
       items: optionToDisplayName.entries.map(_createItem).toList(),
       value: valueNotifier.value,
-      onChanged: (String? value) {
-        valueNotifier.value = value!;
+      onChanged: (T? value) {
+        valueNotifier.value = value;
       },
     );
   }
 
-  DropdownMenuItem<String> _createItem(
-          MapEntry<String, String> optionToDisplayName) =>
-      DropdownMenuItem<String>(
+  DropdownMenuItem<T> _createItem(MapEntry<T, String> optionToDisplayName) =>
+      DropdownMenuItem<T>(
         value: optionToDisplayName.key,
         child: Text(optionToDisplayName.value),
       );

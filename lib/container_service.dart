@@ -76,7 +76,7 @@ class ContainerService {
       .map(containerMapperService.fromDao)
       .toList();
 
-  Map<String, String> otherContainerOptions(Item item) {
+  Map<double, String> otherContainerOptions(Item item) {
     return Map.fromEntries(containerValues
         .where((element) => !assignmentStore.assignments
             .any((a) => a.containerId == element.id && a.itemId == item.id))

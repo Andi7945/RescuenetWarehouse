@@ -10,12 +10,12 @@ import 'rescue_container.dart';
 
 class ContainerVisibilityService extends ChangeNotifier {
   late ContainerMapperService mapperService;
-  Map<String, ContainerDao> containers = {};
+  Map<double, ContainerDao> containers = {};
   ValueNotifier<Filter> currentFilter =
       ValueNotifier(Filter(FilterField.containerName, ""));
   VoidCallback? listener;
 
-  updateContainers(Map<String, ContainerDao> containers,
+  updateContainers(Map<double, ContainerDao> containers,
       ContainerMapperService mapperService) {
     this.containers = containers;
     this.mapperService = mapperService;
@@ -33,7 +33,7 @@ class ContainerVisibilityService extends ChangeNotifier {
     }
   }
 
-  final Map<String, bool> containerVisibility = {
+  final Map<double, bool> containerVisibility = {
     container_office.id: true,
     container_power.id: true,
     container_medical.id: true

@@ -1,16 +1,18 @@
 # next steps
 * Add numeric input field with validation
 
-* PDF Labels
-    * Make right side take all the space
-
 * Print safety datasheet if available
-
-* Packing List: round KG digits
 
 * Add Filter container by X
   * Add more possibilities
   * Set initial
+
+* Make container image changeable
+* Make container overview page useful
+
+* Overflow on WorkLogPage
+* Sort WorkLog Page according to date
+* Make initial date on work log accumulated -1W
 
 Galaxy Tab A8 SMX200
 
@@ -23,3 +25,5 @@ Galaxy Tab A8 SMX200
 * How does the PDF Packing List look with multiple dangerous goods?
 * Dangerous Goods: IATA Number = UN Number?
 * Should the summary list always be printed?
+* Container Picture - By Type or By Container?
+* Container No in PDF - Auto Increment? Or editable field?

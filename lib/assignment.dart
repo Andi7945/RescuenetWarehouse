@@ -1,6 +1,6 @@
 class Assignment {
   String itemId;
-  String containerId;
+  double containerId;
   int count;
 
   Assignment(this.itemId, this.containerId, this.count);

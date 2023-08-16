@@ -75,7 +75,7 @@ List<pw.TableRow> _lines(List<SummaryContainer> container) =>
     container.map(_line).toList();
 
 pw.TableRow _line(SummaryContainer container) => pw.TableRow(children: [
-      tableCell(container.containerNr),
+      tableCell(container.containerNr.toStringAsFixed(0)),
       tableCell(container.name),
       tableCell(container.description),
       tableCell(container.type),

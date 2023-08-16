@@ -1,7 +1,7 @@
 import 'package:rescuenet_warehouse/sequential_build.dart';
 
 class SummaryContainer {
-  final String containerNr;
+  final double containerNr;
   final String name;
   final String description;
   final String type;

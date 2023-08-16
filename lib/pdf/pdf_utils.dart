@@ -103,7 +103,8 @@ List<pw.TableRow> summaryRows(PackingList list) {
     smallRow("Name:", list.containerName),
     smallRow("Description:", list.containerDescription),
     blankRow(),
-    smallLabelFatValueRow("Weight:", "${list.totalWeight} kg"),
+    smallLabelFatValueRow(
+        "Weight:", "${list.totalWeight.toStringAsFixed(2)} kg"),
     blankRow(),
   ];
 }
@@ -156,8 +157,7 @@ Future<pw.Widget> dangerousGoods(List<PackingDangerousGood> goods,
   List<pw.Widget> w =
       goods.isEmpty ? [_noDangerousGoods()] : await _dangerousGood(goods.first);
   return pw.Container(
-      decoration: pw.BoxDecoration(
-          border: pw.Border.all(width: 0.5), color: PdfColors.amber200),
+      decoration: pw.BoxDecoration(border: pw.Border.all(width: 0.5)),
       padding: const pw.EdgeInsets.all(4.0),
       child: fn(w));
 }
