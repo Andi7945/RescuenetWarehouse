@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import "package:collection/collection.dart";
 
 import 'package:provider/provider.dart';
@@ -20,12 +22,17 @@ class WorkLogService {
   WorkLogService(this.workLogStore, this.visibilityService, this.itemService,
       this.containerService);
 
-  Map<DateTime, Map<RescueContainer, List<LogEntryExpanded>>>
+  List<MapEntry<DateTime, Map<RescueContainer, List<LogEntryExpanded>>>>
       byDateAndContainerName() {
     Map<DateTime, List<LogEntry>> byDate =
         _visibleEntries().groupBy((y) => y.date);
-    return byDate.mapValues(_sumDailyChanges).mapValues(
+    var grouped = byDate.mapValues(_sumDailyChanges).mapValues(
         (v) => v.entries.map(_expandEntry).groupBy((p0) => p0.container));
+
+    return grouped.entries
+        .sorted((a, b) =>
+            b.key.millisecondsSinceEpoch - a.key.millisecondsSinceEpoch)
+        .toList();
   }
 
   List<LogEntry> _visibleEntries() {

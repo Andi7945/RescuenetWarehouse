@@ -10,9 +10,9 @@
 * Make container image changeable
 * Make container overview page useful
 
-* Overflow on WorkLogPage
-* Sort WorkLog Page according to date
 * Make initial date on work log accumulated -1W
+
+* Item Amounts: Make TextField to adjust it directly
 
 Galaxy Tab A8 SMX200
 

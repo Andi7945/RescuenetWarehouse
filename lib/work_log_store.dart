@@ -49,7 +49,7 @@ class WorkLogStore extends ChangeNotifier {
 
   add(Assignment assignment) {
     _logEntries.add(LogEntry(assignment, DateTime.now(),
-        Auth().currentUser?.displayName ?? "NO_NAME"));
+        Auth().currentUser?.displayName ?? "Unknown"));
   }
 }
 

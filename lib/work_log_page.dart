@@ -31,7 +31,7 @@ class _WorkLogPageState extends State<WorkLogPage> {
       return Column(children: [
         Menu(MenuOption.workLog),
         _padded(_btnRow(ctxt, withVisibility)),
-        _padded(_body(workLogService))
+        Expanded(child: _padded(_body(workLogService)))
       ]);
     }));
   }

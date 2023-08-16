@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 
 class WorkLogPageBodyAll extends StatelessWidget {
   final DateFormat formatter = DateFormat('MMM d, yyyy');
-  final Map<DateTime, Map<RescueContainer, List<LogEntryExpanded>>>
+  final List<MapEntry<DateTime, Map<RescueContainer, List<LogEntryExpanded>>>>
       byDateAndContainerName;
 
   WorkLogPageBodyAll(this.byDateAndContainerName);
@@ -18,8 +18,7 @@ class WorkLogPageBodyAll extends StatelessWidget {
   Widget build(BuildContext context) => _body();
 
   _body() => ListView(
-        shrinkWrap: true,
-        children: byDateAndContainerName.entries.map(_date).toList(),
+        children: byDateAndContainerName.map(_date).toList(),
       );
 
   Widget _date(
