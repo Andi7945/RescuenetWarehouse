@@ -8,6 +8,8 @@ import 'package:rescuenet_warehouse/rescue_dropdown_button.dart';
 import 'package:rescuenet_warehouse/rescue_input_with_leading_label.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
 
+import 'rescue_leading_label.dart';
+
 class ItemEditPageAdditionalInformation extends StatelessWidget {
   final Item item;
 
@@ -72,12 +74,18 @@ class ItemEditPageAdditionalInformation extends StatelessWidget {
               context, (s) => Item.from(item: item, weight: double.parse(s))),
           "${item.weight}",
           null,
-          true)
+          true),
+      const SizedBox(height: 10),
+      RescueLeadingLabel(
+          Checkbox(
+              value: item.isColdChain,
+              onChanged: _updateItem(
+                  context, (s) => Item.from(item: item, isColdChain: s))),
+          "Cold chain:")
     ]);
   }
 
-  Function(String) _updateItem(
-          BuildContext context, Item Function(String) updateFn) =>
+  Function(T) _updateItem<T>(BuildContext context, Item Function(T) updateFn) =>
       (s) => Provider.of<ItemService>(context, listen: false)
           .updateItem(updateFn(s));
 

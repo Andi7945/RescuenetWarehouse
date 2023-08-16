@@ -36,7 +36,8 @@ class ContainerWithContentHeader extends StatelessWidget {
         children: [
           _nameAndCheckboxes(context),
           _basicInformation(),
-          SignRow(_signs(), _nextExpired(), _operationalStatus()),
+          SignRow(
+              _signs(), _nextExpired(), _operationalStatus(), _isColdChain()),
           Container(
             padding: const EdgeInsets.all(8),
             child: Row(
@@ -199,6 +200,8 @@ class ContainerWithContentHeader extends StatelessWidget {
     }
     return OperationalStatus.deployable;
   }
+
+  bool _isColdChain() => _items.keys.any((itm) => itm.isColdChain);
 
   Container _moduleDestination() {
     return Container(

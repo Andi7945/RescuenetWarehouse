@@ -48,7 +48,7 @@ class ItemCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  _item.name ?? "NO NAME",
+                  _item.name ?? "",
                   style: _buildTextStyle(),
                 ),
                 Container(
@@ -67,8 +67,8 @@ class ItemCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                SignRow(
-                    _item.signs, _nextExpiringDate(), _item.operationalStatus),
+                SignRow(_item.signs, _nextExpiringDate(),
+                    _item.operationalStatus, _item.isColdChain),
               ],
             ),
           ],

@@ -60,7 +60,7 @@ class ItemEditPageSignsSingle extends StatelessWidget {
   Widget _unNumber() => Padding(
       padding: const EdgeInsets.only(left: 16),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        RescueText.slim('UN Number:'),
+        RescueText.slim('IATA ID / UN Number:'),
         const SizedBox(height: 10),
         SizedBox(
             height: 40,

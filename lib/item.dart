@@ -21,6 +21,7 @@ class Item {
   String? sku;
   String? notes;
   List<Sign> signs = List.empty();
+  bool isColdChain = false;
 
   Item(this.id, this.totalAmount, this.rescueNetId);
 
@@ -42,10 +43,13 @@ class Item {
       this.value,
       this.notes,
       this.sku,
+      this.isColdChain,
       this.signs);
 
   Item.simple(this.id, this.name, this.weight, this.totalAmount,
-      this.operationalStatus, this.imagePath, this.rescueNetId);
+      this.operationalStatus, this.imagePath, this.rescueNetId,
+      [bool? isColdChain])
+      : isColdChain = isColdChain ?? false;
 
   Item.from(
       {required Item item,
@@ -66,6 +70,7 @@ class Item {
       int? value,
       String? sku,
       String? notes,
+      bool? isColdChain,
       List<Sign>? signs})
       : id = id ?? item.id,
         name = name ?? item.name,
@@ -84,5 +89,6 @@ class Item {
         value = value ?? item.value,
         sku = sku ?? item.sku,
         notes = notes ?? item.notes,
+        isColdChain = isColdChain ?? item.isColdChain,
         signs = signs ?? item.signs;
 }

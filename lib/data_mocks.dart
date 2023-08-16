@@ -29,10 +29,10 @@ var item_fire = Item.filled(
     100,
     "",
     "324278",
+    false,
     [
       Sign("1", "DGcompressedgasses2.png"),
-      Sign("2", "coldchain.png"),
-      Sign("3", "DGcompressedgasses.png")
+      Sign("2", "DGcompressedgasses.png")
     ]);
 
 var item_chair = Item.simple("2", "Folding Chair", 0.8, 13,
@@ -41,8 +41,8 @@ var item_desk = Item.simple("3", "Table", 2.5, 1, OperationalStatus.needsRepair,
     "folding_desk.png", 10001);
 var item_generator = Item.simple("4", "Generator", 18, 1,
     OperationalStatus.needsRepair, "generator.png", 10002);
-var item_cooler = Item.simple(
-    "5", "Cooler", 3.4, 1, OperationalStatus.deployable, "cooler.png", 10003);
+var item_cooler = Item.simple("5", "Cooler", 3.4, 1,
+    OperationalStatus.deployable, "cooler.png", 10003, true);
 var item_para = Item.simple("6", "Paracetamol", 0.001, 1000,
     OperationalStatus.toBeReplaced, "paracetamol.png", 10004);
 var item_splint = Item.simple("7", "Splint", 0.6, 1,

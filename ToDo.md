@@ -20,11 +20,8 @@ Galaxy Tab A8 SMX200
 
 # Answered
 * Should the summary list always be printed? -> Deploy + Ready
-* Dangerous Goods: IATA Number = UN Number? -> ItemPage: IATA ID / UN Number
 * Dangerous Goods in SummaryList PDF - What text should be in the PDF, the remarks? Or a new field?
 * Description of container - is not planned but in the PDF
-* Cold chain -> checkbox in label? Or do we have one label which will be defined here?
-  * Checkbox in item
 * Page 2: Container No, Printing Date, Table of items
 * Container No in PDF - Auto Increment? Or editable field? Auto next free number -> Not editable
 * How does the PDF Packing List look with multiple dangerous goods?

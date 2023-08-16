@@ -10,8 +10,10 @@ class SignRow extends StatelessWidget {
   final List<Sign> signs;
   final DateTime? nextExpiringDate;
   final OperationalStatus operationalStatus;
+  final bool isColdChain;
 
-  SignRow(this.signs, this.nextExpiringDate, this.operationalStatus);
+  SignRow(this.signs, this.nextExpiringDate, this.operationalStatus,
+      this.isColdChain);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,10 @@ class SignRow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(children: [...signs.map((sign) => RescueImage(sign.imagePath, 40, 40))]),
+          Row(children: [
+            ...signs.map((sign) => RescueImage(sign.imagePath, 40, 40)),
+            isColdChain ? RescueImage("coldchain.png", 40, 40) : Container()
+          ]),
           Row(
             children: [
               IndicatorExpiringDate(nextExpiringDate),
