@@ -9,7 +9,9 @@ import 'package:intl/intl.dart';
 
 class WorkLogPageBodyAll extends StatelessWidget {
   final DateFormat formatter = DateFormat('MMM d, yyyy');
-  final List<MapEntry<DateTime, Map<RescueContainer, List<LogEntryExpanded>>>>
+  final List<
+          MapEntry<DateTime,
+              List<MapEntry<RescueContainer, List<LogEntryExpanded>>>>>
       byDateAndContainerName;
 
   WorkLogPageBodyAll(this.byDateAndContainerName);
@@ -22,7 +24,8 @@ class WorkLogPageBodyAll extends StatelessWidget {
       );
 
   Widget _date(
-          MapEntry<DateTime, Map<RescueContainer, List<LogEntryExpanded>>>
+          MapEntry<DateTime,
+                  List<MapEntry<RescueContainer, List<LogEntryExpanded>>>>
               date) =>
       _bordered(Column(children: [
         Padding(
@@ -40,10 +43,9 @@ class WorkLogPageBodyAll extends StatelessWidget {
           child: w));
 
   Widget _tablesPerDate(
-      Map<RescueContainer, List<LogEntryExpanded>> entriesPerDate) {
+      List<MapEntry<RescueContainer, List<LogEntryExpanded>>> entriesPerDate) {
     return Column(
-        children:
-            entriesPerDate.entries.map(_tablePerDateAndContainer).toList());
+        children: entriesPerDate.map(_tablePerDateAndContainer).toList());
   }
 
   Widget _tablePerDateAndContainer(

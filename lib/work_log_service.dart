@@ -1,6 +1,5 @@
-import 'dart:math';
-
 import "package:collection/collection.dart";
+import 'package:equatable/equatable.dart';
 
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/collection_extensions.dart';
@@ -22,12 +21,15 @@ class WorkLogService {
   WorkLogService(this.workLogStore, this.visibilityService, this.itemService,
       this.containerService);
 
-  List<MapEntry<DateTime, Map<RescueContainer, List<LogEntryExpanded>>>>
+  List<
+          MapEntry<DateTime,
+              List<MapEntry<RescueContainer, List<LogEntryExpanded>>>>>
       byDateAndContainerName() {
     Map<DateTime, List<LogEntry>> byDate =
-        _visibleEntries().groupBy((y) => y.date);
-    var grouped = byDate.mapValues(_sumDailyChanges).mapValues(
-        (v) => v.entries.map(_expandEntry).groupBy((p0) => p0.container));
+        _visibleEntries().groupBy((y) => y.date.asDay());
+    var grouped = byDate.mapValues(_sumDailyChanges).mapValues((v) => v.entries
+        .map(_expandEntry)
+        .groupBySorted((p0) => p0.container, (a, b) => a.id.compareTo(b.id)));
 
     return grouped.entries
         .sorted((a, b) =>
@@ -50,11 +52,9 @@ class WorkLogService {
         .groupBy((p0) =>
             ItemAndContainer(p0.assignment.itemId, p0.assignment.containerId))
         .mapValues((value) => value.fold(
-            CountAndUser("", 0),
+            CountAndUser({}, 0),
             (previousValue, element) => CountAndUser(
-                {previousValue.user, element.user}
-                    .whereNot((element) => element == "")
-                    .join(","),
+                previousValue.user..add(element.user),
                 previousValue.count + element.assignment.count)));
   }
 
@@ -64,7 +64,7 @@ class WorkLogService {
           containerService.containerValues
               .firstWhere((element) => element.id == e.key.containerId),
           e.value.count,
-          e.value.user);
+          e.value.user.join(","));
 
   Map<RescueContainer, List<LogEntryExpanded>> fromDate(DateTime onlyFromDate) {
     var filtered = _visibleEntries().where(
@@ -85,3 +85,27 @@ ProxyProvider4 provideWorkLogService() => ProxyProvider4<
     update: (ctx, store, visibilityService, itemService, containerService, _) =>
         WorkLogService(
             store, visibilityService, itemService, containerService));
+
+extension DateTimeExtensions on DateTime {
+  DateTime asDay() => DateTime(year, month, day);
+}
+
+class ItemAndContainer extends Equatable {
+  final String itemId;
+  final double containerId;
+
+  ItemAndContainer(this.itemId, this.containerId);
+
+  @override
+  List<Object> get props => [itemId, containerId];
+}
+
+class CountAndUser extends Equatable {
+  final Set<String> user;
+  final int count;
+
+  CountAndUser(this.user, this.count);
+
+  @override
+  List<Object> get props => [user, count];
+}
