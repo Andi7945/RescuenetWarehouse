@@ -3,9 +3,6 @@
 
 * Print safety datasheet if available
 
-* Add Filter container by X
-  * Make it look good
-
 * Make container image changeable
 * Make container overview page useful
 
@@ -14,6 +11,9 @@
 * Item Amounts: Make TextField to adjust it directly
 
 * PDF Images from all sources
+
+* Analyze: Use TextInputLayout instead of DropdownButton?
+  * https://m2.material.io/components/menus/android#exposed-dropdown-menus
 
 Galaxy Tab A8 SMX200
 

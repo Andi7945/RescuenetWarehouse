@@ -38,9 +38,16 @@ class _RescueFilterDropdownState extends State<RescueFilterDropdown> {
       _controller.text);
 
   @override
-  Widget build(BuildContext context) => Row(children: [
-        SizedBox(width: 300, child: TextField(controller: _controller)),
-        RescueDropdownButton(_filterOptions, _o)
+  Widget build(BuildContext context) => Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        SizedBox(
+            width: 300,
+            child: TextField(
+                controller: _controller,
+                style: const TextStyle(fontSize: 24.0))),
+        RescueDropdownButton(
+            _filterOptions, _o, Theme.of(context).textTheme.titleLarge)
       ]);
 
   Map<String, String> get _filterOptions => Map.fromEntries(

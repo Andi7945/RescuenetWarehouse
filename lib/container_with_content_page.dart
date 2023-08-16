@@ -36,13 +36,10 @@ class ContainerWithContentPage extends StatelessWidget {
 
   Widget _btnRow(BuildContext ctxt, ValueNotifier<Filter> filterNotifier,
           Map<RescueContainer, bool> containers) =>
-      Row(children: [
-        _filter(filterNotifier),
+      Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        RescueFilterDropdown(filterNotifier),
         _btnChooseContainer(ctxt, containers)
       ]);
-
-  Widget _filter(ValueNotifier<Filter> filterNotifier) =>
-      RescueFilterDropdown(filterNotifier);
 
   TextButton _btnChooseContainer(
       BuildContext ctxt, Map<RescueContainer, bool> containers) {
