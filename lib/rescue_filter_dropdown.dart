@@ -13,12 +13,16 @@ class RescueFilterDropdown extends StatefulWidget {
 }
 
 class _RescueFilterDropdownState extends State<RescueFilterDropdown> {
-  final _controller = TextEditingController();
-  final _o = ValueNotifier(FilterField.containerName.name);
+  late final TextEditingController _controller;
+  late final ValueNotifier<String> _o;
 
   @override
   void initState() {
     super.initState();
+
+    _o = ValueNotifier(widget.valueNotifier.value.field.name);
+    _controller =
+        TextEditingController(text: widget.valueNotifier.value.value ?? "");
 
     _o.addListener(() {
       widget.valueNotifier.value = _currentFilter;
