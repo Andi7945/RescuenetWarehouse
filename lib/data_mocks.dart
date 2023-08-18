@@ -82,19 +82,10 @@ var container_office = ContainerDao(
     SequentialBuild.firstBuild,
     "1",
     "1",
-    false,
+    true,
     false);
-var container_power = ContainerDao(
-    2,
-    2,
-    "Power",
-    "Power supplies",
-    container_type_crate.id,
-    SequentialBuild.laterBuild,
-    "1",
-    "2",
-    false,
-    false);
+var container_power = ContainerDao(2, 2, "Power", "Power supplies",
+    container_type_crate.id, SequentialBuild.laterBuild, "1", "2", true, true);
 var container_medical = ContainerDao(
     3,
     3,
@@ -104,8 +95,8 @@ var container_medical = ContainerDao(
     SequentialBuild.supplies,
     "2",
     "1",
-    false,
-    false);
+    true,
+    true);
 
 var container_type_crate =
     ContainerType("1", "Euro crate", "euro_crate.png", 1.7, "60x40x40");

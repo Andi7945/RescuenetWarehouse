@@ -5,12 +5,12 @@ import 'package:rescuenet_warehouse/pdf/pdf_creator_label.dart';
 import 'package:rescuenet_warehouse/pdf/pdf_creator_summary.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 
-import 'pdf/data_mock_pdf.dart';
 import 'export_page_table.dart';
 import 'item.dart';
 import 'pdf/summary_mapper.dart';
 import 'pdf/pdf_creator_packing_list.dart';
 import 'rescue_text.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class ExportPageBody extends StatefulWidget {
   final Map<RescueContainer, Map<Item, int>> containerWithItems;
@@ -68,29 +68,40 @@ class _ExportPageBodyState extends State<ExportPageBody> {
         children: [
           RescueText.headline(
               "All containers marked as ready ($countReadyContainers / $countAllContainers)"),
-          TextButton(
-              onPressed: () async {
-                // createPdf(summaryContainer);
-                var summaryPdf = await createSummaryPdf(
-                    mapForPdf(widget.containerWithItems));
-                Printing.sharePdf(bytes: await summaryPdf.save());
-              },
-              child: RescueText.normal("Print summary")),
-          TextButton(
-              onPressed: () async {
-                // createPackingListPdf(packingList);
-                var packingListPdf = await createPackingListPdf(
-                    mapPackingList(widget.containerWithItems));
-                Printing.sharePdf(bytes: await packingListPdf.save());
-              },
-              child: RescueText.normal("Print lists")),
-          TextButton(
-              onPressed: () async {
-                var labelPdf = await createLabelPdf(
-                    mapPackingList(widget.containerWithItems));
-                Printing.sharePdf(bytes: await labelPdf.save());
-              },
-              child: RescueText.normal("Print labels"))
+          _btn("Print summary", _shareSummaryPdf),
+          _btn("Print lists", _sharePackingListPdf),
+          _btn("Print labels", _shareLabelPdf)
         ],
       );
+
+  Future<pw.Document> _shareSummaryPdf() {
+    var forContainers = Map.fromEntries(widget.containerWithItems.entries
+        .where((ele) => ele.key.isReady && ele.key.toDeploy));
+    return createSummaryPdf(mapForPdf(forContainers));
+  }
+
+  Future<pw.Document> _sharePackingListPdf() {
+    var toPrint = options
+        .where((ele) => ele.printPackingList)
+        .map((e) => e.container)
+        .toList();
+    var withItems = Map.fromEntries(widget.containerWithItems.entries
+        .where((ele) => toPrint.contains(ele.key)));
+    return createPackingListPdf(mapPackingList(withItems));
+  }
+
+  Future<pw.Document> _shareLabelPdf() {
+    var toPrint =
+        options.where((ele) => ele.printLabel).map((e) => e.container).toList();
+    var withItems = Map.fromEntries(widget.containerWithItems.entries
+        .where((ele) => toPrint.contains(ele.key)));
+    return createLabelPdf(mapPackingList(withItems));
+  }
+
+  Widget _btn(String label, Future<pw.Document> Function() pdf) => TextButton(
+      onPressed: () async {
+        var labelPdf = await pdf();
+        Printing.sharePdf(bytes: await labelPdf.save());
+      },
+      child: RescueText.normal(label));
 }
