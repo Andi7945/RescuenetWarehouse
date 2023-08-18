@@ -17,6 +17,7 @@ class Item {
   String? type;
   String? supplier;
   String? website;
+  String? remarks;
   int value = 0;
   String? sku;
   String? notes;
@@ -44,6 +45,7 @@ class Item {
       this.notes,
       this.sku,
       this.isColdChain,
+      this.remarks,
       this.signs);
 
   Item.simple(this.id, this.name, this.weight, this.totalAmount,
@@ -70,6 +72,7 @@ class Item {
       int? value,
       String? sku,
       String? notes,
+      String? remarks,
       bool? isColdChain,
       List<Sign>? signs})
       : id = id ?? item.id,
@@ -89,6 +92,7 @@ class Item {
         value = value ?? item.value,
         sku = sku ?? item.sku,
         notes = notes ?? item.notes,
+        remarks = remarks ?? item.remarks,
         isColdChain = isColdChain ?? item.isColdChain,
         signs = signs ?? item.signs;
 }

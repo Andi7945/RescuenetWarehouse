@@ -49,4 +49,4 @@ PackingItem _singleItem(MapEntry<Item, int> item) => PackingItem(
     item.key.weight * item.value,
     nextExpirationDateSingle(item),
     item.key.signs.map((e) => e.unNumber).join(","),
-    "item.key.remarks");
+    item.key.remarks ?? "");

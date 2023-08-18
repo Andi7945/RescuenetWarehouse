@@ -38,6 +38,11 @@ class ItemEditPageAdditionalInformation extends StatelessWidget {
           item.manufacturer),
       const SizedBox(height: 10),
       RescueInputWithLeadingLabel(
+          'Remarks:',
+          _updateItem(context, (s) => Item.from(item: item, remarks: s)),
+          item.remarks),
+      const SizedBox(height: 10),
+      RescueInputWithLeadingLabel(
           'Brand:',
           _updateItem(context, (s) => Item.from(item: item, brand: s)),
           item.brand),
