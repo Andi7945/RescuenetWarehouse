@@ -15,7 +15,7 @@ List<PackingList> mapPackingList(
 
 PackingList _single(MapEntry<RescueContainer, Map<Item, int>> entry) =>
     PackingList(
-        entry.key.id.toStringAsFixed(0),
+        entry.key.number,
         entry.key.type?.name ?? "",
         entry.key.name,
         "containerDescription",

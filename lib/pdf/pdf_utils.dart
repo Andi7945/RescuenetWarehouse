@@ -97,7 +97,7 @@ Future<pw.Image> _loadImageFromFile(String path) async {
 
 List<pw.TableRow> summaryRows(PackingList list) {
   return [
-    smallLabelFatValueRow("Container no:", list.containerNo),
+    smallLabelFatValueRow("Container no:", "${list.containerNo}"),
     smallRow("Type container:", list.containerType),
     blankRow(),
     smallRow("Name:", list.containerName),

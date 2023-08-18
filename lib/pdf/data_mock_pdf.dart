@@ -66,7 +66,7 @@ var summaryContainer = [
 ];
 
 var packingList = PackingList(
-    "1",
+    1,
     "Euro L60xW40xH32",
     "Office supplies",
     "Printer, tables, etc,",

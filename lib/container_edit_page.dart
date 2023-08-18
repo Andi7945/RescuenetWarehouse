@@ -110,17 +110,14 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
       );
 
   _sendChangesToStore() {
-    var changedContainer = RescueContainer(
-      widget._container.value.id,
-      _nameController.text,
-      _type(),
-      SequentialBuild.values.firstWhere(
-          (element) => element.name == _sequentialBuildController.value),
-      _destination(),
-      _location(),
-      widget._container.value.isReady,
-      widget._container.value.toDeploy,
-    );
+    var changedContainer = RescueContainer.from(
+        container: widget._container.value,
+        name: _nameController.text,
+        type: _type(),
+        sequentialBuild: SequentialBuild.values.firstWhere(
+            (element) => element.name == _sequentialBuildController.value),
+        moduleDestination: _destination(),
+        currentLocation: _location());
     widget._container.value = changedContainer;
   }
 

@@ -4,7 +4,7 @@ import 'package:rescuenet_warehouse/sequential_build.dart';
 import 'packing_item.dart';
 
 class PackingList {
-  String containerNo;
+  int containerNo;
   String containerType;
   String containerName;
   String containerDescription;

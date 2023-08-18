@@ -5,6 +5,7 @@ import 'sequential_build.dart';
 
 class ContainerDao extends Equatable {
   double id;
+  int number;
   String name;
   String? typeId;
   SequentialBuild sequentialBuild;
@@ -15,6 +16,7 @@ class ContainerDao extends Equatable {
 
   ContainerDao(
       this.id,
+      this.number,
       this.name,
       this.typeId,
       this.sequentialBuild,
@@ -25,6 +27,7 @@ class ContainerDao extends Equatable {
 
   ContainerDao.fromContainer(RescueContainer container)
       : id = container.id,
+        number = container.number,
         name = container.name,
         typeId = container.type?.id,
         sequentialBuild = container.sequentialBuild,
@@ -36,6 +39,7 @@ class ContainerDao extends Equatable {
   @override
   List<Object?> get props => [
         id,
+        number,
         name,
         typeId,
         sequentialBuild,

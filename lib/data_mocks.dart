@@ -53,6 +53,7 @@ var assignment_item1_container3 = Assignment("1", 3, 4);
 
 var container_office = ContainerDao(
     1,
+    1,
     "1 Office supplies",
     container_type_crate.id,
     SequentialBuild.firstBuild,
@@ -60,9 +61,10 @@ var container_office = ContainerDao(
     "1",
     false,
     false);
-var container_power = ContainerDao(2, "2 Power", container_type_crate.id,
+var container_power = ContainerDao(2, 2, "2 Power", container_type_crate.id,
     SequentialBuild.laterBuild, "1", "2", false, false);
 var container_medical = ContainerDao(
+    3,
     3,
     "3 Medical backpack team 1",
     container_type_backpack.id,

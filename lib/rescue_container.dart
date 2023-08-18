@@ -9,6 +9,7 @@ import 'package:equatable/equatable.dart';
 
 class RescueContainer extends Equatable {
   double id;
+  int number;
   String name;
   ContainerType? type;
   SequentialBuild sequentialBuild;
@@ -19,6 +20,7 @@ class RescueContainer extends Equatable {
 
   RescueContainer(
       this.id,
+      this.number,
       this.name,
       this.type,
       this.sequentialBuild,
@@ -30,6 +32,7 @@ class RescueContainer extends Equatable {
   RescueContainer.from({
     required RescueContainer container,
     String? name,
+    int? number,
     ContainerType? type,
     SequentialBuild? sequentialBuild,
     ModuleDestination? moduleDestination,
@@ -37,6 +40,7 @@ class RescueContainer extends Equatable {
     bool? isReady,
     bool? toDeploy,
   })  : id = container.id,
+        number = number ?? container.number,
         name = name ?? container.name,
         type = type ?? container.type,
         sequentialBuild = sequentialBuild ?? container.sequentialBuild,
@@ -48,6 +52,7 @@ class RescueContainer extends Equatable {
   RescueContainer.fromDao(
       ContainerDao dao, this.type, this.moduleDestination, this.currentLocation)
       : id = dao.id,
+        number = dao.number,
         name = dao.name,
         sequentialBuild = dao.sequentialBuild,
         isReady = dao.isReady,
@@ -56,6 +61,7 @@ class RescueContainer extends Equatable {
   @override
   List<Object?> get props => [
         id,
+        number,
         name,
         type,
         sequentialBuild,
