@@ -5,18 +5,67 @@ class Sign {
   String? instructions;
   String? remarks;
   String? sdsPath;
+  String? dangerType;
+  String? properShippingName;
+  double maxWeightPAX;
+  double maxWeightCargo;
+
   List<String> otherDocuments = List.empty();
 
-  Sign(this.id, this.imagePath);
+  Sign(this.id)
+      : maxWeightPAX = 0.0,
+        maxWeightCargo = 0.0;
+
+  Sign.filled(
+      {required this.id,
+      this.unNumber,
+      this.imagePath,
+      this.instructions,
+      this.remarks,
+      this.sdsPath,
+      this.dangerType,
+      this.properShippingName,
+      required this.maxWeightPAX,
+      required this.maxWeightCargo});
+
+  Sign copyWith(
+          {String? id,
+          String? unNumber,
+          String? imagePath,
+          String? instructions,
+          String? remarks,
+          String? sdsPath,
+          String? dangerType,
+          String? properShippingName,
+          double? maxWeightPAX,
+          double? maxWeightCargo,
+          List<String>? otherDocuments}) =>
+      Sign.from(
+          sign: this,
+          id: id,
+          unNumber: unNumber,
+          imagePath: imagePath,
+          instructions: instructions,
+          remarks: remarks,
+          sdsPath: sdsPath,
+          dangerType: dangerType,
+          properShippingName: properShippingName,
+          maxWeightCargo: maxWeightCargo,
+          maxWeightPAX: maxWeightPAX,
+          otherDocuments: otherDocuments);
 
   Sign.from(
       {required Sign sign,
-        String? id,
+      String? id,
       String? unNumber,
       String? imagePath,
       String? instructions,
       String? remarks,
       String? sdsPath,
+      String? dangerType,
+      String? properShippingName,
+      double? maxWeightPAX,
+      double? maxWeightCargo,
       List<String>? otherDocuments})
       : id = id ?? sign.id,
         unNumber = unNumber ?? sign.unNumber,
@@ -24,5 +73,9 @@ class Sign {
         instructions = instructions ?? sign.instructions,
         remarks = remarks ?? sign.remarks,
         sdsPath = sdsPath ?? sign.sdsPath,
+        dangerType = dangerType ?? sign.dangerType,
+        properShippingName = properShippingName ?? sign.properShippingName,
+        maxWeightPAX = maxWeightPAX ?? sign.maxWeightPAX,
+        maxWeightCargo = maxWeightCargo ?? sign.maxWeightCargo,
         otherDocuments = otherDocuments ?? sign.otherDocuments;
 }

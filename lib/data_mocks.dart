@@ -6,6 +6,7 @@ import 'package:rescuenet_warehouse/sign.dart';
 import 'assignment.dart';
 import 'container_dao.dart';
 import 'item.dart';
+import 'main.dart';
 
 var item_fire = Item.filled(
     "1",
@@ -31,8 +32,28 @@ var item_fire = Item.filled(
     "324278",
     false,
     [
-      Sign("1", "DGcompressedgasses2.png"),
-      Sign("2", "DGcompressedgasses.png")
+      Sign.filled(
+          id: uuid.v4(),
+          unNumber: "12.689",
+          imagePath: "DGcompressedgasses2.png",
+          instructions: "Take care",
+          remarks: "Remarkable",
+          sdsPath: "/path/",
+          dangerType: "gas",
+          properShippingName: "Flammable",
+          maxWeightPAX: 0.5,
+          maxWeightCargo: 2.0),
+      Sign.filled(
+          id: uuid.v4(),
+          unNumber: "213 / 17",
+          imagePath: "DGcompressedgasses.png",
+          instructions: "Take great care",
+          remarks: "Remarkable2",
+          sdsPath: "/path/2",
+          dangerType: "gas",
+          properShippingName: "Aerosol",
+          maxWeightPAX: 1.0,
+          maxWeightCargo: 2.7),
     ]);
 
 var item_chair = Item.simple("2", "Folding Chair", 0.8, 13,
@@ -54,19 +75,30 @@ var assignment_item1_container3 = Assignment("1", 3, 4);
 var container_office = ContainerDao(
     1,
     1,
-    "1 Office supplies",
+    "Office supplies",
+    "Tables, Chairs, etc.",
     container_type_crate.id,
     SequentialBuild.firstBuild,
     "1",
     "1",
     false,
     false);
-var container_power = ContainerDao(2, 2, "2 Power", container_type_crate.id,
-    SequentialBuild.laterBuild, "1", "2", false, false);
+var container_power = ContainerDao(
+    2,
+    2,
+    "Power",
+    "Power supplies",
+    container_type_crate.id,
+    SequentialBuild.laterBuild,
+    "1",
+    "2",
+    false,
+    false);
 var container_medical = ContainerDao(
     3,
     3,
-    "3 Medical backpack team 1",
+    "Medical backpack team 1",
+    "Med stuff",
     container_type_backpack.id,
     SequentialBuild.supplies,
     "2",

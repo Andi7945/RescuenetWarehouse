@@ -19,6 +19,7 @@ class ContainerEditPage extends StatefulWidget {
 
 class _ContainerEditPageState extends State<ContainerEditPage> {
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
   late ValueNotifier<String?> _containerTypeController;
   late ValueNotifier<String?> _moduleDestinationController;
   late ValueNotifier<String?> _currentLocationController;
@@ -30,6 +31,7 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
     var container = widget._container.value;
 
     _nameController.text = container.name;
+    _descriptionController.text = container.description ?? "";
     _containerTypeController = ValueNotifier(container.type?.id);
     _moduleDestinationController =
         ValueNotifier(container.moduleDestination?.id);
@@ -41,7 +43,8 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
       _moduleDestinationController,
       _currentLocationController,
       _sequentialBuildController,
-      _nameController
+      _nameController,
+      _descriptionController
     ]) {
       controller.addListener(() {
         _sendChangesToStore();
@@ -68,51 +71,68 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
               TextField(
                   controller: _nameController,
                   onChanged: (text) => _sendChangesToStore())),
-          _editableTile(
-              "Type of container",
-              RescueDropdownButton(
-                  Map.fromEntries(widget._containerOptions.types
-                      .map((e) => MapEntry(e.id, e.name))),
-                  _containerTypeController),
-              routeEditContainerTypes),
           _tile(
+              "Description",
+              TextField(
+                  controller: _descriptionController,
+                  onChanged: (text) => _sendChangesToStore())),
+          _dropdownWithEdit(
+              "Type of container",
+              (co) => co.types.map((e) => MapEntry(e.id, e.name)),
+              _containerTypeController,
+              routeEditContainerTypes),
+          _dropdown(
               "Sequential build",
-              RescueDropdownButton(
-                  Map.fromEntries(widget._containerOptions.sequentialBuilds
-                      .map((e) => MapEntry(e, e))),
-                  _sequentialBuildController)),
-          _editableTile(
+              (co) => co.sequentialBuilds
+                  .map((e) => MapEntry(e.name, e.displayName)),
+              _sequentialBuildController),
+          _dropdownWithEdit(
               "Module destination",
-              RescueDropdownButton(
-                  Map.fromEntries(widget._containerOptions.moduleDestinations
-                      .map((e) => MapEntry(e.id, e.name))),
-                  _moduleDestinationController),
+              (co) => co.moduleDestinations.map((e) => MapEntry(e.id, e.name)),
+              _moduleDestinationController,
               routeEditModuleDestinations),
-          _editableTile(
+          _dropdownWithEdit(
               "Current location",
-              RescueDropdownButton(
-                  Map.fromEntries(widget._containerOptions.currentLocations
-                      .map((e) => MapEntry(e.id, e.name))),
-                  _currentLocationController),
+              (co) => co.currentLocations.map((e) => MapEntry(e.id, e.name)),
+              _currentLocationController,
               routeEditCurrentLocations),
         ]));
   }
 
-  _tile(String label, Widget child) =>
-      ListTile(leading: SizedBox(width: 160, child: Text(label)), title: child);
+  _tile(String label, Widget child, [Widget? editBtn]) => ListTile(
+      leading: SizedBox(width: 160, child: Text(label)),
+      title: child,
+      trailing: editBtn);
 
-  _editableTile(String label, Widget child, String routeName) => ListTile(
-        leading: SizedBox(width: 160, child: Text(label)),
-        title: child,
-        trailing: InkWell(
-            onTap: () => Navigator.pushNamed(context, routeName),
-            child: RescueImage('/edit_icon.png')),
-      );
+  _dropdown(
+          String label,
+          Iterable<MapEntry<String, String>> Function(ContainerOptions) fn,
+          ValueNotifier<String?> controller,
+          [Widget? editBtn]) =>
+      _tile(
+          label,
+          RescueDropdownButton(
+              Map.fromEntries(fn(widget._containerOptions)), controller),
+          editBtn);
+
+  _dropdownWithEdit(
+          String label,
+          Iterable<MapEntry<String, String>> Function(ContainerOptions) fn,
+          ValueNotifier<String?> controller,
+          String routeName) =>
+      _dropdown(
+          label,
+          fn,
+          controller,
+          InkWell(
+              onTap: () => Navigator.pushNamed(context, routeName),
+              child: RescueImage('/edit_icon.png')));
 
   _sendChangesToStore() {
     var changedContainer = RescueContainer.from(
         container: widget._container.value,
         name: _nameController.text,
+        description: _descriptionController.text,
         type: _type(),
         sequentialBuild: SequentialBuild.values.firstWhere(
             (element) => element.name == _sequentialBuildController.value),

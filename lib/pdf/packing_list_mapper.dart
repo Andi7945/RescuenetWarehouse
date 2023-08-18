@@ -18,7 +18,7 @@ PackingList _single(MapEntry<RescueContainer, Map<Item, int>> entry) =>
         entry.key.number,
         entry.key.type?.name ?? "",
         entry.key.name,
-        "containerDescription",
+        entry.key.description ?? "",
         sumItemWeight(entry.key, entry.value),
         entry.key.moduleDestination?.name ?? "",
         entry.key.sequentialBuild,
@@ -30,11 +30,11 @@ List<PackingDangerousGood> _dangerousGoods(Iterable<Sign> signs) =>
     signs.map(_singleGood).toList();
 
 PackingDangerousGood _singleGood(Sign sign) => PackingDangerousGood(
-    "dangerType",
+    sign.dangerType ?? "",
     sign.unNumber ?? "",
-    "properShippingName",
-    0.0,
-    0.0,
+    sign.properShippingName ?? "",
+    sign.maxWeightPAX,
+    sign.maxWeightCargo,
     sign.remarks ?? "",
     sign.imagePath ?? "");
 

@@ -7,6 +7,7 @@ class ContainerDao extends Equatable {
   double id;
   int number;
   String name;
+  String? description;
   String? typeId;
   SequentialBuild sequentialBuild;
   String? moduleDestinationId;
@@ -18,6 +19,7 @@ class ContainerDao extends Equatable {
       this.id,
       this.number,
       this.name,
+      this.description,
       this.typeId,
       this.sequentialBuild,
       this.moduleDestinationId,
@@ -29,6 +31,7 @@ class ContainerDao extends Equatable {
       : id = container.id,
         number = container.number,
         name = container.name,
+        description = container.description,
         typeId = container.type?.id,
         sequentialBuild = container.sequentialBuild,
         moduleDestinationId = container.moduleDestination?.id,
@@ -41,6 +44,7 @@ class ContainerDao extends Equatable {
         id,
         number,
         name,
+        description,
         typeId,
         sequentialBuild,
         moduleDestinationId,

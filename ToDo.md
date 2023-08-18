@@ -22,8 +22,6 @@ Galaxy Tab A8 SMX200
 
 # Answered
 * Should the summary list always be printed? -> Deploy + Ready
-* Dangerous Goods in SummaryList PDF - What text should be in the PDF, the remarks? Or a new field?
-* Description of container - is not planned but in the PDF
 * Page 2: Container No, Printing Date, Table of items
 * How does the PDF Packing List look with multiple dangerous goods?
 

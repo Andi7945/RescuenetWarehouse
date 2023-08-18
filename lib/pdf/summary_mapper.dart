@@ -26,7 +26,7 @@ SummaryContainer _mapSingle(MapEntry<RescueContainer, Map<Item, int>> entry) =>
     SummaryContainer(
         entry.key.number,
         entry.key.name,
-        "description",
+        entry.key.description ?? "",
         entry.key.type?.name ?? "",
         calcValue(entry.value),
         _calcWeight(entry),

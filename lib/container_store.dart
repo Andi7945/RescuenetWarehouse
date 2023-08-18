@@ -26,7 +26,7 @@ class ContainerStore extends ChangeNotifier {
     var newContainerId = containers.keys.reduce(max) + 1;
 
     var newContainer = ContainerDao(newContainerId, _firstUnusedNumber(), "",
-        null, SequentialBuild.firstBuild, null, null, false, false);
+        null, null, SequentialBuild.firstBuild, null, null, false, false);
     containers[newContainer.id] = newContainer;
     return newContainer;
   }
