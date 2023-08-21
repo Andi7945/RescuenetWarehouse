@@ -9,8 +9,6 @@
 
 * Item Amounts: Make TextField to adjust it directly
 
-* PDF Images from all sources
-
 * Add firebase
 
 * Analyze: Use TextInputLayout instead of DropdownButton?

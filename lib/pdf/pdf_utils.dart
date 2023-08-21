@@ -98,16 +98,25 @@ pw.TableRow smallLabelFatValueRow(String label, String value) => pw.TableRow(
 
 pw.TableRow blankRow() => pw.TableRow(children: [empty, pw.Container()]);
 
-Future<pw.Image> loadImage(String path) async => path.endsWith(".jpg")
-    ? _loadImageFromFile(path)
-    : _loadImageFromAssets(path);
+Future<pw.Widget> loadImage(String path,
+    [double? width, double? height]) async {
+  if (path.isEmpty) return Future.value(pw.Container());
+  var provider = path.startsWith("http")
+      ? _loadWebImage(path)
+      : path.endsWith(".jpg")
+          ? _loadImageFromFile(path)
+          : _loadImageFromAssets(path);
+  return pw.Image(await provider, width: width, height: height);
+}
 
-Future<pw.Image> _loadImageFromAssets(String path) async =>
-    pw.Image(await imageFromAssetBundle('assets/images/$path'));
+Future<ImageProvider> _loadWebImage(String path) async => networkImage(path);
 
-Future<pw.Image> _loadImageFromFile(String path) async {
+Future<ImageProvider> _loadImageFromAssets(String path) async =>
+    await imageFromAssetBundle('assets/images/$path');
+
+Future<ImageProvider> _loadImageFromFile(String path) async {
   Uint8List x = File(path).readAsBytesSync();
-  return pw.Image(pw.MemoryImage(x));
+  return pw.MemoryImage(x);
 }
 
 List<pw.TableRow> summaryRows(PackingList list) {
@@ -178,10 +187,10 @@ Future<pw.Widget> dangerousGoods(List<PackingDangerousGood> goods,
 }
 
 pw.Widget _noDangerousGoods() =>
-    pw.Table(children: [smallLabelFatValueRow("Dangerous goods:", "No")]);
+    pw.Table(children: [smallLabelFatValueRow("Dangerous goods: ", "No")]);
 
 Future<List<pw.Widget>> _dangerousGood(PackingDangerousGood good) async =>
-    [_dangerousGoodsTable(good), await loadImage(good.imagePath)];
+    [_dangerousGoodsTable(good), await loadImage(good.imagePath, 80, 80)];
 
 pw.Widget _dangerousGoodsTable(PackingDangerousGood good) =>
     pw.Table(children: [

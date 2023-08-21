@@ -33,7 +33,7 @@ _logoAndCompanyInformation(pw.Widget logo) => pw.Row(children: [
       pw.Expanded(child: logo, flex: 3)
     ]);
 
-Future<pw.Image> _logo() async => loadImage('rn_logo_big.png');
+Future<pw.Widget> _logo() async => loadImage('rn_logo_big.png');
 
 pw.Container _exec() => pw.Container(
     padding: const pw.EdgeInsets.all(4.0),
