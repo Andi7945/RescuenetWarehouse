@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
-import 'package:rescuenet_warehouse/pdf/data_mock_pdf.dart';
 import 'package:rescuenet_warehouse/pdf/packing_list_mapper.dart';
 import 'package:rescuenet_warehouse/pdf/pdf_creator_label.dart';
 import 'package:rescuenet_warehouse/pdf/pdf_creator_summary.dart';
@@ -88,8 +87,7 @@ class _ExportPageBodyState extends State<ExportPageBody> {
         .toList();
     var withItems = Map.fromEntries(widget.containerWithItems.entries
         .where((ele) => toPrint.contains(ele.key)));
-    // return createPackingListPdf(mapPackingList(withItems));
-    return createPackingListPdf([packingList]);
+    return createPackingListPdf(mapPackingList(withItems));
   }
 
   Future<pw.Document> _shareLabelPdf() {

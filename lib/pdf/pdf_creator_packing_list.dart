@@ -21,9 +21,7 @@ Future<pw.Page> _singlePage(PackingList list) async => await pageHeaderFooter(
     await _header(list),
     await _headerSmall(list),
     _body(list),
-    (int num, int max) => pw.Container(
-        alignment: pw.Alignment.centerRight,
-        child: pw.Text("Packing list - page $num / $max")));
+    footerFn("Packing list"));
 
 Future<pw.Widget> _header(PackingList list) async {
   var upperLeft = _upperLeft(list);

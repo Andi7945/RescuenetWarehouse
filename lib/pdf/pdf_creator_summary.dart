@@ -9,17 +9,17 @@ import 'pdf_utils.dart';
 
 Future<pw.Document> createSummaryPdf(SummaryPdf summary) async {
   final pdf = pw.Document();
-  var page = await basicPage(await _body(summary));
-  pdf.addPage(page);
+  pdf.addPage(await _page(summary));
   return pdf;
 }
 
-Future<pw.Column> _body(SummaryPdf summary) async {
-  var row = await headerRow(summaryTable(_summaryRows(summary.list)));
-  return pw.Column(children: [
-    row,
-    _entries(summary.containers)
-  ]);
+Future<pw.Page> _page(SummaryPdf summary) async {
+  var bigHeader = await headerRow(summaryTable(_summaryRows(summary.list)));
+  var smallHeader = await headerRow(summaryTable([
+    pw.TableRow(children: [bigger("Summary list"), pw.Container()])
+  ]));
+  return await pageHeaderFooter(bigHeader, smallHeader,
+      _entries(summary.containers), footerFn("Summary"));
 }
 
 List<pw.TableRow> _summaryRows(SummaryList summaryList) {

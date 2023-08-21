@@ -67,6 +67,11 @@ Future<void> saveAndPrint(pw.Document pdf) async {
   await file.writeAsBytes(await pdf.save());
 }
 
+pw.Widget Function(int, int) footerFn(String name) =>
+    (int num, int max) => pw.Container(
+        alignment: pw.Alignment.centerRight,
+        child: pw.Text("$name - page $num / $max"));
+
 summaryTable(List<pw.TableRow> rows) {
   return pw.Container(
       width: double.infinity,
