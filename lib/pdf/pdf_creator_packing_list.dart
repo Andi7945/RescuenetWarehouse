@@ -1,64 +1,26 @@
-import 'package:pdf/pdf.dart';
 import 'package:rescuenet_warehouse/pdf/packing_item.dart';
 import 'package:rescuenet_warehouse/pdf/packing_list.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-import 'pdf_header_row.dart';
+import 'header_provider.dart';
 import 'pdf_utils.dart';
 
 import 'package:intl/intl.dart';
 
 Future<pw.Document> createPackingListPdf(List<PackingList> lists) async {
   final pdf = pw.Document();
-  var pages = await Future.wait(lists.map(_singlePage));
+  var pages =
+      await Future.wait(lists.map((e) => _singlePage(HeaderProvider(), e)));
+
   for (var page in pages) {
     pdf.addPage(page);
   }
   return pdf;
 }
 
-Future<pw.Page> _singlePage(PackingList list) async => await pageHeaderFooter(
-    await _header(list),
-    await _headerSmall(list),
-    _body(list),
-    footerFn("Packing list"));
-
-Future<pw.Widget> _header(PackingList list) async {
-  var upperLeft = _upperLeft(list);
-  var rightChild = await dangerousGoodsPackingList(list.dangerousGoods);
-  return await headerRow(upperLeft, rightChild);
-}
-
-Future<pw.Widget> _headerSmall(PackingList list) async {
-  return await headerRow(_smallUpperLeft(list));
-}
-
-_upperLeft(PackingList list) {
-  DateFormat formatter = DateFormat("MMMM '' yy");
-  return pw.Column(mainAxisSize: pw.MainAxisSize.min, children: [
-    summaryTable(_summaryRows(list)),
-    pw.Row(children: [
-      valueBox("Destination:", list.destination),
-      valueBox("Seq. build prio:", list.sequentialBuild.displayName, 12.0,
-          PdfColor.fromInt(list.sequentialBuild.color.value)),
-      valueBox(
-          "Expiration:",
-          list.expirationDate != null
-              ? formatter.format(list.expirationDate!)
-              : ""),
-    ])
-  ]);
-}
-
-_smallUpperLeft(PackingList list) => summaryTable([
-      pw.TableRow(children: [bigger("Packing list"), pw.Container()]),
-      smallLabelFatValueRow("Container no:", "${list.containerNo}")
-    ]);
-
-_summaryRows(PackingList list) => [
-      pw.TableRow(children: [bigger("Packing list"), pw.Container()]),
-      ...summaryRows(list)
-    ];
+Future<pw.Page> _singlePage(HeaderProvider prov, PackingList list) async =>
+    pageHeaderFooter(
+        await prov.provideHeader(list), _body(list), footerFn("Packing list"));
 
 pw.Table _body(PackingList list) =>
     pw.Table(border: pw.TableBorder.all(width: 0.5), columnWidths: {

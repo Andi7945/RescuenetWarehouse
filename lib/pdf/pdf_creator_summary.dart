@@ -14,12 +14,16 @@ Future<pw.Document> createSummaryPdf(SummaryPdf summary) async {
 }
 
 Future<pw.Page> _page(SummaryPdf summary) async {
+  return await pageHeaderFooter(await _provideHeader(summary),
+      _entries(summary.containers), footerFn("Summary"));
+}
+
+Future<pw.Widget Function(int)> _provideHeader(SummaryPdf summary) async {
   var bigHeader = await headerRow(summaryTable(_summaryRows(summary.list)));
   var smallHeader = await headerRow(summaryTable([
     pw.TableRow(children: [bigger("Summary list"), pw.Container()])
   ]));
-  return await pageHeaderFooter(bigHeader, smallHeader,
-      _entries(summary.containers), footerFn("Summary"));
+  return (int i) => i == 1 ? bigHeader : smallHeader;
 }
 
 List<pw.TableRow> _summaryRows(SummaryList summaryList) {
