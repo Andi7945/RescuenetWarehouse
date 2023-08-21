@@ -4,12 +4,15 @@ import 'package:intl/intl.dart';
 
 import 'pdf_utils.dart';
 
-Future<pw.Row> headerRow(pw.Widget leftCorner, [pw.Widget? rightSide]) async {
-  return pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
-    pw.Expanded(child: leftCorner, flex: 5),
-    pw.SizedBox(width: 8),
-    pw.Expanded(child: await rightSideHeader(rightSide), flex: 5)
-  ]);
+Future<pw.Widget> headerRow(pw.Widget leftCorner,
+    [pw.Widget? rightSide]) async {
+  return pw.Padding(
+      padding: const pw.EdgeInsets.only(bottom: 16.0),
+      child: pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
+        pw.Expanded(child: leftCorner, flex: 5),
+        pw.SizedBox(width: 8),
+        pw.Expanded(child: await rightSideHeader(rightSide), flex: 5)
+      ]));
 }
 
 Future<pw.Widget> rightSideHeader(pw.Widget? rightSide) async {

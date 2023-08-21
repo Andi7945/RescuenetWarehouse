@@ -10,25 +10,25 @@ import 'package:intl/intl.dart';
 
 Future<pw.Document> createPackingListPdf(List<PackingList> lists) async {
   final pdf = pw.Document();
-  var pages = lists.map(_body).map((e) async => await basicPage(await e));
-  var builded = await Future.wait(pages);
-  for (var page in builded) {
+  var pages = await Future.wait(lists.map(_singlePage));
+  for (var page in pages) {
     pdf.addPage(page);
   }
   return pdf;
 }
 
-Future<pw.Column> _body(PackingList list) async {
+Future<pw.Page> _singlePage(PackingList list) async =>
+    await pageHeaderFooter(await _header(list), _body(list), pw.Container());
+
+Future<pw.Widget> _header(PackingList list) async {
   var upperLeft = _upperLeft(list);
   var rightChild = await dangerousGoodsPackingList(list.dangerousGoods);
-  var row = await headerRow(upperLeft, rightChild);
-  return pw.Column(
-      children: [row, pw.SizedBox(height: 24), _packingTable(list)]);
+  return await headerRow(upperLeft, rightChild);
 }
 
 _upperLeft(PackingList list) {
   DateFormat formatter = DateFormat("MMMM '' yy");
-  return pw.Column(children: [
+  return pw.Column(mainAxisSize: pw.MainAxisSize.min, children: [
     summaryTable(_summaryRows(list)),
     pw.Row(children: [
       valueBox("Destination:", list.destination),
@@ -48,7 +48,7 @@ _summaryRows(PackingList list) => [
       ...summaryRows(list)
     ];
 
-pw.Widget _packingTable(PackingList list) =>
+pw.Table _body(PackingList list) =>
     pw.Table(border: pw.TableBorder.all(width: 0.5), columnWidths: {
       0: const pw.FixedColumnWidth(128),
       1: const pw.FixedColumnWidth(200),

@@ -43,11 +43,21 @@ Future<pw.ThemeData> basicTheme() async => ThemeData.withFont(
           .load("assets/fonts/liberation_sans/LiberationSans-BoldItalic.ttf")),
     );
 
-Future<pw.Page> basicPage(pw.Widget w) async => pw.Page(
+Future<pw.Page> pageHeaderFooter(
+        pw.Widget header, pw.Widget body, pw.Widget footer) async =>
+    pw.MultiPage(
+        theme: await basicTheme(),
+        pageFormat: pageFormatLandscape,
+        orientation: pw.PageOrientation.landscape,
+        build: (pw.Context context) => [body],
+        header: (ctxt) => header,
+        footer: (ctxt) => footer);
+
+Future<pw.Page> basicPage(pw.Widget w) async => pw.MultiPage(
       theme: await basicTheme(),
       pageFormat: pageFormatLandscape,
       orientation: pw.PageOrientation.landscape,
-      build: (pw.Context context) => w,
+      build: (pw.Context context) => [w],
     );
 
 Future<void> saveAndPrint(pw.Document pdf) async {

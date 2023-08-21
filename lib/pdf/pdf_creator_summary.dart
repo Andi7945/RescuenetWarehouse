@@ -18,9 +18,7 @@ Future<pw.Column> _body(SummaryPdf summary) async {
   var row = await headerRow(summaryTable(_summaryRows(summary.list)));
   return pw.Column(children: [
     row,
-    pw.Padding(
-        padding: const pw.EdgeInsets.only(top: 16.0),
-        child: _entries(summary.containers))
+    _entries(summary.containers)
   ]);
 }
 

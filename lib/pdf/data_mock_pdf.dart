@@ -73,9 +73,14 @@ var packingList = PackingList(
     20.5,
     "Office",
     SequentialBuild.firstBuild,
-    DateTime(2023, 5),
-    [packingDangerousGood],
-    [packingItem1, packingItem2, packingItem3]);
+    DateTime(2023, 5), [
+  packingDangerousGood
+], [
+  packingItem1,
+  packingItem2,
+  packingItem3,
+  ...[for (var i = 1; i <= 20; i++) packingItemX(i)]
+]);
 
 var packingDangerousGood = PackingDangerousGood(
     "Compressed gasses",
@@ -100,3 +105,6 @@ var packingItem3 = PackingItem(
     null,
     "2.2 / 1950",
     "Limited quantities LQ2");
+
+PackingItem packingItemX(int n) =>
+    PackingItem("Item $n", "", 13, 15, 12.2, DateTime(2023, 5, 5), "", "");
