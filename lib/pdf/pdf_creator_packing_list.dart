@@ -17,13 +17,22 @@ Future<pw.Document> createPackingListPdf(List<PackingList> lists) async {
   return pdf;
 }
 
-Future<pw.Page> _singlePage(PackingList list) async =>
-    await pageHeaderFooter(await _header(list), _body(list), pw.Container());
+Future<pw.Page> _singlePage(PackingList list) async => await pageHeaderFooter(
+    await _header(list),
+    await _headerSmall(list),
+    _body(list),
+    (int num, int max) => pw.Container(
+        alignment: pw.Alignment.centerRight,
+        child: pw.Text("Packing list - page $num / $max")));
 
 Future<pw.Widget> _header(PackingList list) async {
   var upperLeft = _upperLeft(list);
   var rightChild = await dangerousGoodsPackingList(list.dangerousGoods);
   return await headerRow(upperLeft, rightChild);
+}
+
+Future<pw.Widget> _headerSmall(PackingList list) async {
+  return await headerRow(_smallUpperLeft(list));
 }
 
 _upperLeft(PackingList list) {
@@ -42,6 +51,11 @@ _upperLeft(PackingList list) {
     ])
   ]);
 }
+
+_smallUpperLeft(PackingList list) => summaryTable([
+      pw.TableRow(children: [bigger("Packing list"), pw.Container()]),
+      smallLabelFatValueRow("Container no:", "${list.containerNo}")
+    ]);
 
 _summaryRows(PackingList list) => [
       pw.TableRow(children: [bigger("Packing list"), pw.Container()]),
@@ -65,7 +79,7 @@ pw.Table _body(PackingList list) =>
       _sumRow(list.items)
     ]);
 
-pw.TableRow _headlines() => pw.TableRow(children: [
+pw.TableRow _headlines() => pw.TableRow(repeat: true, children: [
       tableHeadline("Item"),
       tableHeadline("Description"),
       tableHeadline("Amount"),

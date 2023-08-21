@@ -21,7 +21,6 @@ Galaxy Tab A8 SMX200
 # To Discuss
 
 # Answered
-* Page 2: Container No, Printing Date, Table of items
 * How does the PDF Packing List look with multiple dangerous goods?
 
 
