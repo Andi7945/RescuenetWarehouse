@@ -43,7 +43,7 @@ dependencies:
   cloud_firestore: ^4.4.5
   firebase_storage: ^11.0.16
   path_provider: ^2.0.14
-  image_picker: ^0.8.7
+  image_picker: ^1.0.2
   equatable: ^2.0.0
   qr_flutter: ^4.0.0
   uuid: ^3.0.7

@@ -24,7 +24,6 @@ class SequentialBuildProvider extends ChangeNotifier {
     return StatefulBuilder(builder: (context, setState) {
       return Scrollbar(
         controller: scrollController,
-        isAlwaysShown: true,
         child: SingleChildScrollView(
           controller: scrollController,
           scrollDirection: Axis.horizontal,

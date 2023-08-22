@@ -83,7 +83,6 @@ class RNItemsProvider extends ChangeNotifier {
               title: const Text('Add new item'),
               content: Scrollbar(
                 controller: scrollController,
-                isAlwaysShown: true,
                 child: SingleChildScrollView(
                   controller: scrollController,
                   child: ListBody(
