@@ -102,7 +102,3 @@ var container_type_crate =
     ContainerType("1", "Euro crate", "euro_crate.png", 1.7, "60x40x40");
 var container_type_backpack = ContainerType(
     "2", "Medical backpack", "medical_backpack.png", 0.5, "60x40x32");
-
-var container_options_type = [container_type_crate, container_type_backpack];
-var container_options_module_destination = ["Office", "Warehouse"];
-var container_options_current_location = ["Warehouse Shiphole NL", "Office"];
