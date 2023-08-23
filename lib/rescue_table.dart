@@ -39,8 +39,8 @@ class RescueTable extends StatelessWidget {
 
   TableRow _addPaddingBoxes(TableRow row) {
     var children =
-        row.children?.expand((element) => [element, _sizedBox()]).toList();
-    children?.removeLast();
+        row.children.expand((element) => [element, _sizedBox()]).toList();
+    children.removeLast();
     return TableRow(children: children);
   }
 

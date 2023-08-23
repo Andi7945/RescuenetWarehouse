@@ -1,14 +1,17 @@
 # next steps
-* Print safety datasheet if available
-* Item Amounts: Make TextField to adjust it directly
 * Add firebase db
+* Upload safety datasheets
+* Print safety datasheet if available
+
+
+* Make notes field work
+* Item Amounts: Make TextField to adjust it directly
 * Add firebase auth
 
 
 * Make initial date on work log accumulated -1W
 
 
-* Make notes field work
 * Make PDF Packing List work with multiple dangerous goods
 * Make container overview page useful
 * Add numeric input field with validation

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 import '../model/sequental_build_model.dart';
 import '../model/signes_model.dart';
@@ -209,15 +208,15 @@ class _SingleRNBoxWidgetState extends State<SingleRNBoxWidget> {
               const SizedBox(
                 width: 20,
               ),
-              SizedBox(
-                width: 200,
-                height: 200,
-                child: QrImage(
-                  data: box.id,
-                  version: QrVersions.auto,
-                  size: 200.0,
-                ),
-              ),
+              // SizedBox(
+              //   width: 200,
+              //   height: 200,
+              //   child: QrImage(
+              //     data: box.id,
+              //     version: QrVersions.auto,
+              //     size: 200.0,
+              //   ),
+              // ),
             ],
           ),
           actions: <Widget>[
