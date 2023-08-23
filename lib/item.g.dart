@@ -30,7 +30,8 @@ Item _$ItemFromJson(Map<String, dynamic> json) => Item(
       ..sku = json['sku'] as String?
       ..notes = json['notes'] as String?
       ..signs = (json['signs'] as List<dynamic>?)
-              ?.map((e) => Sign.fromJson(e as Map<String, dynamic>))
+              ?.map((e) =>
+                  const SignConverter().fromJson(e as Map<String, dynamic>))
               .toList() ??
           []
       ..isColdChain = json['isColdChain'] as bool;
@@ -57,7 +58,7 @@ Map<String, dynamic> _$ItemToJson(Item instance) => <String, dynamic>{
       'value': instance.value,
       'sku': instance.sku,
       'notes': instance.notes,
-      'signs': instance.signs,
+      'signs': instance.signs.map(const SignConverter().toJson).toList(),
       'isColdChain': instance.isColdChain,
     };
 

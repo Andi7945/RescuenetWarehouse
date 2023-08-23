@@ -1,5 +1,6 @@
 # next steps
 * Add firebase db
+* Upload choosen images to firebase
 * Upload safety datasheets
 * Print safety datasheet if available
 

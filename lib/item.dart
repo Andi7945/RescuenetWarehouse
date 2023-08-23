@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:rescuenet_warehouse/json_converter_sign.dart';
 import 'package:rescuenet_warehouse/json_converter_timestamp.dart';
 import 'package:rescuenet_warehouse/operational_status.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -29,6 +30,7 @@ class Item {
   String? sku;
   String? notes;
   @JsonKey(defaultValue: [])
+  @SignConverter()
   List<Sign> signs = List.empty();
   bool isColdChain = false;
 
