@@ -8,8 +8,8 @@ import 'data_mocks.dart';
 
 class AssignmentStore extends ChangeNotifier {
   final List<Assignment> _assignments = [
-    assignment_item1_container1,
-    assignment_item1_container3
+    // assignment_item1_container1,
+    // assignment_item1_container3
   ];
 
   UnmodifiableListView<Assignment> get assignments =>

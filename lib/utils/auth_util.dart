@@ -14,17 +14,16 @@ class Auth {
     await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
-  Future<void> signInWithEmailAndPassword({required String email, required String password}) async {
+  Future<bool> signInWithEmailAndPassword({required String email, required String password}) async {
     try {
-      //UserCredential result =
-      await _firebaseAuth.signInWithEmailAndPassword(
+      UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      //User? user = result.user;
-      //print('User signed in: ${user?.email!.toString()}');
-
+      User? user = result.user;
+      print('User signed in: ${user?.email!.toString()}');
+      return true;
     } catch (e) {
       // Handle any errors that occur
       if(e is PlatformException) {
@@ -53,8 +52,11 @@ class Auth {
           default:
             print("An undefined Error happened.");
         }
+      } else {
+        print("Else: $e");
       }
     }
+    return false;
   }
 
   Future<void> createUserWithEmailAndPassword({

@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rescuenet_warehouse/main.dart';
 
@@ -10,32 +11,39 @@ import 'item.dart';
 
 class ItemStore extends ChangeNotifier {
   static const String _firebasePath = 'items';
-  final List<Item> _items = [
-    item_fire,
-    item_chair,
-    item_desk,
-    item_generator,
-    item_cooler,
-    item_para,
-    item_splint
-  ];
+  List<Item> _items = [];
 
-  // void listenToRNItemsFromFB() {
-  //   FirebaseFirestore.instance
-  //       .collection(_firebasePath)
-  //       .snapshots()
-  //       .listen((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
-  //     List<SingleRNItemModel> _rnIncome = querySnapshot.docs
-  //         .map((QueryDocumentSnapshot<Map<String, dynamic>> e) =>
-  //         SingleRNItemModel.fromJson(e.data(), e.id))
-  //         .toList();
-  //     _rnItems = _rnIncome.where((element) => element.isBox == false).toList();
-  //     _rnBoxes = _rnIncome.where((element) => element.isBox).toList();
-  //     print("RNItems from Firebase: ${_rnItems.length}");
-  //     print("RNBoxes from Firebase: ${_rnBoxes.length}");
-  //     notifyListeners();
-  //   });
-  // }
+  var _authChangeListener;
+  var _itemListener;
+
+  ItemStore() {
+    _authChangeListener =
+        FirebaseAuth.instance.authStateChanges().listen(_onAuthChange);
+  }
+
+  _onAuthChange(User? user) {
+    if (user == null) {
+      _itemListener = null;
+      print('User is currently signed out!');
+    } else {
+      _itemListener = FirebaseFirestore.instance
+          .collection("items")
+          .withConverter(
+            fromFirestore: Item.fromFirestore,
+            toFirestore: (Item item, _) => item.toFirestore(),
+          )
+          .snapshots()
+          .listen(
+        (items) {
+          _items = items.docs.map((e) => e.data()).toList();
+          notifyListeners();
+          print("current data: ${_items.map((e) => e.toJson()).join(",")}");
+        },
+        onError: (error) => print("Listen failed: $error"),
+      );
+      print('User is signed in!');
+    }
+  }
 
   UnmodifiableListView<Item> get items => UnmodifiableListView(_items);
 

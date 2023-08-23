@@ -16,7 +16,7 @@ Item _$ItemFromJson(Map<String, dynamic> json) => Item(
       ..weight = (json['weight'] as num).toDouble()
       ..description = json['description'] as String?
       ..expiringDates = (json['expiringDates'] as List<dynamic>)
-          .map((e) => DateTime.parse(e as String))
+          .map((e) => const TimestampConverter().fromJson(e as Timestamp))
           .toList()
       ..operationalStatus =
           $enumDecode(_$OperationalStatusEnumMap, json['operationalStatus'])
@@ -29,9 +29,10 @@ Item _$ItemFromJson(Map<String, dynamic> json) => Item(
       ..value = json['value'] as int
       ..sku = json['sku'] as String?
       ..notes = json['notes'] as String?
-      ..signs = (json['signs'] as List<dynamic>)
-          .map((e) => Sign.fromJson(e as Map<String, dynamic>))
-          .toList()
+      ..signs = (json['signs'] as List<dynamic>?)
+              ?.map((e) => Sign.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          []
       ..isColdChain = json['isColdChain'] as bool;
 
 Map<String, dynamic> _$ItemToJson(Item instance) => <String, dynamic>{
@@ -42,8 +43,9 @@ Map<String, dynamic> _$ItemToJson(Item instance) => <String, dynamic>{
       'weight': instance.weight,
       'totalAmount': instance.totalAmount,
       'description': instance.description,
-      'expiringDates':
-          instance.expiringDates.map((e) => e.toIso8601String()).toList(),
+      'expiringDates': instance.expiringDates
+          .map(const TimestampConverter().toJson)
+          .toList(),
       'operationalStatus':
           _$OperationalStatusEnumMap[instance.operationalStatus]!,
       'manufacturer': instance.manufacturer,

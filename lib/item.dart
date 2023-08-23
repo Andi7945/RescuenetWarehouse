@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:rescuenet_warehouse/json_converter_timestamp.dart';
 import 'package:rescuenet_warehouse/operational_status.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -14,6 +16,7 @@ class Item {
   double weight = 0.0;
   int totalAmount;
   String? description;
+  @TimestampConverter()
   List<DateTime> expiringDates = List.empty();
   OperationalStatus operationalStatus = OperationalStatus.deployable;
   String? manufacturer;
@@ -25,6 +28,7 @@ class Item {
   int value = 0;
   String? sku;
   String? notes;
+  @JsonKey(defaultValue: [])
   List<Sign> signs = List.empty();
   bool isColdChain = false;
 
@@ -103,4 +107,16 @@ class Item {
   factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
 
   Map<String, dynamic> toJson() => _$ItemToJson(this);
+
+  factory Item.fromFirestore(
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) {
+    final data = snapshot.data();
+    return Item.fromJson(data ?? {});
+  }
+
+  Map<String, dynamic> toFirestore() {
+    return toJson();
+  }
 }

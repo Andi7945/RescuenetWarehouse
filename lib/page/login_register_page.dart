@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../routes.dart';
 import '../utils/auth_util.dart';
 
 
@@ -22,10 +23,13 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> signInWithEmailAndPassword() async {
     print('pressed Login');
     try {
-      await Auth().signInWithEmailAndPassword(
+      var tryAuth = await Auth().signInWithEmailAndPassword(
         email: _controllerEmail.text,
         password: _controllerPassword.text,
       );
+      if (tryAuth) {
+        Navigator.pushNamed(context, routeContainerWithContent);
+      }
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;
