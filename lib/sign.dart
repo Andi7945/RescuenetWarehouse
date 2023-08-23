@@ -1,3 +1,8 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'sign.g.dart';
+
+@JsonSerializable()
 class Sign {
   String id;
   String? unNumber;
@@ -78,4 +83,8 @@ class Sign {
         maxWeightPAX = maxWeightPAX ?? sign.maxWeightPAX,
         maxWeightCargo = maxWeightCargo ?? sign.maxWeightCargo,
         otherDocuments = otherDocuments ?? sign.otherDocuments;
+
+  factory Sign.fromJson(Map<String, dynamic> json) => _$SignFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SignToJson(this);
 }
