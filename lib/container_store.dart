@@ -5,13 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:rescuenet_warehouse/sequential_build.dart';
 
 import 'container_dao.dart';
-import 'data_mocks.dart';
 
 class ContainerStore extends ChangeNotifier {
   final Map<double, ContainerDao> containers = {
-    container_office.id: container_office,
-    container_power.id: container_power,
-    container_medical.id: container_medical
+    // container_office.id: container_office,
+    // container_power.id: container_power,
+    // container_medical.id: container_medical
   };
 
   UnmodifiableListView<ContainerDao> get containerValues =>
@@ -23,7 +22,7 @@ class ContainerStore extends ChangeNotifier {
   }
 
   ContainerDao newContainer() {
-    var newContainerId = containers.keys.reduce(max) + 1;
+    var newContainerId = containers.keys.isEmpty ? 1.0 : containers.keys.reduce(max) + 1;
 
     var newContainer = ContainerDao(newContainerId, _firstUnusedNumber(), "",
         null, null, SequentialBuild.firstBuild, null, null, false, false);

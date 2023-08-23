@@ -5,7 +5,6 @@ import 'package:rescuenet_warehouse/container_store.dart';
 
 import 'container_dao.dart';
 import 'container_service.dart';
-import 'data_mocks.dart';
 import 'filter.dart';
 import 'rescue_container.dart';
 
@@ -37,9 +36,9 @@ class ContainerVisibilityService extends ChangeNotifier {
   }
 
   final Map<double, bool> containerVisibility = {
-    container_office.id: true,
-    container_power.id: true,
-    container_medical.id: true
+    // container_office.id: true,
+    // container_power.id: true,
+    // container_medical.id: true
   };
 
   changeContainerVisibility(RescueContainer c) {
