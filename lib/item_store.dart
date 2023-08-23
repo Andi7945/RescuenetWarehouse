@@ -9,11 +9,11 @@ import 'package:rescuenet_warehouse/main.dart';
 import 'item.dart';
 
 class ItemStore extends ChangeNotifier {
-  final _collection =
-      FirebaseFirestore.instance.collection("items").withConverter(
-            fromFirestore: Item.fromFirestore,
-            toFirestore: (Item item, _) => item.toFirestore(),
-          );
+  final _collection = FirebaseFirestore.instance
+      .collection("items")
+      .withConverter(
+          fromFirestore: Item.fromFirestore,
+          toFirestore: (Item item, _) => item.toFirestore());
   List<Item> _items = [];
 
   var _authChangeListener;

@@ -1,15 +1,34 @@
 import 'dart:collection';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../container_type.dart';
-import '../data_mocks.dart';
 
 class StoreContainerTypes extends ChangeNotifier {
-  final List<ContainerType> _list = [
-    container_type_crate,
-    container_type_backpack
-  ];
+  final _collection = FirebaseFirestore.instance
+      .collection("container_type")
+      .withConverter(
+          fromFirestore: ContainerType.fromFirestore,
+          toFirestore: (ContainerType type, _) => type.toFirestore());
+
+  List<ContainerType> _list = [];
+
+  StoreContainerTypes() {
+    FirebaseAuth.instance.authStateChanges().listen(_onAuthChange);
+  }
+
+  _onAuthChange(User? user) {
+    if (user == null) return;
+    _collection.snapshots().listen(
+      (containerTypes) {
+        _list = containerTypes.docs.map((e) => e.data()).toList();
+        notifyListeners();
+      },
+      onError: (error) => print("Listen failed: $error"),
+    );
+  }
 
   UnmodifiableListView<ContainerType> get containerTypes =>
       UnmodifiableListView(_list);
@@ -17,25 +36,7 @@ class StoreContainerTypes extends ChangeNotifier {
   ContainerType get(String? typeId) =>
       _list.firstWhere((element) => element.id == typeId);
 
-  add(ContainerType? type) {
-    if (type != null && !_list.contains(type)) {
-      _list.add(type);
-      notifyListeners();
-    }
-  }
+  remove(ContainerType? type) async => _collection.doc(type?.id).delete();
 
-  remove(ContainerType? type) {
-    if (_list.contains(type)) {
-      _list.remove(type);
-      notifyListeners();
-    }
-  }
-
-  edit(ContainerType old, ContainerType newValue) {
-    var idx = _list.indexOf(old);
-    if (idx != -1) {
-      _list.replaceRange(idx, idx + 1, [newValue]);
-      notifyListeners();
-    }
-  }
+  upsert(ContainerType type) async => _collection.doc(type.id).set(type);
 }

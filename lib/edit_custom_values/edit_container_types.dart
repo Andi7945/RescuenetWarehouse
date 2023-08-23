@@ -81,8 +81,7 @@ class _EditContainerTypesState extends State<EditContainerTypes> {
           String? imagePath,
           String? measurements,
           double? emptyWeight}) =>
-      Provider.of<StoreContainerTypes>(context, listen: false).edit(
-          type,
+      Provider.of<StoreContainerTypes>(context, listen: false).upsert(
           ContainerType.from(
               type: type,
               imagePath: imagePath,
@@ -110,7 +109,7 @@ class _EditContainerTypesState extends State<EditContainerTypes> {
 
   _btnAdd() => TextButton(
       onPressed: () {
-        Provider.of<StoreContainerTypes>(context, listen: false).add(
+        Provider.of<StoreContainerTypes>(context, listen: false).upsert(
             ContainerType(
                 uuid.v4(),
                 _addControllerName.text,
