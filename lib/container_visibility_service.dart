@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/container_mapper_service.dart';
-import 'package:rescuenet_warehouse/container_store.dart';
+import 'package:rescuenet_warehouse/stores.dart';
 
 import 'container_dao.dart';
 import 'container_service.dart';
@@ -11,14 +11,14 @@ import 'rescue_container.dart';
 class ContainerVisibilityService extends ChangeNotifier {
   late ContainerMapperService mapperService;
   late ContainerService containerService;
-  Map<double, ContainerDao> containers = {};
+  Map<String, ContainerDao> containers = {};
   ValueNotifier<Filter> currentFilter =
       ValueNotifier(Filter(FilterField.containerName, ""));
   VoidCallback? listener;
 
-  updateContainers(Map<double, ContainerDao> containers,
+  updateContainers(List<ContainerDao> containers,
       ContainerMapperService mapperService, ContainerService containerService) {
-    this.containers = containers;
+    this.containers = Map.fromEntries(containers.map((e) => MapEntry(e.id, e)));
     this.mapperService = mapperService;
     this.containerService = containerService;
 
@@ -30,12 +30,12 @@ class ContainerVisibilityService extends ChangeNotifier {
       notifyListeners();
     });
 
-    for (var e in containers.keys) {
+    for (var e in this.containers.keys) {
       containerVisibility.putIfAbsent(e, () => true);
     }
   }
 
-  final Map<double, bool> containerVisibility = {
+  final Map<String, bool> containerVisibility = {
     // container_office.id: true,
     // container_power.id: true,
     // container_medical.id: true
@@ -72,4 +72,4 @@ ChangeNotifierProxyProvider3 provideVisibilityService() =>
             ContainerService, ContainerVisibilityService>(
         create: (ctx) => ContainerVisibilityService(),
         update: (ctx, store, mapperService, service, prev) =>
-            prev!..updateContainers(store.containers, mapperService, service));
+            prev!..updateContainers(store.all, mapperService, service));

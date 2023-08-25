@@ -8,7 +8,7 @@ import 'container_type.dart';
 import 'package:equatable/equatable.dart';
 
 class RescueContainer extends Equatable {
-  double id;
+  String id;
   int number;
   String name;
   String? description;

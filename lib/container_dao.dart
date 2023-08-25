@@ -1,10 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:rescuenet_warehouse/firebase_store.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
 
 import 'sequential_build.dart';
 
-class ContainerDao extends Equatable {
-  double id;
+part 'container_dao.g.dart';
+
+@JsonSerializable()
+class ContainerDao extends Equatable implements FirebaseStorable<ContainerDao> {
+  String id;
   int number;
   String name;
   String? description;
@@ -52,4 +58,18 @@ class ContainerDao extends Equatable {
         isReady,
         toDeploy
       ];
+
+  factory ContainerDao.fromJson(Map<String, dynamic> json) =>
+      _$ContainerDaoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ContainerDaoToJson(this);
+
+  @override
+  ContainerDao fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    final data = snapshot.data();
+    return ContainerDao.fromJson(data ?? {});
+  }
+
+  @override
+  Map<String, dynamic> toFirestore() => toJson();
 }

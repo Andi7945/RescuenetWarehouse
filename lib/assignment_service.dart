@@ -9,7 +9,6 @@ import 'stores.dart';
 
 import 'assignment.dart';
 import 'container_dao.dart';
-import 'container_store.dart';
 import 'item.dart';
 import 'utils/auth_util.dart';
 
@@ -20,12 +19,12 @@ class AssignmentService extends ChangeNotifier {
 
   update(ContainerStore containerStore, WorkLogStore workLogStore,
       AssignmentStore store) {
-    knownContainerValues = containerStore.containerValues;
+    knownContainerValues = containerStore.all;
     this.workLogStore = workLogStore;
     this.store = store;
   }
 
-  addContainer(double containerId, Item item) {
+  addContainer(String containerId, Item item) {
     var container =
         knownContainerValues.firstWhere((element) => element.id == containerId);
     var assignment = Assignment(uuid.v4(), item.id, container.id, 1);
@@ -37,7 +36,7 @@ class AssignmentService extends ChangeNotifier {
   _buildEntry(Assignment assignment) => LogEntry(uuid.v4(), assignment,
       DateTime.now(), Auth().currentUser?.displayName ?? "Unknown");
 
-  increase(Item item, double containerId) {
+  increase(Item item, String containerId) {
     var assignment = Assignment(uuid.v4(), item.id, containerId, 1);
     if (_change(assignment, 1)) {
       workLogStore?.upsert(_buildEntry(assignment));
@@ -45,7 +44,7 @@ class AssignmentService extends ChangeNotifier {
     }
   }
 
-  reduce(Item item, double containerId) {
+  reduce(Item item, String containerId) {
     var assignment = Assignment(uuid.v4(), item.id, containerId, -1);
     if (_change(assignment, -1)) {
       workLogStore?.upsert(_buildEntry(assignment));

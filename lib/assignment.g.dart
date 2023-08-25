@@ -9,7 +9,7 @@ part of 'assignment.dart';
 Assignment _$AssignmentFromJson(Map<String, dynamic> json) => Assignment(
       json['id'] as String,
       json['itemId'] as String,
-      (json['containerId'] as num).toDouble(),
+      json['containerId'] as String,
       json['count'] as int,
     );
 

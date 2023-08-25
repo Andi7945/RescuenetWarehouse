@@ -8,7 +8,7 @@ part 'assignment.g.dart';
 class Assignment implements FirebaseStorable<Assignment> {
   String id;
   String itemId;
-  double containerId;
+  String containerId;
   int count;
 
   Assignment(this.id, this.itemId, this.containerId, this.count);

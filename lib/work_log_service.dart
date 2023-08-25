@@ -92,7 +92,7 @@ extension DateTimeExtensions on DateTime {
 
 class ItemAndContainer extends Equatable {
   final String itemId;
-  final double containerId;
+  final String containerId;
 
   ItemAndContainer(this.itemId, this.containerId);
 

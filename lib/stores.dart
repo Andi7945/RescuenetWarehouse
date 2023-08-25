@@ -1,4 +1,5 @@
 import 'package:rescuenet_warehouse/assignment.dart';
+import 'package:rescuenet_warehouse/container_dao.dart';
 import 'package:rescuenet_warehouse/current_location.dart';
 import 'package:rescuenet_warehouse/firebase_store.dart';
 import 'package:rescuenet_warehouse/log_entry.dart';
@@ -26,4 +27,8 @@ class AssignmentStore extends FirebaseStore<Assignment> {
 
 class WorkLogStore extends FirebaseStore<LogEntry> {
   WorkLogStore() : super('work_log', LogEntry.fromJson);
+}
+
+class ContainerStore extends FirebaseStore<ContainerDao> {
+  ContainerStore() : super('container_store', ContainerDao.fromJson);
 }
