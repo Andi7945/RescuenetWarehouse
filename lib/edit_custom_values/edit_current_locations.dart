@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/current_location.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/proxy_current_location_usage.dart';
-import 'package:rescuenet_warehouse/edit_custom_values/store_current_locations.dart';
+import 'package:rescuenet_warehouse/main.dart';
 import 'package:rescuenet_warehouse/menu_option.dart';
 
 import '../menu.dart';
 import '../rescue_table.dart';
 import '../rescue_text.dart';
+import '../stores.dart';
 import 'edit_custom_value_delete_button.dart';
 import 'edit_custom_value_text_field.dart';
 
@@ -61,7 +62,7 @@ class _EditCurrentLocationsState extends State<EditCurrentLocations> {
             TextEditingController(text: old.name),
             (newValue) =>
                 Provider.of<StoreCurrentLocations>(context, listen: false)
-                    .edit(CurrentLocation(old.id, newValue))));
+                    .upsert(CurrentLocation(old.id, newValue))));
   }
 
   TableRow _addingRow() => TableRow(children: [
@@ -74,7 +75,7 @@ class _EditCurrentLocationsState extends State<EditCurrentLocations> {
   _btnAdd() => TextButton(
       onPressed: () {
         Provider.of<StoreCurrentLocations>(context, listen: false)
-            .add(_addController.text);
+            .upsert(CurrentLocation(uuid.v4(), _addController.text));
         _addController.clear();
       },
       child: const RescueText(24, '+', FontWeight.w700));

@@ -31,7 +31,7 @@ class FirebaseStore<T extends FirebaseStorable<T>> extends ChangeNotifier {
     );
   }
 
-  UnmodifiableListView<T> get containerTypes => UnmodifiableListView(_list);
+  UnmodifiableListView<T> get all => UnmodifiableListView(_list);
 
   T get(String? typeId) => _list.firstWhere((element) => element.id == typeId);
 

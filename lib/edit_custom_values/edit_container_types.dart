@@ -10,7 +10,7 @@ import '../rescue_table.dart';
 import '../rescue_text.dart';
 import 'edit_custom_value_delete_button.dart';
 import 'edit_custom_value_text_field.dart';
-import 'store_container_types.dart';
+import '../stores.dart';
 
 class EditContainerTypes extends StatefulWidget {
   @override
@@ -41,7 +41,7 @@ class _EditContainerTypesState extends State<EditContainerTypes> {
     return Padding(
         padding: const EdgeInsets.only(left: 40, right: 40),
         child: Consumer<StoreContainerTypes>(
-            builder: (ctx, store, _) => _table(store.containerTypes)));
+            builder: (ctx, store, _) => _table(store.all)));
   }
 
   Widget _table(List<ContainerType> currentTypes) => RescueTable(

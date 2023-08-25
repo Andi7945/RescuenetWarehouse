@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/collection_extensions.dart';
 import 'package:rescuenet_warehouse/container_service.dart';
-import 'package:rescuenet_warehouse/edit_custom_values/store_module_destination.dart';
 
 import "package:collection/collection.dart";
 import 'package:rescuenet_warehouse/module_destination.dart';
+
+import '../stores.dart';
 
 ProxyProvider2 proxyModuleDestinationUsage() => ProxyProvider2<ContainerService,
             StoreModuleDestination, ModuleDestinationWithUsage>(
@@ -18,7 +19,7 @@ ProxyProvider2 proxyModuleDestinationUsage() => ProxyProvider2<ContainerService,
               (value) => value.map((e) => e.name).whereNotNull().toSet());
 
       Map<ModuleDestination, Set<String>> map = {
-        for (var e in storeModuleDestination.moduleDestinations)
+        for (var e in storeModuleDestination.all)
           e: grouped[e] ?? Set()
       };
 

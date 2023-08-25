@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/edit_custom_value_delete_button.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/edit_custom_value_text_field.dart';
+import 'package:rescuenet_warehouse/main.dart';
 import 'package:rescuenet_warehouse/menu_option.dart';
 import 'package:rescuenet_warehouse/module_destination.dart';
 import 'package:rescuenet_warehouse/rescue_table.dart';
-import 'package:rescuenet_warehouse/edit_custom_values/store_module_destination.dart';
 
 import '../menu.dart';
+import '../stores.dart';
 import 'proxy_module_destination_usage.dart';
 import '../rescue_text.dart';
 
@@ -51,7 +52,7 @@ class _EditModuleDestinationsState extends State<EditModuleDestinations> {
         _textField(destination.key),
         EditCustomValueDeleteButton(destination.value, () {
           Provider.of<StoreModuleDestination>(context, listen: false)
-              .removeDestination(destination.key);
+              .remove(destination.key);
         })
       ]);
 
@@ -62,7 +63,7 @@ class _EditModuleDestinationsState extends State<EditModuleDestinations> {
             TextEditingController(text: oldDest.name),
             (newDest) =>
                 Provider.of<StoreModuleDestination>(context, listen: false)
-                    .editDestination(ModuleDestination(oldDest.id, newDest))));
+                    .upsert(ModuleDestination(oldDest.id, newDest))));
   }
 
   TableRow _addingRow() => TableRow(children: [
@@ -75,7 +76,7 @@ class _EditModuleDestinationsState extends State<EditModuleDestinations> {
   _btnAdd() => TextButton(
       onPressed: () {
         Provider.of<StoreModuleDestination>(context, listen: false)
-            .addDestination(_addController.text);
+            .upsert(ModuleDestination(uuid.v4(), _addController.text));
         _addController.clear();
       },
       child: const RescueText(24, '+', FontWeight.w700));

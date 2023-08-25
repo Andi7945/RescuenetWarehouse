@@ -1,9 +1,7 @@
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/edit_custom_values/store_current_locations.dart';
-import 'package:rescuenet_warehouse/edit_custom_values/store_module_destination.dart';
 
 import 'container_dao.dart';
-import 'edit_custom_values/store_container_types.dart';
+import 'stores.dart';
 import 'rescue_container.dart';
 
 class ContainerMapperService {
