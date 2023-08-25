@@ -1,3 +1,4 @@
+import 'package:rescuenet_warehouse/assignment.dart';
 import 'package:rescuenet_warehouse/current_location.dart';
 import 'package:rescuenet_warehouse/firebase_store.dart';
 import 'package:rescuenet_warehouse/module_destination.dart';
@@ -16,4 +17,8 @@ class StoreModuleDestination extends FirebaseStore<ModuleDestination> {
 class StoreCurrentLocations extends FirebaseStore<CurrentLocation> {
   StoreCurrentLocations()
       : super('current_locations', CurrentLocation.fromJson);
+}
+
+class AssignmentStore extends FirebaseStore<Assignment> {
+  AssignmentStore() : super('assignments', Assignment.fromJson);
 }

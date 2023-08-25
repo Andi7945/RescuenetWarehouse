@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/assignment_store.dart';
+import 'package:rescuenet_warehouse/main.dart';
 import 'package:rescuenet_warehouse/work_log_store.dart';
+
+import 'collection_extensions.dart';
+
+import 'stores.dart';
 
 import 'assignment.dart';
 import 'container_dao.dart';
@@ -23,29 +27,41 @@ class AssignmentService extends ChangeNotifier {
   addContainer(double containerId, Item item) {
     var container =
         knownContainerValues.firstWhere((element) => element.id == containerId);
-    var assignment = Assignment(item.id, container.id, 1);
+    var assignment = Assignment(uuid.v4(), item.id, container.id, 1);
 
-    if (store?.add(assignment) ?? false) {
-      workLogStore?.add(assignment);
-      notifyListeners();
-    }
+    store?.upsert(assignment);
+    workLogStore?.add(assignment);
   }
 
   increase(Item item, double containerId) {
-    var assignment = Assignment(item.id, containerId, 1);
-    if (store?.increase(assignment) ?? false) {
+    var assignment = Assignment(uuid.v4(), item.id, containerId, 1);
+    if (_change(assignment, 1)) {
       workLogStore?.add(assignment);
       notifyListeners();
     }
   }
 
   reduce(Item item, double containerId) {
-    var assignment = Assignment(item.id, containerId, -1);
-    if (store?.reduce(assignment) ?? false) {
+    var assignment = Assignment(uuid.v4(), item.id, containerId, -1);
+    if (_change(assignment, -1)) {
       workLogStore?.add(assignment);
       notifyListeners();
     }
   }
+
+  bool _change(Assignment assignment, int amount) {
+    var current = store?.all.firstWhereOrNull(_matchesIds(assignment));
+    if (current != null) {
+      current.count += amount;
+      store?.all.removeWhere((element) => element.count == 0);
+      return true;
+    }
+    return false;
+  }
+
+  bool Function(Assignment a) _matchesIds(Assignment assignment) =>
+      (a) => (a.itemId == assignment.itemId &&
+          a.containerId == assignment.containerId);
 }
 
 ChangeNotifierProxyProvider3 provideAssignmentService() =>

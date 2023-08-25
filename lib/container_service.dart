@@ -1,9 +1,9 @@
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/assignment_store.dart';
 import 'package:rescuenet_warehouse/collection_extensions.dart';
 import 'package:rescuenet_warehouse/container_mapper_service.dart';
 import 'package:rescuenet_warehouse/container_store.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
+import 'package:rescuenet_warehouse/stores.dart';
 
 import 'container_dao.dart';
 import 'item.dart';
@@ -30,7 +30,7 @@ class ContainerService {
     return Map.fromEntries(containerStore.containers.values.map((cont) =>
         MapEntry(
             containerMapperService.fromDao(cont),
-            Map.fromEntries(assignmentStore.assignments
+            Map.fromEntries(assignmentStore.all
                 .where((assignment) => assignment.containerId == cont.id)
                 .map((assignment) => MapEntry(
                     itemService.itemById(assignment.itemId),
@@ -38,9 +38,8 @@ class ContainerService {
   }
 
   Map<Item, int> itemsWithoutContainer() {
-    var assignedItems = assignmentStore.assignments
-        .groupBy((p0) => p0.itemId)
-        .map((key, value) => MapEntry(
+    var assignedItems = assignmentStore.all.groupBy((p0) => p0.itemId).map(
+        (key, value) => MapEntry(
             itemService.itemById(key),
             value.fold(
                 0, (previousValue, element) => previousValue + element.count)));
@@ -59,7 +58,7 @@ class ContainerService {
   }
 
   Map<RescueContainer, int> assignmentsFor(Item item) {
-    return assignmentStore.assignments
+    return assignmentStore.all
         .where((a) => a.itemId == item.id)
         .groupBy((p0) => containerMapperService
             .fromDao(containerStore.containers[p0.containerId]!))
@@ -72,7 +71,7 @@ class ContainerService {
 
   Map<double, String> otherContainerOptions(Item item) {
     return Map.fromEntries(containerValues
-        .where((element) => !assignmentStore.assignments
+        .where((element) => !assignmentStore.all
             .any((a) => a.containerId == element.id && a.itemId == item.id))
         .map((e) => MapEntry(e.id, e.name)));
   }
