@@ -25,7 +25,6 @@ import 'package:rescuenet_warehouse/utils/widget_tree_util.dart';
 import 'package:rescuenet_warehouse/widget/horizontal_drag_widget.dart';
 import 'package:rescuenet_warehouse/work_log_page.dart';
 import 'package:rescuenet_warehouse/work_log_service.dart';
-import 'package:rescuenet_warehouse/work_log_store.dart';
 import 'package:uuid/uuid.dart';
 
 import 'container_service.dart';

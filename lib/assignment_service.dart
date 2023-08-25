@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/main.dart';
-import 'package:rescuenet_warehouse/work_log_store.dart';
 
 import 'collection_extensions.dart';
 
+import 'log_entry.dart';
 import 'stores.dart';
 
 import 'assignment.dart';
 import 'container_dao.dart';
 import 'container_store.dart';
 import 'item.dart';
+import 'utils/auth_util.dart';
 
 class AssignmentService extends ChangeNotifier {
   List<ContainerDao> knownContainerValues = [];
@@ -30,13 +31,16 @@ class AssignmentService extends ChangeNotifier {
     var assignment = Assignment(uuid.v4(), item.id, container.id, 1);
 
     store?.upsert(assignment);
-    workLogStore?.add(assignment);
+    workLogStore?.upsert(_buildEntry(assignment));
   }
+
+  _buildEntry(Assignment assignment) => LogEntry(uuid.v4(), assignment,
+      DateTime.now(), Auth().currentUser?.displayName ?? "Unknown");
 
   increase(Item item, double containerId) {
     var assignment = Assignment(uuid.v4(), item.id, containerId, 1);
     if (_change(assignment, 1)) {
-      workLogStore?.add(assignment);
+      workLogStore?.upsert(_buildEntry(assignment));
       notifyListeners();
     }
   }
@@ -44,7 +48,7 @@ class AssignmentService extends ChangeNotifier {
   reduce(Item item, double containerId) {
     var assignment = Assignment(uuid.v4(), item.id, containerId, -1);
     if (_change(assignment, -1)) {
-      workLogStore?.add(assignment);
+      workLogStore?.upsert(_buildEntry(assignment));
       notifyListeners();
     }
   }

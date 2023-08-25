@@ -7,7 +7,7 @@ import 'package:rescuenet_warehouse/container_visibility_service.dart';
 import 'package:rescuenet_warehouse/log_entry.dart';
 import 'package:rescuenet_warehouse/log_entry_expanded.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
-import 'package:rescuenet_warehouse/work_log_store.dart';
+import 'package:rescuenet_warehouse/stores.dart';
 
 import 'container_service.dart';
 import 'item_service.dart';
@@ -40,7 +40,7 @@ class WorkLogService {
   List<LogEntry> _visibleEntries() {
     var visible = visibilityService.containerVisibility;
 
-    List<LogEntry> areVisible = workLogStore.entries
+    List<LogEntry> areVisible = workLogStore.all
         .where((element) => visible[element.assignment.containerId] == true)
         .toList();
     return areVisible;
