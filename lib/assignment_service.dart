@@ -8,26 +8,20 @@ import 'log_entry.dart';
 import 'stores.dart';
 
 import 'assignment.dart';
-import 'container_dao.dart';
 import 'item.dart';
 import 'utils/auth_util.dart';
 
 class AssignmentService extends ChangeNotifier {
-  List<ContainerDao> knownContainerValues = [];
   WorkLogStore? workLogStore;
   AssignmentStore? store;
 
-  update(ContainerStore containerStore, WorkLogStore workLogStore,
-      AssignmentStore store) {
-    knownContainerValues = containerStore.all;
+  update(WorkLogStore workLogStore, AssignmentStore store) {
     this.workLogStore = workLogStore;
     this.store = store;
   }
 
   addContainer(String containerId, Item item) {
-    var container =
-        knownContainerValues.firstWhere((element) => element.id == containerId);
-    var assignment = Assignment(uuid.v4(), item.id, container.id, 1);
+    var assignment = Assignment(uuid.v4(), item.id, containerId, 1);
 
     store?.upsert(assignment);
     workLogStore?.upsert(_buildEntry(assignment));
@@ -67,9 +61,9 @@ class AssignmentService extends ChangeNotifier {
           a.containerId == assignment.containerId);
 }
 
-ChangeNotifierProxyProvider3 provideAssignmentService() =>
-    ChangeNotifierProxyProvider3<AssignmentStore, WorkLogStore, ContainerStore,
+ChangeNotifierProxyProvider2 provideAssignmentService() =>
+    ChangeNotifierProxyProvider2<AssignmentStore, WorkLogStore,
             AssignmentService>(
         create: (ctx) => AssignmentService(),
-        update: (ctx, store, workLogStore, containerStore, service) =>
-            service!..update(containerStore, workLogStore, store));
+        update: (ctx, store, workLogStore, service) =>
+            service!..update(workLogStore, store));

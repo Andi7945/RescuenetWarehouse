@@ -6,6 +6,7 @@ import 'package:rescuenet_warehouse/log_entry.dart';
 import 'package:rescuenet_warehouse/module_destination.dart';
 
 import 'container_type.dart';
+import 'item.dart';
 
 class StoreContainerTypes extends FirebaseStore<ContainerType> {
   StoreContainerTypes() : super('container_types', ContainerType.fromJson);
@@ -31,4 +32,8 @@ class WorkLogStore extends FirebaseStore<LogEntry> {
 
 class ContainerStore extends FirebaseStore<ContainerDao> {
   ContainerStore() : super('container_store', ContainerDao.fromJson);
+}
+
+class ItemStore extends FirebaseStore<Item> {
+  ItemStore() : super('item_store', Item.fromJson);
 }

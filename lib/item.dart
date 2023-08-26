@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:rescuenet_warehouse/firebase_store.dart';
 import 'package:rescuenet_warehouse/json_converter_sign.dart';
 import 'package:rescuenet_warehouse/json_converter_timestamp.dart';
 import 'package:rescuenet_warehouse/operational_status.dart';
@@ -9,7 +10,8 @@ import 'sign.dart';
 part 'item.g.dart';
 
 @JsonSerializable()
-class Item {
+class Item implements FirebaseStorable<Item> {
+  @override
   String id;
   String? name;
   String imagePath = "https://via.placeholder.com/90x81";
@@ -108,17 +110,6 @@ class Item {
 
   factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$ItemToJson(this);
-
-  factory Item.fromFirestore(
-    DocumentSnapshot<Map<String, dynamic>> snapshot,
-    SnapshotOptions? options,
-  ) {
-    final data = snapshot.data();
-    return Item.fromJson(data ?? {});
-  }
-
-  Map<String, dynamic> toFirestore() {
-    return toJson();
-  }
 }

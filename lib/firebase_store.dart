@@ -14,7 +14,7 @@ class FirebaseStore<T extends FirebaseStorable<T>> extends ChangeNotifier {
             .collection(collectionName)
             .withConverter<T>(
                 fromFirestore: (snapshot, _) => buildFn(snapshot.data()!),
-                toFirestore: (T type, _) => type.toFirestore()) {
+                toFirestore: (T type, _) => type.toJson()) {
     FirebaseAuth.instance.authStateChanges().listen(_onAuthChange);
   }
 
@@ -23,8 +23,8 @@ class FirebaseStore<T extends FirebaseStorable<T>> extends ChangeNotifier {
   _onAuthChange(User? user) {
     if (user == null) return;
     _collection.snapshots().listen(
-      (containerTypes) {
-        _list = containerTypes.docs.map((e) => e.data()).toList();
+      (entries) {
+        _list = entries.docs.map((e) => e.data()).toList();
         notifyListeners();
       },
       onError: (error) => print("Listen failed: $error"),
@@ -43,7 +43,5 @@ class FirebaseStore<T extends FirebaseStorable<T>> extends ChangeNotifier {
 abstract class FirebaseStorable<T> {
   String get id;
 
-  T fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot);
-
-  Map<String, dynamic> toFirestore();
+  Map<String, dynamic> toJson();
 }

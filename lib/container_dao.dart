@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:rescuenet_warehouse/firebase_store.dart';
@@ -10,6 +9,7 @@ part 'container_dao.g.dart';
 
 @JsonSerializable()
 class ContainerDao extends Equatable implements FirebaseStorable<ContainerDao> {
+  @override
   String id;
   int number;
   String name;
@@ -62,14 +62,6 @@ class ContainerDao extends Equatable implements FirebaseStorable<ContainerDao> {
   factory ContainerDao.fromJson(Map<String, dynamic> json) =>
       _$ContainerDaoFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$ContainerDaoToJson(this);
-
-  @override
-  ContainerDao fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot) {
-    final data = snapshot.data();
-    return ContainerDao.fromJson(data ?? {});
-  }
-
-  @override
-  Map<String, dynamic> toFirestore() => toJson();
 }

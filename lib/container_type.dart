@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:rescuenet_warehouse/firebase_store.dart';
@@ -9,6 +8,7 @@ part 'container_type.g.dart';
 class ContainerType extends Equatable
     implements FirebaseStorable<ContainerType> {
 
+  @override
   String id;
   String name;
   String? imagePath;
@@ -37,14 +37,6 @@ class ContainerType extends Equatable
   factory ContainerType.fromJson(Map<String, dynamic> json) =>
       _$ContainerTypeFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$ContainerTypeToJson(this);
-
-  @override
-  ContainerType fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot) {
-    final data = snapshot.data();
-    return ContainerType.fromJson(data ?? {});
-  }
-
-  @override
-  Map<String, dynamic> toFirestore() => toJson();
 }

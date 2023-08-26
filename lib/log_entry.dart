@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:rescuenet_warehouse/firebase_store.dart';
 
@@ -8,6 +7,7 @@ part 'log_entry.g.dart';
 
 @JsonSerializable()
 class LogEntry extends FirebaseStorable<LogEntry> {
+  @override
   final String id;
   final Assignment assignment;
   final DateTime date;
@@ -18,14 +18,6 @@ class LogEntry extends FirebaseStorable<LogEntry> {
   factory LogEntry.fromJson(Map<String, dynamic> json) =>
       _$LogEntryFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$LogEntryToJson(this);
-
-  @override
-  LogEntry fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot) {
-    final data = snapshot.data();
-    return LogEntry.fromJson(data ?? {});
-  }
-
-  @override
-  Map<String, dynamic> toFirestore() => toJson();
 }

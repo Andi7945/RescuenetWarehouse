@@ -1,22 +1,31 @@
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/item_store.dart';
+import 'package:rescuenet_warehouse/stores.dart';
+
+import 'dart:math';
 
 import 'item.dart';
+import 'main.dart';
 
 class ItemService {
   final ItemStore itemStore;
 
   ItemService(this.itemStore);
 
-  List<Item> get items => itemStore.items;
+  List<Item> get items => itemStore.all;
 
-  Item newItem() => itemStore.newItem();
+  Item newItem() {
+    var newRescueNetId =
+        itemStore.all.map((e) => e.rescueNetId).reduce(max) + 1;
+    var item = Item(uuid.v4(), 0, newRescueNetId);
+    updateItem(item);
+    return item;
+  }
 
   Item itemById(String id) =>
-      itemStore.items.firstWhere((element) => element.id == id);
+      itemStore.all.firstWhere((element) => element.id == id);
 
   updateItem(Item item) {
-    itemStore.updateItem(item);
+    itemStore.upsert(item);
   }
 }
 
