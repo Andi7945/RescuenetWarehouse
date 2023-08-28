@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:rescuenet_warehouse/main.dart';
 
 import 'rescue_image.dart';
 import 'rescue_text.dart';
@@ -68,7 +73,16 @@ class RescuePickableImage extends StatelessWidget {
       print("Error on image taken by cam: $onError");
     });
     if (pickedFile != null) {
-      picked(pickedFile.path);
+      var uploadedPath = await uploadFile(uuid.v4(), File(pickedFile.path));
+      picked(uploadedPath);
     }
+  }
+
+  Future<String> uploadFile(String imageName, File photo) async {
+    final destination = 'images/$imageName';
+
+    final ref = firebase_storage.FirebaseStorage.instance.ref(destination);
+    await ref.putFile(photo);
+    return await ref.getDownloadURL();
   }
 }

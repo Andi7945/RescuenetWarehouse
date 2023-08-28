@@ -1,5 +1,4 @@
 # next steps
-* Upload choosen images to firebase
 * Upload safety datasheets
 * Print safety datasheet if available
 
@@ -18,6 +17,7 @@
 * Fix max number in package list footer (count per container)
 * Optimize sizes for Galaxy Tab A8 SMX200
 
+* Add possibility to choose from previously uploaded images
 
 * Add configurable default printer per pdf type
 * Make buttons look like buttons
