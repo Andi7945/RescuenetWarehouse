@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/assignment_service.dart';
 import 'package:rescuenet_warehouse/container_service.dart';
+import 'package:rescuenet_warehouse/rescue_container.dart';
 
 import 'item.dart';
 import 'rescue_dropdown_button.dart';
@@ -26,10 +27,11 @@ class _ItemEditPageAmountsAddContainerState
       builder: (ctx, service, _) =>
           _body(_options(service.otherContainerOptions(widget.item))));
 
-  Map<String, String> _options(Map<String, String> otherOptions) {
-    var availableOptions = {...otherOptions};
-    availableOptions.removeWhere((_, name) => widget.knownNames.contains(name));
-    return availableOptions;
+  Map<String, String> _options(List<RescueContainer> otherOptions) {
+    var availableOptions = [...otherOptions];
+    availableOptions
+        .removeWhere((cont) => widget.knownNames.contains(cont.name));
+    return Map.fromEntries(availableOptions.map((e) => MapEntry(e.id, e.name)));
   }
 
   @override

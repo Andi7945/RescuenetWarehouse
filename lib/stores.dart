@@ -31,9 +31,9 @@ class WorkLogStore extends FirebaseStore<LogEntry> {
 }
 
 class ContainerStore extends FirebaseStore<ContainerDao> {
-  ContainerStore() : super('container_store', ContainerDao.fromJson);
+  ContainerStore() : super('containers', ContainerDao.fromJson);
 }
 
 class ItemStore extends FirebaseStore<Item> {
-  ItemStore() : super('item_store', Item.fromJson);
+  ItemStore() : super('items', Item.fromJson);
 }

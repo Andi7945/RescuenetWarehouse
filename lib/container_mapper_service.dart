@@ -18,6 +18,11 @@ class ContainerMapperService {
     this.storeCurrentLocations = storeCurrentLocations;
   }
 
+  bool storesLoaded() =>
+      storeCurrentLocations.loaded &&
+      storeModuleDestination.loaded &&
+      storeCurrentLocations.loaded;
+
   RescueContainer fromDao(ContainerDao dao) => RescueContainer.fromDao(
       dao,
       dao.typeId == null ? null : storeContainerTypes.get(dao.typeId),

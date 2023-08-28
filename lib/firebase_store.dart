@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class FirebaseStore<T extends FirebaseStorable<T>> extends ChangeNotifier {
+  bool loaded = false;
   final String collectionName;
   final T Function(Map<String, dynamic> data) buildFn;
   final CollectionReference<T> _collection;
@@ -25,6 +26,7 @@ class FirebaseStore<T extends FirebaseStorable<T>> extends ChangeNotifier {
     _collection.snapshots().listen(
       (entries) {
         _list = entries.docs.map((e) => e.data()).toList();
+        loaded = true;
         notifyListeners();
       },
       onError: (error) => print("Listen failed: $error"),
@@ -33,11 +35,11 @@ class FirebaseStore<T extends FirebaseStorable<T>> extends ChangeNotifier {
 
   UnmodifiableListView<T> get all => UnmodifiableListView(_list);
 
-  T get(String? typeId) => _list.firstWhere((element) => element.id == typeId);
+  T get(String? id) => _list.firstWhere((element) => element.id == id);
 
-  remove(T? type) async => _collection.doc(type?.id).delete();
+  remove(T? entity) async => _collection.doc(entity?.id).delete();
 
-  upsert(T type) async => _collection.doc(type.id).set(type);
+  upsert(T entity) async => _collection.doc(entity.id).set(entity);
 }
 
 abstract class FirebaseStorable<T> {

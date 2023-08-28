@@ -18,4 +18,6 @@ class Assignment implements FirebaseStorable<Assignment> {
 
   @override
   Map<String, dynamic> toJson() => _$AssignmentToJson(this);
+
+  Assignment copyWith(int count) => Assignment(id, itemId, containerId, count);
 }

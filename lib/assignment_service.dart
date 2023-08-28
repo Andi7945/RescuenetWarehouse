@@ -24,41 +24,38 @@ class AssignmentService extends ChangeNotifier {
     var assignment = Assignment(uuid.v4(), item.id, containerId, 1);
 
     store?.upsert(assignment);
-    workLogStore?.upsert(_buildEntry(assignment));
+    workLogStore?.upsert(_buildEntry(item, containerId, 1));
   }
 
-  _buildEntry(Assignment assignment) => LogEntry(uuid.v4(), assignment,
-      DateTime.now(), Auth().currentUser?.displayName ?? "Unknown");
+  _buildEntry(Item item, String containerId, int count) => LogEntry(
+      uuid.v4(),
+      item.id,
+      containerId,
+      count,
+      DateTime.now(),
+      Auth().currentUser?.displayName ?? "Unknown");
+
+  Assignment? _find(Item item, String containerId) =>
+      store?.all.firstWhereOrNull(
+          (a) => a.itemId == item.id && a.containerId == containerId);
 
   increase(Item item, String containerId) {
-    var assignment = Assignment(uuid.v4(), item.id, containerId, 1);
-    if (_change(assignment, 1)) {
-      workLogStore?.upsert(_buildEntry(assignment));
-      notifyListeners();
+    var current = _find(item, containerId);
+
+    if (current != null) {
+      store?.upsert(current.copyWith(current.count + 1));
+      workLogStore?.upsert(_buildEntry(item, containerId, 1));
     }
   }
 
   reduce(Item item, String containerId) {
-    var assignment = Assignment(uuid.v4(), item.id, containerId, -1);
-    if (_change(assignment, -1)) {
-      workLogStore?.upsert(_buildEntry(assignment));
-      notifyListeners();
-    }
-  }
+    var current = _find(item, containerId);
 
-  bool _change(Assignment assignment, int amount) {
-    var current = store?.all.firstWhereOrNull(_matchesIds(assignment));
     if (current != null) {
-      current.count += amount;
-      store?.all.removeWhere((element) => element.count == 0);
-      return true;
+      store?.upsert(current.copyWith(current.count - 1));
+      workLogStore?.upsert(_buildEntry(item, containerId, -1));
     }
-    return false;
   }
-
-  bool Function(Assignment a) _matchesIds(Assignment assignment) =>
-      (a) => (a.itemId == assignment.itemId &&
-          a.containerId == assignment.containerId);
 }
 
 ChangeNotifierProxyProvider2 provideAssignmentService() =>

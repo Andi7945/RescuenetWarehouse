@@ -41,7 +41,7 @@ class WorkLogService {
     var visible = visibilityService.containerVisibility;
 
     List<LogEntry> areVisible = workLogStore.all
-        .where((element) => visible[element.assignment.containerId] == true)
+        .where((element) => visible[element.containerId] == true)
         .toList();
     return areVisible;
   }
@@ -49,13 +49,12 @@ class WorkLogService {
   Map<ItemAndContainer, CountAndUser> _sumDailyChanges(
       Iterable<LogEntry> entries) {
     return entries
-        .groupBy((p0) =>
-            ItemAndContainer(p0.assignment.itemId, p0.assignment.containerId))
+        .groupBy((p0) => ItemAndContainer(p0.itemId, p0.containerId))
         .mapValues((value) => value.fold(
             CountAndUser({}, 0),
             (previousValue, element) => CountAndUser(
                 previousValue.user..add(element.user),
-                previousValue.count + element.assignment.count)));
+                previousValue.count + element.count)));
   }
 
   LogEntryExpanded _expandEntry(MapEntry<ItemAndContainer, CountAndUser> e) =>

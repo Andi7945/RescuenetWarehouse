@@ -1,5 +1,5 @@
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/collection_extensions.dart';
+import 'package:rescuenet_warehouse/assignment_expander_service.dart';
 import 'package:rescuenet_warehouse/container_mapper_service.dart';
 import 'package:rescuenet_warehouse/main.dart';
 import 'package:rescuenet_warehouse/rescue_container.dart';
@@ -14,10 +14,10 @@ class ContainerService {
   final ItemService itemService;
   final ContainerStore containerStore;
   final ContainerMapperService containerMapperService;
-  final AssignmentStore assignmentStore;
+  final AssignmentExpanderService assignmentExpanderService;
 
   ContainerService(this.itemService, this.containerStore,
-      this.containerMapperService, this.assignmentStore);
+      this.containerMapperService, this.assignmentExpanderService);
 
   List<RescueContainer> containers() =>
       containerStore.all.map(containerMapperService.fromDao).toList();
@@ -50,18 +50,11 @@ class ContainerService {
   Map<RescueContainer, Map<Item, int>> containerWithItems() {
     return Map.fromEntries(containerStore.all.map((cont) => MapEntry(
         containerMapperService.fromDao(cont),
-        Map.fromEntries(assignmentStore.all
-            .where((assignment) => assignment.containerId == cont.id)
-            .map((assignment) => MapEntry(
-                itemService.itemById(assignment.itemId), assignment.count))))));
+        assignmentExpanderService.assignmentsFor(cont.id))));
   }
 
   Map<Item, int> itemsWithoutContainer() {
-    var assignedItems = assignmentStore.all.groupBy((p0) => p0.itemId).map(
-        (key, value) => MapEntry(
-            itemService.itemById(key),
-            value.fold(
-                0, (previousValue, element) => previousValue + element.count)));
+    var assignedItems = assignmentExpanderService.assignmentsFor();
 
     var map = Map.fromEntries(itemService.items.map((e) {
       var assigned = assignedItems[e];
@@ -76,22 +69,19 @@ class ContainerService {
     return map;
   }
 
-  Map<RescueContainer, int> assignmentsFor(Item item) {
-    return assignmentStore.all
-        .where((a) => a.itemId == item.id)
-        .groupBy((p0) =>
-            containerMapperService.fromDao(containerStore.get(p0.containerId)))
-        .mapValues((value) => value.fold(0, (prev, curr) => prev + curr.count));
-  }
+  Map<RescueContainer, int> assignmentsFor(Item item) =>
+      assignmentExpanderService.assignmentsForItem(item.id);
 
   List<RescueContainer> get containerValues =>
       containerStore.all.map(containerMapperService.fromDao).toList();
 
-  Map<String, String> otherContainerOptions(Item item) {
-    return Map.fromEntries(containerValues
-        .where((element) => !assignmentStore.all
-            .any((a) => a.containerId == element.id && a.itemId == item.id))
-        .map((e) => MapEntry(e.id, e.name)));
+  List<RescueContainer> otherContainerOptions(Item item) {
+    var alreadyAssigned =
+        assignmentExpanderService.assignmentsForItem(item.id).keys;
+    return [
+      for (RescueContainer cont in containerValues)
+        if (!alreadyAssigned.contains(cont)) cont
+    ];
   }
 }
 
@@ -99,9 +89,9 @@ ProxyProvider4 proxyContainerService() => ProxyProvider4<
         ItemService,
         ContainerStore,
         ContainerMapperService,
-        AssignmentStore,
+        AssignmentExpanderService,
         ContainerService>(
-    update: (ctx, itemService, containerStore, mapperService, assignmentStore,
-            prev) =>
-        ContainerService(
-            itemService, containerStore, mapperService, assignmentStore));
+    update: (ctx, itemService, containerStore, mapperService,
+            assignmentExpanderService, prev) =>
+        ContainerService(itemService, containerStore, mapperService,
+            assignmentExpanderService));
