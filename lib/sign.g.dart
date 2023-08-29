@@ -13,7 +13,11 @@ Sign _$SignFromJson(Map<String, dynamic> json) => Sign(
       ..imagePath = json['imagePath'] as String?
       ..instructions = json['instructions'] as String?
       ..remarks = json['remarks'] as String?
-      ..sdsPath = json['sdsPath'] as String?
+      ..sdsPath = (json['sdsPath'] as List<dynamic>?)
+              ?.map((e) => const FirebaseDocumentConverter()
+                  .fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          []
       ..dangerType = json['dangerType'] as String?
       ..properShippingName = json['properShippingName'] as String?
       ..maxWeightPAX = (json['maxWeightPAX'] as num).toDouble()
@@ -28,7 +32,9 @@ Map<String, dynamic> _$SignToJson(Sign instance) => <String, dynamic>{
       'imagePath': instance.imagePath,
       'instructions': instance.instructions,
       'remarks': instance.remarks,
-      'sdsPath': instance.sdsPath,
+      'sdsPath': instance.sdsPath
+          ?.map(const FirebaseDocumentConverter().toJson)
+          .toList(),
       'dangerType': instance.dangerType,
       'properShippingName': instance.properShippingName,
       'maxWeightPAX': instance.maxWeightPAX,

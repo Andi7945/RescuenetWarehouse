@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rescuenet_warehouse/item_edit_page_signs_single_sds.dart';
 import 'package:rescuenet_warehouse/rescue_input_with_leading_label.dart';
 import 'package:rescuenet_warehouse/rescue_pickable_image.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
@@ -40,7 +41,7 @@ class ItemEditPageSignsSingle extends StatelessWidget {
           _doubleField("Max weight PAX", sign.maxWeightPAX,
               (p0) => sign.copyWith(maxWeightPAX: p0)),
           _field("Remarks", sign.remarks, (p0) => sign.copyWith(remarks: p0)),
-          _field("SDS", sign.sdsPath, (p0) => sign.copyWith(sdsPath: p0)),
+          ItemEditPageSignsSingleSds(sign, fnUpdated),
           _field("Other documents", sign.otherDocuments.join(),
               (p0) => sign.copyWith(otherDocuments: p0 == null ? [] : [p0]))
         ],
@@ -55,8 +56,8 @@ class ItemEditPageSignsSingle extends StatelessWidget {
       String label, String? initial, Sign Function(String?) onChange) {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: RescueInputWithLeadingLabel(label,
-            (p0) => fnUpdated(sign.copyWith(sdsPath: p0)), initial, 546));
+        child: RescueInputWithLeadingLabel(
+            label, (p0) => fnUpdated(onChange(p0)), initial, 546));
   }
 
   Widget _unNumber() => Padding(

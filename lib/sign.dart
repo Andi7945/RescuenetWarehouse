@@ -1,4 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:rescuenet_warehouse/firebase_document.dart';
+import 'package:rescuenet_warehouse/json_converter_firebase_document.dart';
 
 part 'sign.g.dart';
 
@@ -9,7 +11,9 @@ class Sign {
   String? imagePath;
   String? instructions;
   String? remarks;
-  String? sdsPath;
+  @JsonKey(defaultValue: [])
+  @FirebaseDocumentConverter()
+  List<FirebaseDocument>? sdsPath = List.empty();
   String? dangerType;
   String? properShippingName;
   double maxWeightPAX;
@@ -39,7 +43,7 @@ class Sign {
           String? imagePath,
           String? instructions,
           String? remarks,
-          String? sdsPath,
+          List<FirebaseDocument>? sdsPath,
           String? dangerType,
           String? properShippingName,
           double? maxWeightPAX,
@@ -66,7 +70,7 @@ class Sign {
       String? imagePath,
       String? instructions,
       String? remarks,
-      String? sdsPath,
+      List<FirebaseDocument>? sdsPath,
       String? dangerType,
       String? properShippingName,
       double? maxWeightPAX,
