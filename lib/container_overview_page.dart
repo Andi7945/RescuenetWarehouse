@@ -26,10 +26,10 @@ class ContainerOverviewPage extends StatelessWidget {
       padding: const EdgeInsets.only(left: 16.0),
       child: Row(children: [
         TextButton(
-            onPressed: () {
-              var id = service.newContainer().id;
+            onPressed: () async {
+              var cont = await service.newContainer();
               Navigator.pushNamed(context, routeContainerEditPage,
-                  arguments: id);
+                  arguments: cont.id);
             },
             child: RescueText.normal("Add container"))
       ]));

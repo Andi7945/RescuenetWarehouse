@@ -26,10 +26,10 @@ class ContainerService {
     containerStore.upsert(container);
   }
 
-  RescueContainer newContainer() {
+  Future<RescueContainer> newContainer() async {
     var newContainer = ContainerDao(uuid.v4(), _firstUnusedNumber(), "", null,
         null, SequentialBuild.firstBuild, null, null, false, false);
-    containerStore.upsert(newContainer);
+    await containerStore.upsert(newContainer);
     return containerMapperService.fromDao(newContainer);
   }
 
