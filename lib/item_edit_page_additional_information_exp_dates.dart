@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/item_service.dart';
+import 'package:rescuenet_warehouse/label_with_multiple_entries.dart';
 
 import 'item.dart';
 import 'rescue_text.dart';
@@ -21,50 +22,13 @@ class ItemEditPageAdditionalInformationExpDates extends StatelessWidget {
   _body(BuildContext context) {
     var dates = [...item.expiringDates];
     dates.sort();
+    var entries = dates.map((e) => _expDateRow(e, context)).toList();
 
-    return SizedBox(
-      width: 562,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.baseline,
-        textBaseline: TextBaseline.alphabetic,
-        children: [
-          SizedBox(
-              width: 152,
-              child: Row(
-                children: [
-                  RescueText.slim('Expiring dates:'),
-                  Expanded(
-                      child: TextButton(
-                          onPressed: () => _chooseDate(context, null),
-                          child: RescueText.headline('+'))),
-                ],
-              )),
-          Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: dates.map((e) => _expDateRow(e, context)).toList()),
-        ],
-      ),
-    );
+    return LabelWithMultipleEntries(
+        "Expiring dates:", () => _chooseDate(context, null), entries, 562);
   }
 
-  Container _expDateRow(DateTime date, BuildContext context) {
-    return Container(
-      width: 400,
-      height: 39,
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      decoration: const BoxDecoration(
-        border: Border(
-          left: BorderSide(width: 0.50),
-          top: BorderSide(width: 0.50),
-          right: BorderSide(width: 0.50),
-          bottom: BorderSide(),
-        ),
-      ),
-      child: Row(
+  Widget _expDateRow(DateTime date, BuildContext context) => Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -85,9 +49,7 @@ class ItemEditPageAdditionalInformationExpDates extends StatelessWidget {
             ],
           ),
         ],
-      ),
-    );
-  }
+      );
 
   _removeDate(BuildContext context, DateTime date) {
     var expDates = [...item.expiringDates];
