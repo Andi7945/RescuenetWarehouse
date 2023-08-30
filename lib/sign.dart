@@ -13,29 +13,19 @@ class Sign {
   String? remarks;
   @JsonKey(defaultValue: [])
   @FirebaseDocumentConverter()
-  List<FirebaseDocument>? sdsPath = List.empty();
+  List<FirebaseDocument> sdsPath = List.empty();
   String? dangerType;
   String? properShippingName;
   double maxWeightPAX;
   double maxWeightCargo;
 
-  List<String> otherDocuments = List.empty();
+  @JsonKey(defaultValue: [])
+  @FirebaseDocumentConverter()
+  List<FirebaseDocument> otherDocuments = List.empty();
 
   Sign(this.id)
       : maxWeightPAX = 0.0,
         maxWeightCargo = 0.0;
-
-  Sign.filled(
-      {required this.id,
-      this.unNumber,
-      this.imagePath,
-      this.instructions,
-      this.remarks,
-      this.sdsPath,
-      this.dangerType,
-      this.properShippingName,
-      required this.maxWeightPAX,
-      required this.maxWeightCargo});
 
   Sign copyWith(
           {String? id,
@@ -48,7 +38,7 @@ class Sign {
           String? properShippingName,
           double? maxWeightPAX,
           double? maxWeightCargo,
-          List<String>? otherDocuments}) =>
+          List<FirebaseDocument>? otherDocuments}) =>
       Sign.from(
           sign: this,
           id: id,
@@ -75,7 +65,7 @@ class Sign {
       String? properShippingName,
       double? maxWeightPAX,
       double? maxWeightCargo,
-      List<String>? otherDocuments})
+      List<FirebaseDocument>? otherDocuments})
       : id = id ?? sign.id,
         unNumber = unNumber ?? sign.unNumber,
         imagePath = imagePath ?? sign.imagePath,

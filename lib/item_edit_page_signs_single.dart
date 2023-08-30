@@ -41,9 +41,12 @@ class ItemEditPageSignsSingle extends StatelessWidget {
           _doubleField("Max weight PAX", sign.maxWeightPAX,
               (p0) => sign.copyWith(maxWeightPAX: p0)),
           _field("Remarks", sign.remarks, (p0) => sign.copyWith(remarks: p0)),
-          ItemEditPageSignsSingleSds(sign, fnUpdated),
-          _field("Other documents", sign.otherDocuments.join(),
-              (p0) => sign.copyWith(otherDocuments: p0 == null ? [] : [p0]))
+          ItemEditPageSignsSingleDocuments("SDS:", sign.sdsPath,
+              (d) => fnUpdated(sign.copyWith(sdsPath: d))),
+          ItemEditPageSignsSingleDocuments(
+              "Other documents",
+              sign.otherDocuments,
+              (d) => fnUpdated(sign.copyWith(otherDocuments: d)))
         ],
       ));
 

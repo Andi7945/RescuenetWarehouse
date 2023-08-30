@@ -22,9 +22,11 @@ Sign _$SignFromJson(Map<String, dynamic> json) => Sign(
       ..properShippingName = json['properShippingName'] as String?
       ..maxWeightPAX = (json['maxWeightPAX'] as num).toDouble()
       ..maxWeightCargo = (json['maxWeightCargo'] as num).toDouble()
-      ..otherDocuments = (json['otherDocuments'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList();
+      ..otherDocuments = (json['otherDocuments'] as List<dynamic>?)
+              ?.map((e) => const FirebaseDocumentConverter()
+                  .fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [];
 
 Map<String, dynamic> _$SignToJson(Sign instance) => <String, dynamic>{
       'id': instance.id,
@@ -33,11 +35,13 @@ Map<String, dynamic> _$SignToJson(Sign instance) => <String, dynamic>{
       'instructions': instance.instructions,
       'remarks': instance.remarks,
       'sdsPath': instance.sdsPath
-          ?.map(const FirebaseDocumentConverter().toJson)
+          .map(const FirebaseDocumentConverter().toJson)
           .toList(),
       'dangerType': instance.dangerType,
       'properShippingName': instance.properShippingName,
       'maxWeightPAX': instance.maxWeightPAX,
       'maxWeightCargo': instance.maxWeightCargo,
-      'otherDocuments': instance.otherDocuments,
+      'otherDocuments': instance.otherDocuments
+          .map(const FirebaseDocumentConverter().toJson)
+          .toList(),
     };

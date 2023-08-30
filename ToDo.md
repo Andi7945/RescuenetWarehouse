@@ -1,5 +1,4 @@
 # next steps
-* Upload safety datasheets
 * Print safety datasheet if available
 
 
