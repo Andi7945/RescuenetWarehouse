@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:rescuenet_warehouse/image_picker_dialog.dart';
 
 import 'package:rescuenet_warehouse/main.dart';
 
@@ -45,6 +46,13 @@ class RescuePickableImage extends StatelessWidget {
             child: Wrap(
               children: <Widget>[
                 ListTile(
+                    leading: const Icon(Icons.cloud_download),
+                    title: const Text('Previously uploaded'),
+                    onTap: () async {
+                      await loadFromFirebase(context);
+                      // Navigator.of(context).pop();
+                    }),
+                ListTile(
                     leading: const Icon(Icons.photo_library),
                     title: const Text('Gallery'),
                     onTap: () {
@@ -76,6 +84,22 @@ class RescuePickableImage extends StatelessWidget {
       final destination = 'images/${uuid.v4()}';
       var uploadedPath = await uploadFile(destination, File(pickedFile.path));
       picked(uploadedPath);
+    }
+  }
+
+  Future loadFromFirebase(BuildContext context) async {
+    String? pickedFile = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SizedBox(
+            width: 1000,
+            child: SimpleDialog(
+                title: RescueText.normal("Load image from firebase"),
+                children: [ImagePickerDialog()]));
+      },
+    );
+    if (pickedFile != null) {
+      picked(pickedFile);
     }
   }
 }
