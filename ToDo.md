@@ -12,7 +12,6 @@ PDF: Split per unit, name: type_number_date-time.pdf
 Print: Store locally and print
 "Print final summary"
 Print buttons under headline (3)
-Show number on container edit page
 
 DG Labels: Implement page 2
 Add "Label X / Y" when having multiple labels (under date)

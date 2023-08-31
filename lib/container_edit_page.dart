@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rescuenet_warehouse/rescue_dropdown_button.dart';
 import 'package:rescuenet_warehouse/rescue_image.dart';
+import 'package:rescuenet_warehouse/rescue_text.dart';
 import 'package:rescuenet_warehouse/routes.dart';
 
 import 'container_options.dart';
@@ -71,6 +72,7 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
               TextField(
                   controller: _nameController,
                   onChanged: (text) => _sendChangesToStore())),
+          _tile("Number", RescueText.slim("${widget._container.value.number}")),
           _tile(
               "Description",
               TextField(
@@ -100,6 +102,7 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
   }
 
   _tile(String label, Widget child, [Widget? editBtn]) => ListTile(
+      titleAlignment: ListTileTitleAlignment.center,
       leading: SizedBox(width: 160, child: Text(label)),
       title: child,
       trailing: editBtn);
