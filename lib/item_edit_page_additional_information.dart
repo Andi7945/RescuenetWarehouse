@@ -66,7 +66,7 @@ class ItemEditPageAdditionalInformation extends StatelessWidget {
           item.website),
       const SizedBox(height: 10),
       RescueInputWithLeadingLabel(
-          'Value:',
+          'Value in €:',
           _updateItem(
               context, (s) => Item.from(item: item, value: int.parse(s))),
           "${item.value}",

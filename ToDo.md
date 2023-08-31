@@ -6,8 +6,6 @@
 * Item Amounts: Make TextField to adjust it directly
 * Add firebase auth
 
-
-Label: Value in €
 Filter: Search in everything
 
 PDF: Printed date: Add time
@@ -30,8 +28,6 @@ Add "Label X / Y" when having multiple labels (under date)
 * Add numeric input field with validation
 * Fix max number in package list footer (count per container)
 * Optimize sizes for Galaxy Tab A8 SMX200
-
-* Add possibility to choose from previously uploaded images
 
 * Add configurable default printer per pdf type
 * Make buttons look like buttons
