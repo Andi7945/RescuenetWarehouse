@@ -50,7 +50,7 @@ class RescuePickableImage extends StatelessWidget {
                     title: const Text('Previously uploaded'),
                     onTap: () async {
                       await loadFromFirebase(context);
-                      // Navigator.of(context).pop();
+                      Navigator.of(context).pop();
                     }),
                 ListTile(
                     leading: const Icon(Icons.photo_library),
