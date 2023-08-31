@@ -50,7 +50,7 @@ class ModalContainerChooser extends StatelessWidget {
   List<TableRow> _options(
       ContainerVisibilityService service, BuildContext context) {
     var entries = service.containerWithVisible().entries.toList();
-    entries.sort((a, b) => a.key.id.compareTo(b.key.id));
+    entries.sort((a, b) => a.key.number.compareTo(b.key.number));
     return entries.map((entry) => _option(context, entry)).toList();
   }
 

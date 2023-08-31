@@ -42,6 +42,8 @@ class _ExportPageBodyState extends State<ExportPageBody> {
         .map((e) => ContainerPrintingOptions(e))
         .toList());
 
+    options.sort((a, b) => a.container.number.compareTo(b.container.number));
+
     countAllContainers = widget.containerWithItems.length;
     countReadyContainers = options.length;
   }

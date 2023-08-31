@@ -57,10 +57,16 @@ class ContainerWithContentPage extends StatelessWidget {
     return Expanded(
         child: ListView(scrollDirection: Axis.horizontal, children: [
       _asBox(ContainerWithContentUnassigned(itemsWithoutContainer)),
-      ...containers.entries
+      ..._sort(containers)
           .map((e) => _asBox(ContainerWithContentColumn(e.key, e.value)))
           .toList()
     ]));
+  }
+
+  _sort(Map<RescueContainer, Map<Item, int>> containers) {
+    var entries = containers.entries.toList();
+    entries.sort((a, b) => a.key.number.compareTo(b.key.number));
+    return entries;
   }
 
   Widget _asBox(Widget w) => Padding(
