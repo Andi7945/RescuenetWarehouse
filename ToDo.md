@@ -6,8 +6,6 @@
 * Item Amounts: Make TextField to adjust it directly
 * Add firebase auth
 
-Filter: Search in everything
-
 PDF: Printed date: Add time
 PDF: Split per unit, name: type_number_date-time.pdf
 

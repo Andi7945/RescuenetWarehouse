@@ -25,22 +25,20 @@ class _RescueFilterDropdownState extends State<RescueFilterDropdown> {
         TextEditingController(text: widget.valueNotifier.value.value ?? "");
 
     _o.addListener(() {
-      widget.valueNotifier.value = _currentFilter;
+      widget.valueNotifier.value = Filter(
+          FilterField.values.firstWhere((v) => v.name == _o.value),
+          _controller.text);
     });
 
     _controller.addListener(() {
-      widget.valueNotifier.value = _currentFilter;
+      widget.valueNotifier.value =
+          widget.valueNotifier.value.withNewValue(_controller.text);
     });
   }
 
-  get _currentFilter => Filter(
-      FilterField.values.firstWhere((v) => v.name == _o.value),
-      _controller.text);
-
   @override
-  Widget build(BuildContext context) => Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
+  Widget build(BuildContext context) =>
+      Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
         SizedBox(
             width: 300,
             child: TextField(

@@ -60,7 +60,7 @@ class ContainerVisibilityService extends ChangeNotifier {
     if (currentFilter.value.value != null) {
       containers.removeWhere((key, value) {
         var currentWithItems = withItems[key];
-        return !currentFilter.value.fn(key, currentWithItems?.keys ?? []);
+        return !currentFilter.value.matches(key, currentWithItems?.keys ?? []);
       });
     }
     return containers;
