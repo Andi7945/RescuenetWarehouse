@@ -17,7 +17,7 @@ PackingList _single(MapEntry<RescueContainer, Map<Item, int>> entry) =>
     PackingList(
         entry.key.number,
         entry.key.type?.name ?? "",
-        entry.key.name,
+        entry.key.printName,
         entry.key.description ?? "",
         sumItemWeight(entry.key, entry.value),
         entry.key.moduleDestination?.name ?? "",

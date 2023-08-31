@@ -25,7 +25,7 @@ SummaryList _list(List<SummaryContainer> containers) {
 SummaryContainer _mapSingle(MapEntry<RescueContainer, Map<Item, int>> entry) =>
     SummaryContainer(
         entry.key.number,
-        entry.key.name,
+        entry.key.printName,
         entry.key.description ?? "",
         entry.key.type?.name ?? "",
         calcValue(entry.value),

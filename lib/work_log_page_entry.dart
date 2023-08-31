@@ -26,7 +26,7 @@ TableRow item(LogEntryExpanded entry) => TableRow(
 
 TableRow _container(RescueContainer? container) => TableRow(children: [
       _imageCell(container?.type?.imagePath, 80, 160),
-      RescueText.slim(container?.name ?? ""),
+      RescueText.slim(container?.printName ?? ""),
       Container()
     ]);
 

@@ -13,7 +13,7 @@ class ContainerVisibilityService extends ChangeNotifier {
   late ContainerService containerService;
   Map<String, ContainerDao> containers = {};
   ValueNotifier<Filter> currentFilter =
-      ValueNotifier(Filter(FilterField.containerName, ""));
+      ValueNotifier(Filter(FilterField.all, ""));
   VoidCallback? listener;
 
   updateContainers(List<ContainerDao> containers,

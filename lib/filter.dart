@@ -35,7 +35,7 @@ bool Function(RescueContainer, Iterable<Item>, String?) calcFn(
 bool Function(RescueContainer, Iterable<Item>) containerFilterMatches(
     String value, FilterField field) {
   Map<FilterField, String? Function(RescueContainer)> containerFilters = {
-    FilterField.containerName: (c) => c.name,
+    FilterField.containerName: (c) => c.printName,
     FilterField.containerLocation: (c) => c.currentLocation?.name,
     FilterField.containerDestination: (c) => c.moduleDestination?.name,
     FilterField.containerType: (c) => c.type?.name,

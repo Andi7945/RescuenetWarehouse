@@ -63,7 +63,7 @@ class ContainerWithContentHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           _checkboxWithLabel("Deploy", _deployNotifier(context)),
-          Flexible(child: _textBold(_container.name, 24, TextAlign.center)),
+          Flexible(child: _textBold(_container.printName, 24, TextAlign.center)),
           _checkboxWithLabel("Ready", _readyNotifier(context))
         ],
       ),

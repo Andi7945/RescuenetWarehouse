@@ -30,8 +30,9 @@ class _ItemEditPageAmountsAddContainerState
   Map<String, String> _options(List<RescueContainer> otherOptions) {
     var availableOptions = [...otherOptions];
     availableOptions
-        .removeWhere((cont) => widget.knownNames.contains(cont.name));
-    return Map.fromEntries(availableOptions.map((e) => MapEntry(e.id, e.name)));
+        .removeWhere((cont) => widget.knownNames.contains(cont.printName));
+    return Map.fromEntries(
+        availableOptions.map((e) => MapEntry(e.id, e.printName)));
   }
 
   @override

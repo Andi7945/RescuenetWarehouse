@@ -48,9 +48,9 @@ class _ItemEditPageAmountsState extends State<ItemEditPageAmounts> {
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             RescueText.slim('Amounts: '),
             ItemEditPageAmountsAddContainer(
-                widget.item, knownContainers.map((e) => e.name).toSet()),
+                widget.item, knownContainers.map((e) => e.printName).toSet()),
           ]),
-          ..._sortedEntries().map((e) => _container(e.key.name, "${e.value}",
+          ..._sortedEntries().map((e) => _container(e.key.printName, "${e.value}",
               () => _increase(context, e.key), () => _reduce(context, e.key))),
           _container('Remaining', "$remaining"),
           _separator(),

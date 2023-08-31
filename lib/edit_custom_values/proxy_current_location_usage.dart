@@ -16,7 +16,7 @@ ProxyProvider2 proxyCurrentLocationUsage() => ProxyProvider2<ContainerService,
           .where((element) => element.currentLocation != null)
           .groupBy((p0) => p0.currentLocation!)
           .mapValues(
-              (value) => value.map((e) => e.name).whereNotNull().toSet());
+              (value) => value.map((e) => e.printName).whereNotNull().toSet());
 
       Map<CurrentLocation, Set<String>> map = {
         for (var e in storeCurrentLocations.all) e: grouped[e] ?? Set()

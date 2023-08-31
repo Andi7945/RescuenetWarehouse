@@ -12,7 +12,7 @@ class ContainerOverviewPageRow {
             onTap: () => onClick(container),
             child: RescueImage('edit_icon.png')),
         RescueImage(container.type?.imagePath),
-        RescueText.normal(container.name),
+        RescueText.normal(container.printName),
         RescueText.normal("1"),
         RescueText.normal("2")
       ]);

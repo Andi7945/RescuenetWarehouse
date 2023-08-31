@@ -16,7 +16,7 @@ ProxyProvider2 proxyModuleDestinationUsage() => ProxyProvider2<ContainerService,
           .where((element) => element.moduleDestination != null)
           .groupBy((p0) => p0.moduleDestination!)
           .mapValues(
-              (value) => value.map((e) => e.name).whereNotNull().toSet());
+              (value) => value.map((e) => e.printName).whereNotNull().toSet());
 
       Map<ModuleDestination, Set<String>> map = {
         for (var e in storeModuleDestination.all)

@@ -61,7 +61,7 @@ class ModalContainerChooser extends StatelessWidget {
     return TableRow(children: [
       s(_scaledCheckbox(
           entry.value, context, entry, (_) => _change(context, entry.key))),
-      s(RescueText.normal(entry.key.name)),
+      s(RescueText.normal(entry.key.printName)),
       s(_scaledCheckbox(entry.key.toDeploy, context, entry, null)),
       s(_scaledCheckbox(entry.key.isReady, context, entry, null)),
     ]);

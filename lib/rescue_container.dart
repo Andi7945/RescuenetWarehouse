@@ -19,6 +19,8 @@ class RescueContainer extends Equatable {
   bool isReady;
   bool toDeploy;
 
+  String get printName => "$number: $name";
+
   RescueContainer(
       this.id,
       this.number,

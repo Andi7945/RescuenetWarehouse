@@ -42,7 +42,8 @@ class WorkLogPageBodyFromDate extends StatelessWidget {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Padding(
                 padding: const EdgeInsets.only(bottom: 8),
-                child: RescueText.headline("Container: ${entry.key.name}")),
+                child:
+                    RescueText.headline("Container: ${entry.key.printName}")),
             Table(
                 defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                 children: [header(), ...entry.value.map(item).toList()])
