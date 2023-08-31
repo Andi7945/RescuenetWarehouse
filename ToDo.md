@@ -1,5 +1,4 @@
 # next steps
-* Make notes field work
 * Item Amounts: Make TextField to adjust it directly
 * Add firebase auth
 

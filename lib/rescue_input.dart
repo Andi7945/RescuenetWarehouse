@@ -6,12 +6,14 @@ class RescueInput extends StatefulWidget {
   String? initial;
   String? hintText;
   bool? digitsOnly;
+  int? maxLines;
 
   RescueInput(
       {required this.initial,
       required this.onChange,
       this.hintText,
-      this.digitsOnly});
+      this.digitsOnly,
+      this.maxLines});
 
   @override
   State createState() => _RescueInputState();
@@ -37,7 +39,10 @@ class _RescueInputState extends State<RescueInput> {
 
   @override
   Widget build(BuildContext context) => TextFormField(
-      keyboardType: TextInputType.numberWithOptions(decimal: true),
+      maxLines: widget.maxLines ?? 1,
+      keyboardType: (widget.digitsOnly == true)
+          ? const TextInputType.numberWithOptions(decimal: true)
+          : null,
       inputFormatters: _buildInputFormatters(),
       style: const TextStyle(fontSize: 24),
       decoration: InputDecoration(

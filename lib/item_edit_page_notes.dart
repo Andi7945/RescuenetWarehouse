@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:rescuenet_warehouse/rescue_input.dart';
 
 import 'item.dart';
+import 'item_service.dart';
 
 class ItemEditPageNotes extends StatelessWidget {
   final Item item;
@@ -9,10 +12,10 @@ class ItemEditPageNotes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _body();
+    return _body(context);
   }
 
-  _body() {
+  _body(BuildContext context) {
     return Container(
       width: 562,
       padding: const EdgeInsets.all(10),
@@ -26,18 +29,18 @@ class ItemEditPageNotes extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            child: Text(
-              'Notes:\n\nBECAUSE YOU SEND US WE CAN GO; BECAUSE WE GO THEY CAN LIVE.\nRescueNet is an emergency relief, rapid response unit, deploying trained volunteer workers offering medical, light search and rescue, psychosocial support, logistical and distribution assistance etc. into disaster areas. We aim to be there within 48 hours of the event taking place.',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w400,
-              ),
-            ),
+            child: RescueInput(
+                maxLines: 20,
+                initial: item.notes,
+                onChange: _updateItem(
+                    context, (String p0) => Item.from(item: item, notes: p0))),
           ),
         ],
       ),
     );
   }
+
+  Function(T) _updateItem<T>(BuildContext context, Item Function(T) updateFn) =>
+      (s) => Provider.of<ItemService>(context, listen: false)
+          .updateItem(updateFn(s));
 }
