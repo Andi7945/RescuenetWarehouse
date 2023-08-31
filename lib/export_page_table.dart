@@ -7,12 +7,16 @@ import 'rescue_text.dart';
 class ExportPageTable extends StatelessWidget {
   final List<ContainerPrintingOptions> options;
   final Function(ContainerPrintingOptions) fnAdjustOption;
+  final Function() printLabels;
+  final Function() printPackingList;
+  final Function() printSafetyDatasheets;
 
-  ExportPageTable(this.options, this.fnAdjustOption);
+  ExportPageTable(this.options, this.fnAdjustOption, this.printPackingList,
+      this.printLabels, this.printSafetyDatasheets);
 
   @override
   Widget build(BuildContext context) {
-    return RescueTable(_headline, _rows(), const {});
+    return RescueTable(_headline, [_printButtonRow(), ..._rows()], const {});
   }
 
   final _headline = [
@@ -22,6 +26,17 @@ class ExportPageTable extends StatelessWidget {
     "Print packing list",
     "Print safety datasheet"
   ];
+
+  TableRow _printButtonRow() => TableRow(children: [
+        Container(),
+        Container(),
+        _printIcon(printLabels),
+        _printIcon(printPackingList),
+        _printIcon(printSafetyDatasheets)
+      ]);
+
+  InkWell _printIcon(Function() onClick) => InkWell(
+      onTap: onClick, child: const Icon(Icons.print_outlined, size: 48.0));
 
   List<TableRow> _rows() => options.map(_single).toList();
 

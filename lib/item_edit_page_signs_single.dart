@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rescuenet_warehouse/item_edit_page_signs_single_sds.dart';
+import 'package:rescuenet_warehouse/item_edit_page_signs_single_documents.dart';
 import 'package:rescuenet_warehouse/rescue_input_with_leading_label.dart';
 import 'package:rescuenet_warehouse/rescue_pickable_image.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';

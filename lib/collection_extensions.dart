@@ -21,3 +21,10 @@ extension MapValues<E, F> on Map<E, F> {
   Map<E, Z> mapValues<Z>(Z Function(F) valueFunction) =>
       map((key, value) => MapEntry(key, valueFunction(value)));
 }
+
+extension FlatMapValues<E, F, X> on Map<E, Map<F, X>> {
+  List<Z> flatMapValues<Z>(List<Z> Function(F) valueFunction) => entries
+      .expand((e) => e.value.entries.map((e) => e.key))
+      .expand(valueFunction)
+      .toList();
+}

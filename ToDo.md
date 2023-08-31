@@ -1,7 +1,4 @@
 # next steps
-* Print safety datasheet if available
-
-
 * Make notes field work
 * Item Amounts: Make TextField to adjust it directly
 * Add firebase auth
@@ -10,8 +7,6 @@ PDF: Printed date: Add time
 PDF: Split per unit, name: type_number_date-time.pdf
 
 Print: Store locally and print
-"Print final summary"
-Print buttons under headline (3)
 
 DG Labels: Implement page 2
 Add "Label X / Y" when having multiple labels (under date)
