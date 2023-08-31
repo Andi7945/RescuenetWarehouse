@@ -66,7 +66,8 @@ class _WorkLogPageState extends State<WorkLogPage> {
       ]);
 
   Future<void> _chooseNewDate() async {
-    var newDate = await _dialogBuilder(context, DateTime(2023, 6, 1));
+    var newDate = await _dialogBuilder(
+        context, DateTime.now().subtract(const Duration(days: 7)));
     if (newDate != null) {
       setState(() {
         onlyFromDate = newDate;

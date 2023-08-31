@@ -2,16 +2,12 @@
 * Item Amounts: Make TextField to adjust it directly
 * Add firebase auth
 
-PDF: Printed date: Add time
 PDF: Split per unit, name: type_number_date-time.pdf
 
 Print: Store locally and print
 
 DG Labels: Implement page 2
 Add "Label X / Y" when having multiple labels (under date)
-
-* Make initial date on work log accumulated -1W
-
 
 * Make PDF Packing List work with multiple dangerous goods
 * Make container overview page useful
