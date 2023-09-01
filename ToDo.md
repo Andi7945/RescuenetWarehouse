@@ -13,7 +13,10 @@ Add "Label X / Y" when having multiple labels (under date)
 * Make container overview page useful
 * Add numeric input field with validation
 * Fix max number in package list footer (count per container)
+
+
 * Optimize sizes for Galaxy Tab A8 SMX200
+
 
 * Add configurable default printer per pdf type
 * Make buttons look like buttons

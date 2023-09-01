@@ -50,7 +50,7 @@ class ItemEditPageBaseInformation extends StatelessWidget {
     );
   }
 
-  RescueInput _nameInput(BuildContext context) => RescueInput(
+  RescueInputText _nameInput(BuildContext context) => RescueInputText(
       initial: item.name,
       onChange: (changed) =>
           _changeItem(context, Item.from(item: item, name: changed)));

@@ -16,7 +16,7 @@ class RescueInputWithLeadingLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RescueLeadingLabel(
-      RescueInput(initial: initial, onChange: updateFn),
+      RescueInputText(initial: initial, onChange: updateFn),
       label,
       width,
     );

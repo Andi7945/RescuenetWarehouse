@@ -39,21 +39,13 @@ class AssignmentService extends ChangeNotifier {
       store?.all.firstWhereOrNull(
           (a) => a.itemId == item.id && a.containerId == containerId);
 
-  increase(Item item, String containerId) {
+  setAmount(Item item, String containerId, int amount) {
     var current = _find(item, containerId);
 
     if (current != null) {
-      store?.upsert(current.copyWith(current.count + 1));
-      workLogStore?.upsert(_buildEntry(item, containerId, 1));
-    }
-  }
-
-  reduce(Item item, String containerId) {
-    var current = _find(item, containerId);
-
-    if (current != null) {
-      store?.upsert(current.copyWith(current.count - 1));
-      workLogStore?.upsert(_buildEntry(item, containerId, -1));
+      store?.upsert(current.copyWith(amount));
+      workLogStore
+          ?.upsert(_buildEntry(item, containerId, current.count - amount));
     }
   }
 }

@@ -29,18 +29,17 @@ class ItemEditPageNotes extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            child: RescueInput(
+            child: RescueInputText(
                 maxLines: 20,
                 initial: item.notes,
-                onChange: _updateItem(
-                    context, (String p0) => Item.from(item: item, notes: p0))),
+                onChange: (s) =>
+                    _updateItem(context, Item.from(item: item, notes: s))),
           ),
         ],
       ),
     );
   }
 
-  Function(T) _updateItem<T>(BuildContext context, Item Function(T) updateFn) =>
-      (s) => Provider.of<ItemService>(context, listen: false)
-          .updateItem(updateFn(s));
+  _updateItem<T>(BuildContext context, Item itm) =>
+      Provider.of<ItemService>(context, listen: false).updateItem(itm);
 }

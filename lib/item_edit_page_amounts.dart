@@ -6,6 +6,7 @@ import 'package:rescuenet_warehouse/rescue_container.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
 
 import 'item.dart';
+import 'item_edit_page_amounts_row.dart';
 import 'item_service.dart';
 
 class ItemEditPageAmounts extends StatefulWidget {
@@ -29,7 +30,7 @@ class _ItemEditPageAmountsState extends State<ItemEditPageAmounts> {
   }
 
   _body(BuildContext context) {
-    var remaining = widget.item.totalAmount -
+    int remaining = widget.item.totalAmount -
         widget.containerWithAssignments.values
             .fold(0, (previousValue, element) => previousValue + element);
     return Container(
@@ -50,12 +51,12 @@ class _ItemEditPageAmountsState extends State<ItemEditPageAmounts> {
             ItemEditPageAmountsAddContainer(
                 widget.item, knownContainers.map((e) => e.printName).toSet()),
           ]),
-          ..._sortedEntries().map((e) => _container(e.key.printName, "${e.value}",
-              () => _increase(context, e.key), () => _reduce(context, e.key))),
-          _container('Remaining', "$remaining"),
+          ..._sortedEntries().map((e) => ItemEditPageAmountsRow(e.key.printName,
+              e.value, (a) => _changeAmount(context, e.key, a))),
+          ItemEditPageAmountsRow('Remaining', remaining),
           _separator(),
-          _container('Total', "${widget.item.totalAmount}",
-              () => _increaseTotal(context), () => _reduceTotal(context)),
+          ItemEditPageAmountsRow(
+              'Total', widget.item.totalAmount, (t) => _changeTotal(context, t))
         ],
       ),
     );
@@ -83,67 +84,19 @@ class _ItemEditPageAmountsState extends State<ItemEditPageAmounts> {
     );
   }
 
-  Widget _container(String label, String count,
-      [VoidCallback? fnIncrease, VoidCallback? fnReduce]) {
-    return Padding(
-        padding: const EdgeInsets.only(top: 4, bottom: 4),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            RescueText.slim(label),
-            const SizedBox(width: 10),
-            Container(
-              height: 40,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: const ShapeDecoration(
-                shape: RoundedRectangleBorder(side: BorderSide(width: 0.50)),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (fnReduce != null)
-                    TextButton(
-                        onPressed: fnReduce, child: RescueText.slim("-")),
-                  const SizedBox(width: 10),
-                  RescueText.normal(count),
-                  const SizedBox(width: 10),
-                  if (fnIncrease != null)
-                    TextButton(
-                        onPressed: fnIncrease, child: RescueText.slim("+")),
-                ],
-              ),
-            ),
-          ],
-        ));
-  }
-
-  _reduce(BuildContext context, RescueContainer container) {
+  _changeAmount(
+      BuildContext context, RescueContainer container, int newAmount) {
     if (widget.containerWithAssignments.containsKey(container)) {
       Provider.of<AssignmentService>(context, listen: false)
-          .reduce(widget.item, container.id);
-    }
-  }
-
-  _increase(BuildContext context, RescueContainer container) {
-    if (widget.containerWithAssignments.containsKey(container)) {
-      Provider.of<AssignmentService>(context, listen: false)
-          .increase(widget.item, container.id);
+          .setAmount(widget.item, container.id, newAmount);
     } else {
       Provider.of<AssignmentService>(context, listen: false)
           .addContainer(container.id, widget.item);
     }
   }
 
-  _reduceTotal(BuildContext context) {
-    Provider.of<ItemService>(context, listen: false).updateItem(
-        Item.from(item: widget.item, totalAmount: widget.item.totalAmount - 1));
-  }
-
-  _increaseTotal(BuildContext context) {
-    Provider.of<ItemService>(context, listen: false).updateItem(
-        Item.from(item: widget.item, totalAmount: widget.item.totalAmount + 1));
+  _changeTotal(BuildContext context, int newAmount) {
+    Provider.of<ItemService>(context, listen: false)
+        .updateItem(Item.from(item: widget.item, totalAmount: newAmount));
   }
 }
