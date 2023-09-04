@@ -1,24 +1,21 @@
 # next steps
 * Add firebase auth
-
-PDF: Split per unit, name: type_number_date-time.pdf
-
-Print: Store locally and print
+* Optimize sizes for Galaxy Tab A8 SMX200
 
 DG Labels: Implement page 2
 Add "Label X / Y" when having multiple labels (under date)
 
 * Make PDF Packing List work with multiple dangerous goods
-* Add numeric input field with validation
+
+
 * Fix max number in package list footer (count per container)
 
-
-* Optimize sizes for Galaxy Tab A8 SMX200
-
-
 * Add configurable default printer per pdf type
+* Pdf: print on preconfigured printers
+
 * Make buttons look like buttons
 
+* Add numeric input field with validation
 
 * Analyze: Use TextInputLayout instead of DropdownButton?
     * https://m2.material.io/components/menus/android#exposed-dropdown-menus

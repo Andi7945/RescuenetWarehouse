@@ -5,13 +5,10 @@ import 'packing_list.dart';
 import 'pdf_header_row.dart';
 import 'pdf_utils.dart';
 
-Future<pw.Document> createLabelPdf(List<PackingList> lists) async {
+Future<pw.Document> createLabelPdf(PackingList list) async {
   final pdf = pw.Document();
-  var fPages = lists.map((e) async => _labelPage(await _body(e)));
-  var pages = await Future.wait(fPages);
-  for (var page in pages) {
-    pdf.addPage(page);
-  }
+  var page = _labelPage(await _body(list));
+  pdf.addPage(page);
   return pdf;
 }
 

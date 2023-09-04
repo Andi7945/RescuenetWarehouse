@@ -1,5 +1,8 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:printing/printing.dart';
 import 'package:rescuenet_warehouse/collection_extensions.dart';
 import 'package:rescuenet_warehouse/firebase_document.dart';
@@ -81,15 +84,18 @@ class _ExportPageBodyState extends State<ExportPageBody> {
 
   Widget _summaryButton() => TextButton(
       onPressed: () async {
-        var file = await _shareSummaryPdf();
-        Printing.sharePdf(bytes: await file.save());
+        await _shareSummaryPdf();
       },
       child: RescueText.normal("Print final summary"));
 
-  Future<pw.Document> _shareSummaryPdf() {
+  _shareSummaryPdf() async {
     var forContainers = Map.fromEntries(widget.containerWithItems.entries
         .where((ele) => ele.key.isReady && ele.key.toDeploy));
-    return createSummaryPdf(mapForPdf(forContainers));
+
+    final directory = await getApplicationDocumentsDirectory();
+    var formattedDate = _formattedPrintingDate();
+    var fileName = "${directory.path}/${formattedDate}_summary.pdf";
+    _saveFileLocally(createSummaryPdf(mapForPdf(forContainers)), fileName);
   }
 
   void _sharePackingListPdf() async {
@@ -99,8 +105,15 @@ class _ExportPageBodyState extends State<ExportPageBody> {
         .toList();
     var withItems = Map.fromEntries(widget.containerWithItems.entries
         .where((ele) => toPrint.contains(ele.key)));
-    var file = await createPackingListPdf(mapPackingList(withItems));
-    Printing.sharePdf(bytes: await file.save());
+
+    final directory = await getApplicationDocumentsDirectory();
+    var formattedDate = _formattedPrintingDate();
+    for (var list in mapPackingList(withItems)) {
+      var fileName =
+          "${directory.path}/${formattedDate}_packing_list_${list.containerNo}.pdf";
+      _saveFileLocally(createPackingListPdf(list), fileName);
+    }
+    // Printing.sharePdf(bytes: await file.save());
   }
 
   void _shareLabelPdf() async {
@@ -108,8 +121,15 @@ class _ExportPageBodyState extends State<ExportPageBody> {
         options.where((ele) => ele.printLabel).map((e) => e.container).toList();
     var withItems = Map.fromEntries(widget.containerWithItems.entries
         .where((ele) => toPrint.contains(ele.key)));
-    var file = await createLabelPdf(mapPackingList(withItems));
-    Printing.sharePdf(bytes: await file.save());
+
+    final directory = await getApplicationDocumentsDirectory();
+    var formattedDate = _formattedPrintingDate();
+    for (var list in mapPackingList(withItems)) {
+      var fileName =
+          "${directory.path}/${formattedDate}_label_${list.containerNo}.pdf";
+      _saveFileLocally(createLabelPdf(list), fileName);
+    }
+    // Printing.sharePdf(bytes: await file.save());
   }
 
   void _shareSafetyDatasheets() async {
@@ -124,10 +144,8 @@ class _ExportPageBodyState extends State<ExportPageBody> {
         .expand((element) => element.sdsPath);
     for (FirebaseDocument element in safetySheets) {
       var data = _loadFileFromWeb(element);
-      // await Printing.layoutPdf(onLayout: (_) => data);
       await Printing.sharePdf(bytes: await data);
     }
-    // return createLabelPdf(mapPackingList(withItems));
   }
 
   Future<Uint8List> _loadFileFromWeb(FirebaseDocument element) =>
@@ -135,4 +153,17 @@ class _ExportPageBodyState extends State<ExportPageBody> {
           .ref(element.url)
           .getData()
           .then((value) => value!);
+
+  String _formattedPrintingDate() {
+    final DateFormat formatter = DateFormat("y-MM-dd_H-m");
+    return formatter.format(DateTime.now());
+  }
+
+  _saveFileLocally(Future<pw.Document> doc, String fileName) async {
+    var pdf = await doc;
+
+    final file = File(fileName);
+    print("Save to $fileName");
+    await file.writeAsBytes(await pdf.save());
+  }
 }

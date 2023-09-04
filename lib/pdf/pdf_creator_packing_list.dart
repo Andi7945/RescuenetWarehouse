@@ -7,14 +7,10 @@ import 'pdf_utils.dart';
 
 import 'package:intl/intl.dart';
 
-Future<pw.Document> createPackingListPdf(List<PackingList> lists) async {
+Future<pw.Document> createPackingListPdf(PackingList list) async {
   final pdf = pw.Document();
-  var pages =
-      await Future.wait(lists.map((e) => _singlePage(HeaderProvider(), e)));
-
-  for (var page in pages) {
-    pdf.addPage(page);
-  }
+  var page = await _singlePage(HeaderProvider(), list);
+  pdf.addPage(page);
   return pdf;
 }
 
