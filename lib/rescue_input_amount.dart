@@ -2,43 +2,44 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class RescueInputAmount extends StatefulWidget {
-  final ValueNotifier<int> notifier;
+  final Function(int) onChange;
+  final int amount;
 
-  const RescueInputAmount({super.key, required this.notifier});
+  const RescueInputAmount(
+      {super.key, required this.onChange, required this.amount});
 
   @override
   State createState() => _RescueInputAmountState();
 }
 
 class _RescueInputAmountState extends State<RescueInputAmount> {
-  late TextEditingController controller;
+  final TextEditingController _controller = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-    controller = TextEditingController(text: "${widget.notifier.value}");
-    controller.addListener(() {
-      _onChange(controller.text);
-    });
-    widget.notifier.addListener(() {
-      controller.text = "${widget.notifier.value}";
-    });
+  Widget build(BuildContext context) {
+    _controller.text = "${widget.amount}";
+    return TextFormField(
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        style: const TextStyle(fontSize: 24),
+        controller: _controller,
+        onChanged: _onChange);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    _controller.dispose();
   }
 
   _onChange(String s) {
     var newAmount = int.tryParse(s);
     if (newAmount != null) {
-      widget.notifier.value = newAmount;
+      widget.onChange(newAmount);
+    } else {
+      print("could not parse int from new amount: $s");
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        style: const TextStyle(fontSize: 24),
-        controller: controller);
   }
 
   String? numberValidator(String? value) {

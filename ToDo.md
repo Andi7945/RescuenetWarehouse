@@ -1,5 +1,4 @@
 # next steps
-* Item Amounts: Make TextField to adjust it directly
 * Add firebase auth
 
 PDF: Split per unit, name: type_number_date-time.pdf

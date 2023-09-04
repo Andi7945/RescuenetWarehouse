@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'rescue_input_amount.dart';
 import 'rescue_text.dart';
 
-class ItemEditPageAmountsRow extends StatefulWidget {
+class ItemEditPageAmountsRow extends StatelessWidget {
   final String label;
   final int amount;
   final Function(int)? changeAmount;
@@ -11,41 +11,19 @@ class ItemEditPageAmountsRow extends StatefulWidget {
   ItemEditPageAmountsRow(this.label, this.amount, [this.changeAmount]);
 
   @override
-  State createState() => _ItemEditPageAmountsRow();
-}
-
-class _ItemEditPageAmountsRow extends State<ItemEditPageAmountsRow> {
-  late ValueNotifier<int> notifier;
-
-  @override
-  void initState() {
-    super.initState();
-
-    notifier = _createNotifier();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    var fnChangeAmount = widget.changeAmount;
+    var fnChangeAmount = changeAmount;
     if (fnChangeAmount != null) {
       return _container(
-          widget.label,
-          SizedBox(width: 30, child: RescueInputAmount(notifier: notifier)),
-          () => fnChangeAmount(widget.amount + 1),
-          () => fnChangeAmount(widget.amount - 1));
+          label,
+          SizedBox(
+              width: 60,
+              child:
+                  RescueInputAmount(onChange: fnChangeAmount, amount: amount)),
+          () => fnChangeAmount(amount + 1),
+          () => fnChangeAmount(amount - 1));
     }
-    return _container(widget.label, RescueText.normal("${widget.amount}"));
-  }
-
-  ValueNotifier<int> _createNotifier() {
-    var notifier = ValueNotifier(widget.amount);
-    var fnChangeAmount = widget.changeAmount;
-    if (fnChangeAmount != null) {
-      notifier.addListener(() {
-        fnChangeAmount(notifier.value);
-      });
-    }
-    return notifier;
+    return _container(label, RescueText.normal("$amount"));
   }
 
   Widget _container(String label, Widget number,
