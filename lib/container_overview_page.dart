@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rescuenet_warehouse/container_overview_page_card.dart';
 import 'package:rescuenet_warehouse/menu_option.dart';
-import 'package:rescuenet_warehouse/rescue_table.dart';
 import 'package:rescuenet_warehouse/routes.dart';
 
-import 'container_overview_page_row.dart';
 import 'container_service.dart';
 import 'menu.dart';
 import 'rescue_container.dart';
@@ -18,7 +17,7 @@ class ContainerOverviewPage extends StatelessWidget {
             builder: (ctxt, service, _) => Column(children: [
                   Menu(MenuOption.containerOverview),
                   _buttons(context, service),
-                  _body(context, service)
+                  Expanded(child: _body(context, service))
                 ])));
   }
 
@@ -35,21 +34,18 @@ class ContainerOverviewPage extends StatelessWidget {
       ]));
 
   _body(context, ContainerService service) {
-    return Padding(
-        padding: const EdgeInsets.only(left: 40, right: 40),
-        child: RescueTable(
-            const ["", "Image", "Name", "Currently deployed", "Total amount"],
-            _buildRows(context, service.containers()),
-            const {0: IntrinsicColumnWidth(), 1: IntrinsicColumnWidth()}));
+    return _grid(service.containers());
   }
 
-  List<TableRow> _buildRows(context, List<RescueContainer> containers) =>
-      containers.map((c) => _buildSingleRow(c, context)).toList();
-
-  TableRow _buildSingleRow(container, context) =>
-      ContainerOverviewPageRow().build(
-          container: container,
-          onClick: (RescueContainer c) => Navigator.pushNamed(
-              context, routeContainerEditPage,
-              arguments: c.id));
+  _grid(List<RescueContainer> containers) => GridView.count(
+        primary: false,
+        padding: const EdgeInsets.all(20),
+        crossAxisSpacing: 10,
+        childAspectRatio: 2,
+        mainAxisSpacing: 10,
+        crossAxisCount: 3,
+        children: <Widget>[
+          ...containers.map((c) => ContainerOverviewPageCard(c)).toList()
+        ],
+      );
 }

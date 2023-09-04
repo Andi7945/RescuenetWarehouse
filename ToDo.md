@@ -9,7 +9,6 @@ DG Labels: Implement page 2
 Add "Label X / Y" when having multiple labels (under date)
 
 * Make PDF Packing List work with multiple dangerous goods
-* Make container overview page useful
 * Add numeric input field with validation
 * Fix max number in package list footer (count per container)
 

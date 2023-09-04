@@ -120,5 +120,5 @@ class _EditContainerTypesState extends State<EditContainerTypes> {
         _addControllerEmptyWeight.clear();
         _addControllerMeasurements.clear();
       },
-      child: const RescueText(24, '+', FontWeight.w700));
+      child: const RescueText(24, '+', fontWeight: FontWeight.w700));
 }

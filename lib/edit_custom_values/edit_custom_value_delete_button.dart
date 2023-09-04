@@ -17,12 +17,12 @@ class EditCustomValueDeleteButton extends StatelessWidget {
 
   _btnDeleteEnabled(BuildContext context) => TextButton(
       onPressed: onDelete,
-      child: const RescueText(24, '-', FontWeight.w700));
+      child: const RescueText(24, '-', fontWeight: FontWeight.w700));
 
   _btnDeleteDisabled() => Tooltip(
       showDuration: const Duration(milliseconds: 3000),
       message: "Can not delete. Value is still used in: ${usedIn?.join(", ")}",
       triggerMode: TooltipTriggerMode.tap,
       child: const TextButton(
-          onPressed: null, child: RescueText(24, '-', FontWeight.w700)));
+          onPressed: null, child: RescueText(24, '-', fontWeight: FontWeight.w700)));
 }

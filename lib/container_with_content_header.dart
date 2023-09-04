@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/container_dao.dart';
 import 'package:rescuenet_warehouse/container_service.dart';
+import 'package:rescuenet_warehouse/rescue_box_module_destination.dart';
+import 'package:rescuenet_warehouse/rescue_box_sequential_build.dart';
 import 'package:rescuenet_warehouse/rescue_image.dart';
+import 'package:rescuenet_warehouse/rescue_text.dart';
 
 import 'item_utils.dart';
 import 'rescue_container.dart';
@@ -44,8 +47,8 @@ class ContainerWithContentHeader extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _sequentialBuild(),
-                _moduleDestination(),
+                RescueBoxSequentialBuild(_container),
+                RescueBoxModuleDestination(_container),
               ],
             ),
           ),
@@ -63,7 +66,9 @@ class ContainerWithContentHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           _checkboxWithLabel("Deploy", _deployNotifier(context)),
-          Flexible(child: _textBold(_container.printName, 24, TextAlign.center)),
+          Flexible(
+              child: RescueText.normal(
+                  _container.printName, FontWeight.w700, TextAlign.center)),
           _checkboxWithLabel("Ready", _readyNotifier(context))
         ],
       ),
@@ -98,7 +103,7 @@ class ContainerWithContentHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _text(text, 20, TextAlign.center),
+          RescueText(20, text, textAlign: TextAlign.center),
           _checkbox(changer),
         ],
       ),
@@ -133,9 +138,9 @@ class ContainerWithContentHeader extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _text(_container.type?.name ?? "", 16),
+                  RescueText.slim(_container.type?.name),
                   const SizedBox(height: 10),
-                  _text(_container.type?.measurements ?? "", 16),
+                  RescueText.slim(_container.type?.measurements),
                 ],
               ),
             ),
@@ -143,9 +148,9 @@ class ContainerWithContentHeader extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _text('Weight', 16),
+              RescueText.slim('Weight'),
               const SizedBox(height: 10),
-              _text("${_sumWeight()} kg", 20)
+              RescueText(20, "${_sumWeight()} kg")
             ],
           ),
         ],
@@ -154,28 +159,6 @@ class ContainerWithContentHeader extends StatelessWidget {
   }
 
   _sumWeight() => sumItemWeight(_container, _items).toStringAsFixed(2);
-
-  Text _text(String text, double fontSize, [TextAlign? textAlign]) => Text(
-        text,
-        textAlign: textAlign,
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: fontSize,
-          fontFamily: 'Inter',
-          fontWeight: FontWeight.w500,
-        ),
-      );
-
-  Text _textBold(String text, double fontSize, [TextAlign? textAlign]) => Text(
-        text,
-        textAlign: textAlign,
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: fontSize,
-          fontFamily: 'Inter',
-          fontWeight: FontWeight.w700,
-        ),
-      );
 
   List<Sign> _signs() {
     return _items.keys.expand((i) => i.signs).toList();
@@ -202,40 +185,4 @@ class ContainerWithContentHeader extends StatelessWidget {
   }
 
   bool _isColdChain() => _items.keys.any((itm) => itm.isColdChain);
-
-  Container _moduleDestination() {
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      decoration: const BoxDecoration(color: Colors.white),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _text('Module Destination', 16),
-          const SizedBox(height: 10),
-          _textBold(_container.moduleDestination?.name ?? "", 24),
-        ],
-      ),
-    );
-  }
-
-  Container _sequentialBuild() {
-    return Container(
-      width: 108,
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      clipBehavior: Clip.antiAlias,
-      decoration: ShapeDecoration(
-        color: _container.sequentialBuild.color,
-        shape: const RoundedRectangleBorder(side: BorderSide(width: 0.50)),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          _text('Sequential Build', 12),
-          _textBold(_container.sequentialBuild.displayName, 16)
-        ],
-      ),
-    );
-  }
 }

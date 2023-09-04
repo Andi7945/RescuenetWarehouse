@@ -19,8 +19,11 @@ class ContainerService {
   ContainerService(this.itemService, this.containerStore,
       this.containerMapperService, this.assignmentExpanderService);
 
-  List<RescueContainer> containers() =>
-      containerStore.all.map(containerMapperService.fromDao).toList();
+  List<RescueContainer> containers() {
+    var conts = containerStore.all.map(containerMapperService.fromDao).toList();
+    conts.sort((a, b) => a.number.compareTo(b.number));
+    return conts;
+  }
 
   updateContainer(ContainerDao container) {
     containerStore.upsert(container);

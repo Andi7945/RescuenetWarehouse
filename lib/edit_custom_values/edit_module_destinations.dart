@@ -79,5 +79,5 @@ class _EditModuleDestinationsState extends State<EditModuleDestinations> {
             .upsert(ModuleDestination(uuid.v4(), _addController.text));
         _addController.clear();
       },
-      child: const RescueText(24, '+', FontWeight.w700));
+      child: const RescueText(24, '+', fontWeight: FontWeight.w700));
 }
