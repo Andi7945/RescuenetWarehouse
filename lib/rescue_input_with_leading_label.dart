@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'rescue_input.dart';
+import 'rescue_input_text.dart';
 import 'rescue_leading_label.dart';
 
 class RescueInputWithLeadingLabel extends StatelessWidget {

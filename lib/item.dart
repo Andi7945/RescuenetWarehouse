@@ -65,6 +65,51 @@ class Item implements FirebaseStorable<Item> {
       [bool? isColdChain])
       : isColdChain = isColdChain ?? false;
 
+  Item copyWith(
+      {String? id,
+      String? name,
+      String? imagePath,
+      double? rescueNetId,
+      double? weight,
+      int? totalAmount,
+      String? description,
+      List<DateTime>? expiringDates,
+      OperationalStatus? operationalStatus,
+      String? manufacturer,
+      String? brand,
+      String? type,
+      String? supplier,
+      String? website,
+      int? value,
+      String? sku,
+      String? notes,
+      String? remarks,
+      bool? isColdChain,
+      List<Sign>? signs}) {
+    return Item.from(
+        item: this,
+        id: id,
+        name: name,
+        imagePath: imagePath,
+        rescueNetId: rescueNetId,
+        weight: weight,
+        totalAmount: totalAmount,
+        description: description,
+        expiringDates: expiringDates,
+        operationalStatus: operationalStatus,
+        manufacturer: manufacturer,
+        brand: brand,
+        type: type,
+        supplier: supplier,
+        website: website,
+        value: value,
+        sku: sku,
+        notes: notes,
+        remarks: remarks,
+        isColdChain: isColdChain,
+        signs: signs);
+  }
+
   Item.from(
       {required Item item,
       String? id,

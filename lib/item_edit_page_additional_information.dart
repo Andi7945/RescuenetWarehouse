@@ -21,62 +21,47 @@ class ItemEditPageAdditionalInformation extends StatelessWidget {
   }
 
   _body(BuildContext context) {
+    update<T>(Item Function(T) fn) => _updateItem(context, fn);
     return Column(children: [
-      RescueInputWithLeadingLabel(
-          'Description:',
-          _updateItem(context, (s) => Item.from(item: item, description: s)),
-          item.description),
+      RescueInputWithLeadingLabel('Description:',
+          update((s) => item.copyWith(description: s)), item.description),
       const SizedBox(height: 10),
       ItemEditPageAdditionalInformationExpDates(item),
       const SizedBox(height: 10),
       _operationalStatusEntry(
           context, 'Operational status:', item.operationalStatus),
       const SizedBox(height: 10),
-      RescueInputWithLeadingLabel(
-          'Manufacturer:',
-          _updateItem(context, (s) => Item.from(item: item, manufacturer: s)),
-          item.manufacturer),
+      RescueInputWithLeadingLabel('Manufacturer:',
+          update((s) => item.copyWith(manufacturer: s)), item.manufacturer),
       const SizedBox(height: 10),
       RescueInputWithLeadingLabel(
-          'Remarks:',
-          _updateItem(context, (s) => Item.from(item: item, remarks: s)),
-          item.remarks),
+          'Remarks:', update((s) => item.copyWith(remarks: s)), item.remarks),
       const SizedBox(height: 10),
       RescueInputWithLeadingLabel(
-          'Brand:',
-          _updateItem(context, (s) => Item.from(item: item, brand: s)),
-          item.brand),
+          'Brand:', update((s) => item.copyWith(brand: s)), item.brand),
       const SizedBox(height: 10),
       RescueInputWithLeadingLabel(
-          'Type:',
-          _updateItem(context, (s) => Item.from(item: item, type: s)),
-          item.type),
+          'Type:', update((s) => item.copyWith(type: s)), item.type),
+      const SizedBox(height: 10),
+      RescueInputWithLeadingLabel('Supplier:',
+          update((s) => item.copyWith(supplier: s)), item.supplier),
       const SizedBox(height: 10),
       RescueInputWithLeadingLabel(
-          'Supplier:',
-          _updateItem(context, (s) => Item.from(item: item, supplier: s)),
-          item.supplier),
-      const SizedBox(height: 10),
-      RescueInputWithLeadingLabel('SKU:',
-          _updateItem(context, (s) => Item.from(item: item, sku: s)), item.sku),
+          'SKU:', update((s) => item.copyWith(sku: s)), item.sku),
       const SizedBox(height: 10),
       RescueInputWithLeadingLabel(
-          'Website:',
-          _updateItem(context, (s) => Item.from(item: item, website: s)),
-          item.website),
+          'Website:', update((s) => item.copyWith(website: s)), item.website),
       const SizedBox(height: 10),
       RescueInputWithLeadingLabel(
           'Value in €:',
-          _updateItem(
-              context, (s) => Item.from(item: item, value: int.parse(s))),
+          update((s) => item.copyWith(value: int.parse(s))),
           "${item.value}",
           null,
           true),
       const SizedBox(height: 10),
       RescueInputWithLeadingLabel(
           'Weight:',
-          _updateItem(
-              context, (s) => Item.from(item: item, weight: double.parse(s))),
+          update((s) => item.copyWith(weight: double.parse(s))),
           "${item.weight}",
           null,
           true),
@@ -84,8 +69,7 @@ class ItemEditPageAdditionalInformation extends StatelessWidget {
       RescueLeadingLabel(
           Checkbox(
               value: item.isColdChain,
-              onChanged: _updateItem(
-                  context, (s) => Item.from(item: item, isColdChain: s))),
+              onChanged: update((b) => item.copyWith(isColdChain: b))),
           "Cold chain:")
     ]);
   }
