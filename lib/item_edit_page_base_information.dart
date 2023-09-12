@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/item.dart';
-import 'package:rescuenet_warehouse/rescue_input.dart';
+import 'package:rescuenet_warehouse/rescue_input_text.dart';
 import 'package:rescuenet_warehouse/rescue_pickable_image.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
 

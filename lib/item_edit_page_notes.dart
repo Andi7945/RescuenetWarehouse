@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/rescue_input.dart';
+import 'package:rescuenet_warehouse/rescue_input_text.dart';
 
 import 'item.dart';
 import 'item_service.dart';

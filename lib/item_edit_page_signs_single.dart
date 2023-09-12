@@ -4,7 +4,7 @@ import 'package:rescuenet_warehouse/rescue_input_with_leading_label.dart';
 import 'package:rescuenet_warehouse/rescue_pickable_image.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
 
-import 'rescue_input.dart';
+import 'rescue_input_text.dart';
 import 'sign.dart';
 
 class ItemEditPageSignsSingle extends StatelessWidget {

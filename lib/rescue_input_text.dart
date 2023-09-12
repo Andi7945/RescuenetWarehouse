@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class RescueInputText extends StatelessWidget {
+class RescueInputText extends StatefulWidget {
   ValueChanged<String> onChange;
   String? initial;
   String? hintText;
@@ -14,21 +14,29 @@ class RescueInputText extends StatelessWidget {
       this.maxLines});
 
   @override
+  State createState() => _RescueInputTextState();
+}
+
+class _RescueInputTextState extends State<RescueInputText> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
-    var controller = _buildController();
+    _controller.text = widget.initial ?? "";
     return TextFormField(
-        maxLines: maxLines ?? 1,
+        maxLines: widget.maxLines ?? 1,
         style: const TextStyle(fontSize: 24),
         decoration: InputDecoration(
-            hintText: hintText ?? "Insert new value here",
+            hintText: widget.hintText ?? "Insert new value here",
             hintStyle: const TextStyle(fontSize: 24)),
-        controller: controller);
+        controller: _controller,
+        onChanged: widget.onChange);
   }
 
-  _buildController() {
-    var controller = TextEditingController(text: initial);
-    controller.addListener(() {
-      onChange(controller.text);
-    });
+  @override
+  void dispose() {
+    super.dispose();
+
+    _controller.dispose();
   }
 }
