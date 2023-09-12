@@ -157,7 +157,8 @@ pw.Widget valueBox(String label, String value,
                           fontWeight: pw.FontWeight.bold, fontSize: 14))
                 ])));
 
-Future<pw.Widget> dangerousGoodsLabels(List<PackingDangerousGood> goods) async {
+Future<List<pw.Widget>> dangerousGoodsLabels(
+    List<PackingDangerousGood> goods) async {
   return dangerousGoods(
       goods,
       (ws) => pw.Column(
@@ -166,7 +167,7 @@ Future<pw.Widget> dangerousGoodsLabels(List<PackingDangerousGood> goods) async {
           children: ws));
 }
 
-Future<pw.Widget> dangerousGoodsPackingList(
+Future<List<pw.Widget>> dangerousGoodsPackingList(
     List<PackingDangerousGood> goods) async {
   return dangerousGoods(
       goods,
@@ -176,14 +177,22 @@ Future<pw.Widget> dangerousGoodsPackingList(
           children: ws));
 }
 
-Future<pw.Widget> dangerousGoods(List<PackingDangerousGood> goods,
+Future<List<pw.Widget>> dangerousGoods(List<PackingDangerousGood> goods,
     pw.Widget Function(List<pw.Widget> ws) fn) async {
-  List<pw.Widget> w =
-      goods.isEmpty ? [_noDangerousGoods()] : await _dangerousGood(goods.first);
+  if (goods.isEmpty) {
+    return [_noDangerousGoods()];
+  }
+  var futures = goods.map((good) => _perGood(good, fn));
+  return Future.wait(futures);
+}
+
+Future<Widget> _perGood(PackingDangerousGood good,
+    pw.Widget Function(List<pw.Widget> ws) renderFn) async {
+  var g = await _dangerousGood(good);
   return pw.Container(
       decoration: pw.BoxDecoration(border: pw.Border.all(width: 0.5)),
       padding: const pw.EdgeInsets.all(4.0),
-      child: fn(w));
+      child: renderFn(g));
 }
 
 pw.Widget _noDangerousGoods() =>

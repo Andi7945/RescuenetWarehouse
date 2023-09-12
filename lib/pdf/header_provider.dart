@@ -30,7 +30,31 @@ class HeaderProvider {
   Future<pw.Widget> _header(PackingList list) async {
     var upperLeft = _upperLeft(list);
     var rightChild = await dangerousGoodsPackingList(list.dangerousGoods);
-    return await headerRow(upperLeft, rightChild);
+    var top = await headerRow(upperLeft, rightChild.first);
+    var additionalGoods = rightChild.skip(1).toList();
+
+    var grid = _grid(additionalGoods);
+
+    return pw.Padding(
+        padding: const pw.EdgeInsets.only(bottom: 8.0),
+        child: pw.Column(children: [top, grid]));
+  }
+
+  pw.Widget _grid(List<pw.Widget> goods) {
+    List<pw.Widget> rows = [];
+    for (var i = 0; i < goods.length; i += 2) {
+      rows.add(_buildGridRow(goods, i));
+      rows.add(pw.SizedBox(height: 8));
+    }
+    return pw.Column(children: rows);
+  }
+
+  pw.Widget _buildGridRow(List<pw.Widget> goods, int idx) {
+    var left = pw.Flexible(child: goods[idx]);
+    var right = goods.length > (idx + 1)
+        ? pw.Flexible(child: goods[idx + 1])
+        : pw.Flexible(child: pw.Container());
+    return pw.Row(children: [left, pw.SizedBox(width: 8), right]);
   }
 
   Future<pw.Widget> _headerSmall(PackingList list) async {

@@ -27,7 +27,7 @@ Future<pw.Column> _body(PackingList list) async {
     pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
       pw.Expanded(child: _left(list)),
       pw.SizedBox(width: 16),
-      pw.Expanded(child: right)
+      pw.Expanded(child: right.first)
     ])
     // pw.Row(children: [right])
   ]);
