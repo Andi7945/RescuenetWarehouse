@@ -15,27 +15,30 @@ Future<pw.Widget> headerRow(pw.Widget leftCorner,
       ]));
 }
 
-Future<pw.Widget> rightSideHeader(pw.Widget? rightSide) async {
+Future<pw.Widget> rightSideHeader(pw.Widget? rightSide,
+    [pw.Widget? companyInfoAppendix]) async {
   return pw.Container(
       width: double.infinity,
       child: pw.Column(children: [
-        _logoAndCompanyInformation(await _logo()),
+        _logoAndCompanyInformation(await _logo(), companyInfoAppendix),
         pw.SizedBox(height: 8),
         rightSide ?? pw.Container()
       ]));
 }
 
-_logoAndCompanyInformation(pw.Widget logo) => pw.Row(children: [
+_logoAndCompanyInformation(pw.Widget logo, pw.Widget? companyInfoAppendix) =>
+    pw.Row(children: [
       pw.Expanded(
           child: pw.Padding(
-              padding: const pw.EdgeInsets.only(right: 8.0), child: _exec()),
+              padding: const pw.EdgeInsets.only(right: 8.0),
+              child: _exec(companyInfoAppendix)),
           flex: 2),
       pw.Expanded(child: logo, flex: 3)
     ]);
 
 Future<pw.Widget> _logo() async => loadImage('rn_logo_big.png');
 
-pw.Container _exec() => pw.Container(
+pw.Container _exec(pw.Widget? companyInfoAppendix) => pw.Container(
     padding: const pw.EdgeInsets.all(4.0),
     decoration: pw.BoxDecoration(border: pw.Border.all(width: 0.5)),
     child: pw.Column(
@@ -47,7 +50,7 @@ pw.Container _exec() => pw.Container(
           empty,
           smallText("Printed by: GJP"),
           smallText("Date: ${_now()}"),
-          empty,
+          companyInfoAppendix ?? empty,
         ]));
 
 String _now() {

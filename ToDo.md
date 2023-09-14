@@ -3,10 +3,6 @@
 * Optimize sizes for Galaxy Tab A8 SMX200
 
 
-* DG Labels: Implement page 2
-* Add "Label X / Y" when having multiple labels (under date)
-
-
 * Add configurable default printer per pdf type
 * Pdf: print on preconfigured printers
 
