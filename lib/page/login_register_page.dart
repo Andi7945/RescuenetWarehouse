@@ -88,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _loginOrRegisterButton() {
-    return TextButton(
+    return FilledButton(
       onPressed: () {
         setState(() {
           isLogin = !isLogin;

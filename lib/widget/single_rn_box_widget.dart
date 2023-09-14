@@ -220,7 +220,7 @@ class _SingleRNBoxWidgetState extends State<SingleRNBoxWidget> {
             ],
           ),
           actions: <Widget>[
-            TextButton(
+            FilledButton(
               child: const Text('Schließen'),
               onPressed: () {
                 Navigator.of(context).pop();

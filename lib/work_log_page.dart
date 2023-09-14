@@ -51,14 +51,14 @@ class _WorkLogPageState extends State<WorkLogPage> {
         _btnChooseContainer(ctxt, withVisibility)
       ]);
 
-  Widget _allChangesButton() => TextButton(
+  Widget _allChangesButton() => FilledButton(
       onPressed: () => setState(() {
             onlyFromDate = null;
           }),
       child: RescueText.normal("Show all changes"));
 
   Widget _dateChooser() => Row(mainAxisSize: MainAxisSize.min, children: [
-        TextButton(
+        FilledButton(
             onPressed: () async {
               await _chooseNewDate();
             },
@@ -75,10 +75,10 @@ class _WorkLogPageState extends State<WorkLogPage> {
     }
   }
 
-  TextButton _btnChooseContainer(
+  FilledButton _btnChooseContainer(
       BuildContext ctxt, Map<RescueContainer, bool> containers) {
     var visible = containers.entries.where((element) => element.value).toList();
-    return TextButton(
+    return FilledButton(
         onPressed: () {
           showDialog(context: ctxt, builder: (ctx) => ModalContainerChooser());
         },

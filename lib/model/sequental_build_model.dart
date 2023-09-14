@@ -59,7 +59,7 @@ class SequentialBuildModel {
                   ),
                 ),
                 actions: [
-                  TextButton(
+                  FilledButton(
                     child: const Text("Abbrechen"),
                     onPressed: () {
                       Navigator.pop(context);

@@ -107,7 +107,7 @@ class _EditContainerTypesState extends State<EditContainerTypes> {
   _leftPadded(Widget w) =>
       Padding(padding: const EdgeInsets.only(left: 20), child: w);
 
-  _btnAdd() => TextButton(
+  _btnAdd() => FilledButton(
       onPressed: () {
         Provider.of<StoreContainerTypes>(context, listen: false).upsert(
             ContainerType(

@@ -48,13 +48,13 @@ class ItemEditPageAmountsRow extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   if (fnReduce != null)
-                    TextButton(
+                    FilledButton(
                         onPressed: fnReduce, child: RescueText.slim("-")),
                   const SizedBox(width: 10),
                   number,
                   const SizedBox(width: 10),
                   if (fnIncrease != null)
-                    TextButton(
+                    FilledButton(
                         onPressed: fnIncrease, child: RescueText.slim("+")),
                 ],
               ),

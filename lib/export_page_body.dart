@@ -82,7 +82,7 @@ class _ExportPageBodyState extends State<ExportPageBody> {
         ],
       );
 
-  Widget _summaryButton() => TextButton(
+  Widget _summaryButton() => FilledButton(
       onPressed: () async {
         await _shareSummaryPdf();
       },

@@ -72,7 +72,7 @@ class _EditCurrentLocationsState extends State<EditCurrentLocations> {
         _btnAdd()
       ]);
 
-  _btnAdd() => TextButton(
+  _btnAdd() => FilledButton(
       onPressed: () {
         Provider.of<StoreCurrentLocations>(context, listen: false)
             .upsert(CurrentLocation(uuid.v4(), _addController.text));

@@ -41,10 +41,10 @@ class ContainerWithContentPage extends StatelessWidget {
         _btnChooseContainer(ctxt, containers)
       ]);
 
-  TextButton _btnChooseContainer(
+  FilledButton _btnChooseContainer(
       BuildContext ctxt, Map<RescueContainer, bool> containers) {
     var visible = containers.entries.where((element) => element.value).toList();
-    return TextButton(
+    return FilledButton(
         onPressed: () {
           showDialog(context: ctxt, builder: (ctx) => ModalContainerChooser());
         },

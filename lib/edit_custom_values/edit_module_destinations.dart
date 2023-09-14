@@ -73,7 +73,7 @@ class _EditModuleDestinationsState extends State<EditModuleDestinations> {
         _btnAdd()
       ]);
 
-  _btnAdd() => TextButton(
+  _btnAdd() => FilledButton(
       onPressed: () {
         Provider.of<StoreModuleDestination>(context, listen: false)
             .upsert(ModuleDestination(uuid.v4(), _addController.text));

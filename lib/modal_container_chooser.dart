@@ -16,10 +16,10 @@ class ModalContainerChooser extends StatelessWidget {
 
   Row _buttonRow(BuildContext context) =>
       Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        TextButton(
+        FilledButton(
             onPressed: () => _changeAll(context, true),
             child: RescueText.normal("show all")),
-        TextButton(
+        FilledButton(
             onPressed: () => _changeAll(context, false),
             child: RescueText.normal("show none"))
       ]);

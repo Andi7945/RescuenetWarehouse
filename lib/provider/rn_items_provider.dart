@@ -154,13 +154,13 @@ class RNItemsProvider extends ChangeNotifier {
                 ),
               ),
               actions: <Widget>[
-                TextButton(
+                FilledButton(
                   child: const Text('Cancel'),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),
-                TextButton(
+                FilledButton(
                   child: const Text('Add'),
                   onPressed: () async {
                     SingleRNItemModel rnItem = SingleRNItemModel(

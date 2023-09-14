@@ -25,7 +25,7 @@ class ItemOverviewPage extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.only(left: 16.0),
         child: Row(children: [
-          TextButton(
+          FilledButton(
               onPressed: () {
                 var id = itemService.newItem().id;
                 Navigator.pushNamed(context, routeItemEditPage, arguments: id);

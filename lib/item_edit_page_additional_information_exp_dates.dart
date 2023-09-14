@@ -43,7 +43,7 @@ class ItemEditPageAdditionalInformationExpDates extends StatelessWidget {
                   onTap: () => _removeDate(context, date),
                   child: Center(child: RescueText.headline('-'))),
               const SizedBox(width: 8),
-              TextButton(
+              FilledButton(
                   onPressed: () => _chooseDate(context, date),
                   child: RescueText.slim("choose"))
             ],

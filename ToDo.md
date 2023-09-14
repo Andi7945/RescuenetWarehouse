@@ -12,9 +12,6 @@
 
 
 * Input fields: do not always jump to the end
-
-* Make buttons look like buttons
-
 * Add numeric input field with validation
 
 * Analyze: Use TextInputLayout instead of DropdownButton?

@@ -60,7 +60,7 @@ class _ItemEditPageAmountsAddContainerState
 
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       RescueDropdownButton(otherContainerOptions, valueNotifier),
-      TextButton(
+      FilledButton(
           onPressed: () => _addNewContainer(valueNotifier.value),
           child: RescueText.slim("Add container"))
     ]);
