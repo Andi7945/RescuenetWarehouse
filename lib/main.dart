@@ -11,6 +11,7 @@ import 'package:rescuenet_warehouse/container_with_content_page.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/edit_container_types.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/edit_current_locations.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/edit_module_destinations.dart';
+import 'package:rescuenet_warehouse/edit_custom_values/proxy_container_type_usage.dart';
 import 'package:rescuenet_warehouse/stores.dart';
 import 'package:rescuenet_warehouse/export_page.dart';
 import 'package:rescuenet_warehouse/item_edit_page_argument_extractor.dart';
@@ -67,6 +68,7 @@ class MyApp extends StatelessWidget {
         provideVisibilityService(),
         proxyModuleDestinationUsage(),
         proxyCurrentLocationUsage(),
+        proxyContainerTypeUsage(),
         proxyContainerOptions(),
         provideAssignmentService(),
         provideWorkLogService()

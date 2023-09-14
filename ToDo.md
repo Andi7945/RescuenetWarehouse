@@ -1,5 +1,5 @@
+
 # next steps
-* Add firebase auth
 * Optimize sizes for Galaxy Tab A8 SMX200
 
 

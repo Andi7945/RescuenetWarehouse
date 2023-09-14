@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rescuenet_warehouse/edit_custom_values/proxy_container_type_usage.dart';
 import 'package:rescuenet_warehouse/main.dart';
 import 'package:rescuenet_warehouse/menu_option.dart';
 
@@ -40,34 +41,37 @@ class _EditContainerTypesState extends State<EditContainerTypes> {
   _body() {
     return Padding(
         padding: const EdgeInsets.only(left: 40, right: 40),
-        child: Consumer<StoreContainerTypes>(
-            builder: (ctx, store, _) => _table(store.all)));
+        child: Consumer<ContainerTypeUsage>(
+            builder: (ctx, usages, _) => _table(usages.typesWithUsages)));
   }
 
-  Widget _table(List<ContainerType> currentTypes) => RescueTable(
+  Widget _table(Map<ContainerType, Set<String>> currentTypes) => RescueTable(
       const ["Name", "Image", "Empty weight", "Measurements", ""],
       [..._rows(currentTypes), _addingRow()],
       const {});
 
-  List<TableRow> _rows(List<ContainerType> currentTypes) =>
-      currentTypes.map<TableRow>(_buildRow).toList();
+  List<TableRow> _rows(Map<ContainerType, Set<String>> currentTypes) =>
+      currentTypes.entries.map<TableRow>(_buildRow).toList();
 
-  TableRow _buildRow(ContainerType type) => TableRow(children: [
+  TableRow _buildRow(MapEntry<ContainerType, Set<String>> type) =>
+      TableRow(children: [
         Padding(
             padding: const EdgeInsets.only(left: 20),
-            child: _textField(type.name, (v) => _change(type: type, name: v))),
+            child: _textField(
+                type.key.name, (v) => _change(type: type.key, name: v))),
         RescuePickableImage(
-          type.imagePath,
-          (path) => _change(type: type, imagePath: path),
+          type.key.imagePath,
+          (path) => _change(type: type.key, imagePath: path),
           90,
           80.89,
         ),
-        _textField(type.emptyWeight.toStringAsFixed(1),
-            (v) => _change(type: type, emptyWeight: double.tryParse(v))),
-        _textField(
-            type.measurements, (v) => _change(type: type, measurements: v)),
-        EditCustomValueDeleteButton(null, () {
-          Provider.of<StoreContainerTypes>(context, listen: false).remove(type);
+        _textField(type.key.emptyWeight.toStringAsFixed(1),
+            (v) => _change(type: type.key, emptyWeight: double.tryParse(v))),
+        _textField(type.key.measurements,
+            (v) => _change(type: type.key, measurements: v)),
+        EditCustomValueDeleteButton(type.value, () {
+          Provider.of<StoreContainerTypes>(context, listen: false)
+              .remove(type.key);
         })
       ]);
 
