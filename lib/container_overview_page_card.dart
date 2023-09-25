@@ -25,12 +25,11 @@ class ContainerOverviewPageCard extends StatelessWidget {
         child: Container(
             width: 420,
             padding: const EdgeInsets.only(top: 4, left: 4, right: 4),
-            clipBehavior: Clip.antiAlias,
             decoration: const ShapeDecoration(
               color: Colors.white,
               shape: RoundedRectangleBorder(side: BorderSide(width: 1)),
             ),
-            child: Column(children: [
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
               _nameRow(),
               _typeAndLocationRow(),
               _priorityAndDestination()
@@ -43,7 +42,6 @@ class ContainerOverviewPageCard extends StatelessWidget {
 
   Widget _typeAndLocationRow() => Container(
       padding: const EdgeInsets.all(10),
-      clipBehavior: Clip.antiAlias,
       decoration: const BoxDecoration(color: Colors.white),
       child: Row(
           mainAxisSize: MainAxisSize.min,

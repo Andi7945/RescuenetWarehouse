@@ -17,7 +17,7 @@ class ItemOverviewPage extends StatelessWidget {
             builder: (ctxt, itemService, _) => Column(children: [
                   Menu(MenuOption.itemOverview),
                   _buttons(context, itemService),
-                  Expanded(child: _grid(itemService.items))
+                  Expanded(child: _items(itemService.items))
                 ])));
   }
 
@@ -34,15 +34,9 @@ class ItemOverviewPage extends StatelessWidget {
         ]));
   }
 
-  _grid(List<Item> items) => GridView.count(
-        primary: false,
-        padding: const EdgeInsets.all(20),
-        crossAxisSpacing: 10,
-        childAspectRatio: 2,
-        mainAxisSpacing: 10,
-        crossAxisCount: 3,
-        children: <Widget>[
-          ...items.map((i) => ItemCard(i, i.totalAmount)).toList()
-        ],
+  _items(List<Item> items) => Wrap(
+        spacing: 8.0,
+        runSpacing: 8.0,
+        children: items.map((i) => ItemCard(i, i.totalAmount)).toList(),
       );
 }

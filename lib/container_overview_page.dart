@@ -6,7 +6,6 @@ import 'package:rescuenet_warehouse/routes.dart';
 
 import 'container_service.dart';
 import 'menu.dart';
-import 'rescue_container.dart';
 import 'rescue_text.dart';
 
 class ContainerOverviewPage extends StatelessWidget {
@@ -33,19 +32,10 @@ class ContainerOverviewPage extends StatelessWidget {
             child: RescueText.normal("Add container"))
       ]));
 
-  _body(context, ContainerService service) {
-    return _grid(service.containers());
-  }
-
-  _grid(List<RescueContainer> containers) => GridView.count(
-        primary: false,
-        padding: const EdgeInsets.all(20),
-        crossAxisSpacing: 10,
-        childAspectRatio: 2,
-        mainAxisSpacing: 10,
-        crossAxisCount: 3,
-        children: <Widget>[
-          ...containers.map((c) => ContainerOverviewPageCard(c)).toList()
-        ],
-      );
+  _body(context, ContainerService service) => Wrap(spacing: 8.0, runSpacing: 8.0, children: [
+        ...service
+            .containers()
+            .map((c) => ContainerOverviewPageCard(c))
+            .toList()
+      ]);
 }
