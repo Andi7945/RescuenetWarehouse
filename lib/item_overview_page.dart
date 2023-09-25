@@ -35,9 +35,11 @@ class ItemOverviewPage extends StatelessWidget {
         ]));
   }
 
-  _items(List<Item> items) => Wrap(
+  _items(List<Item> items) => SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Wrap(
         spacing: 8.0,
         runSpacing: 8.0,
         children: items.map((i) => ItemCard(i, i.totalAmount)).toList(),
-      );
+      ));
 }

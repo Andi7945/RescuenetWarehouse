@@ -33,10 +33,12 @@ class ContainerOverviewPage extends StatelessWidget {
             label: RescueText.normal("Add"))
       ]));
 
-  _body(context, ContainerService service) => Wrap(spacing: 8.0, runSpacing: 8.0, children: [
+  _body(context, ContainerService service) => SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Wrap(spacing: 8.0, runSpacing: 8.0, children: [
         ...service
             .containers()
             .map((c) => ContainerOverviewPageCard(c))
             .toList()
-      ]);
+      ]));
 }
