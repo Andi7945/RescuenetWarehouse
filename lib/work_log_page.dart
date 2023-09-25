@@ -44,10 +44,14 @@ class _WorkLogPageState extends State<WorkLogPage> {
   _padded(Widget w) =>
       Padding(padding: const EdgeInsets.only(left: 40, right: 40), child: w);
 
-  Row _btnRow(BuildContext ctxt, Map<RescueContainer, bool> withVisibility) =>
-      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        _allChangesButton(),
-        _dateChooser(),
+  Widget _btnRow(
+          BuildContext ctxt, Map<RescueContainer, bool> withVisibility) =>
+      Wrap(alignment: WrapAlignment.spaceEvenly, children: [
+        Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: _allChangesButton()),
+        Padding(
+            padding: const EdgeInsets.only(right: 8), child: _dateChooser()),
         _btnChooseContainer(ctxt, withVisibility)
       ]);
 
