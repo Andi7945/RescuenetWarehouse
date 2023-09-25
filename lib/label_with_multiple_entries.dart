@@ -16,10 +16,9 @@ class LabelWithMultipleEntries extends StatelessWidget {
   }
 
   _body(BuildContext context) {
-    return SizedBox(
-      width: width,
+    return Container(
+      constraints: BoxConstraints(maxWidth: width),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.baseline,
         textBaseline: TextBaseline.alphabetic,
@@ -46,7 +45,6 @@ class LabelWithMultipleEntries extends StatelessWidget {
 
   Container _withBorder(Widget w) {
     return Container(
-      width: width - 152,
       height: 39,
       padding: const EdgeInsets.symmetric(horizontal: 8),
       decoration: const BoxDecoration(

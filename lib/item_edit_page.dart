@@ -16,7 +16,7 @@ class ItemEditPage extends StatefulWidget {
   @override
   State createState() => _ItemEditPageState();
 
-  ItemEditPage(this.item);
+  const ItemEditPage(this.item, {super.key});
 }
 
 class _ItemEditPageState extends State<ItemEditPage> {
@@ -32,13 +32,9 @@ class _ItemEditPageState extends State<ItemEditPage> {
         scrollDirection: Axis.vertical,
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            _lane(Column(
               children: [
                 ItemEditPageBaseInformation(widget.item),
                 const SizedBox(height: 10),
@@ -46,14 +42,17 @@ class _ItemEditPageState extends State<ItemEditPage> {
                 const SizedBox(height: 10),
                 ItemEditPageAdditionalInformation(widget.item)
               ],
-            ),
-            const SizedBox(width: 10),
-            Column(children: [
+            )),
+            _lane(Column(children: [
               ItemEditPageNotes(widget.item),
               ItemEditPageSigns(widget.item)
-            ]),
-            const SizedBox(width: 10),
+            ])),
           ],
         ));
   }
+
+  Widget _lane(Widget w) => Flexible(
+      flex: 1,
+      child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0), child: w));
 }

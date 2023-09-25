@@ -22,8 +22,7 @@
 * UI everything more compact
 * Figma Phone UI
 * Where are the pdfs saved on Android?
-* Finish print via printer 
-* Item Card -> Swipe left to right
+* Finish print via printer
 * All containers -> Titles are cut off
 * Testing: Create Container Type -> Change stuff -> should all be changed
 * Only RescueNet email addresses

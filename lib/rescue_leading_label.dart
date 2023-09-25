@@ -11,8 +11,8 @@ class RescueLeadingLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: width ?? 562,
+    return Container(
+      constraints: BoxConstraints(maxWidth: width ?? 562),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -20,16 +20,9 @@ class RescueLeadingLabel extends StatelessWidget {
         children: [
           RescueText.slim(label),
           const SizedBox(width: 10),
-          SizedBox(
-            width: _width(),
-            child: w,
-          ),
+          Expanded(child: w),
         ],
       ),
     );
-  }
-
-  double _width() {
-    return (width ?? 562) - 162;
   }
 }

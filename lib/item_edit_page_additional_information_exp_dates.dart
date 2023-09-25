@@ -29,13 +29,11 @@ class ItemEditPageAdditionalInformationExpDates extends StatelessWidget {
   }
 
   Widget _expDateRow(DateTime date, BuildContext context) => Row(
-        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           RescueText.slim(formatter.format(date)),
           Row(
-            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
