@@ -6,6 +6,8 @@ class Auth {
 
   User? get currentUser => _firebaseAuth.currentUser;
 
+  String? get currentUserName => _firebaseAuth.currentUser?.email?.split("@")[0];
+
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
   Future<void> sendPasswordResetEmail({

@@ -33,7 +33,7 @@ class AssignmentService extends ChangeNotifier {
       containerId,
       count,
       DateTime.now(),
-      Auth().currentUser?.displayName ?? "Unknown");
+      Auth().currentUserName ?? "Unknown");
 
   Assignment? _find(Item item, String containerId) =>
       store?.all.firstWhereOrNull(

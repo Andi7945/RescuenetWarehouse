@@ -18,6 +18,7 @@
 # Meeting notes
 * Password forgot mail link
 * Testing: Mail wrong -> Register -> login
+
 * UI everything more compact
 * Figma Phone UI
 * Where are the pdfs saved on Android?
@@ -26,9 +27,6 @@
 * All containers -> Titles are cut off
 * Testing: Create Container Type -> Change stuff -> should all be changed
 * Only RescueNet email addresses
-* Username: First part of the mail address (before @)
-  * In WorkLog
-  * On printed PDFs
 * Portrait / Landscape switching: Check UI
 * Missing edit icons
 
