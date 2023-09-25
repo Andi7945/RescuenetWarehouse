@@ -59,14 +59,14 @@ class _WorkLogPageState extends State<WorkLogPage> {
       onPressed: () => setState(() {
             onlyFromDate = null;
           }),
-      child: RescueText.normal("Show all changes"));
+      child: RescueText.normal("All changes"));
 
   Widget _dateChooser() => Row(mainAxisSize: MainAxisSize.min, children: [
         FilledButton(
             onPressed: () async {
               await _chooseNewDate();
             },
-            child: RescueText.normal("Show accumulated changes from date"))
+            child: RescueText.normal("Changes from date"))
       ]);
 
   Future<void> _chooseNewDate() async {

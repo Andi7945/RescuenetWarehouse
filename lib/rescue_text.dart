@@ -22,7 +22,6 @@ class RescueText extends StatelessWidget {
         text,
         textAlign: textAlign,
         style: TextStyle(
-          color: Colors.black,
           fontSize: fontSize,
           fontFamily: 'Inter',
           fontWeight: fontWeight,

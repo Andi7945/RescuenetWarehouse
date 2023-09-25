@@ -25,12 +25,13 @@ class ItemOverviewPage extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.only(left: 16.0),
         child: Row(children: [
-          FilledButton(
+          FilledButton.tonalIcon(
               onPressed: () {
                 var id = itemService.newItem().id;
                 Navigator.pushNamed(context, routeItemEditPage, arguments: id);
               },
-              child: RescueText.normal("Add item"))
+              icon: const Icon(Icons.add),
+              label: RescueText.normal("Add"))
         ]));
   }
 
