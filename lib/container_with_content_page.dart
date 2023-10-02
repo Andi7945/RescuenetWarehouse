@@ -24,7 +24,7 @@ class ContainerWithContentPage extends StatelessWidget {
             actions: [
               ActionChip(
                   label: Text(
-                      "${visible.length} / ${visibilityService.filteredContainer.length}"),
+                      "${visible.length} / ${visibilityService.containerWithVisible().length}"),
                   onPressed: () {
                     showDialog(
                         context: ctxt,
