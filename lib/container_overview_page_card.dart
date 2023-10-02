@@ -41,7 +41,7 @@ class ContainerOverviewPageCard extends StatelessWidget {
           container.printName, FontWeight.w700, TextAlign.center));
 
   Widget _typeAndLocationRow() => Container(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(4),
       decoration: const BoxDecoration(color: Colors.white),
       child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -55,12 +55,12 @@ class ContainerOverviewPageCard extends StatelessWidget {
   Widget _measurements() {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 4),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             RescueText.slim(container.type?.name),
-            const SizedBox(height: 10),
+            const SizedBox(height: 4),
             RescueText.slim(container.type?.measurements),
           ],
         ),
@@ -70,7 +70,7 @@ class ContainerOverviewPageCard extends StatelessWidget {
 
   Widget _priorityAndDestination() {
     return Container(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.only(left: 4, right: 4, bottom: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,

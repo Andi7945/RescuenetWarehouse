@@ -18,23 +18,16 @@ class SignRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 320,
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(children: [
-            ...signs.map((sign) => RescueImage(sign.imagePath, 40, 40)),
-            isColdChain ? RescueImage("coldchain.png", 40, 40) : Container()
-          ]),
-          Row(
-            children: [
-              IndicatorExpiringDate(nextExpiringDate),
-              IndicatorOperationalStatus(operationalStatus),
-            ],
-          )
+          IndicatorExpiringDate(nextExpiringDate),
+          IndicatorOperationalStatus(operationalStatus),
+          ...signs.map((sign) => RescueImage(sign.imagePath, 40, 40)),
+          isColdChain ? RescueImage("coldchain.png", 40, 40) : Container()
         ],
       ),
     );
