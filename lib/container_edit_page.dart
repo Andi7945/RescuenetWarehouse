@@ -129,7 +129,7 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
           controller,
           InkWell(
               onTap: () => Navigator.pushNamed(context, routeName),
-              child: RescueImage('/edit_icon.png')));
+              child: RescueImage('edit_icon.png')));
 
   _sendChangesToStore() {
     var changedContainer = RescueContainer.from(

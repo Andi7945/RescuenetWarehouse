@@ -27,7 +27,6 @@
 * Testing: Create Container Type -> Change stuff -> should all be changed
 * Only RescueNet email addresses
 * Portrait / Landscape switching: Check UI
-* Missing edit icons
 
 # To Discuss
 
