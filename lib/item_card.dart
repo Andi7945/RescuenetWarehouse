@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rescuenet_warehouse/rescue_image.dart';
+import 'package:rescuenet_warehouse/rescue_text.dart';
 import 'package:rescuenet_warehouse/routes.dart';
 
 import 'item.dart';
@@ -30,8 +31,7 @@ class ItemCard extends StatelessWidget {
 
   _card() => Container(
         width: 420,
-        height: 190,
-        clipBehavior: Clip.antiAlias,
+        padding: const EdgeInsets.only(top: 8, bottom: 8, left: 4, right: 4),
         decoration: const ShapeDecoration(
           color: Colors.white,
           shape: RoundedRectangleBorder(side: BorderSide(width: 0.50)),
@@ -47,22 +47,17 @@ class ItemCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  _item.name ?? "",
-                  style: _buildTextStyle(),
-                ),
+                RescueText.normal(_item.name ?? ""),
                 Container(
                   width: 300,
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  clipBehavior: Clip.antiAlias,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: const BoxDecoration(color: Colors.white),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       amountWithLabel(),
-                      const SizedBox(width: 10),
                       weightWithLabel(),
                     ],
                   ),
@@ -81,15 +76,9 @@ class ItemCard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Weight',
-          style: _textStyleSmall(),
-        ),
-        const SizedBox(height: 7),
-        Text(
-          '${_weight()} kg',
-          style: _buildTextStyle(),
-        ),
+        RescueText.slim('Weight'),
+        const SizedBox(height: 4),
+        RescueText.normal('${_weight()} kg'),
       ],
     );
   }
@@ -105,34 +94,10 @@ class ItemCard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Amount',
-          style: _textStyleSmall(),
-        ),
-        const SizedBox(height: 10),
-        Text(
-          '$_amount x',
-          style: _buildTextStyle(),
-        ),
+        RescueText.slim('Amount'),
+        const SizedBox(height: 4),
+        RescueText.normal('$_amount x'),
       ],
-    );
-  }
-
-  TextStyle _textStyleSmall() {
-    return const TextStyle(
-      color: Colors.black,
-      fontSize: 20,
-      fontFamily: 'Inter',
-      fontWeight: FontWeight.w500,
-    );
-  }
-
-  TextStyle _buildTextStyle() {
-    return const TextStyle(
-      color: Colors.black,
-      fontSize: 32,
-      fontFamily: 'Inter',
-      fontWeight: FontWeight.w500,
     );
   }
 }
