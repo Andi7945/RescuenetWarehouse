@@ -46,11 +46,6 @@ class ContainerVisibilityService extends ChangeNotifier {
     notifyListeners();
   }
 
-  changeAllContainerVisibility(bool shown) {
-    containerVisibility.updateAll((key, value) => value = shown);
-    notifyListeners();
-  }
-
   Map<RescueContainer, bool> containerWithVisible() => containerVisibility.map(
       (key, value) => MapEntry(mapperService.fromDao(containers[key]!), value));
 

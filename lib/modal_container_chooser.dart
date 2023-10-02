@@ -13,27 +13,12 @@ class ModalContainerChooser extends StatelessWidget {
         return SimpleDialog(
             title: RescueText.headline("Filter container"),
             children: [
-              _buttonRow(context),
               Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [RescueFilterDropdown(service.currentFilter)]),
               _table(service, context)
             ]);
       });
-
-  Row _buttonRow(BuildContext context) =>
-      Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        FilledButton(
-            onPressed: () => _changeAll(context, true),
-            child: RescueText.normal("show all")),
-        FilledButton(
-            onPressed: () => _changeAll(context, false),
-            child: RescueText.normal("show none"))
-      ]);
-
-  _changeAll(BuildContext context, bool shown) =>
-      Provider.of<ContainerVisibilityService>(context, listen: false)
-          .changeAllContainerVisibility(shown);
 
   Widget _table(ContainerVisibilityService service, BuildContext context) {
     return Table(columnWidths: const {
