@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/container_visibility_service.dart';
+import 'package:rescuenet_warehouse/rescue_filter_dropdown.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
 
 import 'rescue_container.dart';
@@ -10,8 +11,14 @@ class ModalContainerChooser extends StatelessWidget {
   Widget build(BuildContext context) =>
       Consumer<ContainerVisibilityService>(builder: (ctxt, service, _) {
         return SimpleDialog(
-            title: RescueText.normal("Choose container"),
-            children: [_buttonRow(context), _table(service, context)]);
+            title: RescueText.headline("Filter container"),
+            children: [
+              _buttonRow(context),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [RescueFilterDropdown(service.currentFilter)]),
+              _table(service, context)
+            ]);
       });
 
   Row _buttonRow(BuildContext context) =>
@@ -30,10 +37,10 @@ class ModalContainerChooser extends StatelessWidget {
 
   Widget _table(ContainerVisibilityService service, BuildContext context) {
     return Table(columnWidths: const {
-      0: FixedColumnWidth(100),
-      1: FixedColumnWidth(700),
-      2: FixedColumnWidth(100),
-      3: FixedColumnWidth(100)
+      0: IntrinsicColumnWidth(),
+      1: IntrinsicColumnWidth(),
+      2: IntrinsicColumnWidth(),
+      3: IntrinsicColumnWidth()
     }, children: [
       _header(),
       ..._options(service, context)
