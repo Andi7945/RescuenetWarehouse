@@ -29,8 +29,8 @@ class LabelWithMultipleEntries extends StatelessWidget {
                 children: [
                   RescueText.slim(label),
                   Expanded(
-                      child: FilledButton(
-                          onPressed: onAdd, child: RescueText.headline('+'))),
+                      child: IconButton(
+                          onPressed: onAdd, icon: const Icon(Icons.add))),
                 ],
               )),
           Column(

@@ -37,13 +37,12 @@ class ItemEditPageAdditionalInformationExpDates extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              InkWell(
-                  onTap: () => _removeDate(context, date),
-                  child: Center(child: RescueText.headline('-'))),
-              const SizedBox(width: 8),
-              FilledButton(
+              IconButton(
+                  onPressed: () => _removeDate(context, date),
+                  icon: const Icon(Icons.remove)),
+              IconButton(
                   onPressed: () => _chooseDate(context, date),
-                  child: RescueText.slim("choose"))
+                  icon: const Icon(Icons.edit))
             ],
           ),
         ],
