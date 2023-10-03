@@ -4,8 +4,8 @@ import 'package:rescuenet_warehouse/container_service.dart';
 import 'package:rescuenet_warehouse/container_visibility_service.dart';
 import 'package:rescuenet_warehouse/container_with_content_column.dart';
 import 'package:rescuenet_warehouse/container_with_content_unassigned.dart';
-import 'package:rescuenet_warehouse/modal_container_chooser.dart';
 
+import 'container_chooser_action.dart';
 import 'item.dart';
 import 'rescue_container.dart';
 import 'widget/rescue_navigation_drawer.dart';
@@ -15,29 +15,10 @@ class ContainerWithContentPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer2<ContainerVisibilityService, ContainerService>(
         builder: (ctxt, visibilityService, service, _) {
-      var visible = visibilityService.filteredContainer.entries
-          .where((element) => element.value)
-          .toList();
       return Scaffold(
           appBar: AppBar(
             title: const Text("Container with content"),
-            actions: [
-              ActionChip(
-                  label: Text(
-                      "${visible.length} / ${visibilityService.containerWithVisible().length}"),
-                  onPressed: () {
-                    showDialog(
-                        context: ctxt,
-                        builder: (ctx) => ModalContainerChooser());
-                  }),
-              IconButton(
-                  onPressed: () {
-                    showDialog(
-                        context: ctxt,
-                        builder: (ctx) => ModalContainerChooser());
-                  },
-                  icon: const Icon(Icons.filter_alt))
-            ],
+            actions: [provideContainerFilterAction(visibilityService, ctxt)],
           ),
           drawer: RescueNavigationDrawer(),
           body: _body(

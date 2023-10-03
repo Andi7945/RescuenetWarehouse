@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rescuenet_warehouse/container_chooser_action.dart';
 import 'package:rescuenet_warehouse/container_visibility_service.dart';
-import 'package:rescuenet_warehouse/rescue_container.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
 import 'package:rescuenet_warehouse/work_log_page_body_from_date.dart';
 import 'package:rescuenet_warehouse/work_log_service.dart';
-
-import 'modal_container_chooser.dart';
 
 import 'package:intl/intl.dart';
 
@@ -24,20 +22,15 @@ class _WorkLogPageState extends State<WorkLogPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(title: const Text("Work log"), actions: [
-          _allChangesButton(),
-          _dateChooser()
-        ]),
-        drawer: RescueNavigationDrawer(),
-        body: Consumer2<ContainerVisibilityService, WorkLogService>(
-            builder: (ctxt, visibilityService, workLogService, _) {
-          var withVisibility = visibilityService.containerWithVisible();
-          return Column(children: [
-            _padded(_btnRow(ctxt, withVisibility)),
-            Expanded(child: _padded(_body(workLogService)))
-          ]);
-        }));
+    return Consumer2<ContainerVisibilityService, WorkLogService>(
+        builder: (ctxt, visibilityService, workLogService, _) => Scaffold(
+            appBar: AppBar(title: const Text("Work log"), actions: [
+              _allChangesButton(),
+              _dateChooser(),
+              provideContainerFilterAction(visibilityService, ctxt)
+            ]),
+            drawer: RescueNavigationDrawer(),
+            body: _body(workLogService)));
   }
 
   Widget _body(WorkLogService workLogService) => onlyFromDate == null
@@ -45,26 +38,17 @@ class _WorkLogPageState extends State<WorkLogPage> {
       : WorkLogPageBodyFromDate(
           onlyFromDate!, workLogService.fromDate(onlyFromDate!));
 
-  _padded(Widget w) =>
-      Padding(padding: const EdgeInsets.only(left: 40, right: 40), child: w);
-
-  Widget _btnRow(
-          BuildContext ctxt, Map<RescueContainer, bool> withVisibility) =>
-      Wrap(alignment: WrapAlignment.spaceEvenly, children: [
-        _btnChooseContainer(ctxt, withVisibility)
-      ]);
-
   Widget _allChangesButton() => FilledButton(
       onPressed: () => setState(() {
             onlyFromDate = null;
           }),
-      child: RescueText.slim("All"));
+      child: RescueText.slim("all"));
 
   Widget _dateChooser() => FilledButton(
       onPressed: () async {
         await _chooseNewDate();
       },
-      child: RescueText.slim("from date"));
+      child: RescueText.slim("since"));
 
   Future<void> _chooseNewDate() async {
     var newDate = await _dialogBuilder(
@@ -74,17 +58,6 @@ class _WorkLogPageState extends State<WorkLogPage> {
         onlyFromDate = newDate;
       });
     }
-  }
-
-  FilledButton _btnChooseContainer(
-      BuildContext ctxt, Map<RescueContainer, bool> containers) {
-    var visible = containers.entries.where((element) => element.value).toList();
-    return FilledButton(
-        onPressed: () {
-          showDialog(context: ctxt, builder: (ctx) => ModalContainerChooser());
-        },
-        child: RescueText.normal(
-            "Choose container (${visible.length} / ${containers.length})"));
   }
 
   Future<DateTime?> _dialogBuilder(BuildContext context, [DateTime? initial]) {
