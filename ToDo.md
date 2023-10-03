@@ -1,3 +1,5 @@
+#
+
 
 # next steps
 * Optimize sizes for Galaxy Tab A8 SMX200
@@ -18,15 +20,18 @@
 # Meeting notes
 * Password forgot mail link
 * Testing: Mail wrong -> Register -> login
+* Only RescueNet email addresses
+
 
 * UI everything more compact
 * Figma Phone UI
-* Where are the pdfs saved on Android?
+* Portrait / Landscape switching: Check UI 
+
+
 * Finish print via printer
-* All containers -> Titles are cut off
+
+ 
 * Testing: Create Container Type -> Change stuff -> should all be changed
-* Only RescueNet email addresses
-* Portrait / Landscape switching: Check UI
 
 # To Discuss
 
