@@ -30,16 +30,14 @@ class _ItemEditPageState extends State<ItemEditPage> {
   _body(Map<RescueContainer, int> assignments) {
     return SingleChildScrollView(
         scrollDirection: Axis.vertical,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Wrap(
           children: [
             _lane(Column(
               children: [
                 ItemEditPageBaseInformation(widget.item),
-                const SizedBox(height: 10),
+                const SizedBox(height: 8),
                 ItemEditPageAmounts(widget.item, assignments),
-                const SizedBox(height: 10),
+                const SizedBox(height: 8),
                 ItemEditPageAdditionalInformation(widget.item)
               ],
             )),

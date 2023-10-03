@@ -6,12 +6,11 @@ import 'package:rescuenet_warehouse/rescue_text.dart';
 import 'package:rescuenet_warehouse/work_log_page_body_from_date.dart';
 import 'package:rescuenet_warehouse/work_log_service.dart';
 
-import 'menu.dart';
-import 'menu_option.dart';
 import 'modal_container_chooser.dart';
 
 import 'package:intl/intl.dart';
 
+import 'widget/rescue_navigation_drawer.dart';
 import 'work_log_page_body_all.dart';
 
 class WorkLogPage extends StatefulWidget {
@@ -25,15 +24,20 @@ class _WorkLogPageState extends State<WorkLogPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Consumer2<ContainerVisibilityService, WorkLogService>(
-        builder: (ctxt, visibilityService, workLogService, _) {
-      var withVisibility = visibilityService.containerWithVisible();
-      return Column(children: [
-        Menu(MenuOption.workLog),
-        _padded(_btnRow(ctxt, withVisibility)),
-        Expanded(child: _padded(_body(workLogService)))
-      ]);
-    }));
+    return Scaffold(
+        appBar: AppBar(title: const Text("Work log"), actions: [
+          _allChangesButton(),
+          _dateChooser()
+        ]),
+        drawer: RescueNavigationDrawer(),
+        body: Consumer2<ContainerVisibilityService, WorkLogService>(
+            builder: (ctxt, visibilityService, workLogService, _) {
+          var withVisibility = visibilityService.containerWithVisible();
+          return Column(children: [
+            _padded(_btnRow(ctxt, withVisibility)),
+            Expanded(child: _padded(_body(workLogService)))
+          ]);
+        }));
   }
 
   Widget _body(WorkLogService workLogService) => onlyFromDate == null
@@ -47,11 +51,6 @@ class _WorkLogPageState extends State<WorkLogPage> {
   Widget _btnRow(
           BuildContext ctxt, Map<RescueContainer, bool> withVisibility) =>
       Wrap(alignment: WrapAlignment.spaceEvenly, children: [
-        Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: _allChangesButton()),
-        Padding(
-            padding: const EdgeInsets.only(right: 8), child: _dateChooser()),
         _btnChooseContainer(ctxt, withVisibility)
       ]);
 
@@ -59,15 +58,13 @@ class _WorkLogPageState extends State<WorkLogPage> {
       onPressed: () => setState(() {
             onlyFromDate = null;
           }),
-      child: RescueText.normal("All changes"));
+      child: RescueText.slim("All"));
 
-  Widget _dateChooser() => Row(mainAxisSize: MainAxisSize.min, children: [
-        FilledButton(
-            onPressed: () async {
-              await _chooseNewDate();
-            },
-            child: RescueText.normal("Changes from date"))
-      ]);
+  Widget _dateChooser() => FilledButton(
+      onPressed: () async {
+        await _chooseNewDate();
+      },
+      child: RescueText.slim("from date"));
 
   Future<void> _chooseNewDate() async {
     var newDate = await _dialogBuilder(

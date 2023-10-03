@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/proxy_container_type_usage.dart';
 import 'package:rescuenet_warehouse/main.dart';
-import 'package:rescuenet_warehouse/menu_option.dart';
 
 import '../container_type.dart';
-import '../menu.dart';
 import '../rescue_pickable_image.dart';
 import '../rescue_table.dart';
 import '../rescue_text.dart';
+import '../widget/rescue_navigation_drawer.dart';
 import 'edit_custom_value_delete_button.dart';
 import 'edit_custom_value_text_field.dart';
 import '../stores.dart';
@@ -29,13 +28,9 @@ class _EditContainerTypesState extends State<EditContainerTypes> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Menu(MenuOption.containerOverview),
-      Padding(
-          padding: const EdgeInsets.only(left: 40, bottom: 24),
-          child: RescueText.headline("Edit container types")),
-      Expanded(child: _body())
-    ]));
+        appBar: AppBar(title: const Text("Container types")),
+        drawer: RescueNavigationDrawer(),
+        body: _body());
   }
 
   _body() {

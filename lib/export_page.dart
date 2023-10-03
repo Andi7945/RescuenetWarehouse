@@ -3,8 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/container_service.dart';
 import 'package:rescuenet_warehouse/export_page_body.dart';
 
-import 'menu.dart';
-import 'menu_option.dart';
+import 'widget/rescue_navigation_drawer.dart';
 
 class ExportPage extends StatefulWidget {
   @override
@@ -15,13 +14,9 @@ class _ExportPageState extends State<ExportPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(children: [
-      Menu(MenuOption.export),
-      Expanded(
-          child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40.0),
-              child: _body()))
-    ]));
+        appBar: AppBar(title: const Text("Export")),
+        drawer: RescueNavigationDrawer(),
+        body: _body());
   }
 
   _body() => Consumer<ContainerService>(
