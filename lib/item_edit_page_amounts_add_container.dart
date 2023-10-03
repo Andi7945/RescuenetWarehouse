@@ -60,9 +60,9 @@ class _ItemEditPageAmountsAddContainerState
 
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       RescueDropdownButton(otherContainerOptions, valueNotifier),
-      FilledButton(
+      IconButton(
           onPressed: () => _addNewContainer(valueNotifier.value),
-          child: RescueText.slim("Add container"))
+          icon: const Icon(Icons.add))
     ]);
   }
 

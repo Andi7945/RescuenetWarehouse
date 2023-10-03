@@ -14,52 +14,46 @@ class ItemEditPageAmountsRow extends StatelessWidget {
   Widget build(BuildContext context) {
     var fnChangeAmount = changeAmount;
     if (fnChangeAmount != null) {
-      return _container(
-          label,
-          SizedBox(
-              width: 60,
-              child:
-                  RescueInputAmount(onChange: fnChangeAmount, amount: amount)),
-          () => fnChangeAmount(amount + 1),
-          () => fnChangeAmount(amount - 1));
+      return _row(label, _changeableAmount(fnChangeAmount));
     }
-    return _container(label, RescueText.normal("$amount"));
+    return _row(label, RescueText.normal("$amount"));
   }
 
-  Widget _container(String label, Widget number,
-      [VoidCallback? fnIncrease, VoidCallback? fnReduce]) {
-    return Padding(
-        padding: const EdgeInsets.only(top: 4, bottom: 4),
-        child: Row(
+  Widget _row(String label, Widget rightSide) => Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             RescueText.slim(label),
-            const SizedBox(width: 10),
             Container(
-              height: 40,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: const ShapeDecoration(
-                shape: RoundedRectangleBorder(side: BorderSide(width: 0.50)),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (fnReduce != null)
-                    FilledButton(
-                        onPressed: fnReduce, child: RescueText.slim("-")),
-                  const SizedBox(width: 10),
-                  number,
-                  const SizedBox(width: 10),
-                  if (fnIncrease != null)
-                    FilledButton(
-                        onPressed: fnIncrease, child: RescueText.slim("+")),
-                ],
-              ),
-            ),
-          ],
-        ));
-  }
+                height: 40,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: const ShapeDecoration(
+                  shape: RoundedRectangleBorder(side: BorderSide(width: 0.50)),
+                ),
+                child: rightSide)
+          ]));
+
+  Widget _changeableAmount(Function(int) fnChangeAmount) => Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          IconButton(
+              onPressed: () => fnChangeAmount(amount - 1),
+              icon: const Icon(Icons.remove)),
+          const SizedBox(width: 4),
+          SizedBox(
+              width: 60,
+              child:
+                  RescueInputAmount(onChange: fnChangeAmount, amount: amount)),
+          const SizedBox(width: 4),
+          IconButton(
+              onPressed: () => fnChangeAmount(amount + 1),
+              icon: const Icon(Icons.add))
+        ],
+      );
 }

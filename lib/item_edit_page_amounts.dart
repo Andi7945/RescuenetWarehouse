@@ -34,9 +34,7 @@ class _ItemEditPageAmountsState extends State<ItemEditPageAmounts> {
         widget.containerWithAssignments.values
             .fold(0, (previousValue, element) => previousValue + element);
     return Container(
-      width: 562,
-      padding: const EdgeInsets.all(10),
-      clipBehavior: Clip.antiAlias,
+      padding: const EdgeInsets.all(8),
       decoration: const ShapeDecoration(
         color: Colors.white,
         shape: RoundedRectangleBorder(side: BorderSide(width: 0.50)),
