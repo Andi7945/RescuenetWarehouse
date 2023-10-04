@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:rescuenet_warehouse/rescue_dropdown_button.dart';
-import 'package:rescuenet_warehouse/rescue_image.dart';
-import 'package:rescuenet_warehouse/rescue_text.dart';
 import 'package:rescuenet_warehouse/routes.dart';
 
 import 'container_options.dart';
@@ -67,69 +64,75 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
     return Padding(
         padding: const EdgeInsets.only(left: 40, right: 40),
         child: ListView(children: [
-          _tile(
-              "Name",
-              TextField(
-                  controller: _nameController,
-                  onChanged: (text) => _sendChangesToStore())),
-          _tile("Number", RescueText.slim("${widget._container.value.number}")),
-          _tile(
-              "Description",
-              TextField(
-                  controller: _descriptionController,
-                  onChanged: (text) => _sendChangesToStore())),
+          _textField("name", _nameController),
+          _textField("description", _descriptionController),
           _dropdownWithEdit(
-              "Type of container",
-              (co) => co.types.map((e) => MapEntry(e.id, e.name)),
+              "container type",
+              routeEditContainerTypes,
               _containerTypeController,
-              routeEditContainerTypes),
-          _dropdown(
-              "Sequential build",
-              (co) => co.sequentialBuilds
-                  .map((e) => MapEntry(e.name, e.displayName)),
-              _sequentialBuildController),
+              widget._containerOptions.types
+                  .map((e) => DropdownMenuEntry(value: e.id, label: e.name))),
+          _sequentialBuildDropdown(),
           _dropdownWithEdit(
-              "Module destination",
-              (co) => co.moduleDestinations.map((e) => MapEntry(e.id, e.name)),
+              "module destination",
+              routeEditModuleDestinations,
               _moduleDestinationController,
-              routeEditModuleDestinations),
+              widget._containerOptions.moduleDestinations
+                  .map((e) => DropdownMenuEntry(value: e.id, label: e.name))),
           _dropdownWithEdit(
-              "Current location",
-              (co) => co.currentLocations.map((e) => MapEntry(e.id, e.name)),
+              "current location",
+              routeEditCurrentLocations,
               _currentLocationController,
-              routeEditCurrentLocations),
+              widget._containerOptions.currentLocations
+                  .map((e) => DropdownMenuEntry(value: e.id, label: e.name)))
         ]));
   }
 
-  _tile(String label, Widget child, [Widget? editBtn]) => ListTile(
-      titleAlignment: ListTileTitleAlignment.center,
-      leading: SizedBox(width: 160, child: Text(label)),
-      title: child,
-      trailing: editBtn);
+  _textField(String label, TextEditingController controller) => ListTile(
+      title: TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            labelText: label,
+          ),
+          onChanged: (text) => _sendChangesToStore()));
 
-  _dropdown(
-          String label,
-          Iterable<MapEntry<String, String>> Function(ContainerOptions) fn,
-          ValueNotifier<String?> controller,
-          [Widget? editBtn]) =>
-      _tile(
-          label,
-          RescueDropdownButton(
-              Map.fromEntries(fn(widget._containerOptions)), controller),
-          editBtn);
+  _sequentialBuildDropdown() => ListTile(
+      title: DropdownMenu(
+          initialSelection: _sequentialBuildController.value,
+          onSelected: (String? value) {
+            var v = value;
+            if (v != null) {
+              _sequentialBuildController.value = v;
+            }
+          },
+          label: const Text(
+            "sequential build",
+            overflow: TextOverflow.ellipsis,
+          ),
+          dropdownMenuEntries: widget._containerOptions.sequentialBuilds
+              .map(
+                  (e) => DropdownMenuEntry(value: e.name, label: e.displayName))
+              .toList()));
 
   _dropdownWithEdit(
-          String label,
-          Iterable<MapEntry<String, String>> Function(ContainerOptions) fn,
-          ValueNotifier<String?> controller,
-          String routeName) =>
-      _dropdown(
-          label,
-          fn,
-          controller,
-          InkWell(
-              onTap: () => Navigator.pushNamed(context, routeName),
-              child: RescueImage('edit_icon.png')));
+          String labelText,
+          String routeName,
+          ValueNotifier<String?> notifier,
+          Iterable<DropdownMenuEntry<String?>> entries) =>
+      ListTile(
+          title: DropdownMenu<String?>(
+              initialSelection: notifier.value,
+              onSelected: (String? value) {
+                notifier.value = value;
+              },
+              label: Text(
+                labelText,
+                overflow: TextOverflow.ellipsis,
+              ),
+              dropdownMenuEntries: entries.toList()),
+          trailing: IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: () => Navigator.pushNamed(context, routeName)));
 
   _sendChangesToStore() {
     var changedContainer = RescueContainer.from(
