@@ -15,10 +15,10 @@ class _EditCustomValueTextFieldState extends State<EditCustomValueTextField> {
 
   @override
   Widget build(BuildContext context) => TextField(
-        style: const TextStyle(fontSize: 24),
+        style: const TextStyle(fontSize: 16),
         decoration: const InputDecoration(
             hintText: "Insert new value here",
-            hintStyle: TextStyle(fontSize: 24)),
+            hintStyle: TextStyle(fontSize: 16)),
         controller: widget.controller,
         onTap: () {
           _focussed = true;

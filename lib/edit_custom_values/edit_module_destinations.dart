@@ -9,7 +9,6 @@ import 'package:rescuenet_warehouse/rescue_table.dart';
 import '../stores.dart';
 import '../widget/rescue_navigation_drawer.dart';
 import 'proxy_module_destination_usage.dart';
-import '../rescue_text.dart';
 
 class EditModuleDestinations extends StatefulWidget {
   @override
@@ -53,7 +52,7 @@ class _EditModuleDestinationsState extends State<EditModuleDestinations> {
 
   _textField(ModuleDestination oldDest) {
     return Padding(
-        padding: const EdgeInsets.only(left: 20),
+        padding: const EdgeInsets.only(left: 16),
         child: EditCustomValueTextField(
             TextEditingController(text: oldDest.name),
             (newDest) =>
@@ -63,16 +62,16 @@ class _EditModuleDestinationsState extends State<EditModuleDestinations> {
 
   TableRow _addingRow() => TableRow(children: [
         Padding(
-            padding: const EdgeInsets.only(left: 20),
+            padding: const EdgeInsets.only(left: 16),
             child: EditCustomValueTextField(_addController)),
         _btnAdd()
       ]);
 
-  _btnAdd() => FilledButton(
+  _btnAdd() => IconButton(
       onPressed: () {
         Provider.of<StoreModuleDestination>(context, listen: false)
             .upsert(ModuleDestination(uuid.v4(), _addController.text));
         _addController.clear();
       },
-      child: const RescueText(24, '+', fontWeight: FontWeight.w700));
+      icon: const Icon(Icons.add));
 }

@@ -5,7 +5,6 @@ import 'package:rescuenet_warehouse/edit_custom_values/proxy_current_location_us
 import 'package:rescuenet_warehouse/main.dart';
 
 import '../rescue_table.dart';
-import '../rescue_text.dart';
 import '../stores.dart';
 import '../widget/rescue_navigation_drawer.dart';
 import 'edit_custom_value_delete_button.dart';
@@ -52,7 +51,7 @@ class _EditCurrentLocationsState extends State<EditCurrentLocations> {
 
   _textField(CurrentLocation old) {
     return Padding(
-        padding: const EdgeInsets.only(left: 20),
+        padding: const EdgeInsets.only(left: 16),
         child: EditCustomValueTextField(
             TextEditingController(text: old.name),
             (newValue) =>
@@ -62,16 +61,16 @@ class _EditCurrentLocationsState extends State<EditCurrentLocations> {
 
   TableRow _addingRow() => TableRow(children: [
         Padding(
-            padding: const EdgeInsets.only(left: 20),
+            padding: const EdgeInsets.only(left: 16),
             child: EditCustomValueTextField(_addController)),
         _btnAdd()
       ]);
 
-  _btnAdd() => FilledButton(
+  _btnAdd() => IconButton(
       onPressed: () {
         Provider.of<StoreCurrentLocations>(context, listen: false)
             .upsert(CurrentLocation(uuid.v4(), _addController.text));
         _addController.clear();
       },
-      child: const RescueText(24, '+', fontWeight: FontWeight.w700));
+      icon: const Icon(Icons.add));
 }

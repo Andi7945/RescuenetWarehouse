@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../rescue_text.dart';
-
 class EditCustomValueDeleteButton extends StatelessWidget {
   final Set<String> usedIn;
   final VoidCallback? onDelete;
@@ -13,17 +11,14 @@ class EditCustomValueDeleteButton extends StatelessWidget {
     return (usedIn.isEmpty) ? _btnDeleteEnabled(context) : _btnDeleteDisabled();
   }
 
-  _btnDeleteEnabled(BuildContext context) => FilledButton(
-      onPressed: onDelete,
-      child: const RescueText(24, '-', fontWeight: FontWeight.w700));
+  _btnDeleteEnabled(BuildContext context) =>
+      IconButton(icon: const Icon(Icons.remove), onPressed: onDelete);
 
   _btnDeleteDisabled() => Tooltip(
       showDuration: const Duration(milliseconds: 3000),
       message: "Can not delete. Value is still used in: ${_usedIn()}",
       triggerMode: TooltipTriggerMode.tap,
-      child: const FilledButton(
-          onPressed: null,
-          child: RescueText(24, '-', fontWeight: FontWeight.w700)));
+      child: const IconButton(onPressed: null, icon: Icon(Icons.remove)));
 
   String _usedIn() {
     var used = usedIn.toList();

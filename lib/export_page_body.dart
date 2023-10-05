@@ -77,8 +77,8 @@ class _ExportPageBodyState extends State<ExportPageBody> {
   _topRow() => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          RescueText.headline(
-              "All containers marked as ready ($countReadyContainers / $countAllContainers)"),
+          RescueText.normal(
+              "Containers marked as ready ($countReadyContainers / $countAllContainers)"),
           _summaryButton()
         ],
       );

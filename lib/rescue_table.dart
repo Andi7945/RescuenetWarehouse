@@ -19,13 +19,15 @@ class RescueTable extends StatelessWidget {
 
     var expandedColumnWidths = _columnWidthsWithPaddingBoxes();
 
-    return Table(
-      border:
-          const TableBorder(top: side, bottom: side, horizontalInside: side),
-      columnWidths: expandedColumnWidths,
-      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-      children: [headline, ...rows],
-    );
+    return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Table(
+          border: const TableBorder(
+              top: side, bottom: side, horizontalInside: side),
+          columnWidths: expandedColumnWidths,
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          children: [headline, ...rows],
+        ));
   }
 
   TableRow _buildHeadline() {
@@ -34,8 +36,8 @@ class RescueTable extends StatelessWidget {
   }
 
   Widget headlineCell(e) => Padding(
-      padding: const EdgeInsets.only(top: 8, bottom: 8),
-      child: RescueText.headline(e));
+      padding: const EdgeInsets.only(top: 4, bottom: 4),
+      child: RescueText.normal(e));
 
   TableRow _addPaddingBoxes(TableRow row) {
     var children =
