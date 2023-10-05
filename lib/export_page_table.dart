@@ -41,7 +41,7 @@ class ExportPageTable extends StatelessWidget {
   List<TableRow> _rows() => options.map(_single).toList();
 
   TableRow _single(ContainerPrintingOptions option) => TableRow(children: [
-        RescueText.normal(option.container.printName),
+        RescueText.slim(option.container.printName),
         _checkbox(option.container.toDeploy, null),
         _checkbox(option.printLabel, (v) {
           fnAdjustOption(ContainerPrintingOptions.from(

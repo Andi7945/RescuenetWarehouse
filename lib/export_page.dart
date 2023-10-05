@@ -3,6 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/container_service.dart';
 import 'package:rescuenet_warehouse/export_page_body.dart';
 
+import 'export_service.dart';
+import 'item.dart';
+import 'rescue_container.dart';
+import 'rescue_text.dart';
 import 'widget/rescue_navigation_drawer.dart';
 
 class ExportPage extends StatefulWidget {
@@ -13,13 +17,29 @@ class ExportPage extends StatefulWidget {
 class _ExportPageState extends State<ExportPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(title: const Text("Export")),
-        drawer: RescueNavigationDrawer(),
-        body: _body());
+    return Consumer<ContainerService>(builder: (ctxt, service, _) {
+      var allContainersWithItems = service.containerWithItems();
+
+      return Scaffold(
+          appBar: AppBar(
+              title: const Text("Ready containers"),
+              actions: [_summaryButton(allContainersWithItems)]),
+          drawer: RescueNavigationDrawer(),
+          body: ExportPageBody(service.containerWithItems()));
+    });
   }
 
-  _body() => Consumer<ContainerService>(
-      builder: (ctxt, service, _) =>
-          ExportPageBody(service.containerWithItems()));
+  Widget _summaryButton(
+          Map<RescueContainer, Map<Item, int>> allContainersWithItems) =>
+      ActionChip(
+          onPressed: () async {
+            await _shareSummaryPdf(allContainersWithItems);
+          },
+          label: RescueText.slim("Print final summary"));
+
+  _shareSummaryPdf(Map<RescueContainer, Map<Item, int>> withItems) {
+    var forContainers = Map.fromEntries(
+        withItems.entries.where((ele) => ele.key.isReady && ele.key.toDeploy));
+    shareSummaryPdf(forContainers, context);
+  }
 }
