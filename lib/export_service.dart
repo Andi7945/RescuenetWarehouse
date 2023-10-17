@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:rescuenet_warehouse/collection_extensions.dart';
 import 'package:rescuenet_warehouse/firebase_document.dart';
@@ -67,24 +68,25 @@ String _formattedPrintingDate() {
 
 _saveFileLocally(
     Future<pw.Document> doc, String fileName, BuildContext context) async {
+  Uint8List pdf = await (await doc).save();
   bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
   if (isIOS) {
-    _saveFileLocallyIos(doc, fileName);
+    await _saveFileLocallyIos(pdf, fileName);
   } else {
-    _saveFileLocallyAndroid(doc, fileName);
+    await _saveFileLocallyAndroid(pdf, fileName);
   }
+  await Printing.layoutPdf(onLayout: (PdfPageFormat format) async => pdf);
 }
 
-_saveFileLocallyIos(Future<pw.Document> doc, String fileName) async {
-  var pdf = await doc;
+_saveFileLocallyIos(Uint8List pdf, String fileName) async {
   final directory = await getApplicationDocumentsDirectory();
 
   final file = File("${directory.path}/$fileName");
   print("Save to $fileName");
-  await file.writeAsBytes(await pdf.save());
+  await file.writeAsBytes(pdf);
 }
 
-_saveFileLocallyAndroid(Future<pw.Document> doc, String fileName) async {
+_saveFileLocallyAndroid(Uint8List pdf, String fileName) async {
   var uri = await _androidUri();
 
   if (uri != null) {
@@ -93,7 +95,7 @@ _saveFileLocallyAndroid(Future<pw.Document> doc, String fileName) async {
       uri,
       mimeType: 'application/pdf',
       displayName: fileName,
-      bytes: Uint8List.fromList(await (await doc).save()),
+      bytes: pdf,
     );
   } else {
     print("No uri selected. Abort printing");
