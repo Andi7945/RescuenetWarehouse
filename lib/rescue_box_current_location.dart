@@ -13,13 +13,13 @@ class RescueBoxCurrentLocation extends StatelessWidget {
 
   Container _body() {
     return Container(
-      clipBehavior: Clip.antiAlias,
       decoration: const BoxDecoration(color: Colors.white),
+      constraints: const BoxConstraints(maxWidth: 150),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           RescueText.slim('Current location'),
-          const SizedBox(height: 10),
+          const SizedBox(height: 4),
           RescueText.normal(
               _container.currentLocation?.name ?? "", FontWeight.w700),
         ],

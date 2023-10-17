@@ -15,11 +15,12 @@ class RescueBoxModuleDestination extends StatelessWidget {
     return Container(
       clipBehavior: Clip.antiAlias,
       decoration: const BoxDecoration(color: Colors.white),
+      constraints: const BoxConstraints(maxWidth: 250),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           RescueText.slim('Module Destination'),
-          const SizedBox(height: 10),
+          const SizedBox(height: 4),
           RescueText.normal(
               _container.moduleDestination?.name ?? "", FontWeight.w700),
         ],
