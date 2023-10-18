@@ -73,7 +73,7 @@ _saveFileLocally(
   if (isIOS) {
     await _saveFileLocallyIos(pdf, fileName);
   } else {
-    await _saveFileLocallyAndroid(pdf, fileName);
+    await _saveFileLocallyAndroid(pdf, fileName, context);
   }
   await Printing.layoutPdf(onLayout: (PdfPageFormat format) async => pdf);
 }
@@ -86,11 +86,13 @@ _saveFileLocallyIos(Uint8List pdf, String fileName) async {
   await file.writeAsBytes(pdf);
 }
 
-_saveFileLocallyAndroid(Uint8List pdf, String fileName) async {
+_saveFileLocallyAndroid(Uint8List pdf, String fileName, BuildContext context) async {
   var uri = await _androidUri();
 
   if (uri != null) {
-    print("Save to $uri/$fileName");
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text("Save to $uri/$fileName"),
+    ));
     createFileAsBytes(
       uri,
       mimeType: 'application/pdf',
@@ -98,7 +100,9 @@ _saveFileLocallyAndroid(Uint8List pdf, String fileName) async {
       bytes: pdf,
     );
   } else {
-    print("No uri selected. Abort printing");
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text("No uri selected. Abort printing"),
+    ));
   }
 }
 
