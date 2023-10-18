@@ -49,8 +49,6 @@ class _ItemEditPageState extends State<ItemEditPage> {
         ));
   }
 
-  Widget _lane(Widget w) => Flexible(
-      flex: 1,
-      child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0), child: w));
+  Widget _lane(Widget w) =>
+      Container(padding: const EdgeInsets.symmetric(horizontal: 8.0), child: w);
 }

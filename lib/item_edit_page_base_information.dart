@@ -18,31 +18,29 @@ class ItemEditPageBaseInformation extends StatelessWidget {
   }
 
   _body(BuildContext context) => Padding(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(0),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [_leftSide(context), _rightSide(context)],
+          children: [
+            Expanded(flex: 1, child: _leftSide(context)),
+            Expanded(flex: 2, child: _rightSide(context))
+          ],
         ),
       );
 
-  SizedBox _leftSide(BuildContext context) => SizedBox(
-      width: 202,
-      height: 195,
-      child: RescuePickableImage(
-          item.imagePath,
-          (path) =>
-              _changeItem(context, Item.from(item: item, imagePath: path))));
+  Widget _leftSide(BuildContext context) => RescuePickableImage(item.imagePath,
+      (path) => _changeItem(context, Item.from(item: item, imagePath: path)));
 
   Widget _rightSide(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ..._widgetWithLabel("Name:", _nameInput(context)),
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
           ..._widgetWithLabel("RescueNet ID:",
               RescueText.normal(item.rescueNetId.toStringAsFixed(0)))
         ],
@@ -58,8 +56,8 @@ class ItemEditPageBaseInformation extends StatelessWidget {
   List<Widget> _widgetWithLabel(String label, Widget w) {
     return [
       RescueText.slim(label),
-      const SizedBox(height: 10),
-      SizedBox(height: 40, width: 240, child: w)
+      const SizedBox(height: 8),
+      SizedBox(height: 40, child: w)
     ];
   }
 

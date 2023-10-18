@@ -25,12 +25,7 @@ class ItemEditPageSignsSingle extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            RescuePickableImage(sign.imagePath ?? "",
-                (path) => fnUpdated(Sign.from(sign: sign, imagePath: path))),
-            _unNumber(),
-            _removeButton()
-          ]),
+          _picAndNumber(),
           _field("Instructions", sign.instructions,
               (p0) => sign.copyWith(instructions: p0)),
           _field("Type", sign.dangerType, (p) => sign.copyWith(dangerType: p)),
@@ -49,6 +44,17 @@ class ItemEditPageSignsSingle extends StatelessWidget {
               (d) => fnUpdated(sign.copyWith(otherDocuments: d)))
         ],
       ));
+
+  Row _picAndNumber() {
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      Expanded(
+          flex: 1,
+          child: RescuePickableImage(sign.imagePath ?? "",
+              (path) => fnUpdated(Sign.from(sign: sign, imagePath: path)))),
+      Expanded(flex: 2, child: _unNumber()),
+      _removeButton()
+    ]);
+  }
 
   Widget _doubleField(
           String label, double initial, Sign Function(double) onChange) =>
