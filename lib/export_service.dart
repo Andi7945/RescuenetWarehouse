@@ -68,7 +68,13 @@ String _formattedPrintingDate() {
 
 _saveFileLocally(
     Future<pw.Document> doc, String fileName, BuildContext context) async {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text("Start to save to $fileName. Load pdf."),
+  ));
   Uint8List pdf = await (await doc).save();
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text("Start to save to $fileName. PDF loaded, now specific"),
+  ));
   bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
   if (isIOS) {
     await _saveFileLocallyIos(pdf, fileName);
@@ -86,7 +92,8 @@ _saveFileLocallyIos(Uint8List pdf, String fileName) async {
   await file.writeAsBytes(pdf);
 }
 
-_saveFileLocallyAndroid(Uint8List pdf, String fileName, BuildContext context) async {
+_saveFileLocallyAndroid(
+    Uint8List pdf, String fileName, BuildContext context) async {
   var uri = await _androidUri();
 
   if (uri != null) {
