@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../routes.dart';
 import '../utils/auth_util.dart';
 
-
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
   static const routeName = "/login";
@@ -22,22 +21,18 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> signInWithEmailAndPassword() async {
     print('pressed Login');
-    try {
-      var tryAuth = await Auth().signInWithEmailAndPassword(
-        email: _controllerEmail.text,
-        password: _controllerPassword.text,
-      );
-      if (tryAuth) {
-        Navigator.pushNamed(context, routeContainerWithContent);
-      }
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        errorMessage = e.message;
-      });
-    } catch (e) {
-      print("Error in Login: $e");
+    var tryAuth = await Auth().signInWithEmailAndPassword(
+      email: _controllerEmail.text,
+      password: _controllerPassword.text,
+    );
+    setState(() {
+      errorMessage = tryAuth.errorMessage;
+    });
+    if (tryAuth.errorCode == null) {
+      Navigator.pushNamed(context, routeContainerWithContent);
     }
   }
+
   Future<void> createUserWithEmailAndPassword() async {
     print('pressed Register');
     try {
@@ -64,9 +59,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _entryField(
-      String title,
-      TextEditingController controller,
-      ) {
+    String title,
+    TextEditingController controller,
+  ) {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
@@ -74,6 +69,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+
   Widget _errorMessage() {
     return Text(errorMessage == '' ? '' : 'Humm ? $errorMessage');
   }
@@ -81,7 +77,9 @@ class _LoginPageState extends State<LoginPage> {
   Widget _submitButton() {
     return ElevatedButton(
       onPressed: () {
-        isLogin ? signInWithEmailAndPassword() : createUserWithEmailAndPassword();
+        isLogin
+            ? signInWithEmailAndPassword()
+            : createUserWithEmailAndPassword();
       },
       child: Text(isLogin ? 'Login' : 'Register'),
     );
@@ -97,7 +95,6 @@ class _LoginPageState extends State<LoginPage> {
       child: Text(isLogin ? 'Register instead' : 'Login instead'),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
