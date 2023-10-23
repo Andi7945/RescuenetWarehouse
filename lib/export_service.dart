@@ -94,7 +94,7 @@ _saveFileLocallyIos(Uint8List pdf, String fileName) async {
 
 _saveFileLocallyAndroid(
     Uint8List pdf, String fileName, BuildContext context) async {
-  var uri = await _androidUri();
+  var uri = await _androidUri(context);
 
   if (uri != null) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -113,7 +113,14 @@ _saveFileLocallyAndroid(
   }
 }
 
-Future<Uri?> _androidUri() async {
+Future<Uri?> _androidUri(BuildContext context) async {
   final uris = await persistedUriPermissions();
-  return uris?.first.uri ?? await openDocumentTree();
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text("Uris allowed (${uris?.length}): $uris"),
+  ));
+  var first = uris?.first.uri ?? await openDocumentTree();
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text("Uri used: $first"),
+  ));
+  return first;
 }
