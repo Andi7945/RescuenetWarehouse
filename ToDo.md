@@ -30,9 +30,6 @@
 
 * Finish print via printer
 
-
-* Container with content -> Card too wide
-
  
 * Testing: Create Container Type -> Change stuff -> should all be changed
 
