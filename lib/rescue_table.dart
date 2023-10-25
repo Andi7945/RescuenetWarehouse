@@ -37,7 +37,7 @@ class RescueTable extends StatelessWidget {
 
   Widget headlineCell(e) => Padding(
       padding: const EdgeInsets.only(top: 4, bottom: 4),
-      child: RescueText.normal(e));
+      child: RescueText.slightslim(e));
 
   TableRow _addPaddingBoxes(TableRow row) {
     var children =

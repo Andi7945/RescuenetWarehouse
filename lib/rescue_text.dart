@@ -14,6 +14,9 @@ class RescueText extends StatelessWidget {
   RescueText.normal(String text, [FontWeight? weight, TextAlign? textAlign])
       : this(24, text, fontWeight: weight, textAlign: textAlign);
 
+  RescueText.slightslim(String text, [FontWeight? weight, TextAlign? textAlign])
+      : this(20, text, fontWeight: weight, textAlign: textAlign);
+
   RescueText.slim(String? text, [FontWeight? weight])
       : this(16, text ?? "", fontWeight: weight);
 
