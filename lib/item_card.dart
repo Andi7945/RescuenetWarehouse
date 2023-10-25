@@ -30,7 +30,6 @@ class ItemCard extends StatelessWidget {
       );
 
   _card() => Container(
-        width: 420,
         padding: const EdgeInsets.only(top: 8, bottom: 8, left: 4, right: 4),
         decoration: const ShapeDecoration(
           color: Colors.white,
@@ -49,10 +48,9 @@ class ItemCard extends StatelessWidget {
               children: [
                 RescueText.normal(_item.name ?? ""),
                 Container(
-                  width: 300,
+                  width: 280,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: const BoxDecoration(color: Colors.white),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

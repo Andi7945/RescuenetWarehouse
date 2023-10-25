@@ -48,5 +48,5 @@ class ContainerWithContentPage extends StatelessWidget {
 
   Widget _asBox(Widget w) => Padding(
       padding: const EdgeInsets.only(left: 4, right: 4),
-      child: SizedBox(width: 420, child: w));
+      child: SizedBox(width: 400, child: w));
 }

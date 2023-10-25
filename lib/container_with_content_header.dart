@@ -27,7 +27,7 @@ class ContainerWithContentHeader extends StatelessWidget {
 
   _body(BuildContext context) {
     return Container(
-      width: 420,
+      width: 400,
       clipBehavior: Clip.antiAlias,
       decoration: const ShapeDecoration(
         color: Colors.white,
