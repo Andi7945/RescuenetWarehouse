@@ -15,7 +15,7 @@
 * Analyze: Use TextInputLayout instead of DropdownButton?
     * https://m2.material.io/components/menus/android#exposed-dropdown-menus
 
-
+* Redirect to login page on sign out
 
 # Meeting notes
 * Password forgot mail link

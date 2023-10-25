@@ -100,8 +100,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        height: double.infinity,
-        width: double.infinity,
         padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
           child: Column(
@@ -115,6 +113,10 @@ class _LoginPageState extends State<LoginPage> {
               _errorMessage(),
               _submitButton(),
               _loginOrRegisterButton(),
+              ElevatedButton(
+                  child: Text("Forgot password"),
+                  onPressed: () =>
+                      Navigator.pushNamed(context, routeForgotPassword))
             ],
           ),
         ),

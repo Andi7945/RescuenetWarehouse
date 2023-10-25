@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/assignment_expander_service.dart';
 import 'package:rescuenet_warehouse/assignment_service.dart';
+import 'package:rescuenet_warehouse/auth_forgot_password_page.dart';
 import 'package:rescuenet_warehouse/container_edit_page_argument_extractor.dart';
 import 'package:rescuenet_warehouse/container_mapper_service.dart';
 import 'package:rescuenet_warehouse/container_overview_page.dart';
@@ -94,6 +95,8 @@ class MyApp extends StatelessWidget {
                 const HorizontalDragWidget(lists: []),
             LoginPage.routeName: (ctx) => const LoginPage(),
             WidgetTree.routeName: (ctx) => const WidgetTree(),
+
+            routeForgotPassword: (ctx) => AuthForgotPasswordPage(),
 
             routeContainerOverview: (ctx) => ContainerOverviewPage(),
             routeContainerWithContent: (ctx) => ContainerWithContentPage(),

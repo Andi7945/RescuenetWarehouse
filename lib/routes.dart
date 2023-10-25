@@ -10,3 +10,5 @@ const routeEditCurrentLocations = "/editCurrentLocations";
 
 const routeWorkLog = "/workLog";
 const routeExport = "/export";
+
+const routeForgotPassword = "/forgotPassword";
