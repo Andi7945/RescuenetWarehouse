@@ -23,7 +23,7 @@ shareSummaryPdf(Map<RescueContainer, Map<Item, int>> forContainers,
     BuildContext context) async {
   var formattedDate = _formattedPrintingDate();
   var fileName = "${formattedDate}_summary.pdf";
-  _saveFileLocally(
+  _showExportOptions(
       createSummaryPdf(mapForPdf(forContainers)), fileName, context);
 }
 
@@ -32,9 +32,8 @@ void sharePackingListPdf(Map<RescueContainer, Map<Item, int>> withItems,
   var formattedDate = _formattedPrintingDate();
   for (var list in mapPackingList(withItems)) {
     var fileName = "${formattedDate}_packing_list_${list.containerNo}.pdf";
-    _saveFileLocally(createPackingListPdf(list), fileName, context);
+    _showExportOptions(createPackingListPdf(list), fileName, context);
   }
-  // Printing.sharePdf(bytes: await file.save());
 }
 
 void shareLabelPdf(Map<RescueContainer, Map<Item, int>> withItems,
@@ -42,9 +41,8 @@ void shareLabelPdf(Map<RescueContainer, Map<Item, int>> withItems,
   var formattedDate = _formattedPrintingDate();
   for (var list in mapPackingList(withItems)) {
     var fileName = "${formattedDate}_label_${list.containerNo}.pdf";
-    _saveFileLocally(createLabelPdf(list), fileName, context);
+    _showExportOptions(createLabelPdf(list), fileName, context);
   }
-  // Printing.sharePdf(bytes: await file.save());
 }
 
 void shareSafetyDatasheets(Map<RescueContainer, Map<Item, int>> withItems,
@@ -54,7 +52,7 @@ void shareSafetyDatasheets(Map<RescueContainer, Map<Item, int>> withItems,
       .expand((element) => element.sdsPath);
   for (FirebaseDocument element in safetySheets) {
     var data = _loadFileFromWeb(element);
-    await Printing.sharePdf(bytes: await data);
+    await Printing.layoutPdf(onLayout: (PdfPageFormat format) async => data);
   }
 }
 
@@ -64,6 +62,54 @@ Future<Uint8List> _loadFileFromWeb(FirebaseDocument element) =>
 String _formattedPrintingDate() {
   final DateFormat formatter = DateFormat("y-MM-dd_H-m");
   return formatter.format(DateTime.now());
+}
+
+exportFile(Future<pw.Document> doc, String fileName, BuildContext context) {}
+
+void _showExportOptions(
+    Future<pw.Document> doc, String fileName, BuildContext context) {
+  showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                  leading: const Icon(Icons.print),
+                  title: const Text('Print'),
+                  onTap: () async {
+                    await _print(doc, fileName, context);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Printed $fileName."),
+                    ));
+                    Navigator.of(context).pop();
+                  }),
+              ListTile(
+                  leading: const Icon(Icons.save),
+                  title: const Text('Save on disc'),
+                  onTap: () async {
+                    await _saveFileLocally(doc, fileName, context);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Saved to $fileName."),
+                    ));
+                    Navigator.of(context).pop();
+                  }),
+              ListTile(
+                leading: const Icon(Icons.podcasts),
+                title: const Text('Pop'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      });
+}
+
+_print(Future<pw.Document> doc, String fileName, BuildContext context) async {
+  Uint8List pdf = await (await doc).save();
+  await Printing.layoutPdf(onLayout: (PdfPageFormat format) async => pdf);
 }
 
 _saveFileLocally(
@@ -81,7 +127,6 @@ _saveFileLocally(
   } else {
     await _saveFileLocallyAndroid(pdf, fileName, context);
   }
-  await Printing.layoutPdf(onLayout: (PdfPageFormat format) async => pdf);
 }
 
 _saveFileLocallyIos(Uint8List pdf, String fileName) async {
