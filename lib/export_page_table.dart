@@ -35,8 +35,10 @@ class ExportPageTable extends StatelessWidget {
         _printIcon(printSafetyDatasheets)
       ]);
 
-  InkWell _printIcon(Function() onClick) => InkWell(
-      onTap: onClick, child: const Icon(Icons.print_outlined, size: 48.0));
+  Widget _printIcon(Function() onClick) => Align(
+      alignment: Alignment.centerLeft,
+      child: InkWell(
+          onTap: onClick, child: const Icon(Icons.print_outlined, size: 48.0)));
 
   List<TableRow> _rows() => options.map(_single).toList();
 
