@@ -24,6 +24,7 @@ class RescueText extends StatelessWidget {
   Widget build(BuildContext context) => Text(
         text,
         textAlign: textAlign,
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(
           fontSize: fontSize,
           fontFamily: 'Inter',

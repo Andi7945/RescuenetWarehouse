@@ -31,26 +31,23 @@ class ContainerVisibilityService extends ChangeNotifier {
     });
 
     for (var e in this.containers.keys) {
-      containerVisibility.putIfAbsent(e, () => true);
+      _containerVisibility.putIfAbsent(e, () => true);
     }
   }
 
-  final Map<String, bool> containerVisibility = {
-    // container_office.id: true,
-    // container_power.id: true,
-    // container_medical.id: true
-  };
+  final Map<String, bool> _containerVisibility = {};
 
   changeContainerVisibility(RescueContainer c) {
-    containerVisibility.update(c.id, (value) => !value);
+    _containerVisibility.update(c.id, (value) => !value);
     notifyListeners();
   }
 
-  Map<RescueContainer, bool> containerWithVisible() => containerVisibility.map(
-      (key, value) => MapEntry(mapperService.fromDao(containers[key]!), value));
+  Map<RescueContainer, bool> unfilteredContainerWithVisible() =>
+      _containerVisibility.map((key, value) =>
+          MapEntry(mapperService.fromDao(containers[key]!), value));
 
   Map<RescueContainer, bool> get filteredContainer {
-    var containers = containerWithVisible();
+    var containers = unfilteredContainerWithVisible();
     var withItems = containerService.containerWithItems();
     if (currentFilter.value.value != null) {
       containers.removeWhere((key, value) {

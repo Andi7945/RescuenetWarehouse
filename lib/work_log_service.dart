@@ -38,7 +38,8 @@ class WorkLogService {
   }
 
   List<LogEntry> _visibleEntries() {
-    var visible = visibilityService.containerVisibility;
+    var visible = visibilityService.filteredContainer
+        .map((key, value) => MapEntry(key.id, value));
 
     List<LogEntry> areVisible = workLogStore.all
         .where((element) => visible[element.containerId] == true)

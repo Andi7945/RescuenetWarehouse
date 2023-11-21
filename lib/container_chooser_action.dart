@@ -12,7 +12,7 @@ Widget provideContainerFilterAction(
   return ActionChip(
       label: Row(children: [
         Text(
-            "${visible.length} / ${visibilityService.containerWithVisible().length}"),
+            "${visible.length} / ${visibilityService.unfilteredContainerWithVisible().length}"),
         const Icon(Icons.filter_alt, color: Colors.blue)
       ]),
       onPressed: () {

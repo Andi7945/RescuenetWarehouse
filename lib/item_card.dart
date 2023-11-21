@@ -9,6 +9,7 @@ import 'sign_row.dart';
 class ItemCard extends StatelessWidget {
   final Item _item;
   final int _amount;
+  static const double cardWidth = 370;
 
   ItemCard(this._item, this._amount);
 
@@ -40,15 +41,17 @@ class ItemCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            RescueImage(_item.imagePath),
+            RescueImage(_item.imagePath, 90),
             Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                RescueText.normal(_item.name ?? ""),
+                SizedBox(
+                  width: cardWidth - 90,
+                    child: RescueText.normal(_item.name ?? "")),
                 Container(
-                  width: 280,
+                  width: cardWidth - 90,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: Row(
