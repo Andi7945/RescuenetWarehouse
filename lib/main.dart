@@ -9,6 +9,7 @@ import 'package:rescuenet_warehouse/container_mapper_service.dart';
 import 'package:rescuenet_warehouse/container_overview_page.dart';
 import 'package:rescuenet_warehouse/container_visibility_service.dart';
 import 'package:rescuenet_warehouse/container_with_content_page.dart';
+import 'package:rescuenet_warehouse/custom_scroll_behavior.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/edit_container_types.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/edit_current_locations.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/edit_module_destinations.dart';
@@ -30,13 +31,14 @@ import 'package:uuid/uuid.dart';
 
 import 'container_service.dart';
 import 'edit_custom_values/proxy_current_location_usage.dart';
+import 'firebase_options.dart';
 import 'item_overview_page.dart';
 import 'proxy_container_options.dart';
 import 'edit_custom_values/proxy_module_destination_usage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -86,6 +88,7 @@ class MyApp extends StatelessWidget {
             cardColor: const Color(0xFFF5F2E7),
             fontFamily: 'Quicksand',
           ),
+          scrollBehavior: CustomScrollBehavior(),
           home: const LoginPage(),
           routes: {
             // all of the routes in the app

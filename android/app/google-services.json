@@ -29,6 +29,13 @@
             {
               "client_id": "954628027650-r7i849u32dct8sapon164jkahf989trg.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "954628027650-tjpi2enlscaadbd82hl7v3f1k7dsdid4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "net.rescuenet.app"
+              }
             }
           ]
         }
