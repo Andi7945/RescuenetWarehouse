@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
     //return the logo from the assets
     return const DrawerHeader(
       child: Image(
-        image: AssetImage('assets/images/LogoRN.png'),
+        image: AssetImage('assets/images/rn_logo_big.png'),
       ),
     );
   }
@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _submitButton() {
-    return ElevatedButton(
+    return FilledButton(
       onPressed: () {
         isLogin
             ? signInWithEmailAndPassword()
@@ -86,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _loginOrRegisterButton() {
-    return FilledButton(
+    return ElevatedButton(
       onPressed: () {
         setState(() {
           isLogin = !isLogin;
@@ -111,12 +111,17 @@ class _LoginPageState extends State<LoginPage> {
               _entryField('email', _controllerEmail),
               _entryField('password', _controllerPassword),
               _errorMessage(),
-              _submitButton(),
-              _loginOrRegisterButton(),
-              ElevatedButton(
-                  child: Text("Forgot password"),
-                  onPressed: () =>
-                      Navigator.pushNamed(context, routeForgotPassword))
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _submitButton(),
+                  _loginOrRegisterButton(),
+                  ElevatedButton(
+                      child: Text("Forgot password"),
+                      onPressed: () =>
+                          Navigator.pushNamed(context, routeForgotPassword))
+                ],
+              ),
             ],
           ),
         ),
