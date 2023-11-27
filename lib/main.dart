@@ -19,12 +19,7 @@ import 'package:rescuenet_warehouse/export_page.dart';
 import 'package:rescuenet_warehouse/item_edit_page_argument_extractor.dart';
 import 'package:rescuenet_warehouse/item_service.dart';
 import 'package:rescuenet_warehouse/page/login_register_page.dart';
-import 'package:rescuenet_warehouse/page/warehouse_overview_page.dart';
-import 'package:rescuenet_warehouse/provider/rn_items_provider.dart';
-import 'package:rescuenet_warehouse/provider/sequentialbuild_provider.dart';
 import 'package:rescuenet_warehouse/routes.dart';
-import 'package:rescuenet_warehouse/utils/widget_tree_util.dart';
-import 'package:rescuenet_warehouse/widget/horizontal_drag_widget.dart';
 import 'package:rescuenet_warehouse/work_log_page.dart';
 import 'package:rescuenet_warehouse/work_log_service.dart';
 import 'package:uuid/uuid.dart';
@@ -51,12 +46,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (ctx) => RNItemsProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (ctx) => SequentialBuildProvider(),
-        ),
         ChangeNotifierProvider(create: (_) => ContainerStore()),
         ChangeNotifierProvider(create: (_) => ItemStore()),
         ChangeNotifierProvider(create: (_) => StoreModuleDestination()),
@@ -91,13 +80,7 @@ class MyApp extends StatelessWidget {
           scrollBehavior: CustomScrollBehavior(),
           home: const LoginPage(),
           routes: {
-            // all of the routes in the app
-            WareHouseOverviewPage.routeName: (ctx) =>
-                const WareHouseOverviewPage(),
-            HorizontalDragWidget.routeName: (ctx) =>
-                const HorizontalDragWidget(lists: []),
             LoginPage.routeName: (ctx) => const LoginPage(),
-            WidgetTree.routeName: (ctx) => const WidgetTree(),
 
             routeForgotPassword: (ctx) => AuthForgotPasswordPage(),
 

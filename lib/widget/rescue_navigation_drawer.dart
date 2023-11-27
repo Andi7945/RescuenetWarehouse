@@ -4,8 +4,9 @@ import '../routes.dart';
 import '../utils/auth_util.dart';
 
 class RescueNavigationDrawer extends StatelessWidget {
-  RescueNavigationDrawer({Key? key}) : super(key: key);
-  Auth auth = Auth();
+  RescueNavigationDrawer({super.key});
+
+  final Auth auth = Auth();
 
   @override
   Widget build(BuildContext context) {
