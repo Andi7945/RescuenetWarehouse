@@ -31,21 +31,19 @@ def withFieldName(counter, row):
         "line number": counter,
         "Category": getOrEmpty(row, 0),
         "Subcategory": getOrEmpty(row, 1),
-        "Item": getOrEmpty(row, 2),
-        "Remarks": getOrEmpty(row, 3),
-        "Quantity for deployment": getOrEmpty(row, 4),
-        "Quantity trainingweekend": getOrEmpty(row, 5),
-        "Status trainingweekend": getOrEmpty(row, 6),
-        "Status Lebanon - proposal 2020": getOrEmpty(row, 7),
-        "Source": getOrEmpty(row, 8),
-        "Where to buy": getOrEmpty(row, 9),
-        "Price each": getOrEmpty(row, 10),
-        "Dangerous good": getOrEmpty(row, 11),
-        "Expiring": getOrEmpty(row, 12),
-        "Weight [kg]": getOrEmpty(row, 13),
-        "Where to keep during deployment": getOrEmpty(row, 14),
-        "Current location": getOrEmpty(row, 15),
-        "QTY": getOrEmpty(row, 16)
+        "Name": getOrEmpty(row, 2),
+        "Unique Excel ID": getOrEmpty(row, 3),
+        "Description": getOrEmpty(row, 4),
+        "Amount": getOrEmpty(row, 5),
+        "Quantity trainingweekend": getOrEmpty(row, 6),
+        "Status trainingweekend": getOrEmpty(row, 7),
+        "Status Lebanon - proposal 2020": getOrEmpty(row, 8),
+        "Brand": getOrEmpty(row, 9),
+        "Supplier": getOrEmpty(row, 10),
+        "Value in EUR": getOrEmpty(row, 11),
+        "Dangerous good": getOrEmpty(row, 12),
+        "Expiring": getOrEmpty(row, 13),
+        "Weight [kg]": getOrEmpty(row, 14)
     })
 
 docs = (
@@ -73,35 +71,35 @@ print("Highest id : " + str(maxId))
 counter = 0
 
 import csv
-with open('rescue-item-import-data.csv', newline='') as csvfile:
+with open('rescue-item-import-data-2.csv', newline='') as csvfile:
     spamreader = csv.reader(csvfile, delimiter=';', quotechar='|')
     for row in spamreader:
         counter = counter + 1
         if (counter != 1):
             sys.stdout.write("\rImport line number %d" % counter)
             sys.stdout.flush()
-            id = str(uuid.uuid4())
+            id = getOrEmpty(row, 3)
             j = {
                 "id": id,
-                "brand": getOrEmpty(row, 8),
-                "description": "",
+                "brand": getOrEmpty(row, 9),
+                "description": getOrEmpty(row, 4),
                 "expiringDates": [],
                 "imagePath": "",
                 "isColdChain": False,
-                "manufacturer": getOrEmpty(row, 8),
+                "manufacturer": getOrEmpty(row, 9),
                 "name": getOrEmpty(row, 2),
                 "notes": withFieldName(str(counter), row),
                 "operationalStatus": "deployable",
-                "remarks": getOrEmpty(row, 3),
+                "remarks": "",
                 "rescueNetId": maxId + counter,
                 "signs": [],
                 "sku": "",
-                "supplier": "",
-                "totalAmount": getOrNull(row, 4),
+                "supplier": getOrEmpty(row, 10),
+                "totalAmount": getOrNull(row, 5),
                 "type": "",
-                "value": getOrNull(row, 10),
-                "website": getOrEmpty(row, 9),
-                "weight": getOrNull(row, 13),
+                "value": getOrNull(row, 11),
+                "website": "",
+                "weight": getOrNull(row, 14),
                 "importedFromCsv": True
             }
 
