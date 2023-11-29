@@ -52,17 +52,19 @@ class _EditContainerTypesState extends State<EditContainerTypes> {
         Padding(
             padding: const EdgeInsets.only(left: 16),
             child: _textField(
-                type.key.name, (v) => _change(type: type.key, name: v))),
+                type.key.name, (v) => _change(type.key.copyWith(name: v)))),
         RescuePickableImage(
           type.key.imagePath,
-          (path) => _change(type: type.key, imagePath: path),
+          (path) => _change(type.key.copyWith(imagePath: path)),
           90,
           80.89,
         ),
-        _textField(type.key.emptyWeight.toStringAsFixed(1),
-            (v) => _change(type: type.key, emptyWeight: double.tryParse(v))),
+        _textField(
+            type.key.emptyWeight.toStringAsFixed(1),
+            (v) => _change(
+                type.key.copyWith(emptyWeight: double.tryParse(v) ?? 0.0))),
         _textField(type.key.measurements,
-            (v) => _change(type: type.key, measurements: v)),
+            (v) => _change(type.key.copyWith(measurements: v))),
         EditCustomValueDeleteButton(type.value, () {
           Provider.of<StoreContainerTypes>(context, listen: false)
               .remove(type.key);
@@ -73,19 +75,8 @@ class _EditContainerTypesState extends State<EditContainerTypes> {
     return EditCustomValueTextField(TextEditingController(text: old), onChange);
   }
 
-  _change(
-          {required ContainerType type,
-          String? name,
-          String? imagePath,
-          String? measurements,
-          double? emptyWeight}) =>
-      Provider.of<StoreContainerTypes>(context, listen: false).upsert(
-          ContainerType.from(
-              type: type,
-              imagePath: imagePath,
-              emptyWeight: emptyWeight,
-              name: name,
-              measurements: measurements));
+  _change(ContainerType type) =>
+      Provider.of<StoreContainerTypes>(context, listen: false).upsert(type);
 
   TableRow _addingRow() => TableRow(children: [
         _leftPadded(EditCustomValueTextField(_addControllerName)),
@@ -109,11 +100,12 @@ class _EditContainerTypesState extends State<EditContainerTypes> {
       onPressed: () {
         Provider.of<StoreContainerTypes>(context, listen: false).upsert(
             ContainerType(
-                uuid.v4(),
-                _addControllerName.text,
-                _imagePathNotifier.value,
-                double.tryParse(_addControllerEmptyWeight.text) ?? 0.0,
-                _addControllerMeasurements.text));
+                id: uuid.v4(),
+                name: _addControllerName.text,
+                imagePath: _imagePathNotifier.value,
+                emptyWeight:
+                    double.tryParse(_addControllerEmptyWeight.text) ?? 0.0,
+                measurements: _addControllerMeasurements.text));
         _addControllerName.clear();
         _addControllerEmptyWeight.clear();
         _addControllerMeasurements.clear();

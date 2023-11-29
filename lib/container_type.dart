@@ -1,42 +1,23 @@
-import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:flutter/foundation.dart';
 import 'package:rescuenet_warehouse/firebase_store.dart';
+
+part 'container_type.freezed.dart';
 
 part 'container_type.g.dart';
 
-@JsonSerializable()
-class ContainerType extends Equatable
+@freezed
+class ContainerType
+    with _$ContainerType
     implements FirebaseStorable<ContainerType> {
+  const factory ContainerType({
+    required String id,
+    required String name,
+    String? imagePath,
+    required double emptyWeight,
+    required String measurements,
+  }) = _ContainerType;
 
-  @override
-  String id;
-  String name;
-  String? imagePath;
-  double emptyWeight;
-  String measurements;
-
-  ContainerType(
-      this.id, this.name, this.imagePath, this.emptyWeight, this.measurements);
-
-  @override
-  List<Object?> get props => [id, name, imagePath, emptyWeight, measurements];
-
-  ContainerType.from(
-      {required ContainerType type,
-      String? id,
-      String? name,
-      String? imagePath,
-      double? emptyWeight,
-      String? measurements})
-      : id = id ?? type.id,
-        name = name ?? type.name,
-        imagePath = imagePath ?? type.imagePath,
-        emptyWeight = emptyWeight ?? type.emptyWeight,
-        measurements = measurements ?? type.measurements;
-
-  factory ContainerType.fromJson(Map<String, dynamic> json) =>
+  factory ContainerType.fromJson(Map<String, Object?> json) =>
       _$ContainerTypeFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$ContainerTypeToJson(this);
 }
