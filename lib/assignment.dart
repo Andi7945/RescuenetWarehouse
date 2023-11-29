@@ -1,23 +1,17 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:rescuenet_warehouse/firebase_store.dart';
 
+part 'assignment.freezed.dart';
 part 'assignment.g.dart';
 
-@JsonSerializable()
-class Assignment implements FirebaseStorable<Assignment> {
-  @override
-  String id;
-  String itemId;
-  String containerId;
-  int count;
+@freezed
+class Assignment with _$Assignment implements FirebaseStorable<Assignment> {
+  const factory Assignment(
+      {required String id,
+      required String itemId,
+      required String containerId,
+      required int count}) = _Assignment;
 
-  Assignment(this.id, this.itemId, this.containerId, this.count);
-
-  factory Assignment.fromJson(Map<String, dynamic> json) =>
+  factory Assignment.fromJson(Map<String, Object?> json) =>
       _$AssignmentFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$AssignmentToJson(this);
-
-  Assignment copyWith(int count) => Assignment(id, itemId, containerId, count);
 }

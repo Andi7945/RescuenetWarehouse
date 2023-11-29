@@ -6,20 +6,22 @@ part of 'container_dao.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ContainerDao _$ContainerDaoFromJson(Map<String, dynamic> json) => ContainerDao(
-      json['id'] as String,
-      json['number'] as int,
-      json['name'] as String,
-      json['description'] as String?,
-      json['typeId'] as String?,
-      $enumDecode(_$SequentialBuildEnumMap, json['sequentialBuild']),
-      json['moduleDestinationId'] as String?,
-      json['currentLocationId'] as String?,
-      json['isReady'] as bool,
-      json['toDeploy'] as bool,
+_$ContainerDaoImpl _$$ContainerDaoImplFromJson(Map<String, dynamic> json) =>
+    _$ContainerDaoImpl(
+      id: json['id'] as String,
+      number: json['number'] as int,
+      name: json['name'] as String,
+      description: json['description'] as String?,
+      typeId: json['typeId'] as String?,
+      sequentialBuild:
+          $enumDecode(_$SequentialBuildEnumMap, json['sequentialBuild']),
+      moduleDestinationId: json['moduleDestinationId'] as String?,
+      currentLocationId: json['currentLocationId'] as String?,
+      isReady: json['isReady'] as bool,
+      toDeploy: json['toDeploy'] as bool,
     );
 
-Map<String, dynamic> _$ContainerDaoToJson(ContainerDao instance) =>
+Map<String, dynamic> _$$ContainerDaoImplToJson(_$ContainerDaoImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'number': instance.number,

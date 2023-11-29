@@ -21,7 +21,8 @@ class AssignmentService extends ChangeNotifier {
   }
 
   addContainer(String containerId, Item item) {
-    var assignment = Assignment(uuid.v4(), item.id, containerId, 1);
+    var assignment = Assignment(
+        id: uuid.v4(), itemId: item.id, containerId: containerId, count: 1);
 
     store?.upsert(assignment);
     workLogStore?.upsert(_buildEntry(item, containerId, 1));
@@ -43,7 +44,7 @@ class AssignmentService extends ChangeNotifier {
     var current = _find(item, containerId);
 
     if (current != null) {
-      store?.upsert(current.copyWith(amount));
+      store?.upsert(current.copyWith(count: amount));
       workLogStore
           ?.upsert(_buildEntry(item, containerId, current.count - amount));
     }

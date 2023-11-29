@@ -6,14 +6,15 @@ part of 'assignment.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Assignment _$AssignmentFromJson(Map<String, dynamic> json) => Assignment(
-      json['id'] as String,
-      json['itemId'] as String,
-      json['containerId'] as String,
-      json['count'] as int,
+_$AssignmentImpl _$$AssignmentImplFromJson(Map<String, dynamic> json) =>
+    _$AssignmentImpl(
+      id: json['id'] as String,
+      itemId: json['itemId'] as String,
+      containerId: json['containerId'] as String,
+      count: json['count'] as int,
     );
 
-Map<String, dynamic> _$AssignmentToJson(Assignment instance) =>
+Map<String, dynamic> _$$AssignmentImplToJson(_$AssignmentImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'itemId': instance.itemId,
