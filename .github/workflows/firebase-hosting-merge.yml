@@ -22,3 +22,5 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_RESCUENET_7733B }}'
           channelId: live
           projectId: rescuenet-7733b
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
