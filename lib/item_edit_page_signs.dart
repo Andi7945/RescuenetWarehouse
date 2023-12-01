@@ -56,7 +56,7 @@ class ItemEditPageSigns extends StatelessWidget {
       updatedSigns.add(updated);
     }
     updatedSigns.sort((s1, s2) => s1.id.compareTo(s2.id));
-    var updatedItem = Item.from(item: item, signs: updatedSigns);
+    var updatedItem = item.copyWith(signs: updatedSigns);
     Provider.of<ItemService>(context, listen: false).updateItem(updatedItem);
   }
 }

@@ -56,7 +56,7 @@ class _EditCurrentLocationsState extends State<EditCurrentLocations> {
             TextEditingController(text: old.name),
             (newValue) =>
                 Provider.of<StoreCurrentLocations>(context, listen: false)
-                    .upsert(CurrentLocation(old.id, newValue))));
+                    .upsert(old.copyWith(name: newValue))));
   }
 
   TableRow _addingRow() => TableRow(children: [
@@ -69,7 +69,7 @@ class _EditCurrentLocationsState extends State<EditCurrentLocations> {
   _btnAdd() => IconButton(
       onPressed: () {
         Provider.of<StoreCurrentLocations>(context, listen: false)
-            .upsert(CurrentLocation(uuid.v4(), _addController.text));
+            .upsert(CurrentLocation(id: uuid.v4(), name: _addController.text));
         _addController.clear();
       },
       icon: const Icon(Icons.add));

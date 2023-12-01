@@ -30,7 +30,7 @@ class ItemEditPageBaseInformation extends StatelessWidget {
       );
 
   Widget _leftSide(BuildContext context) => RescuePickableImage(item.imagePath,
-      (path) => _changeItem(context, Item.from(item: item, imagePath: path)));
+      (path) => _changeItem(context, item.copyWith(imagePath: path)));
 
   Widget _rightSide(BuildContext context) {
     return Padding(
@@ -51,7 +51,7 @@ class ItemEditPageBaseInformation extends StatelessWidget {
   RescueInputText _nameInput(BuildContext context) => RescueInputText(
       initial: item.name,
       onChange: (changed) =>
-          _changeItem(context, Item.from(item: item, name: changed)));
+          _changeItem(context, item.copyWith(name: changed)));
 
   List<Widget> _widgetWithLabel(String label, Widget w) {
     return [

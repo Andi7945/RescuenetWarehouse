@@ -95,6 +95,6 @@ class _ItemEditPageAmountsState extends State<ItemEditPageAmounts> {
 
   _changeTotal(BuildContext context, int newAmount) {
     Provider.of<ItemService>(context, listen: false)
-        .updateItem(Item.from(item: widget.item, totalAmount: newAmount));
+        .updateItem(widget.item.copyWith(totalAmount: newAmount));
   }
 }

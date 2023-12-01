@@ -47,7 +47,8 @@ class ItemEditPageSignsSingleDocuments extends StatelessWidget {
       var lastSeparator = path.lastIndexOf(Platform.pathSeparator);
       var name = path.substring(lastSeparator + 1);
       await uploadFile("safety_datasheets/$name", file);
-      _changePaths(id, FirebaseDocument(id, "safety_datasheets/$name", name));
+      _changePaths(id,
+          FirebaseDocument(id: id, url: "safety_datasheets/$name", name: name));
     }
   }
 

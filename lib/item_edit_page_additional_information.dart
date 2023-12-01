@@ -67,7 +67,7 @@ class ItemEditPageAdditionalInformation extends StatelessWidget {
           initial: "${item.weight}"),
       CheckboxListTile(
           value: item.isColdChain,
-          onChanged: update((b) => item.copyWith(isColdChain: b)),
+          onChanged: update((b) => item.copyWith(isColdChain: b ?? false)),
           title: const Text("Cold chain"))
     ]);
   }
@@ -83,8 +83,7 @@ class ItemEditPageAdditionalInformation extends StatelessWidget {
         onSelected: (String? value) {
           var v = value;
           if (v != null) {
-            var changedItem = Item.from(
-                item: item,
+            var changedItem = item.copyWith(
                 operationalStatus: OperationalStatus.values
                     .firstWhere((element) => element.name == v));
             Provider.of<ItemService>(context, listen: false)

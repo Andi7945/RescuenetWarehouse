@@ -16,7 +16,7 @@ class ItemService {
   Item newItem() {
     var newRescueNetId =
         itemStore.all.map((e) => e.rescueNetId).reduce(max) + 1;
-    var item = Item(uuid.v4(), 0, newRescueNetId);
+    var item = Item(id: uuid.v4(), totalAmount: 0, rescueNetId: newRescueNetId);
     updateItem(item);
     return item;
   }

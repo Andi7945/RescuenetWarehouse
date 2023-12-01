@@ -33,7 +33,7 @@ class ItemEditPageNotes extends StatelessWidget {
                 maxLines: 20,
                 initial: item.notes,
                 onChange: (s) =>
-                    _updateItem(context, Item.from(item: item, notes: s))),
+                    _updateItem(context, item.copyWith(notes: s))),
           ),
         ],
       ),

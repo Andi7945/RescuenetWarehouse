@@ -6,14 +6,16 @@ part of 'firebase_document.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-FirebaseDocument _$FirebaseDocumentFromJson(Map<String, dynamic> json) =>
-    FirebaseDocument(
-      json['id'] as String,
-      json['url'] as String,
-      json['name'] as String,
+_$FirebaseDocumentImpl _$$FirebaseDocumentImplFromJson(
+        Map<String, dynamic> json) =>
+    _$FirebaseDocumentImpl(
+      id: json['id'] as String,
+      url: json['url'] as String,
+      name: json['name'] as String,
     );
 
-Map<String, dynamic> _$FirebaseDocumentToJson(FirebaseDocument instance) =>
+Map<String, dynamic> _$$FirebaseDocumentImplToJson(
+        _$FirebaseDocumentImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'url': instance.url,

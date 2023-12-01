@@ -67,7 +67,7 @@ class ItemEditPageAdditionalInformationExpDates extends StatelessWidget {
   }
 
   _updateItem(BuildContext context, List<DateTime> dates) {
-    var updated = Item.from(item: item, expiringDates: dates);
+    var updated = item.copyWith(expiringDates: dates);
     Provider.of<ItemService>(context, listen: false).updateItem(updated);
   }
 

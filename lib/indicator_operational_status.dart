@@ -9,10 +9,10 @@ class IndicatorOperationalStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (_operationalStatus == OperationalStatus.needsRepair) {
-      return _filled("Repair", Color(0xFFE0A348));
+      return _filled("Repair", const Color(0xFFE0A348));
     }
     if (_operationalStatus == OperationalStatus.toBeReplaced) {
-      return _filled("Re\nplace", Color(0xFFE0A348));
+      return _filled("Re\nplace", const Color(0xFFE0A348));
     }
     return _empty();
   }

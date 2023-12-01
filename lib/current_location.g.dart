@@ -6,13 +6,15 @@ part of 'current_location.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-CurrentLocation _$CurrentLocationFromJson(Map<String, dynamic> json) =>
-    CurrentLocation(
-      json['id'] as String,
-      json['name'] as String,
+_$CurrentLocationImpl _$$CurrentLocationImplFromJson(
+        Map<String, dynamic> json) =>
+    _$CurrentLocationImpl(
+      id: json['id'] as String,
+      name: json['name'] as String,
     );
 
-Map<String, dynamic> _$CurrentLocationToJson(CurrentLocation instance) =>
+Map<String, dynamic> _$$CurrentLocationImplToJson(
+        _$CurrentLocationImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
