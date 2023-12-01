@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/services/assignment_service.dart';
@@ -31,8 +33,11 @@ class _ItemEditPageAmountsAddContainerState
     var availableOptions = [...otherOptions];
     availableOptions
         .removeWhere((cont) => widget.knownNames.contains(cont.printName));
-    return Map.fromEntries(
-        availableOptions.map((e) => MapEntry(e.id, e.printName)));
+    return SplayTreeMap<RescueContainer, String>.fromIterable(availableOptions,
+            key: (e) => e,
+            value: (e) => e.printName,
+            compare: (a, b) => a.number.compareTo(b.number))
+        .map((key, value) => MapEntry(key.id, value));
   }
 
   @override
