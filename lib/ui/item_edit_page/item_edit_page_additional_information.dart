@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/models/item.dart';
 import 'package:rescuenet_warehouse/ui/item_edit_page/item_edit_page_additional_information_exp_dates.dart';
 import 'package:rescuenet_warehouse/item_service.dart';
-import 'package:rescuenet_warehouse/operational_status.dart';
+import 'package:rescuenet_warehouse/models/operational_status.dart';
 
 import '../rescue_text_field.dart';
 

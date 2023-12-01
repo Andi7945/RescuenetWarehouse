@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:rescuenet_warehouse/routes.dart';
 
-import '../../container_options.dart';
+import '../../models/container_options.dart';
 import '../../models/rescue_container.dart';
-import '../../sequential_build.dart';
+import '../../models/sequential_build.dart';
 
 class ContainerEditPage extends StatefulWidget {
   final ValueNotifier<RescueContainer> _container;

@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:rescuenet_warehouse/firebase_store.dart';
 import 'package:rescuenet_warehouse/models/rescue_container.dart';
 
-import '../sequential_build.dart';
+import 'sequential_build.dart';
 
 part 'container_dao.freezed.dart';
 

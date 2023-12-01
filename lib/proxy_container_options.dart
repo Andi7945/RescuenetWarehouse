@@ -1,5 +1,5 @@
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/container_options.dart';
+import 'package:rescuenet_warehouse/models/container_options.dart';
 import 'package:rescuenet_warehouse/stores.dart';
 
 ProxyProvider3 proxyContainerOptions() => ProxyProvider3<StoreContainerTypes,

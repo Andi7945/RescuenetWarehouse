@@ -6,7 +6,7 @@ import 'package:rescuenet_warehouse/models/rescue_container.dart';
 import 'package:rescuenet_warehouse/ui/rescue_navigation_drawer.dart';
 
 import '../../models/container_dao.dart';
-import '../../container_options.dart';
+import '../../models/container_options.dart';
 
 class ContainerEditPageArgumentExtractor extends StatelessWidget {
   @override

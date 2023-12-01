@@ -1,4 +1,4 @@
-import 'package:rescuenet_warehouse/sequential_build.dart';
+import 'package:rescuenet_warehouse/models/sequential_build.dart';
 
 class SummaryContainer {
   final int containerNr;

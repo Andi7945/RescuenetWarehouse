@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rescuenet_warehouse/models/rescue_container.dart';
 import 'package:rescuenet_warehouse/ui/rescue_text.dart';
 
-import '../../log_entry_expanded.dart';
+import '../../models/log_entry_expanded.dart';
 import 'work_log_page_entry.dart';
 
 import 'package:intl/intl.dart';

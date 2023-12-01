@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:rescuenet_warehouse/firebase_store.dart';
-import 'package:rescuenet_warehouse/json_converter_timestamp.dart';
+import 'package:rescuenet_warehouse/models/json_converter_timestamp.dart';
 
 part 'log_entry.freezed.dart';
 

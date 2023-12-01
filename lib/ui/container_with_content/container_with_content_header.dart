@@ -6,7 +6,7 @@ import 'package:rescuenet_warehouse/container_service.dart';
 import 'package:rescuenet_warehouse/models/item.dart';
 import 'package:rescuenet_warehouse/models/rescue_container.dart';
 import 'package:rescuenet_warehouse/models/sign.dart';
-import 'package:rescuenet_warehouse/operational_status.dart';
+import 'package:rescuenet_warehouse/models/operational_status.dart';
 import 'package:rescuenet_warehouse/ui/rescue_box_module_destination.dart';
 import 'package:rescuenet_warehouse/ui/rescue_box_sequential_build.dart';
 import 'package:rescuenet_warehouse/ui/rescue_image.dart';

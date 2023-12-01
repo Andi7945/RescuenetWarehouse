@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:rescuenet_warehouse/firebase_store.dart';
-import 'package:rescuenet_warehouse/json_converter_timestamp.dart';
-import 'package:rescuenet_warehouse/operational_status.dart';
+import 'package:rescuenet_warehouse/models/json_converter_timestamp.dart';
+import 'package:rescuenet_warehouse/models/operational_status.dart';
 
 import 'sign.dart';
 

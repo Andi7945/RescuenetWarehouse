@@ -8,7 +8,7 @@ import 'package:rescuenet_warehouse/stores.dart';
 import 'models/container_dao.dart';
 import 'models/item.dart';
 import 'item_service.dart';
-import 'sequential_build.dart';
+import 'models/sequential_build.dart';
 
 class ContainerService {
   final ItemService itemService;

@@ -1,5 +1,5 @@
 import 'package:rescuenet_warehouse/pdf/packing_dangerous_good.dart';
-import 'package:rescuenet_warehouse/sequential_build.dart';
+import 'package:rescuenet_warehouse/models/sequential_build.dart';
 
 import 'packing_item.dart';
 

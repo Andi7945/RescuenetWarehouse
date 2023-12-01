@@ -2,7 +2,7 @@ import 'package:rescuenet_warehouse/pdf/packing_dangerous_good.dart';
 import 'package:rescuenet_warehouse/pdf/packing_item.dart';
 import 'package:rescuenet_warehouse/pdf/packing_list.dart';
 import 'package:rescuenet_warehouse/pdf/summary_container.dart';
-import 'package:rescuenet_warehouse/sequential_build.dart';
+import 'package:rescuenet_warehouse/models/sequential_build.dart';
 
 var summaryContainer = [
   SummaryContainer(
