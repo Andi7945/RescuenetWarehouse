@@ -34,6 +34,9 @@ class RescueContainer with _$RescueContainer {
           CurrentLocation? currentLocation) =>
       RescueContainer(
           id: dao.id,
+          type: type,
+          moduleDestination: moduleDestination,
+          currentLocation: currentLocation,
           number: dao.number,
           description: dao.description,
           name: dao.name,
