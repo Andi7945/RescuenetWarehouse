@@ -6,8 +6,8 @@ import 'package:rescuenet_warehouse/container_with_content_column.dart';
 import 'package:rescuenet_warehouse/container_with_content_unassigned.dart';
 
 import 'container_chooser_action.dart';
-import 'item.dart';
-import 'rescue_container.dart';
+import 'models/item.dart';
+import 'models/rescue_container.dart';
 import 'widget/rescue_navigation_drawer.dart';
 
 class ContainerWithContentPage extends StatelessWidget {

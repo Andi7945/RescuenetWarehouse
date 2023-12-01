@@ -1,4 +1,4 @@
-import '../item.dart';
+import '../models/item.dart';
 
 import 'package:intl/intl.dart';
 

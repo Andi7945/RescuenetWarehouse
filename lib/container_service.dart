@@ -2,11 +2,11 @@ import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/assignment_expander_service.dart';
 import 'package:rescuenet_warehouse/container_mapper_service.dart';
 import 'package:rescuenet_warehouse/main.dart';
-import 'package:rescuenet_warehouse/rescue_container.dart';
+import 'package:rescuenet_warehouse/models/rescue_container.dart';
 import 'package:rescuenet_warehouse/stores.dart';
 
-import 'container_dao.dart';
-import 'item.dart';
+import 'models/container_dao.dart';
+import 'models/item.dart';
 import 'item_service.dart';
 import 'sequential_build.dart';
 

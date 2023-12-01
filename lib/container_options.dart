@@ -1,7 +1,7 @@
-import 'package:rescuenet_warehouse/current_location.dart';
-import 'package:rescuenet_warehouse/module_destination.dart';
+import 'package:rescuenet_warehouse/models/current_location.dart';
+import 'package:rescuenet_warehouse/models/module_destination.dart';
 
-import 'container_type.dart';
+import 'models/container_type.dart';
 import 'sequential_build.dart';
 
 class ContainerOptions {

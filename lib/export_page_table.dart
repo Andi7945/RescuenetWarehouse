@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'rescue_container.dart';
+import 'models/rescue_container.dart';
 import 'rescue_table.dart';
 import 'rescue_text.dart';
 

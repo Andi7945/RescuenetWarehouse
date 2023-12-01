@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/container_edit_page.dart';
 import 'package:rescuenet_warehouse/container_service.dart';
-import 'package:rescuenet_warehouse/rescue_container.dart';
+import 'package:rescuenet_warehouse/models/rescue_container.dart';
 import 'package:rescuenet_warehouse/widget/rescue_navigation_drawer.dart';
 
-import 'container_dao.dart';
+import 'models/container_dao.dart';
 import 'container_options.dart';
 
 class ContainerEditPageArgumentExtractor extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/item.dart';
+import 'package:rescuenet_warehouse/models/item.dart';
 import 'package:rescuenet_warehouse/item_edit_page_additional_information_exp_dates.dart';
 import 'package:rescuenet_warehouse/item_service.dart';
 import 'package:rescuenet_warehouse/operational_status.dart';

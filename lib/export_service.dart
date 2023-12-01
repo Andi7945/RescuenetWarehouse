@@ -6,14 +6,14 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:rescuenet_warehouse/collection_extensions.dart';
-import 'package:rescuenet_warehouse/firebase_document.dart';
+import 'package:rescuenet_warehouse/models/firebase_document.dart';
 import 'package:rescuenet_warehouse/pdf/packing_list_mapper.dart';
 import 'package:rescuenet_warehouse/pdf/pdf_creator_label.dart';
 import 'package:rescuenet_warehouse/pdf/pdf_creator_summary.dart';
-import 'package:rescuenet_warehouse/rescue_container.dart';
+import 'package:rescuenet_warehouse/models/rescue_container.dart';
 import 'package:shared_storage/shared_storage.dart';
 
-import 'item.dart';
+import 'models/item.dart';
 import 'pdf/summary_mapper.dart';
 import 'pdf/pdf_creator_packing_list.dart';
 import 'package:pdf/widgets.dart' as pw;

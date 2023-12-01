@@ -3,7 +3,7 @@ import 'package:rescuenet_warehouse/stores.dart';
 
 import 'dart:math';
 
-import 'item.dart';
+import 'models/item.dart';
 import 'main.dart';
 
 class ItemService {

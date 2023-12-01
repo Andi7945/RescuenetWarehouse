@@ -1,5 +1,5 @@
-import 'package:rescuenet_warehouse/item.dart';
-import 'package:rescuenet_warehouse/rescue_container.dart';
+import 'package:rescuenet_warehouse/models/item.dart';
+import 'package:rescuenet_warehouse/models/rescue_container.dart';
 
 class LogEntryExpanded {
   Item item;

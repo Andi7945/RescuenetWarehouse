@@ -5,10 +5,10 @@ import 'package:rescuenet_warehouse/item_edit_page_amounts.dart';
 import 'package:rescuenet_warehouse/item_edit_page_base_information.dart';
 import 'package:rescuenet_warehouse/item_edit_page_notes.dart';
 import 'package:rescuenet_warehouse/item_edit_page_signs.dart';
-import 'package:rescuenet_warehouse/rescue_container.dart';
+import 'package:rescuenet_warehouse/models/rescue_container.dart';
 
 import 'container_service.dart';
-import 'item.dart';
+import 'models/item.dart';
 
 class ItemEditPage extends StatefulWidget {
   final Item item;

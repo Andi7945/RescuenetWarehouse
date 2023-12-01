@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/rescue_input_text.dart';
 
-import 'item.dart';
+import 'models/item.dart';
 import 'item_service.dart';
 
 class ItemEditPageNotes extends StatelessWidget {

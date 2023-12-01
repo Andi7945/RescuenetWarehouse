@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:rescuenet_warehouse/firebase_document.dart';
+import 'package:rescuenet_warehouse/models/firebase_document.dart';
 import 'package:rescuenet_warehouse/firebase_utils.dart';
 import 'package:rescuenet_warehouse/label_with_multiple_entries.dart';
 import 'package:rescuenet_warehouse/main.dart';

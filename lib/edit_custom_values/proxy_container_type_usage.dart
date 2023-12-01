@@ -5,7 +5,7 @@ import 'package:rescuenet_warehouse/stores.dart';
 import "package:collection/collection.dart";
 
 import '../container_service.dart';
-import '../container_type.dart';
+import '../models/container_type.dart';
 
 ProxyProvider2 proxyContainerTypeUsage() {
   return ProxyProvider2<ContainerService, StoreContainerTypes,

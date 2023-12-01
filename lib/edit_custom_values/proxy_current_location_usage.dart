@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/collection_extensions.dart';
 import 'package:rescuenet_warehouse/container_service.dart';
-import 'package:rescuenet_warehouse/current_location.dart';
+import 'package:rescuenet_warehouse/models/current_location.dart';
 
 import "package:collection/collection.dart";
 

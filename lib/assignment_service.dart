@@ -4,11 +4,11 @@ import 'package:rescuenet_warehouse/main.dart';
 
 import 'collection_extensions.dart';
 
-import 'log_entry.dart';
+import 'models/log_entry.dart';
 import 'stores.dart';
 
-import 'assignment.dart';
-import 'item.dart';
+import 'models/assignment.dart';
+import 'models/item.dart';
 import 'utils/auth_util.dart';
 
 class AssignmentService extends ChangeNotifier {

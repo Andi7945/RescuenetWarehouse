@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'log_entry_expanded.dart';
-import 'rescue_container.dart';
+import 'models/rescue_container.dart';
 import 'rescue_text.dart';
 import 'work_log_page_entry.dart';
 

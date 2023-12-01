@@ -4,8 +4,8 @@ import 'package:rescuenet_warehouse/container_service.dart';
 import 'package:rescuenet_warehouse/export_page_body.dart';
 
 import 'export_service.dart';
-import 'item.dart';
-import 'rescue_container.dart';
+import 'models/item.dart';
+import 'models/rescue_container.dart';
 import 'rescue_text.dart';
 import 'widget/rescue_navigation_drawer.dart';
 

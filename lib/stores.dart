@@ -1,12 +1,12 @@
-import 'package:rescuenet_warehouse/assignment.dart';
-import 'package:rescuenet_warehouse/container_dao.dart';
-import 'package:rescuenet_warehouse/current_location.dart';
+import 'package:rescuenet_warehouse/models/assignment.dart';
+import 'package:rescuenet_warehouse/models/container_dao.dart';
+import 'package:rescuenet_warehouse/models/current_location.dart';
 import 'package:rescuenet_warehouse/firebase_store.dart';
-import 'package:rescuenet_warehouse/log_entry.dart';
-import 'package:rescuenet_warehouse/module_destination.dart';
+import 'package:rescuenet_warehouse/models/log_entry.dart';
+import 'package:rescuenet_warehouse/models/module_destination.dart';
 
-import 'container_type.dart';
-import 'item.dart';
+import 'models/container_type.dart';
+import 'models/item.dart';
 
 class StoreContainerTypes extends FirebaseStore<ContainerType> {
   StoreContainerTypes() : super('container_types', ContainerType.fromJson);

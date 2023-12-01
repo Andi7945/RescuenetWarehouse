@@ -3,10 +3,10 @@ import 'package:rescuenet_warehouse/pdf/packing_item.dart';
 import 'package:rescuenet_warehouse/pdf/packing_list.dart';
 import 'package:rescuenet_warehouse/pdf/pdf_mapper_utils.dart';
 
-import '../item.dart';
+import '../models/item.dart';
 import '../item_utils.dart';
-import '../rescue_container.dart';
-import '../sign.dart';
+import '../models/rescue_container.dart';
+import '../models/sign.dart';
 
 List<PackingList> mapPackingList(
     Map<RescueContainer, Map<Item, int>> containerWithItems) {

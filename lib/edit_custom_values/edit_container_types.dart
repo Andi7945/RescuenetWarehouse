@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/proxy_container_type_usage.dart';
 import 'package:rescuenet_warehouse/main.dart';
 
-import '../container_type.dart';
+import '../models/container_type.dart';
 import '../rescue_pickable_image.dart';
 import '../rescue_table.dart';
 import '../widget/rescue_navigation_drawer.dart';

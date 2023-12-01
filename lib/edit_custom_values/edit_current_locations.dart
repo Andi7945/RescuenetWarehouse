@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/current_location.dart';
+import 'package:rescuenet_warehouse/models/current_location.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/proxy_current_location_usage.dart';
 import 'package:rescuenet_warehouse/main.dart';
 

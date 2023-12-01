@@ -3,7 +3,7 @@ import 'package:rescuenet_warehouse/rescue_image.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
 import 'package:rescuenet_warehouse/routes.dart';
 
-import 'item.dart';
+import 'models/item.dart';
 import 'sign_row.dart';
 
 class ItemCard extends StatelessWidget {

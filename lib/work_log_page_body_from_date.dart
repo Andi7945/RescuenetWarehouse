@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rescuenet_warehouse/rescue_container.dart';
+import 'package:rescuenet_warehouse/models/rescue_container.dart';
 
 import 'log_entry_expanded.dart';
 import 'rescue_text.dart';

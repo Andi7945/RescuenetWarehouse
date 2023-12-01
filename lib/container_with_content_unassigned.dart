@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
 
-import 'item.dart';
+import 'models/item.dart';
 import 'item_card.dart';
 
 class ContainerWithContentUnassigned extends StatelessWidget {

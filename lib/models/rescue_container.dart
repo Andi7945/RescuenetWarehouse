@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:rescuenet_warehouse/current_location.dart';
-import 'package:rescuenet_warehouse/module_destination.dart';
+import 'package:rescuenet_warehouse/models/current_location.dart';
+import 'package:rescuenet_warehouse/models/module_destination.dart';
 import 'package:rescuenet_warehouse/sequential_build.dart';
 
 import 'container_dao.dart';

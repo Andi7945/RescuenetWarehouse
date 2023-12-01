@@ -4,7 +4,7 @@ import 'package:rescuenet_warehouse/rescue_image.dart';
 
 import 'indicator_expiring_date.dart';
 import 'indicator_operational_status.dart';
-import 'sign.dart';
+import 'models/sign.dart';
 
 class SignRow extends StatelessWidget {
   final List<Sign> signs;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rescuenet_warehouse/routes.dart';
 
 import 'container_options.dart';
-import 'rescue_container.dart';
+import 'models/rescue_container.dart';
 import 'sequential_build.dart';
 
 class ContainerEditPage extends StatefulWidget {

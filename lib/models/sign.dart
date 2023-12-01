@@ -1,8 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:rescuenet_warehouse/firebase_document.dart';
+import 'package:rescuenet_warehouse/models/firebase_document.dart';
 
 part 'sign.freezed.dart';
-
 part 'sign.g.dart';
 
 @freezed

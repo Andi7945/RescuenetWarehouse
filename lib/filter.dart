@@ -1,5 +1,5 @@
-import 'item.dart';
-import 'rescue_container.dart';
+import 'models/item.dart';
+import 'models/rescue_container.dart';
 
 class Filter {
   final FilterField field;

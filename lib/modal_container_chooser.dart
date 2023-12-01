@@ -4,7 +4,7 @@ import 'package:rescuenet_warehouse/container_visibility_service.dart';
 import 'package:rescuenet_warehouse/rescue_filter_dropdown.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
 
-import 'rescue_container.dart';
+import 'models/rescue_container.dart';
 
 class ModalContainerChooser extends StatelessWidget {
   @override

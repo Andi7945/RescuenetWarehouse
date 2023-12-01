@@ -4,9 +4,9 @@ import 'package:equatable/equatable.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/collection_extensions.dart';
 import 'package:rescuenet_warehouse/container_visibility_service.dart';
-import 'package:rescuenet_warehouse/log_entry.dart';
+import 'package:rescuenet_warehouse/models/log_entry.dart';
 import 'package:rescuenet_warehouse/log_entry_expanded.dart';
-import 'package:rescuenet_warehouse/rescue_container.dart';
+import 'package:rescuenet_warehouse/models/rescue_container.dart';
 import 'package:rescuenet_warehouse/stores.dart';
 
 import 'container_service.dart';

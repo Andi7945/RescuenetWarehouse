@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/item_edit_page_signs_single.dart';
 
-import 'item.dart';
+import 'models/item.dart';
 import 'item_service.dart';
 import 'main.dart';
 import 'rescue_text.dart';
-import 'sign.dart';
+import 'models/sign.dart';
 
 class ItemEditPageSigns extends StatelessWidget {
   final Item item;

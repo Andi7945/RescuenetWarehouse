@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/container_dao.dart';
+import 'package:rescuenet_warehouse/models/container_dao.dart';
 import 'package:rescuenet_warehouse/container_service.dart';
 import 'package:rescuenet_warehouse/rescue_box_module_destination.dart';
 import 'package:rescuenet_warehouse/rescue_box_sequential_build.dart';
@@ -8,10 +8,10 @@ import 'package:rescuenet_warehouse/rescue_image.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
 
 import 'item_utils.dart';
-import 'rescue_container.dart';
-import 'item.dart';
+import 'models/rescue_container.dart';
+import 'models/item.dart';
 import 'operational_status.dart';
-import 'sign.dart';
+import 'models/sign.dart';
 import 'sign_row.dart';
 
 class ContainerWithContentHeader extends StatelessWidget {

@@ -2,9 +2,9 @@ import 'package:rescuenet_warehouse/collection_extensions.dart';
 import 'package:rescuenet_warehouse/pdf/summary_list.dart';
 import 'package:rescuenet_warehouse/pdf/summary_pdf.dart';
 
-import '../item.dart';
+import '../models/item.dart';
 import '../item_utils.dart';
-import '../rescue_container.dart';
+import '../models/rescue_container.dart';
 import 'pdf_mapper_utils.dart';
 import 'summary_container.dart';
 

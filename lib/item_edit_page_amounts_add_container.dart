@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/assignment_service.dart';
 import 'package:rescuenet_warehouse/container_service.dart';
-import 'package:rescuenet_warehouse/rescue_container.dart';
+import 'package:rescuenet_warehouse/models/rescue_container.dart';
 
-import 'item.dart';
+import 'models/item.dart';
 import 'rescue_dropdown_button.dart';
 import 'rescue_text.dart';
 

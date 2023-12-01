@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rescuenet_warehouse/rescue_box_current_location.dart';
-import 'package:rescuenet_warehouse/rescue_container.dart';
+import 'package:rescuenet_warehouse/models/rescue_container.dart';
 import 'package:rescuenet_warehouse/rescue_text.dart';
 
 import 'rescue_box_module_destination.dart';

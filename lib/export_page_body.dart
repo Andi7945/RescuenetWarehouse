@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:rescuenet_warehouse/export_service.dart';
-import 'package:rescuenet_warehouse/rescue_container.dart';
+import 'package:rescuenet_warehouse/models/rescue_container.dart';
 
 import 'export_page_table.dart';
-import 'item.dart';
+import 'models/item.dart';
 
 class ExportPageBody extends StatefulWidget {
   final Map<RescueContainer, Map<Item, int>> containerWithItems;

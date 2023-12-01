@@ -4,7 +4,7 @@ import 'package:rescuenet_warehouse/collection_extensions.dart';
 import 'package:rescuenet_warehouse/container_service.dart';
 
 import "package:collection/collection.dart";
-import 'package:rescuenet_warehouse/module_destination.dart';
+import 'package:rescuenet_warehouse/models/module_destination.dart';
 
 import '../stores.dart';
 

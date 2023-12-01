@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/edit_custom_value_delete_button.dart';
 import 'package:rescuenet_warehouse/edit_custom_values/edit_custom_value_text_field.dart';
 import 'package:rescuenet_warehouse/main.dart';
-import 'package:rescuenet_warehouse/module_destination.dart';
+import 'package:rescuenet_warehouse/models/module_destination.dart';
 import 'package:rescuenet_warehouse/rescue_table.dart';
 
 import '../stores.dart';

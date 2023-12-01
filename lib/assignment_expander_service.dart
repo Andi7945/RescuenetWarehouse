@@ -3,8 +3,8 @@ import 'package:rescuenet_warehouse/collection_extensions.dart';
 import 'package:rescuenet_warehouse/container_mapper_service.dart';
 import 'package:rescuenet_warehouse/stores.dart';
 
-import 'item.dart';
-import 'rescue_container.dart';
+import 'models/item.dart';
+import 'models/rescue_container.dart';
 
 class AssignmentExpanderService {
   final AssignmentStore _assignmentStore;

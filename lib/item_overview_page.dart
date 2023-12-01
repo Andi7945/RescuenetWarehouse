@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/item_service.dart';
 import 'package:rescuenet_warehouse/widget/rescue_navigation_drawer.dart';
 
-import 'item.dart';
+import 'models/item.dart';
 import 'item_card.dart';
 import 'routes.dart';
 

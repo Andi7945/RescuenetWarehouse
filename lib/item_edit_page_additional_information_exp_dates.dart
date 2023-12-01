@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/item_service.dart';
 import 'package:rescuenet_warehouse/label_with_multiple_entries.dart';
 
-import 'item.dart';
+import 'models/item.dart';
 import 'rescue_text.dart';
 
 import 'package:intl/intl.dart';

@@ -5,7 +5,7 @@ import 'package:rescuenet_warehouse/rescue_text.dart';
 import 'package:rescuenet_warehouse/rescue_text_field.dart';
 
 import 'rescue_input_text.dart';
-import 'sign.dart';
+import 'models/sign.dart';
 
 class ItemEditPageSignsSingle extends StatelessWidget {
   final Function(Sign?) fnUpdated;

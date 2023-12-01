@@ -1,8 +1,8 @@
 import 'package:provider/provider.dart';
 
-import 'container_dao.dart';
+import 'models/container_dao.dart';
 import 'stores.dart';
-import 'rescue_container.dart';
+import 'models/rescue_container.dart';
 
 class ContainerMapperService {
   late StoreContainerTypes storeContainerTypes;
