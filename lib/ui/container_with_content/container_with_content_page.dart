@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/container_service.dart';
-import 'package:rescuenet_warehouse/container_visibility_service.dart';
+import 'package:rescuenet_warehouse/services/container_service.dart';
+import 'package:rescuenet_warehouse/services/container_visibility_service.dart';
 import 'package:rescuenet_warehouse/ui/container_with_content/container_with_content_column.dart';
 
 import '../container_chooser_action.dart';

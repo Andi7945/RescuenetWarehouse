@@ -5,7 +5,7 @@ import 'package:rescuenet_warehouse/ui/rescue_input_text.dart';
 import 'package:rescuenet_warehouse/ui/rescue_pickable_image.dart';
 import 'package:rescuenet_warehouse/ui/rescue_text.dart';
 
-import '../../item_service.dart';
+import '../../services/item_service.dart';
 
 class ItemEditPageBaseInformation extends StatelessWidget {
   final Item item;

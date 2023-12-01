@@ -4,7 +4,7 @@ import 'package:rescuenet_warehouse/stores.dart';
 
 import "package:collection/collection.dart";
 
-import 'container_service.dart';
+import 'services/container_service.dart';
 import 'models/container_type.dart';
 
 ProxyProvider2 proxyContainerTypeUsage() {

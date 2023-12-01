@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rescuenet_warehouse/container_visibility_service.dart';
+import 'package:rescuenet_warehouse/services/container_visibility_service.dart';
 
 import 'container_chooser_modal.dart';
 

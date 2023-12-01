@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/container_service.dart';
+import 'package:rescuenet_warehouse/services/container_service.dart';
 
-import '../../export_service.dart';
+import '../../services/export_service.dart';
 import '../../models/item.dart';
 import '../../models/rescue_container.dart';
 import '../rescue_text.dart';

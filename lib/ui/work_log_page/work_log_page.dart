@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/ui/container_chooser_action.dart';
-import 'package:rescuenet_warehouse/container_visibility_service.dart';
+import 'package:rescuenet_warehouse/services/container_visibility_service.dart';
 import 'package:rescuenet_warehouse/ui/rescue_text.dart';
 import 'package:rescuenet_warehouse/ui/work_log_page/work_log_page_body_from_date.dart';
-import 'package:rescuenet_warehouse/work_log_service.dart';
+import 'package:rescuenet_warehouse/services/work_log_service.dart';
 
 import 'package:intl/intl.dart';
 

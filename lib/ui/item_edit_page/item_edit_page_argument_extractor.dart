@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/ui/item_edit_page/item_edit_page.dart';
 import 'package:rescuenet_warehouse/ui/rescue_navigation_drawer.dart';
 
-import '../../item_service.dart';
+import '../../services/item_service.dart';
 
 class ItemEditPageArgumentExtractor extends StatelessWidget {
   @override

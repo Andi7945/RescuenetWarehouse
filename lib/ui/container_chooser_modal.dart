@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/container_visibility_service.dart';
+import 'package:rescuenet_warehouse/services/container_visibility_service.dart';
 import 'package:rescuenet_warehouse/ui/rescue_filter_dropdown.dart';
 import 'package:rescuenet_warehouse/ui/rescue_text.dart';
 

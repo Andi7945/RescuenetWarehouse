@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/main.dart';
 
-import 'collection_extensions.dart';
+import '../collection_extensions.dart';
 
-import 'models/log_entry.dart';
-import 'stores.dart';
+import '../models/log_entry.dart';
+import '../stores.dart';
 
-import 'models/assignment.dart';
-import 'models/item.dart';
-import 'auth_util.dart';
+import '../models/assignment.dart';
+import '../models/item.dart';
+import '../auth_util.dart';
 
 class AssignmentService extends ChangeNotifier {
   WorkLogStore? workLogStore;

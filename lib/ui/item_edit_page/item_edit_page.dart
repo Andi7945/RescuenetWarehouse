@@ -6,7 +6,7 @@ import 'package:rescuenet_warehouse/ui/item_edit_page/item_edit_page_base_inform
 import 'package:rescuenet_warehouse/ui/item_edit_page/item_edit_page_signs.dart';
 import 'package:rescuenet_warehouse/models/rescue_container.dart';
 
-import '../../container_service.dart';
+import '../../services/container_service.dart';
 import '../../models/item.dart';
 import 'item_edit_page_notes.dart';
 

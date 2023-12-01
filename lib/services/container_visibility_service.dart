@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/container_mapper_service.dart';
+import 'package:rescuenet_warehouse/services/container_mapper_service.dart';
 import 'package:rescuenet_warehouse/stores.dart';
 
-import 'models/container_dao.dart';
+import '../models/container_dao.dart';
 import 'container_service.dart';
-import 'filter.dart';
-import 'models/rescue_container.dart';
+import '../filter.dart';
+import '../models/rescue_container.dart';
 
 class ContainerVisibilityService extends ChangeNotifier {
   late ContainerMapperService mapperService;

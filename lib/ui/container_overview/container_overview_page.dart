@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/ui/container_overview/container_overview_page_card.dart';
 import 'package:rescuenet_warehouse/routes.dart';
 
-import '../../container_service.dart';
+import '../../services/container_service.dart';
 import '../rescue_navigation_drawer.dart';
 
 class ContainerOverviewPage extends StatelessWidget {

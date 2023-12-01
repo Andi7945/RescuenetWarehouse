@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/assignment_service.dart';
+import 'package:rescuenet_warehouse/services/assignment_service.dart';
 import 'package:rescuenet_warehouse/ui/item_edit_page/item_edit_page_amounts_add_container.dart';
 import 'package:rescuenet_warehouse/models/rescue_container.dart';
 import 'package:rescuenet_warehouse/ui/rescue_text.dart';
 
 import '../../models/item.dart';
-import '../../item_service.dart';
+import '../../services/item_service.dart';
 import 'item_edit_page_amounts_row.dart';
 
 class ItemEditPageAmounts extends StatefulWidget {

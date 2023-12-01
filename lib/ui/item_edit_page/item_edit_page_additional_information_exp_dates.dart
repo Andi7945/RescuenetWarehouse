@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/item_service.dart';
+import 'package:rescuenet_warehouse/services/item_service.dart';
 import 'package:rescuenet_warehouse/ui/label_with_multiple_entries.dart';
 
 import '../../models/item.dart';

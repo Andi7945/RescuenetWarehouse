@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/ui/item_edit_page/item_edit_page_signs_single.dart';
 
 import '../../models/item.dart';
-import '../../item_service.dart';
+import '../../services/item_service.dart';
 import '../../main.dart';
 import '../rescue_text.dart';
 import '../../models/sign.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/ui/container_edit_page/container_edit_page.dart';
-import 'package:rescuenet_warehouse/container_service.dart';
+import 'package:rescuenet_warehouse/services/container_service.dart';
 import 'package:rescuenet_warehouse/models/rescue_container.dart';
 import 'package:rescuenet_warehouse/ui/rescue_navigation_drawer.dart';
 
