@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../routes.dart';
-import '../utils/auth_util.dart';
+import '../auth_util.dart';
 
 class RescueNavigationDrawer extends StatelessWidget {
   RescueNavigationDrawer({super.key});

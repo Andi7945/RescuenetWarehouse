@@ -9,7 +9,7 @@ import 'stores.dart';
 
 import 'models/assignment.dart';
 import 'models/item.dart';
-import 'utils/auth_util.dart';
+import 'auth_util.dart';
 
 class AssignmentService extends ChangeNotifier {
   WorkLogStore? workLogStore;

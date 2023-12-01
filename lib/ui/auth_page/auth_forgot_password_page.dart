@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:rescuenet_warehouse/utils/auth_util.dart';
+import 'package:rescuenet_warehouse/auth_util.dart';
 
 class AuthForgotPasswordPage extends StatefulWidget {
   @override

@@ -2,7 +2,7 @@ import 'package:pdf/widgets.dart' as pw;
 
 import 'package:intl/intl.dart';
 
-import '../utils/auth_util.dart';
+import '../auth_util.dart';
 import 'pdf_utils.dart';
 
 Future<pw.Widget> headerRow(pw.Widget leftCorner,

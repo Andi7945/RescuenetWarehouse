@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:rescuenet_warehouse/utils/auth_util.dart';
+import 'package:rescuenet_warehouse/auth_util.dart';
 
 import 'packing_list.dart';
 import 'pdf_header_row.dart';
