@@ -25,13 +25,11 @@ mixin _$Sign {
   String? get imagePath => throw _privateConstructorUsedError;
   String? get instructions => throw _privateConstructorUsedError;
   String? get remarks => throw _privateConstructorUsedError;
-  @FirebaseDocumentConverter()
   List<FirebaseDocument> get sdsPath => throw _privateConstructorUsedError;
   String? get dangerType => throw _privateConstructorUsedError;
   String? get properShippingName => throw _privateConstructorUsedError;
   double get maxWeightPAX => throw _privateConstructorUsedError;
   double get maxWeightCargo => throw _privateConstructorUsedError;
-  @FirebaseDocumentConverter()
   List<FirebaseDocument> get otherDocuments =>
       throw _privateConstructorUsedError;
 
@@ -51,12 +49,12 @@ abstract class $SignCopyWith<$Res> {
       String? imagePath,
       String? instructions,
       String? remarks,
-      @FirebaseDocumentConverter() List<FirebaseDocument> sdsPath,
+      List<FirebaseDocument> sdsPath,
       String? dangerType,
       String? properShippingName,
       double maxWeightPAX,
       double maxWeightCargo,
-      @FirebaseDocumentConverter() List<FirebaseDocument> otherDocuments});
+      List<FirebaseDocument> otherDocuments});
 }
 
 /// @nodoc
@@ -146,12 +144,12 @@ abstract class _$$SignImplCopyWith<$Res> implements $SignCopyWith<$Res> {
       String? imagePath,
       String? instructions,
       String? remarks,
-      @FirebaseDocumentConverter() List<FirebaseDocument> sdsPath,
+      List<FirebaseDocument> sdsPath,
       String? dangerType,
       String? properShippingName,
       double maxWeightPAX,
       double maxWeightCargo,
-      @FirebaseDocumentConverter() List<FirebaseDocument> otherDocuments});
+      List<FirebaseDocument> otherDocuments});
 }
 
 /// @nodoc
@@ -234,13 +232,11 @@ class _$SignImpl implements _Sign {
       this.imagePath,
       this.instructions,
       this.remarks,
-      @FirebaseDocumentConverter()
       final List<FirebaseDocument> sdsPath = const [],
       this.dangerType,
       this.properShippingName,
       this.maxWeightPAX = 0.0,
       this.maxWeightCargo = 0.0,
-      @FirebaseDocumentConverter()
       final List<FirebaseDocument> otherDocuments = const []})
       : _sdsPath = sdsPath,
         _otherDocuments = otherDocuments;
@@ -261,7 +257,6 @@ class _$SignImpl implements _Sign {
   final List<FirebaseDocument> _sdsPath;
   @override
   @JsonKey()
-  @FirebaseDocumentConverter()
   List<FirebaseDocument> get sdsPath {
     if (_sdsPath is EqualUnmodifiableListView) return _sdsPath;
     // ignore: implicit_dynamic_type
@@ -281,7 +276,6 @@ class _$SignImpl implements _Sign {
   final List<FirebaseDocument> _otherDocuments;
   @override
   @JsonKey()
-  @FirebaseDocumentConverter()
   List<FirebaseDocument> get otherDocuments {
     if (_otherDocuments is EqualUnmodifiableListView) return _otherDocuments;
     // ignore: implicit_dynamic_type
@@ -356,12 +350,11 @@ abstract class _Sign implements Sign {
       final String? imagePath,
       final String? instructions,
       final String? remarks,
-      @FirebaseDocumentConverter() final List<FirebaseDocument> sdsPath,
+      final List<FirebaseDocument> sdsPath,
       final String? dangerType,
       final String? properShippingName,
       final double maxWeightPAX,
       final double maxWeightCargo,
-      @FirebaseDocumentConverter()
       final List<FirebaseDocument> otherDocuments}) = _$SignImpl;
 
   factory _Sign.fromJson(Map<String, dynamic> json) = _$SignImpl.fromJson;
@@ -377,7 +370,6 @@ abstract class _Sign implements Sign {
   @override
   String? get remarks;
   @override
-  @FirebaseDocumentConverter()
   List<FirebaseDocument> get sdsPath;
   @override
   String? get dangerType;
@@ -388,7 +380,6 @@ abstract class _Sign implements Sign {
   @override
   double get maxWeightCargo;
   @override
-  @FirebaseDocumentConverter()
   List<FirebaseDocument> get otherDocuments;
   @override
   @JsonKey(ignore: true)

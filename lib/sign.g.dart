@@ -13,8 +13,7 @@ _$SignImpl _$$SignImplFromJson(Map<String, dynamic> json) => _$SignImpl(
       instructions: json['instructions'] as String?,
       remarks: json['remarks'] as String?,
       sdsPath: (json['sdsPath'] as List<dynamic>?)
-              ?.map((e) => const FirebaseDocumentConverter()
-                  .fromJson(e as Map<String, dynamic>))
+              ?.map((e) => FirebaseDocument.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
       dangerType: json['dangerType'] as String?,
@@ -22,8 +21,7 @@ _$SignImpl _$$SignImplFromJson(Map<String, dynamic> json) => _$SignImpl(
       maxWeightPAX: (json['maxWeightPAX'] as num?)?.toDouble() ?? 0.0,
       maxWeightCargo: (json['maxWeightCargo'] as num?)?.toDouble() ?? 0.0,
       otherDocuments: (json['otherDocuments'] as List<dynamic>?)
-              ?.map((e) => const FirebaseDocumentConverter()
-                  .fromJson(e as Map<String, dynamic>))
+              ?.map((e) => FirebaseDocument.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
     );
@@ -35,14 +33,10 @@ Map<String, dynamic> _$$SignImplToJson(_$SignImpl instance) =>
       'imagePath': instance.imagePath,
       'instructions': instance.instructions,
       'remarks': instance.remarks,
-      'sdsPath': instance.sdsPath
-          .map(const FirebaseDocumentConverter().toJson)
-          .toList(),
+      'sdsPath': instance.sdsPath,
       'dangerType': instance.dangerType,
       'properShippingName': instance.properShippingName,
       'maxWeightPAX': instance.maxWeightPAX,
       'maxWeightCargo': instance.maxWeightCargo,
-      'otherDocuments': instance.otherDocuments
-          .map(const FirebaseDocumentConverter().toJson)
-          .toList(),
+      'otherDocuments': instance.otherDocuments,
     };

@@ -39,8 +39,6 @@ mixin _$Item {
   int get value => throw _privateConstructorUsedError;
   String? get sku => throw _privateConstructorUsedError;
   String? get notes => throw _privateConstructorUsedError;
-  @JsonKey(defaultValue: [])
-  @SignConverter()
   List<Sign> get signs => throw _privateConstructorUsedError;
   bool get isColdChain => throw _privateConstructorUsedError;
 
@@ -73,7 +71,7 @@ abstract class $ItemCopyWith<$Res> {
       int value,
       String? sku,
       String? notes,
-      @JsonKey(defaultValue: []) @SignConverter() List<Sign> signs,
+      List<Sign> signs,
       bool isColdChain});
 }
 
@@ -222,7 +220,7 @@ abstract class _$$ItemImplCopyWith<$Res> implements $ItemCopyWith<$Res> {
       int value,
       String? sku,
       String? notes,
-      @JsonKey(defaultValue: []) @SignConverter() List<Sign> signs,
+      List<Sign> signs,
       bool isColdChain});
 }
 
@@ -364,8 +362,6 @@ class _$ItemImpl implements _Item {
       this.value = 0,
       this.sku,
       this.notes,
-      @JsonKey(defaultValue: [])
-      @SignConverter()
       final List<Sign> signs = const [],
       this.isColdChain = false})
       : _expiringDates = expiringDates,
@@ -424,8 +420,7 @@ class _$ItemImpl implements _Item {
   final String? notes;
   final List<Sign> _signs;
   @override
-  @JsonKey(defaultValue: [])
-  @SignConverter()
+  @JsonKey()
   List<Sign> get signs {
     if (_signs is EqualUnmodifiableListView) return _signs;
     // ignore: implicit_dynamic_type
@@ -537,7 +532,7 @@ abstract class _Item implements Item {
       final int value,
       final String? sku,
       final String? notes,
-      @JsonKey(defaultValue: []) @SignConverter() final List<Sign> signs,
+      final List<Sign> signs,
       final bool isColdChain}) = _$ItemImpl;
 
   factory _Item.fromJson(Map<String, dynamic> json) = _$ItemImpl.fromJson;
@@ -580,8 +575,6 @@ abstract class _Item implements Item {
   @override
   String? get notes;
   @override
-  @JsonKey(defaultValue: [])
-  @SignConverter()
   List<Sign> get signs;
   @override
   bool get isColdChain;
