@@ -6,16 +6,18 @@ part of 'log_entry.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-LogEntry _$LogEntryFromJson(Map<String, dynamic> json) => LogEntry(
-      json['id'] as String,
-      json['itemId'] as String,
-      json['containerId'] as String,
-      json['count'] as int,
-      const TimestampConverter().fromJson(json['date'] as Timestamp),
-      json['user'] as String,
+_$LogEntryImpl _$$LogEntryImplFromJson(Map<String, dynamic> json) =>
+    _$LogEntryImpl(
+      id: json['id'] as String,
+      itemId: json['itemId'] as String,
+      containerId: json['containerId'] as String,
+      count: json['count'] as int,
+      date: const TimestampConverter().fromJson(json['date'] as Timestamp),
+      user: json['user'] as String,
     );
 
-Map<String, dynamic> _$LogEntryToJson(LogEntry instance) => <String, dynamic>{
+Map<String, dynamic> _$$LogEntryImplToJson(_$LogEntryImpl instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'itemId': instance.itemId,
       'containerId': instance.containerId,

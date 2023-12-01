@@ -1,27 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:rescuenet_warehouse/firebase_store.dart';
 import 'package:rescuenet_warehouse/json_converter_timestamp.dart';
 
+part 'log_entry.freezed.dart';
+
 part 'log_entry.g.dart';
 
-@JsonSerializable()
-class LogEntry extends FirebaseStorable<LogEntry> {
-  @override
-  final String id;
-  final String itemId;
-  final String containerId;
-  final int count;
-  @TimestampConverter()
-  final DateTime date;
-  final String user;
-
-  LogEntry(
-      this.id, this.itemId, this.containerId, this.count, this.date, this.user);
+@freezed
+class LogEntry extends FirebaseStorable<LogEntry> with _$LogEntry {
+  const factory LogEntry({
+    required String id,
+    required String itemId,
+    required String containerId,
+    required int count,
+    @TimestampConverter() required DateTime date,
+    required String user,
+  }) = _LogEntry;
 
   factory LogEntry.fromJson(Map<String, dynamic> json) =>
       _$LogEntryFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$LogEntryToJson(this);
 }

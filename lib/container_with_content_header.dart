@@ -79,7 +79,7 @@ class ContainerWithContentHeader extends StatelessWidget {
     var ifier = ValueNotifier(_container.toDeploy);
     ifier.addListener(() {
       var updated = ContainerDao.fromContainer(
-          RescueContainer.from(container: _container, toDeploy: ifier.value));
+          _container.copyWith(toDeploy: ifier.value));
       Provider.of<ContainerService>(context, listen: false)
           .updateContainer(updated);
     });
@@ -89,8 +89,8 @@ class ContainerWithContentHeader extends StatelessWidget {
   _readyNotifier(BuildContext context) {
     var ifier = ValueNotifier(_container.isReady);
     ifier.addListener(() {
-      var updated = ContainerDao.fromContainer(
-          RescueContainer.from(container: _container, isReady: ifier.value));
+      var updated =
+          ContainerDao.fromContainer(_container.copyWith(isReady: ifier.value));
       Provider.of<ContainerService>(context, listen: false)
           .updateContainer(updated);
     });

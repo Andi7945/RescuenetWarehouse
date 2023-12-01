@@ -6,29 +6,30 @@ part of 'sign.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Sign _$SignFromJson(Map<String, dynamic> json) => Sign(
-      json['id'] as String,
-    )
-      ..unNumber = json['unNumber'] as String?
-      ..imagePath = json['imagePath'] as String?
-      ..instructions = json['instructions'] as String?
-      ..remarks = json['remarks'] as String?
-      ..sdsPath = (json['sdsPath'] as List<dynamic>?)
+_$SignImpl _$$SignImplFromJson(Map<String, dynamic> json) => _$SignImpl(
+      id: json['id'] as String,
+      unNumber: json['unNumber'] as String?,
+      imagePath: json['imagePath'] as String?,
+      instructions: json['instructions'] as String?,
+      remarks: json['remarks'] as String?,
+      sdsPath: (json['sdsPath'] as List<dynamic>?)
               ?.map((e) => const FirebaseDocumentConverter()
                   .fromJson(e as Map<String, dynamic>))
               .toList() ??
-          []
-      ..dangerType = json['dangerType'] as String?
-      ..properShippingName = json['properShippingName'] as String?
-      ..maxWeightPAX = (json['maxWeightPAX'] as num).toDouble()
-      ..maxWeightCargo = (json['maxWeightCargo'] as num).toDouble()
-      ..otherDocuments = (json['otherDocuments'] as List<dynamic>?)
+          const [],
+      dangerType: json['dangerType'] as String?,
+      properShippingName: json['properShippingName'] as String?,
+      maxWeightPAX: (json['maxWeightPAX'] as num?)?.toDouble() ?? 0.0,
+      maxWeightCargo: (json['maxWeightCargo'] as num?)?.toDouble() ?? 0.0,
+      otherDocuments: (json['otherDocuments'] as List<dynamic>?)
               ?.map((e) => const FirebaseDocumentConverter()
                   .fromJson(e as Map<String, dynamic>))
               .toList() ??
-          [];
+          const [],
+    );
 
-Map<String, dynamic> _$SignToJson(Sign instance) => <String, dynamic>{
+Map<String, dynamic> _$$SignImplToJson(_$SignImpl instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'unNumber': instance.unNumber,
       'imagePath': instance.imagePath,

@@ -29,12 +29,12 @@ class AssignmentService extends ChangeNotifier {
   }
 
   _buildEntry(Item item, String containerId, int count) => LogEntry(
-      uuid.v4(),
-      item.id,
-      containerId,
-      count,
-      DateTime.now(),
-      Auth().currentUserName ?? "Unknown");
+      id: uuid.v4(),
+      itemId: item.id,
+      containerId: containerId,
+      count: count,
+      date: DateTime.now(),
+      user: Auth().currentUserName ?? "Unknown");
 
   Assignment? _find(Item item, String containerId) =>
       store?.all.firstWhereOrNull(

@@ -135,8 +135,7 @@ class _ContainerEditPageState extends State<ContainerEditPage> {
               onPressed: () => Navigator.pushNamed(context, routeName)));
 
   _sendChangesToStore() {
-    var changedContainer = RescueContainer.from(
-        container: widget._container.value,
+    var changedContainer = widget._container.value.copyWith(
         name: _nameController.text,
         description: _descriptionController.text,
         type: _type(),

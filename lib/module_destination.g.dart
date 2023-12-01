@@ -6,13 +6,15 @@ part of 'module_destination.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ModuleDestination _$ModuleDestinationFromJson(Map<String, dynamic> json) =>
-    ModuleDestination(
-      json['id'] as String,
-      json['name'] as String,
+_$ModuleDestinationImpl _$$ModuleDestinationImplFromJson(
+        Map<String, dynamic> json) =>
+    _$ModuleDestinationImpl(
+      id: json['id'] as String,
+      name: json['name'] as String,
     );
 
-Map<String, dynamic> _$ModuleDestinationToJson(ModuleDestination instance) =>
+Map<String, dynamic> _$$ModuleDestinationImplToJson(
+        _$ModuleDestinationImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,

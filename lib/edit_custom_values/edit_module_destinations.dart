@@ -57,7 +57,7 @@ class _EditModuleDestinationsState extends State<EditModuleDestinations> {
             TextEditingController(text: oldDest.name),
             (newDest) =>
                 Provider.of<StoreModuleDestination>(context, listen: false)
-                    .upsert(ModuleDestination(oldDest.id, newDest))));
+                    .upsert(oldDest.copyWith(name: newDest))));
   }
 
   TableRow _addingRow() => TableRow(children: [
@@ -69,8 +69,8 @@ class _EditModuleDestinationsState extends State<EditModuleDestinations> {
 
   _btnAdd() => IconButton(
       onPressed: () {
-        Provider.of<StoreModuleDestination>(context, listen: false)
-            .upsert(ModuleDestination(uuid.v4(), _addController.text));
+        Provider.of<StoreModuleDestination>(context, listen: false).upsert(
+            ModuleDestination(id: uuid.v4(), name: _addController.text));
         _addController.clear();
       },
       icon: const Icon(Icons.add));

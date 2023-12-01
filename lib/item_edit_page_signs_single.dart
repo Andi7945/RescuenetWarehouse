@@ -50,7 +50,7 @@ class ItemEditPageSignsSingle extends StatelessWidget {
       Expanded(
           flex: 1,
           child: RescuePickableImage(sign.imagePath ?? "",
-              (path) => fnUpdated(Sign.from(sign: sign, imagePath: path)))),
+              (path) => fnUpdated(sign.copyWith(imagePath: path)))),
       Expanded(flex: 2, child: _unNumber()),
       _removeButton()
     ]);
@@ -82,7 +82,7 @@ class ItemEditPageSignsSingle extends StatelessWidget {
             child: RescueInputText(
                 initial: sign.unNumber,
                 onChange: (changed) =>
-                    fnUpdated(Sign.from(sign: sign, unNumber: changed)))),
+                    fnUpdated(sign.copyWith(unNumber: changed)))),
       ]));
 
   Widget _removeButton() {

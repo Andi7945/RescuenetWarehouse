@@ -31,7 +31,7 @@ class ItemEditPageSigns extends StatelessWidget {
 
   _addButton(BuildContext context) {
     return FilledButton(
-        onPressed: () => _changeItem(context, "", Sign(uuid.v4())),
+        onPressed: () => _changeItem(context, "", Sign(id: uuid.v4())),
         child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
