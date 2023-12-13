@@ -95,8 +95,8 @@ void _showExportOptions(
                     Navigator.of(context).pop();
                   }),
               ListTile(
-                leading: const Icon(Icons.podcasts),
-                title: const Text('Pop'),
+                leading: const Icon(Icons.cancel_presentation),
+                title: const Text('Cancel'),
                 onTap: () {
                   Navigator.of(context).pop();
                 },

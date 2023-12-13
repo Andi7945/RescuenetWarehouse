@@ -16,7 +16,7 @@
 * Export: print labels -> save as pdf: only 1 label shown, A5 instead of A6, aligned on top. Document name: document.pdf, better to have a recognizable name. Title during saving presumes otherwise...
 * Export: print packing lists: only 1 list (print or saved as pdf), does not remember orientation (eg landscape mode), does not remember selected printer.
 * Export: Save on disk: not doing anything
-* Export: pop? what is this?
+~~* Export: pop? what is this?~~
 
 # next steps
 * Optimize sizes for Galaxy Tab A8 SMX200
