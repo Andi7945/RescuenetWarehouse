@@ -8,7 +8,7 @@
 ~~* Item page description: difficult to type with bluetooth keyboard: often changes cursor to end of text field. Deleting characters: sometimes they appear again.~~
 ~~* Item page: amounts: new container: all containers are in random order, better per unique number~~
 ~~* Ordering of items in a container not consistent: Genset 1, 2: same items, different order~~
-* All fonts: smaller (to 75%?)
+~~* All fonts: smaller (to 75%?)~~
 ~~* Item page: move cold chain checkbox close to text~~
 * Work log: Amount negative when removed from container?
 * Work log since: not scrollable. Menu -> work log again: resets to normal work log order (e.g. per date)
