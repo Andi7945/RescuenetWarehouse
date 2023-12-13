@@ -16,7 +16,7 @@ class WorkLogPageBodyFromDate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _bordered(Column(children: [
+    return _bordered(ListView(children: [
       Padding(
           padding: const EdgeInsets.only(top: 8),
           child: RescueText.headline(

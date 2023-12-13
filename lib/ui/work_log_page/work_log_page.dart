@@ -38,17 +38,21 @@ class _WorkLogPageState extends State<WorkLogPage> {
       : WorkLogPageBodyFromDate(
           onlyFromDate!, workLogService.fromDate(onlyFromDate!));
 
-  Widget _allChangesButton() => FilledButton(
-      onPressed: () => setState(() {
-            onlyFromDate = null;
-          }),
-      child: RescueText.slim("all"));
+  Widget _allChangesButton() => Padding(
+      padding: const EdgeInsets.only(right: 4),
+      child: FilledButton(
+          onPressed: () => setState(() {
+                onlyFromDate = null;
+              }),
+          child: RescueText.slim("all")));
 
-  Widget _dateChooser() => FilledButton(
-      onPressed: () async {
-        await _chooseNewDate();
-      },
-      child: RescueText.slim("since"));
+  Widget _dateChooser() => Padding(
+      padding: const EdgeInsets.only(right: 4),
+      child: FilledButton(
+          onPressed: () async {
+            await _chooseNewDate();
+          },
+          child: RescueText.slim("since")));
 
   Future<void> _chooseNewDate() async {
     var newDate = await _dialogBuilder(
