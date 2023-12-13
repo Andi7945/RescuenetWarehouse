@@ -17,8 +17,14 @@ class ContainerWithContentColumn extends StatelessWidget {
       shrinkWrap: true,
       children: [
         ContainerWithContentHeader(_container, _items),
-        ..._items.entries.map((e) => ItemCard(e.key, e.value))
+        ..._sortedEntries().map((e) => ItemCard(e.key, e.value))
       ],
     );
+  }
+
+  List<MapEntry<Item, int>> _sortedEntries() {
+    var entries = _items.entries.toList();
+    entries.sort((a, b) => (a.key.name ?? "").compareTo(b.key.name ?? ""));
+    return entries;
   }
 }

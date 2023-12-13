@@ -5,9 +5,9 @@
 * Filtering on Container overview page is missing
 * All items & Containers with content: unassigned list: find an item with name (eg water tank) Now you cannot easily find an item to include in another container...
 * All items: filter / sorting would be useful!
-* Item page description: difficult to type with bluetooth keyboard: often changes cursor to end of text field. Deleting characters: sometimes they appear again.
-* Item page: amounts: new container: all containers are in random order, better per unique number
-* Ordering of items in a container not consistent: Genset 1, 2: same items, different order
+~~* Item page description: difficult to type with bluetooth keyboard: often changes cursor to end of text field. Deleting characters: sometimes they appear again.~~
+~~* Item page: amounts: new container: all containers are in random order, better per unique number~~
+~~* Ordering of items in a container not consistent: Genset 1, 2: same items, different order~~
 * All fonts: smaller (to 75%?)
 * Item page: move cold chain checkbox close to text
 * Work log: Amount negative when removed from container?

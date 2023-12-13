@@ -14,7 +14,7 @@ class ContainerWithContentUnassigned extends StatelessWidget {
         shrinkWrap: true,
         children: [
           _header(),
-          ..._items.entries.map((e) => ItemCard(e.key, e.value))
+          ..._sortedEntries().map((e) => ItemCard(e.key, e.value))
         ],
       );
 
@@ -28,5 +28,11 @@ class ContainerWithContentUnassigned extends StatelessWidget {
             padding: const EdgeInsets.only(top: 4, bottom: 4),
             child: Center(
                 child: RescueText.normal("Unassigned", FontWeight.w700))));
+  }
+
+  List<MapEntry<Item, int>> _sortedEntries() {
+    var entries = _items.entries.toList();
+    entries.sort((a, b) => (a.key.name ?? "").compareTo(b.key.name ?? ""));
+    return entries;
   }
 }
