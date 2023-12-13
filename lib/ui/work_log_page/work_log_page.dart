@@ -6,19 +6,36 @@ import 'package:rescuenet_warehouse/ui/rescue_text.dart';
 import 'package:rescuenet_warehouse/ui/work_log_page/work_log_page_body_from_date.dart';
 import 'package:rescuenet_warehouse/services/work_log_service.dart';
 
-import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../rescue_navigation_drawer.dart';
 import 'work_log_page_body_all.dart';
 
 class WorkLogPage extends StatefulWidget {
+  const WorkLogPage({super.key});
+
   @override
   State createState() => _WorkLogPageState();
 }
 
 class _WorkLogPageState extends State<WorkLogPage> {
-  final DateFormat formatter = DateFormat('MMM d, yyyy');
-  DateTime? onlyFromDate;
+  Future<DateTime?> _getDate() async {
+    var prefs = await SharedPreferences.getInstance();
+
+    var millisecondsSinceEpoch = prefs.getInt('work_log_instant_filter');
+    return millisecondsSinceEpoch != null
+        ? DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch)
+        : null;
+  }
+
+  _saveDate(DateTime? choosen) async {
+    var prefs = await SharedPreferences.getInstance();
+    if (choosen == null) {
+      prefs.remove('work_log_instant_filter');
+    } else {
+      prefs.setInt('work_log_instant_filter', choosen.millisecondsSinceEpoch);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,16 +50,24 @@ class _WorkLogPageState extends State<WorkLogPage> {
             body: _body(workLogService)));
   }
 
-  Widget _body(WorkLogService workLogService) => onlyFromDate == null
-      ? WorkLogPageBodyAll(workLogService.byDateAndContainerName())
-      : WorkLogPageBodyFromDate(
-          onlyFromDate!, workLogService.fromDate(onlyFromDate!));
+  Widget _body(WorkLogService workLogService) => FutureBuilder(
+      future: _getDate(),
+      builder: (ctxt, snap) {
+        if (snap.connectionState != ConnectionState.done) {
+          return const CircularProgressIndicator();
+        }
+        var onlyFromDate = snap.data;
+        return onlyFromDate == null
+            ? WorkLogPageBodyAll(workLogService.byDateAndContainerName())
+            : WorkLogPageBodyFromDate(
+                onlyFromDate, workLogService.fromDate(onlyFromDate));
+      });
 
   Widget _allChangesButton() => Padding(
       padding: const EdgeInsets.only(right: 4),
       child: FilledButton(
           onPressed: () => setState(() {
-                onlyFromDate = null;
+                _saveDate(null);
               }),
           child: RescueText.slim("all")));
 
@@ -55,11 +80,12 @@ class _WorkLogPageState extends State<WorkLogPage> {
           child: RescueText.slim("since")));
 
   Future<void> _chooseNewDate() async {
-    var newDate = await _dialogBuilder(
-        context, DateTime.now().subtract(const Duration(days: 7)));
+    var initial =
+        (await _getDate()) ?? DateTime.now().subtract(const Duration(days: 7));
+    var newDate = await _dialogBuilder(context, initial);
     if (newDate != null) {
       setState(() {
-        onlyFromDate = newDate;
+        _saveDate(newDate);
       });
     }
   }

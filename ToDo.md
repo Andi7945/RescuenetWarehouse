@@ -11,7 +11,7 @@
 ~~* All fonts: smaller (to 75%?)~~
 ~~* Item page: move cold chain checkbox close to text~~
 * Work log: Amount negative when removed from container?
-* Work log since: not scrollable. Menu -> work log again: resets to normal work log order (e.g. per date)
+~~* Work log since: not scrollable. Menu -> work log again: resets to normal work log order (e.g. per date)~~
 * Export: Print labels: only 1 label shown instead of 2, A5 instead of A6, aligned in middle of page
 * Export: print labels -> save as pdf: only 1 label shown, A5 instead of A6, aligned on top. Document name: document.pdf, better to have a recognizable name. Title during saving presumes otherwise...
 * Export: print packing lists: only 1 list (print or saved as pdf), does not remember orientation (eg landscape mode), does not remember selected printer.

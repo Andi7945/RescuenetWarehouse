@@ -67,8 +67,7 @@ class WorkLogService {
           e.value.user.join(","));
 
   Map<RescueContainer, List<LogEntryExpanded>> fromDate(DateTime onlyFromDate) {
-    var filtered = _visibleEntries().where(
-        (e) => e.date.add(const Duration(days: 1)).isAfter(onlyFromDate));
+    var filtered = _visibleEntries().where((e) => e.date.isAfter(onlyFromDate));
     return _sumDailyChanges(filtered)
         .entries
         .map(_expandEntry)
