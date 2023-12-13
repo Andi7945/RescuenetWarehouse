@@ -33,10 +33,10 @@ Map<String, dynamic> _$$SignImplToJson(_$SignImpl instance) =>
       'imagePath': instance.imagePath,
       'instructions': instance.instructions,
       'remarks': instance.remarks,
-      'sdsPath': instance.sdsPath,
+      'sdsPath': instance.sdsPath.map((e) => e.toJson()).toList(),
       'dangerType': instance.dangerType,
       'properShippingName': instance.properShippingName,
       'maxWeightPAX': instance.maxWeightPAX,
       'maxWeightCargo': instance.maxWeightCargo,
-      'otherDocuments': instance.otherDocuments,
+      'otherDocuments': instance.otherDocuments.map((e) => e.toJson()).toList(),
     };

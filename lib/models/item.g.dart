@@ -61,7 +61,7 @@ Map<String, dynamic> _$$ItemImplToJson(_$ItemImpl instance) =>
       'value': instance.value,
       'sku': instance.sku,
       'notes': instance.notes,
-      'signs': instance.signs,
+      'signs': instance.signs.map((e) => e.toJson()).toList(),
       'isColdChain': instance.isColdChain,
     };
 
