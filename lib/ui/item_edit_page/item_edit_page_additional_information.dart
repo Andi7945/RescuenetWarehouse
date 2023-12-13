@@ -65,10 +65,16 @@ class ItemEditPageAdditionalInformation extends StatelessWidget {
           label: 'Weight:',
           onChange: update((s) => item.copyWith(weight: double.parse(s))),
           initial: "${item.weight}"),
-      CheckboxListTile(
-          value: item.isColdChain,
-          onChanged: update((b) => item.copyWith(isColdChain: b ?? false)),
-          title: const Text("Cold chain"))
+      Container(
+          alignment: Alignment.centerLeft,
+          width: double.infinity,
+          child: Container(
+              constraints: const BoxConstraints(maxWidth: 400),
+              child: CheckboxListTile(
+                  value: item.isColdChain,
+                  onChanged:
+                      update((b) => item.copyWith(isColdChain: b ?? false)),
+                  title: const Text("Cold chain"))))
     ]);
   }
 
