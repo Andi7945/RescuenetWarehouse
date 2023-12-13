@@ -22,7 +22,7 @@ class _RescueInputTextState extends State<RescueInputText> {
 
   @override
   Widget build(BuildContext context) {
-    _controller.text = widget.initial ?? "";
+    _controller.value = _controller.value.copyWith(text: widget.initial ?? "");
     return TextFormField(
         maxLines: widget.maxLines ?? 1,
         style: const TextStyle(fontSize: 24),

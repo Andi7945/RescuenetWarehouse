@@ -17,7 +17,7 @@ class _RescueInputAmountState extends State<RescueInputAmount> {
 
   @override
   Widget build(BuildContext context) {
-    _controller.text = "${widget.amount}";
+    _controller.value = _controller.value.copyWith(text: "${widget.amount}");
     return TextFormField(
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
