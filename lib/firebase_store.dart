@@ -39,6 +39,8 @@ class FirebaseStore<T extends FirebaseStorable<T>> extends ChangeNotifier {
 
   remove(T? entity) async => _collection.doc(entity?.id).delete();
 
+  removeById(String id) async => _collection.doc(id).delete();
+
   upsert(T entity) async => _collection.doc(entity.id).set(entity);
 }
 

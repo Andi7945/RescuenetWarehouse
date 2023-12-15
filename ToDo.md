@@ -1,4 +1,4 @@
-* How to remove a container?
+~~* How to remove a container?~~
 * Current location: smaller font (50%)
   * Smaller Font (50%) - Wirklich Current Location? Oder ist Module Destination gemeint?
 * Does not save "container types" -> change empty weight

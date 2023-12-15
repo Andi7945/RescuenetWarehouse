@@ -16,9 +16,9 @@ class ContainerVisibilityService extends ChangeNotifier {
       ValueNotifier(Filter(FilterField.all, ""));
   VoidCallback? listener;
 
-  updateContainers(List<ContainerDao> containers,
+  updateContainers(List<ContainerDao> conts,
       ContainerMapperService mapperService, ContainerService containerService) {
-    this.containers = Map.fromEntries(containers.map((e) => MapEntry(e.id, e)));
+    containers = Map.fromEntries(conts.map((e) => MapEntry(e.id, e)));
     this.mapperService = mapperService;
     this.containerService = containerService;
 
@@ -30,9 +30,11 @@ class ContainerVisibilityService extends ChangeNotifier {
       notifyListeners();
     });
 
-    for (var e in this.containers.keys) {
+    for (var e in containers.keys) {
       _containerVisibility.putIfAbsent(e, () => true);
     }
+    _containerVisibility
+        .removeWhere((key, value) => !containers.keys.contains(key));
   }
 
   final Map<String, bool> _containerVisibility = {};

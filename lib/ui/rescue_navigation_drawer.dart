@@ -54,8 +54,7 @@ class RescueNavigationDrawer extends StatelessWidget {
         title: Text(text),
         leading: const Icon(Icons.list),
         onTap: () {
-          Navigator.of(context).pop();
-          Navigator.pushNamed(context, route);
+          Navigator.popAndPushNamed(context, route);
         },
       );
 }

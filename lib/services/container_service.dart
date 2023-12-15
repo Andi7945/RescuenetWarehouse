@@ -41,6 +41,9 @@ class ContainerService {
     return containerMapperService.fromDao(newContainer);
   }
 
+  Future<void> deleteContainer(String containerId) =>
+      containerStore.removeById(containerId);
+
   int _firstUnusedNumber() {
     var containerNumbers = containerStore.all.map((c) => c.number).toList();
     containerNumbers.sort();
@@ -76,6 +79,9 @@ class ContainerService {
 
     return map;
   }
+
+  Set<Item> itemsAssigned(RescueContainer container) =>
+      assignmentExpanderService.assignmentsFor(container.id).keys.toSet();
 
   Map<RescueContainer, int> assignmentsFor(Item item) =>
       assignmentExpanderService.assignmentsForItem(item.id);
