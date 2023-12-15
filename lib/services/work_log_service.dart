@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/collection_extensions.dart';
+import 'package:rescuenet_warehouse/models/item.dart';
 import 'package:rescuenet_warehouse/services/container_visibility_service.dart';
 import 'package:rescuenet_warehouse/models/log_entry.dart';
 import 'package:rescuenet_warehouse/models/log_entry_expanded.dart';
@@ -60,7 +61,8 @@ class WorkLogService {
 
   LogEntryExpanded _expandEntry(MapEntry<ItemAndContainer, CountAndUser> e) =>
       LogEntryExpanded(
-          itemService.itemById(e.key.itemId),
+          itemService.itemById(e.key.itemId) ??
+              Item(id: e.key.itemId, rescueNetId: 0, totalAmount: 0),
           containerService.containerValues
               .firstWhere((element) => element.id == e.key.containerId),
           e.value.count,

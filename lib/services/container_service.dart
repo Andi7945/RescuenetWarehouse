@@ -7,16 +7,15 @@ import 'package:rescuenet_warehouse/stores.dart';
 
 import '../models/container_dao.dart';
 import '../models/item.dart';
-import 'item_service.dart';
 import '../models/sequential_build.dart';
 
 class ContainerService {
-  final ItemService itemService;
+  final ItemStore itemStore;
   final ContainerStore containerStore;
   final ContainerMapperService containerMapperService;
   final AssignmentExpanderService assignmentExpanderService;
 
-  ContainerService(this.itemService, this.containerStore,
+  ContainerService(this.itemStore, this.containerStore,
       this.containerMapperService, this.assignmentExpanderService);
 
   List<RescueContainer> containers() {
@@ -67,7 +66,7 @@ class ContainerService {
   Map<Item, int> itemsWithoutContainer() {
     var assignedItems = assignmentExpanderService.assignmentsFor();
 
-    var map = Map.fromEntries(itemService.items.map((e) {
+    var map = Map.fromEntries(itemStore.all.map((e) {
       var assigned = assignedItems[e];
       if (assigned == null) {
         return MapEntry(e, e.totalAmount);
@@ -100,12 +99,12 @@ class ContainerService {
 }
 
 ProxyProvider4 proxyContainerService() => ProxyProvider4<
-        ItemService,
+        ItemStore,
         ContainerStore,
         ContainerMapperService,
         AssignmentExpanderService,
         ContainerService>(
-    update: (ctx, itemService, containerStore, mapperService,
+    update: (ctx, itemStore, containerStore, mapperService,
             assignmentExpanderService, prev) =>
-        ContainerService(itemService, containerStore, mapperService,
+        ContainerService(itemStore, containerStore, mapperService,
             assignmentExpanderService));
