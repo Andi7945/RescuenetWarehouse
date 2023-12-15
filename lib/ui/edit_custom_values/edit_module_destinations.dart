@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/ui/edit_custom_values/edit_custom_value_delete_button.dart';
+import 'package:rescuenet_warehouse/ui/delete_button_with_usages.dart';
 import 'package:rescuenet_warehouse/ui/edit_custom_values/edit_custom_value_text_field.dart';
 import 'package:rescuenet_warehouse/main.dart';
 import 'package:rescuenet_warehouse/models/module_destination.dart';
@@ -44,7 +44,7 @@ class _EditModuleDestinationsState extends State<EditModuleDestinations> {
   TableRow _buildRow(MapEntry<ModuleDestination, Set<String>> destination) =>
       TableRow(children: [
         _textField(destination.key),
-        EditCustomValueDeleteButton(destination.value, () {
+        DeleteButtonWithUsages(destination.value, () {
           Provider.of<StoreModuleDestination>(context, listen: false)
               .remove(destination.key);
         })

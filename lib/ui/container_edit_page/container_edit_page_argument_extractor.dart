@@ -17,7 +17,9 @@ class ContainerEditPageArgumentExtractor extends StatelessWidget {
       var container =
           service.containers().firstWhere((c) => c.id == containerId);
       return Scaffold(
-          appBar: AppBar(title: Text("Edit container ${container.number}")),
+          appBar: AppBar(
+              title: Text("Edit container ${container.number}"),
+              actions: [_deleteBtn()]),
           drawer: RescueNavigationDrawer(),
           body: _page(container, (c) => service.updateContainer(c), options));
     });
@@ -30,5 +32,9 @@ class ContainerEditPageArgumentExtractor extends StatelessWidget {
       updateContainer(ContainerDao.fromContainer(cont.value));
     });
     return ContainerEditPage(cont, containerOptions);
+  }
+
+  _deleteBtn() {
+    return IconButton(onPressed: () {}, icon: const Icon(Icons.delete));
   }
 }

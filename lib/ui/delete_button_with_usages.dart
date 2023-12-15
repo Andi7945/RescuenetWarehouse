@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class EditCustomValueDeleteButton extends StatelessWidget {
+class DeleteButtonWithUsages extends StatelessWidget {
   final Set<String> usedIn;
   final VoidCallback? onDelete;
 
-  EditCustomValueDeleteButton(this.usedIn, this.onDelete);
+  DeleteButtonWithUsages(this.usedIn, this.onDelete);
 
   @override
   Widget build(BuildContext context) {

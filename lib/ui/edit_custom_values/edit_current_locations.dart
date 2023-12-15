@@ -3,11 +3,11 @@ import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/models/current_location.dart';
 import 'package:rescuenet_warehouse/proxy_current_location_usage.dart';
 import 'package:rescuenet_warehouse/main.dart';
+import 'package:rescuenet_warehouse/ui/delete_button_with_usages.dart';
 
 import '../rescue_table.dart';
 import '../../stores.dart';
 import '../rescue_navigation_drawer.dart';
-import 'edit_custom_value_delete_button.dart';
 import 'edit_custom_value_text_field.dart';
 
 class EditCurrentLocations extends StatefulWidget {
@@ -43,7 +43,7 @@ class _EditCurrentLocationsState extends State<EditCurrentLocations> {
   TableRow _buildRow(MapEntry<CurrentLocation, Set<String>> withUsage) =>
       TableRow(children: [
         _textField(withUsage.key),
-        EditCustomValueDeleteButton(withUsage.value, () {
+        DeleteButtonWithUsages(withUsage.value, () {
           Provider.of<StoreCurrentLocations>(context, listen: false)
               .remove(withUsage.key);
         })

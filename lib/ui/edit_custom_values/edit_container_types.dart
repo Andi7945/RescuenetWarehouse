@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/proxy_container_type_usage.dart';
 import 'package:rescuenet_warehouse/main.dart';
+import 'package:rescuenet_warehouse/ui/delete_button_with_usages.dart';
 
 import '../../models/container_type.dart';
 import '../rescue_pickable_image.dart';
 import '../rescue_table.dart';
 import '../rescue_navigation_drawer.dart';
-import 'edit_custom_value_delete_button.dart';
 import 'edit_custom_value_text_field.dart';
 import '../../stores.dart';
 
@@ -65,7 +65,7 @@ class _EditContainerTypesState extends State<EditContainerTypes> {
                 type.key.copyWith(emptyWeight: double.tryParse(v) ?? 0.0))),
         _textField(type.key.measurements,
             (v) => _change(type.key.copyWith(measurements: v))),
-        EditCustomValueDeleteButton(type.value, () {
+        DeleteButtonWithUsages(type.value, () {
           Provider.of<StoreContainerTypes>(context, listen: false)
               .remove(type.key);
         })
