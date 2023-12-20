@@ -20,17 +20,18 @@ class ContainerChooserModal extends StatelessWidget {
             ]);
       });
 
-  Widget _table(ContainerVisibilityService service, BuildContext context) {
-    return Table(columnWidths: const {
-      0: IntrinsicColumnWidth(),
-      1: IntrinsicColumnWidth(),
-      2: IntrinsicColumnWidth(),
-      3: IntrinsicColumnWidth()
-    }, children: [
-      _header(),
-      ..._options(service, context)
-    ]);
-  }
+  Widget _table(ContainerVisibilityService service, BuildContext context) =>
+      Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Table(columnWidths: const {
+            0: IntrinsicColumnWidth(),
+            1: IntrinsicColumnWidth(),
+            2: IntrinsicColumnWidth(),
+            3: IntrinsicColumnWidth()
+          }, children: [
+            _header(),
+            ..._options(service, context)
+          ]));
 
   TableRow _header() => TableRow(children: [
         Align(child: RescueText.normal("shown", FontWeight.w700)),

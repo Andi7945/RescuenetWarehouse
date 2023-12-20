@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:rescuenet_warehouse/container_filter.dart';
+import 'package:rescuenet_warehouse/filter_fields.dart';
 import 'package:rescuenet_warehouse/ui/rescue_dropdown_button.dart';
 
-import '../filter.dart';
-
 class RescueFilterDropdown extends StatefulWidget {
-  final ValueNotifier<Filter> valueNotifier;
+  final ValueNotifier<ContainerFilter> valueNotifier;
 
   RescueFilterDropdown(this.valueNotifier);
 
@@ -25,7 +25,7 @@ class _RescueFilterDropdownState extends State<RescueFilterDropdown> {
         TextEditingController(text: widget.valueNotifier.value.value ?? "");
 
     _o.addListener(() {
-      widget.valueNotifier.value = Filter(
+      widget.valueNotifier.value = ContainerFilter(
           FilterField.values.firstWhere((v) => v.name == _o.value),
           _controller.text);
     });
