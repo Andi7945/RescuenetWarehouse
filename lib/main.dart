@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/services/assignment_expander_service.dart';
 import 'package:rescuenet_warehouse/services/assignment_service.dart';
+import 'package:rescuenet_warehouse/services/item_sort_service.dart';
 import 'package:rescuenet_warehouse/ui/auth_page/auth_forgot_password_page.dart';
 import 'package:rescuenet_warehouse/ui/container_edit_page/container_edit_page_argument_extractor.dart';
 import 'package:rescuenet_warehouse/services/container_mapper_service.dart';
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
         provideMapperService(),
         provideAssignmentExpander(),
         provideItemService(),
+        provideItemSortService(),
         proxyContainerService(),
         provideVisibilityService(),
         proxyModuleDestinationUsage(),
@@ -63,7 +65,7 @@ class MyApp extends StatelessWidget {
         proxyContainerTypeUsage(),
         proxyContainerOptions(),
         provideAssignmentService(),
-        provideWorkLogService()
+        provideWorkLogService(),
       ],
       child: MaterialApp(
           title: 'RescueNet',
@@ -81,21 +83,16 @@ class MyApp extends StatelessWidget {
           home: const LoginPage(),
           routes: {
             LoginPage.routeName: (ctx) => const LoginPage(),
-
             routeForgotPassword: (ctx) => AuthForgotPasswordPage(),
-
             routeContainerOverview: (ctx) => ContainerOverviewPage(),
             routeContainerWithContent: (ctx) => ContainerWithContentPage(),
             routeContainerEditPage: (ctx) =>
                 ContainerEditPageArgumentExtractor(),
-
             routeItemsOverview: (ctx) => ItemOverviewPage(),
             routeItemEditPage: (ctx) => ItemEditPageArgumentExtractor(),
-
             routeEditModuleDestinations: (ctx) => EditModuleDestinations(),
             routeEditCurrentLocations: (ctx) => EditCurrentLocations(),
             routeEditContainerTypes: (ctx) => EditContainerTypes(),
-
             routeWorkLog: (_) => WorkLogPage(),
             routeExport: (_) => ExportPage(),
           }),

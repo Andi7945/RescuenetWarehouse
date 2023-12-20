@@ -1,38 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/services/item_service.dart';
+import 'package:rescuenet_warehouse/services/item_sort_service.dart';
+import 'package:rescuenet_warehouse/ui/item_overview_page/item_add_button.dart';
+import 'package:rescuenet_warehouse/ui/item_overview_page/item_sort_button.dart';
 import 'package:rescuenet_warehouse/ui/rescue_navigation_drawer.dart';
 
 import '../../models/item.dart';
 import '../item_card.dart';
-import '../../routes.dart';
 
-class ItemOverviewPage extends StatelessWidget {
+class ItemOverviewPage extends StatefulWidget {
+  @override
+  State createState() => _ItemOverviewPageState();
+}
+
+class _ItemOverviewPageState extends State<ItemOverviewPage> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<ItemService>(
-        builder: (ctxt, itemService, _) => Scaffold(
+    return Consumer<ItemSortService>(
+        builder: (ctxt, service, _) => Scaffold(
             appBar: AppBar(
               title: const Text("Item overview"),
-              actions: [
-                IconButton(
-                    onPressed: () async {
-                      var id = itemService.newItem().id;
-                      Navigator.pushNamed(context, routeItemEditPage,
-                          arguments: id);
-                    },
-                    icon: const Icon(Icons.add))
+              actions: const [
+                ItemSortButton(),
+                ItemAddButton(),
               ],
             ),
             drawer: RescueNavigationDrawer(),
-            body: _items(itemService.items)));
+            body: _items(service.items)));
   }
 
   _items(List<Item> items) => SingleChildScrollView(
       scrollDirection: Axis.vertical,
-      child: Wrap(
+      child: Center(
+          child: Wrap(
         spacing: 8.0,
         runSpacing: 8.0,
         children: items.map((i) => ItemCard(i, i.totalAmount)).toList(),
-      ));
+      )));
 }

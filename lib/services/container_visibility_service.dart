@@ -14,21 +14,18 @@ class ContainerVisibilityService extends ChangeNotifier {
   Map<String, ContainerDao> containers = {};
   ValueNotifier<Filter> currentFilter =
       ValueNotifier(Filter(FilterField.all, ""));
-  VoidCallback? listener;
 
-  updateContainers(List<ContainerDao> conts,
-      ContainerMapperService mapperService, ContainerService containerService) {
+  init(List<ContainerDao> conts, ContainerMapperService mapperService,
+      ContainerService containerService) {
     containers = Map.fromEntries(conts.map((e) => MapEntry(e.id, e)));
     this.mapperService = mapperService;
     this.containerService = containerService;
 
-    if (listener != null) {
-      currentFilter.removeListener(listener!);
-      listener = null;
+    if (!currentFilter.hasListeners) {
+      currentFilter.addListener(() {
+        notifyListeners();
+      });
     }
-    currentFilter.addListener(() {
-      notifyListeners();
-    });
 
     for (var e in containers.keys) {
       _containerVisibility.putIfAbsent(e, () => true);
@@ -66,4 +63,4 @@ ChangeNotifierProxyProvider3 provideVisibilityService() =>
             ContainerService, ContainerVisibilityService>(
         create: (ctx) => ContainerVisibilityService(),
         update: (ctx, store, mapperService, service, prev) =>
-            prev!..updateContainers(store.all, mapperService, service));
+            prev!..init(store.all, mapperService, service));
