@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/services/item_sort_service.dart';
+import 'package:rescuenet_warehouse/ui/item_chooser_action.dart';
 import 'package:rescuenet_warehouse/ui/item_overview_page/item_add_button.dart';
 import 'package:rescuenet_warehouse/ui/item_overview_page/item_sort_button.dart';
 import 'package:rescuenet_warehouse/ui/rescue_navigation_drawer.dart';
@@ -21,6 +22,9 @@ class _ItemOverviewPageState extends State<ItemOverviewPage> {
             appBar: AppBar(
               title: const Text("Item overview"),
               actions: const [
+                Padding(
+                    padding: EdgeInsets.only(right: 8),
+                    child: ItemChooserAction()),
                 ItemSortButton(),
                 ItemAddButton(),
               ],

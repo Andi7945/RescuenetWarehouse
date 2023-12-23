@@ -1,4 +1,5 @@
 import 'package:rescuenet_warehouse/filter_fields.dart';
+import 'package:rescuenet_warehouse/item_filter.dart';
 
 import 'models/item.dart';
 import 'models/rescue_container.dart';

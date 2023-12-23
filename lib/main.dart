@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/services/assignment_expander_service.dart';
 import 'package:rescuenet_warehouse/services/assignment_service.dart';
+import 'package:rescuenet_warehouse/services/item_filter_service.dart';
 import 'package:rescuenet_warehouse/services/item_sort_service.dart';
 import 'package:rescuenet_warehouse/ui/auth_page/auth_forgot_password_page.dart';
 import 'package:rescuenet_warehouse/ui/container_edit_page/container_edit_page_argument_extractor.dart';
@@ -57,6 +58,7 @@ class MyApp extends StatelessWidget {
         provideMapperService(),
         provideAssignmentExpander(),
         provideItemService(),
+        provideItemFilterService(),
         provideItemSortService(),
         proxyContainerService(),
         provideVisibilityService(),

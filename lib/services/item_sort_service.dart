@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rescuenet_warehouse/models/item.dart';
-import 'package:rescuenet_warehouse/services/item_service.dart';
+import 'package:rescuenet_warehouse/services/item_filter_service.dart';
 import 'package:rescuenet_warehouse/models/item_sorting_options.dart';
 
 class ItemSortService extends ChangeNotifier {
@@ -13,7 +13,7 @@ class ItemSortService extends ChangeNotifier {
 
   bool get sortedAsc => _sortAsc;
 
-  List<Item> get items => sortedItems();
+  List<Item> get items => _sortedItems();
 
   ItemSortService(this._items);
 
@@ -22,7 +22,7 @@ class ItemSortService extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<Item> sortedItems() {
+  List<Item> _sortedItems() {
     var itms = [..._items];
     var sortFn =
         _sortAsc ? _sortedBy.sort : ((a, b) => (_sortedBy.sort(a, b) * -1));
@@ -37,9 +37,9 @@ class ItemSortService extends ChangeNotifier {
   }
 }
 
-ChangeNotifierProxyProvider<ItemService, ItemSortService>
+ChangeNotifierProxyProvider<ItemFilterService, ItemSortService>
     provideItemSortService() =>
-        ChangeNotifierProxyProvider<ItemService, ItemSortService>(
+        ChangeNotifierProxyProvider<ItemFilterService, ItemSortService>(
           create: (ctx) => ItemSortService([]),
           update: (ctx, itemService, prev) =>
               prev!..updateItems(itemService.items),
