@@ -1,0 +1,6 @@
+package net.rescuenet.app
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity() {
+}

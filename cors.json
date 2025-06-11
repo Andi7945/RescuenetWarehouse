@@ -1,0 +1,7 @@
+[
+  {
+    "origin": ["https://rescuenet-7733b.web.app/", "http://localhost:62152"],
+    "method": ["GET"],
+    "maxAgeSeconds": 3600
+  }
+]

@@ -1,0 +1,43 @@
+import 'package:rescuenet_warehouse/collection_extensions.dart';
+import 'package:rescuenet_warehouse/state/all_containers_notifier.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../models/assignment.dart';
+import '../models/item.dart';
+import '../models/rescue_container.dart';
+import 'all_assignments_notifier.dart';
+import 'all_items_notifier.dart';
+
+part 'container_with_items_notifier.g.dart';
+
+@riverpod
+class ContainerWithItemsNotifier extends _$ContainerWithItemsNotifier {
+  @override
+  Map<RescueContainer, Map<Item, int>> build() {
+    var assignments = ref.watch(allAssignmentsNotifierProvider);
+    return _container(assignments);
+  }
+
+  Map<RescueContainer, Map<Item, int>> _container(
+      List<Assignment> assignments) {
+    var container = ref.watch(allContainersNotifierProvider.notifier);
+    var entries = assignments.groupBy((a) => a.containerId).entries.map((e) {
+      var cont = container.byId(e.key);
+      if (cont != null) {
+        return MapEntry(cont, _items(e.value));
+      }
+      return null;
+    }).nonNulls;
+    return Map.fromEntries(entries);
+  }
+
+  Map<Item, int> _items(List<Assignment> assignments) {
+    var items = ref.watch(allItemsNotifierProvider.notifier);
+    return Map.fromEntries(assignments.map((a) {
+      var item = items.byId(a.itemId);
+      if (item != null) {
+        return MapEntry(item, a.count);
+      }
+    }).nonNulls);
+  }
+}

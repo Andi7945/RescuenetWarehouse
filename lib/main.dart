@@ -1,55 +1,141 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:rescuenet_warehouse/page/login_register_page.dart';
-import 'package:rescuenet_warehouse/page/warehouse_overview_page.dart';
-import 'package:rescuenet_warehouse/provider/rn_items_provider.dart';
-import 'package:rescuenet_warehouse/provider/sequentialbuild_provider.dart';
-import 'package:rescuenet_warehouse/utils/widget_tree_util.dart';
-import 'package:rescuenet_warehouse/widget/horizontal_drag_widget.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' as river;
+import 'package:rescuenet_warehouse/db/assignment_data.dart';
+import 'package:rescuenet_warehouse/db/container_data.dart';
+import 'package:rescuenet_warehouse/db/container_types_data.dart';
+import 'package:rescuenet_warehouse/db/current_locations_data.dart';
+import 'package:rescuenet_warehouse/db/item_data.dart';
+import 'package:rescuenet_warehouse/db/module_destinations_data.dart';
+import 'package:rescuenet_warehouse/db/work_log_data.dart';
+import 'package:rescuenet_warehouse/features/assignment_by_container/assign_by_container/assignment_by_container_page.dart';
+import 'package:rescuenet_warehouse/features/assignment_by_container/container_overview/container_assignments_page.dart';
+import 'package:rescuenet_warehouse/features/assignment_by_container/search_item_for_assignment/assignment_search_item_page.dart';
+import 'package:rescuenet_warehouse/features/item_export/item_export_page.dart';
+import 'package:rescuenet_warehouse/state/all_assignments_notifier.dart';
+import 'package:rescuenet_warehouse/state/all_containers_notifier.dart';
+import 'package:rescuenet_warehouse/state/all_items_notifier.dart';
+import 'package:rescuenet_warehouse/state/container_current_filter_notifier.dart';
+import 'package:rescuenet_warehouse/state/container_hidden_by_selection_notifier.dart';
+import 'package:rescuenet_warehouse/state/container_types_notifier.dart';
+import 'package:rescuenet_warehouse/state/container_visibility_notifier.dart';
+import 'package:rescuenet_warehouse/state/current_locations_notifier.dart';
+import 'package:rescuenet_warehouse/state/items_current_filter_notifier.dart';
+import 'package:rescuenet_warehouse/state/items_current_sort_notifier.dart';
+import 'package:rescuenet_warehouse/state/items_filtered_and_sorted_notifier.dart';
+import 'package:rescuenet_warehouse/state/module_destinations_notifier.dart';
+import 'package:rescuenet_warehouse/ui/auth_page/auth_forgot_password_page.dart';
+import 'package:rescuenet_warehouse/ui/container_edit_page/container_edit_page_argument_extractor.dart';
+import 'package:rescuenet_warehouse/ui/container_overview/container_overview_page.dart';
+import 'package:rescuenet_warehouse/ui/container_with_content/container_with_content_page.dart';
+import 'package:rescuenet_warehouse/custom_scroll_behavior.dart';
+import 'package:rescuenet_warehouse/ui/edit_custom_values/edit_container_types.dart';
+import 'package:rescuenet_warehouse/ui/edit_custom_values/edit_current_locations.dart';
+import 'package:rescuenet_warehouse/ui/edit_custom_values/edit_module_destinations.dart';
+import 'package:rescuenet_warehouse/ui/export_page/export_page.dart';
+import 'package:rescuenet_warehouse/ui/item_edit_page/item_edit_page_argument_extractor.dart';
+import 'package:rescuenet_warehouse/ui/auth_page/login_register_page.dart';
+import 'package:rescuenet_warehouse/routes.dart';
+import 'package:rescuenet_warehouse/features/item_csv_import/widgets/import_export/item_import_overview.dart';
+import 'package:rescuenet_warehouse/ui/work_log_page/work_log_page.dart';
+import 'package:uuid/uuid.dart';
+
+import 'auth_util.dart';
+import 'features/item_delete_multiple/item_delete_multiple_page.dart';
+import 'firebase_options.dart';
+import 'features/item_overview/item_overview_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(const MyApp());
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  runApp(river.ProviderScope(child: MyApp()));
 }
+
+var uuid = const Uuid();
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (ctx) => RNItemsProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (ctx) => SequentialBuildProvider(),
-        ),
-      ],
+    return _EagerInitialization(
       child: MaterialApp(
-          title: 'RescueNet',
-          theme: ThemeData(
-            pageTransitionsTheme: const PageTransitionsTheme(builders: {
+        title: 'RescueNet',
+        theme: ThemeData(
+          pageTransitionsTheme: const PageTransitionsTheme(
+            builders: {
               TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
               TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-            }),
-            // the colors and font
-            primaryColorDark: const Color(0xFF2C3333),
-            cardColor: const Color(0xFFF5F2E7),
-            fontFamily: 'Quicksand',
+            },
           ),
-          home: const WidgetTree(),
-          routes: {
-            // all of the raoutes in the app
-            WareHouseOverviewPage.routeName: (ctx) =>
-                const WareHouseOverviewPage(),
-            HorizontalDragWidget.routeName: (ctx) =>
-                const HorizontalDragWidget(lists: []),
-            LoginPage.routeName: (ctx) => const LoginPage(),
-            WidgetTree.routeName: (ctx) => const WidgetTree(),
-          }),
+          // the colors and font
+          primaryColorDark: const Color(0xFF2C3333),
+          cardColor: const Color(0xFFF5F2E7),
+          fontFamily: 'Quicksand',
+          visualDensity: VisualDensity.compact,
+        ),
+        scrollBehavior: CustomScrollBehavior(),
+        home:
+            Auth().currentUser == null
+                ? LoginPage()
+                : ContainerWithContentPage(),
+        routes: {
+          LoginPage.routeName: (ctx) => const LoginPage(),
+          routeForgotPassword: (ctx) => AuthForgotPasswordPage(),
+          routeContainerOverview: (ctx) => ContainerOverviewPage(),
+          routeContainerWithContent: (ctx) => ContainerWithContentPage(),
+          routeContainerEditPage: (ctx) => ContainerEditPageArgumentExtractor(),
+          routeContainerAssignmentOverviewPage:
+              (ctx) => ContainerAssignmentsPage(),
+          routeContainerAssignmentSinglePage:
+              (ctx) => AssignmentByContainerPage(),
+          routeContainerAssignmentSearchItemPage:
+              (ctx) => AssignmentSearchItemPage(),
+          routeItemsOverview: (ctx) => ItemOverviewPage(),
+          routeExportItemsOverview: (_) => ItemExportPage(),
+          routeItemEditPage: (ctx) => ItemEditPageArgumentExtractor(),
+          routeEditModuleDestinations: (ctx) => EditModuleDestinations(),
+          routeEditCurrentLocations: (ctx) => EditCurrentLocations(),
+          routeEditContainerTypes: (ctx) => EditContainerTypes(),
+          routeWorkLog: (_) => WorkLogPage(),
+          routeExport: (_) => ExportPage(),
+          routeItemImportOverview: (_) => ItemImportOverviewPage(),
+          routeDeleteMultipleItems: (_) => ItemDeleteMultiplePage(),
+        },
+      ),
     );
+  }
+}
+
+class _EagerInitialization extends river.ConsumerWidget {
+  const _EagerInitialization({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context, river.WidgetRef ref) {
+    // Eagerly initialize providers by watching them.
+    // By using "watch", the provider will stay alive and not be disposed.
+    // See https://riverpod.dev/docs/essentials/eager_initialization
+    ref.watch(assignmentDataProvider);
+    ref.watch(containerDataProvider);
+    ref.watch(containerTypesDataProvider);
+    ref.watch(currentLocationsDataProvider);
+    ref.watch(moduleDestinationsDataProvider);
+    ref.watch(itemDataProvider);
+    ref.watch(workLogDataProvider);
+    ref.watch(containerTypesNotifierProvider);
+    ref.watch(moduleDestinationsNotifierProvider);
+    ref.watch(currentLocationsNotifierProvider);
+    ref.watch(allContainersNotifierProvider);
+    ref.watch(allItemsNotifierProvider);
+    ref.watch(allAssignmentsNotifierProvider);
+    ref.watch(itemsCurrentFilterNotifierProvider);
+    ref.watch(itemsCurrentSortNotifierProvider);
+    ref.watch(itemsFilteredAndSortedNotifierProvider);
+    ref.watch(containerHiddenBySelectionNotifierProvider);
+    ref.watch(containerVisibilityNotifierProvider);
+    ref.watch(containerCurrentFilterNotifierProvider);
+    return child;
   }
 }
