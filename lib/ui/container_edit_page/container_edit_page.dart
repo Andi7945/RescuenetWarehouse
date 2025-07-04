@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as river;
 import 'package:rescuenet_warehouse/routes.dart';
+import 'package:rescuenet_warehouse/state/all_containers_notifier.dart';
 import 'package:rescuenet_warehouse/state/container_types_notifier.dart';
 import 'package:rescuenet_warehouse/state/current_locations_notifier.dart';
 import 'package:rescuenet_warehouse/state/module_destinations_notifier.dart';
@@ -158,6 +159,8 @@ class _ContainerEditPageState extends river.ConsumerState<ContainerEditPage> {
         moduleDestination: _destination(),
         currentLocation: _location());
     widget._container.value = changedContainer;
+    // Persist changes to database
+    ref.read(allContainersNotifierProvider.notifier).update(changedContainer);
   }
 
   _type() => _containerTypeController.value == null
