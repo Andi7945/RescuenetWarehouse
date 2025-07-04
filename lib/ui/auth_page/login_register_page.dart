@@ -46,6 +46,8 @@ class _LoginPageState extends State<LoginPage> {
           email: _controllerEmail.text,
           password: _controllerPassword.text,
         );
+        // Registration successful, navigate to main app
+        Navigator.pushNamed(context, routeContainerWithContent);
       }
     } on FirebaseAuthException catch (e) {
       setState(() {

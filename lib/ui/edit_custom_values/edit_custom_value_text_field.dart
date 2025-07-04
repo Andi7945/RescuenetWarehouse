@@ -29,5 +29,17 @@ class _EditCustomValueTextFieldState extends State<EditCustomValueTextField> {
             widget.onChange!(widget.controller.text);
           }
         },
+        onEditingComplete: () {
+          if (widget.onChange != null && _focussed) {
+            _focussed = false;
+            widget.onChange!(widget.controller.text);
+          }
+        },
+        onSubmitted: (value) {
+          if (widget.onChange != null) {
+            _focussed = false;
+            widget.onChange!(value);
+          }
+        },
       );
 }
