@@ -40,15 +40,27 @@ class CurrentItemAssignmentsNotifier extends _$CurrentItemAssignmentsNotifier {
 
   addContainerAssignment(String containerIdToAdd, int amount) {
     var currentItem = ref.read(currentItemNotifierProvider);
+    
+    // Check if assignment already exists to prevent duplicates
+    var existingAssignment = ref
+        .read(allAssignmentsNotifierProvider.notifier)
+        .byIds(currentItem!.id, containerIdToAdd);
+    
+    if (existingAssignment != null) {
+      // Update existing assignment instead of creating duplicate
+      setAmount(containerIdToAdd, amount);
+      return;
+    }
+    
     var assignment = Assignment(
       id: uuid.v4(),
-      itemId: currentItem!.id,
+      itemId: currentItem.id,
       containerId: containerIdToAdd,
       count: amount,
     );
 
     ref.read(assignmentDataProvider.notifier).upsertOrDelete(assignment);
-    var log = _buildEntry(currentItem, containerIdToAdd, 1);
+    var log = _buildEntry(currentItem, containerIdToAdd, amount);
     ref.read(workLogDataProvider.notifier).upsert(log);
   }
 
@@ -63,6 +75,17 @@ class CurrentItemAssignmentsNotifier extends _$CurrentItemAssignmentsNotifier {
           .read(assignmentDataProvider.notifier)
           .upsertOrDelete(current.copyWith(count: amount));
       var log = _buildEntry(item, containerId, amount - current.count);
+      ref.read(workLogDataProvider.notifier).upsert(log);
+    } else if (amount > 0) {
+      // Create new assignment if none exists and amount > 0
+      var assignment = Assignment(
+        id: uuid.v4(),
+        itemId: item.id,
+        containerId: containerId,
+        count: amount,
+      );
+      ref.read(assignmentDataProvider.notifier).upsertOrDelete(assignment);
+      var log = _buildEntry(item, containerId, amount);
       ref.read(workLogDataProvider.notifier).upsert(log);
     }
   }

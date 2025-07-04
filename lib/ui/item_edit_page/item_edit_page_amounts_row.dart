@@ -43,7 +43,7 @@ class ItemEditPageAmountsRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           IconButton(
-              onPressed: () => fnChangeAmount(amount - 1),
+              onPressed: amount > 0 ? () => fnChangeAmount(amount - 1) : null,
               icon: const Icon(Icons.remove)),
           const SizedBox(width: 4),
           SizedBox(
@@ -52,7 +52,7 @@ class ItemEditPageAmountsRow extends StatelessWidget {
                   RescueInputAmount(onChange: fnChangeAmount, amount: amount)),
           const SizedBox(width: 4),
           IconButton(
-              onPressed: () => fnChangeAmount(amount + 1),
+              onPressed: amount < 99999 ? () => fnChangeAmount(amount + 1) : null,
               icon: const Icon(Icons.add))
         ],
       );
