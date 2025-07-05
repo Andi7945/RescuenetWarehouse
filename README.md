@@ -76,6 +76,7 @@ npx playwright show-report
 - `authentication.spec.js` - Tests registration redirect fix
 - `container-persistence.spec.js` - Tests container data persistence fix  
 - `item-quantity.spec.js` - Tests item quantity/assignment fixes
+- `container-types.spec.js` - Tests container types page and empty weight database persistence
 - `integration.spec.js` - Tests combined workflows
 
 ### Notes
