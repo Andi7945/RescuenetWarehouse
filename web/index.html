@@ -32,6 +32,14 @@
   <title>rescuenet_warehouse</title>
   <link rel="manifest" href="manifest.json">
 
+  <!-- Mock Firebase for Playwright testing only -->
+  <script>
+    // Only load mock Firebase when running Playwright tests (detected by user agent)
+    if (navigator.userAgent.includes('Playwright')) {
+      document.write('<script src="mock-firebase.js"><\/script>');
+    }
+  </script>
+
   <script>
     // The value below is injected by flutter build, do not touch.
     var serviceWorkerVersion = null;

@@ -44,6 +44,46 @@ There are different roles:
 We use [json annotations](https://github.com/google/json_serializable.dart/tree/master/example) to reduce boilerplate code. To generate new files:
 - dart run build_runner build
 
+### Build for web
+```bash
+flutter build web
+```
+
+## Testing
+We use Playwright for end-to-end testing of the Flutter web app. The tests validate bug fixes and core functionality.
+
+The tests use coordinate-based interaction to work with Flutter's Canvas rendering. Mock Firebase backend is automatically loaded during testing.
+
+### Run Playwright tests
+```bash
+cd test/puppeteer
+npm test
+```
+
+### Run tests for specific browser
+```bash
+cd test/puppeteer
+npx playwright test --project=chromium
+```
+
+### View test results in browser
+```bash
+cd test/puppeteer
+npx playwright show-report
+```
+
+### Test files
+- `authentication.spec.js` - Tests registration redirect fix
+- `container-persistence.spec.js` - Tests container data persistence fix  
+- `item-quantity.spec.js` - Tests item quantity/assignment fixes
+- `integration.spec.js` - Tests combined workflows
+
+### Notes
+- Tests run against the real Flutter app with mocked Firebase backend
+- Mock Firebase is only loaded when Playwright user agent is detected
+- Screenshots are captured at key points for debugging
+- Tests use coordinate-based clicking since Flutter uses Canvas rendering
+
 ### Import data
 ```bash
 firebase firestore:import --collection-name "items" --project "RescueNet" --csv "~/Documents/Blad1-Table 1.csv" --field-separator ";"
