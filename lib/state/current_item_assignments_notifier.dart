@@ -1,14 +1,12 @@
 import 'package:rescuenet_warehouse/collection_extensions.dart';
-import 'package:rescuenet_warehouse/db/assignment_data.dart';
-import 'package:rescuenet_warehouse/db/work_log_data.dart';
 import 'package:rescuenet_warehouse/models/assignment.dart';
 import 'package:rescuenet_warehouse/state/all_assignments_notifier.dart';
 import 'package:rescuenet_warehouse/state/all_containers_notifier.dart';
 import 'package:rescuenet_warehouse/state/current_item_notifier.dart';
-import 'package:rescuenet_warehouse/db/firebase.dart';
+import 'package:rescuenet_warehouse/repositories/repository_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../auth_util.dart';
+import '../repositories/auth_providers.dart';
 import '../main.dart';
 import '../models/item.dart';
 import '../models/log_entry.dart';
@@ -59,9 +57,9 @@ class CurrentItemAssignmentsNotifier extends _$CurrentItemAssignmentsNotifier {
       count: amount,
     );
 
-    ref.read(assignmentDataProvider.notifier).upsertOrDelete(assignment);
+    ref.read(assignmentRepositoryProvider).upsertAssignment(assignment);
     var log = _buildEntry(currentItem, containerIdToAdd, amount);
-    ref.read(workLogDataProvider.notifier).upsert(log);
+    ref.read(workLogRepositoryProvider).upsertWorkLog(log);
   }
 
   setAmount(String containerId, int amount) {
@@ -71,11 +69,9 @@ class CurrentItemAssignmentsNotifier extends _$CurrentItemAssignmentsNotifier {
         .byIds(item.id, containerId);
 
     if (current != null) {
-      ref
-          .read(assignmentDataProvider.notifier)
-          .upsertOrDelete(current.copyWith(count: amount));
+      ref.read(assignmentRepositoryProvider).upsertOrDeleteAssignment(current.copyWith(count: amount));
       var log = _buildEntry(item, containerId, amount - current.count);
-      ref.read(workLogDataProvider.notifier).upsert(log);
+      ref.read(workLogRepositoryProvider).upsertWorkLog(log);
     } else if (amount > 0) {
       // Create new assignment if none exists and amount > 0
       var assignment = Assignment(
@@ -84,9 +80,9 @@ class CurrentItemAssignmentsNotifier extends _$CurrentItemAssignmentsNotifier {
         containerId: containerId,
         count: amount,
       );
-      ref.read(assignmentDataProvider.notifier).upsertOrDelete(assignment);
+      ref.read(assignmentRepositoryProvider).upsertAssignment(assignment);
       var log = _buildEntry(item, containerId, amount);
-      ref.read(workLogDataProvider.notifier).upsert(log);
+      ref.read(workLogRepositoryProvider).upsertWorkLog(log);
     }
   }
 
@@ -96,6 +92,6 @@ class CurrentItemAssignmentsNotifier extends _$CurrentItemAssignmentsNotifier {
     containerId: containerId,
     count: count,
     date: DateTime.now(),
-    user: Auth().currentUserName ?? "Unknown",
+    user: ref.read(currentUserNameProvider) ?? "Unknown",
   );
 }

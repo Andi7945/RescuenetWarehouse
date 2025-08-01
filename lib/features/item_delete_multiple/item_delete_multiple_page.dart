@@ -11,7 +11,7 @@ import 'package:rescuenet_warehouse/ui/item_overview_page/item_sort_button.dart'
 import 'package:rescuenet_warehouse/ui/rescue_navigation_drawer.dart';
 import 'package:rescuenet_warehouse/widgets/items/item_grid.dart';
 
-import '../../db/item_data.dart';
+import '../../repositories/repository_providers.dart';
 
 class ItemDeleteMultiplePage extends ConsumerStatefulWidget {
   @override
@@ -74,7 +74,7 @@ class _ItemDeleteMultiplePageState
 
   _delete() {
     for (Item itm in itemDeletionList) {
-      ref.read(itemDataProvider.notifier).delete(itm.id);
+      ref.read(itemRepositoryProvider).deleteItem(itm.id);
     }
     showSnackbar(context, "Deleted $itemsInList items.");
     setState(() {

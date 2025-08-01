@@ -1,13 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as river;
-import 'package:rescuenet_warehouse/db/assignment_data.dart';
-import 'package:rescuenet_warehouse/db/container_data.dart';
-import 'package:rescuenet_warehouse/db/container_types_data.dart';
-import 'package:rescuenet_warehouse/db/current_locations_data.dart';
-import 'package:rescuenet_warehouse/db/item_data.dart';
-import 'package:rescuenet_warehouse/db/module_destinations_data.dart';
-import 'package:rescuenet_warehouse/db/work_log_data.dart';
 import 'package:rescuenet_warehouse/features/assignment_by_container/assign_by_container/assignment_by_container_page.dart';
 import 'package:rescuenet_warehouse/features/assignment_by_container/container_overview/container_assignments_page.dart';
 import 'package:rescuenet_warehouse/features/assignment_by_container/search_item_for_assignment/assignment_search_item_page.dart';
@@ -118,13 +111,6 @@ class _EagerInitialization extends river.ConsumerWidget {
     // Eagerly initialize providers by watching them.
     // By using "watch", the provider will stay alive and not be disposed.
     // See https://riverpod.dev/docs/essentials/eager_initialization
-    ref.watch(assignmentDataProvider);
-    ref.watch(containerDataProvider);
-    ref.watch(containerTypesDataProvider);
-    ref.watch(currentLocationsDataProvider);
-    ref.watch(moduleDestinationsDataProvider);
-    ref.watch(itemDataProvider);
-    ref.watch(workLogDataProvider);
     ref.watch(containerTypesNotifierProvider);
     ref.watch(moduleDestinationsNotifierProvider);
     ref.watch(currentLocationsNotifierProvider);

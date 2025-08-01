@@ -1,6 +1,6 @@
-import 'package:rescue_net_warehouse/models/current_location.dart';
-import 'package:rescue_net_warehouse/repositories/current_location_repository.dart';
-import 'package:rescue_net_warehouse/db/firebase.dart';
+import 'package:rescuenet_warehouse/models/current_location.dart';
+import 'package:rescuenet_warehouse/repositories/current_location_repository.dart';
+import 'package:rescuenet_warehouse/db/firebase.dart';
 
 /// Firebase implementation of CurrentLocationRepository
 /// 

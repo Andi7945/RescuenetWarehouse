@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:rescue_net_warehouse/models/log_entry.dart';
-import 'package:rescue_net_warehouse/repositories/work_log_repository.dart';
-import 'package:rescue_net_warehouse/db/firebase.dart';
+import 'package:rescuenet_warehouse/models/log_entry.dart';
+import 'package:rescuenet_warehouse/repositories/work_log_repository.dart';
+import 'package:rescuenet_warehouse/db/firebase.dart';
 
 /// Firebase implementation of WorkLogRepository
 /// 

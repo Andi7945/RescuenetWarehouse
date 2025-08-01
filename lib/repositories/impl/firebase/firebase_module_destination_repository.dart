@@ -1,6 +1,6 @@
-import 'package:rescue_net_warehouse/models/module_destination.dart';
-import 'package:rescue_net_warehouse/repositories/module_destination_repository.dart';
-import 'package:rescue_net_warehouse/db/firebase.dart';
+import 'package:rescuenet_warehouse/models/module_destination.dart';
+import 'package:rescuenet_warehouse/repositories/module_destination_repository.dart';
+import 'package:rescuenet_warehouse/db/firebase.dart';
 
 /// Firebase implementation of ModuleDestinationRepository
 /// 

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:rescue_net_warehouse/models/assignment.dart';
-import 'package:rescue_net_warehouse/repositories/assignment_repository.dart';
-import 'package:rescue_net_warehouse/db/firebase.dart';
+import 'package:rescuenet_warehouse/models/assignment.dart';
+import 'package:rescuenet_warehouse/repositories/assignment_repository.dart';
+import 'package:rescuenet_warehouse/db/firebase.dart';
 
 /// Firebase implementation of AssignmentRepository
 /// 

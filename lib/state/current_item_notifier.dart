@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:rescuenet_warehouse/db/item_data.dart';
 import 'package:rescuenet_warehouse/state/all_items_notifier.dart';
+import 'package:rescuenet_warehouse/repositories/repository_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../main.dart';
@@ -31,16 +31,16 @@ class CurrentItemNotifier extends _$CurrentItemNotifier {
     state = item;
   }
 
-  update(Item item) {
+  update(Item item) async {
     state = item;
-    ref.read(itemDataProvider.notifier).upsert(item);
+    await ref.read(itemRepositoryProvider).upsertItem(item);
   }
 
-  delete() {
+  delete() async {
     var id = state?.id;
     if (id != null) {
       state = null;
-      ref.read(itemDataProvider.notifier).delete(id);
+      await ref.read(itemRepositoryProvider).deleteItem(id);
     }
   }
 }

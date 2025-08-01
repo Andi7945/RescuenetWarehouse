@@ -1,4 +1,4 @@
-import 'package:rescue_net_warehouse/models/assignment.dart';
+import 'package:rescuenet_warehouse/models/assignment.dart';
 
 /// Repository interface for managing item-container assignments.
 /// 

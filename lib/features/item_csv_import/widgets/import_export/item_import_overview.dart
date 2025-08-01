@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rescuenet_warehouse/collection_extensions.dart';
-import 'package:rescuenet_warehouse/db/item_data.dart';
+import 'package:rescuenet_warehouse/repositories/repository_providers.dart';
 import 'package:rescuenet_warehouse/models/item.dart';
 import 'package:rescuenet_warehouse/features/item_csv_import/services/csv_to_model_importer.dart';
 import 'package:rescuenet_warehouse/state/all_items_notifier.dart';
@@ -87,9 +87,11 @@ class _ItemImportOverviewPageState
     }
   }
 
-  void _applyChanges(List<Item> objectsToUpdateOrInsert) {
-    var notifier = ref.read(itemDataProvider.notifier);
-    objectsToUpdateOrInsert.forEach(notifier.upsert);
+  void _applyChanges(List<Item> objectsToUpdateOrInsert) async {
+    var repository = ref.read(itemRepositoryProvider);
+    for (var item in objectsToUpdateOrInsert) {
+      await repository.upsertItem(item);
+    }
 
     // Update state
     setState(() {

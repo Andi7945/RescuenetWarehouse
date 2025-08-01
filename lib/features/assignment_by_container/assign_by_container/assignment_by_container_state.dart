@@ -1,8 +1,9 @@
-import 'package:rescuenet_warehouse/db/assignment_data.dart';
+import 'package:rescuenet_warehouse/repositories/repository_providers.dart';
 import 'package:rescuenet_warehouse/main.dart';
 import 'package:rescuenet_warehouse/models/assignment.dart';
 import 'package:rescuenet_warehouse/models/item.dart';
 import 'package:rescuenet_warehouse/state/all_items_notifier.dart';
+import 'package:rescuenet_warehouse/state/all_assignments_notifier.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'assignment_by_container_state.g.dart';
@@ -12,7 +13,7 @@ class AssignmentByContainerState extends _$AssignmentByContainerState {
   @override
   Map<Item, Assignment> build(String containerId) {
     var assignments = ref
-        .watch(assignmentDataProvider)
+        .watch(allAssignmentsNotifierProvider)
         .where((a) => a.containerId == containerId);
 
     var assignedItems = Map.fromEntries(
@@ -37,10 +38,11 @@ class AssignmentByContainerState extends _$AssignmentByContainerState {
       containerId: containerId,
       count: 1,
     );
-    ref.read(assignmentDataProvider.notifier).upsertOrDelete(assignment);
+    ref.read(assignmentRepositoryProvider).upsertAssignment(assignment);
   }
 
-  upsert(Assignment assignment) {
-    ref.read(assignmentDataProvider.notifier).upsertOrDelete(assignment);
+  upsert(Assignment assignment) async {
+    final repository = ref.read(assignmentRepositoryProvider);
+    await repository.upsertOrDeleteAssignment(assignment);
   }
 }
