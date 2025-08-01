@@ -7,7 +7,7 @@ part of 'all_containers_notifier.dart';
 // **************************************************************************
 
 String _$allContainersNotifierHash() =>
-    r'7a4eab5d721c9bfc11aec26f009d4071ca54f994';
+    r'04b38f315afdf414c6529e50874fcd8365f214a7';
 
 /// See also [AllContainersNotifier].
 @ProviderFor(AllContainersNotifier)

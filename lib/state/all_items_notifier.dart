@@ -1,8 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:rescuenet_warehouse/db/item_data.dart';
-import 'package:rescuenet_warehouse/db/firebase.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rescuenet_warehouse/collection_extensions.dart';
+import 'package:rescuenet_warehouse/repositories/repository_providers.dart';
 
 import '../models/item.dart';
 
@@ -12,7 +10,16 @@ part 'all_items_notifier.g.dart';
 class AllItemsNotifier extends _$AllItemsNotifier {
   @override
   List<Item> build() {
-    return ref.watch(itemDataProvider);
+    final repository = ref.watch(itemRepositoryProvider);
+    
+    // Subscribe to the stream and update state when data changes
+    repository.watchItems().listen((items) {
+      if (mounted) {
+        state = items;
+      }
+    });
+    
+    return [];
   }
 
   Item? byId(String id) {

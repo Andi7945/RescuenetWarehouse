@@ -4,12 +4,11 @@ import 'package:rescuenet_warehouse/state/module_destinations_notifier.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rescuenet_warehouse/collection_extensions.dart';
 import 'package:rescuenet_warehouse/main.dart';
+import 'package:rescuenet_warehouse/repositories/repository_providers.dart';
 
 import '../models/container_dao.dart';
 import '../models/rescue_container.dart';
 import '../models/sequential_build.dart';
-
-import '../db/container_data.dart';
 
 part 'all_containers_notifier.g.dart';
 
@@ -17,8 +16,16 @@ part 'all_containers_notifier.g.dart';
 class AllContainersNotifier extends _$AllContainersNotifier {
   @override
   List<RescueContainer> build() {
-    var data = ref.watch(containerDataProvider);
-    return data.map(_expand).toList();
+    final repository = ref.watch(containerRepositoryProvider);
+    
+    // Subscribe to the stream and update state when data changes
+    repository.watchContainers().listen((containers) {
+      if (mounted) {
+        state = containers.map(_expand).toList();
+      }
+    });
+    
+    return [];
   }
 
   RescueContainer _expand(ContainerDao dao) {
@@ -48,7 +55,7 @@ class AllContainersNotifier extends _$AllContainersNotifier {
       isReady: false,
       toDeploy: false,
     );
-    ref.read(containerDataProvider.notifier).upsert(newContainer);
+    ref.read(containerRepositoryProvider).createContainer(newContainer);
     return _expand(newContainer);
   }
 
@@ -67,9 +74,9 @@ class AllContainersNotifier extends _$AllContainersNotifier {
   }
 
   update(RescueContainer container) => ref
-      .read(containerDataProvider.notifier)
-      .upsert(ContainerDao.fromContainer(container));
+      .read(containerRepositoryProvider)
+      .updateContainer(ContainerDao.fromContainer(container));
 
   delete(RescueContainer container) =>
-      ref.read(containerDataProvider.notifier).delete(container.id);
+      ref.read(containerRepositoryProvider).deleteContainer(container.id);
 }

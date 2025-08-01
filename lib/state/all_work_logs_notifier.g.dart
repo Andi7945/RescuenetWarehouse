@@ -7,7 +7,7 @@ part of 'all_work_logs_notifier.dart';
 // **************************************************************************
 
 String _$allWorkLogsNotifierHash() =>
-    r'07594851cfc207f9908220780a891823624c89ce';
+    r'3a7b2c0b3a5aa460e92f105a810bdab47b46fe52';
 
 /// See also [AllWorkLogsNotifier].
 @ProviderFor(AllWorkLogsNotifier)

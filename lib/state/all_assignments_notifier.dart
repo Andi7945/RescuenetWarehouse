@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:rescuenet_warehouse/repositories/repository_providers.dart';
 
-import '../db/assignment_data.dart';
 import '../models/assignment.dart';
 
 import 'package:collection/collection.dart';
@@ -11,7 +11,16 @@ part 'all_assignments_notifier.g.dart';
 class AllAssignmentsNotifier extends _$AllAssignmentsNotifier {
   @override
   List<Assignment> build() {
-    return ref.watch(assignmentDataProvider);
+    final repository = ref.watch(assignmentRepositoryProvider);
+    
+    // Subscribe to the stream and update state when data changes
+    repository.watchAssignments().listen((assignments) {
+      if (mounted) {
+        state = assignments;
+      }
+    });
+    
+    return [];
   }
 
   Assignment? byIds(String itemId, String containerId) {
