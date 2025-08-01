@@ -56,3 +56,6 @@ functions/node_modules
 venv
 
 android/app/google-services.json
+
+# Playwright test screenshots
+test/puppeteer/*.png

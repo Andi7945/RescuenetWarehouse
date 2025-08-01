@@ -3,6 +3,10 @@ const { test, expect } = require('@playwright/test');
 
 test.describe('Item Management (UC02)', () => {
   test.beforeEach(async ({ page }) => {
+    // Listen to console logs to debug issues
+    page.on('console', msg => console.log('BROWSER:', msg.text()));
+    page.on('pageerror', error => console.log('PAGE ERROR:', error.message));
+    
     // Navigate to the Flutter app  
     await page.goto('/');
     
@@ -11,6 +15,9 @@ test.describe('Item Management (UC02)', () => {
     
     // Wait for the login page to load
     await page.waitForTimeout(5000);
+    
+    // Take screenshot to see what we actually have
+    await page.screenshot({ path: 'debug-before-login.png' });
     
     // Login with test credentials using the same pattern as other tests
     await page.mouse.click(640, 285); // Email field

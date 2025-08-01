@@ -22,10 +22,10 @@ module.exports = defineConfig({
     baseURL: 'http://localhost:8080',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: 'on',
     
     /* Take screenshot on failure */
-    screenshot: 'only-on-failure',
+    screenshot: 'on',
     
     /* Increase timeout for Flutter app loading */
     navigationTimeout: 30000,

@@ -32,13 +32,34 @@
   <title>rescuenet_warehouse</title>
   <link rel="manifest" href="manifest.json">
 
-  <!-- Mock Firebase for Playwright testing only -->
+  <!-- Mock Firebase for Playwright testing only - MUST load before Flutter -->
   <script>
-    // Only load mock Firebase when running Playwright tests (detected by user agent)
-    if (navigator.userAgent.includes('Playwright')) {
-      document.write('<script src="mock-firebase.js"><\/script>');
+    // Load mock Firebase when running Playwright tests or when mock=true parameter is present
+    const isPlaywrightTest = navigator.userAgent.includes('Playwright') || 
+                             navigator.userAgent.includes('HeadlessChrome') ||
+                             window.location.search.includes('mock=true') ||
+                             window.location.hostname === 'localhost';
+    
+    console.log('Mock Firebase detection:', {
+      userAgent: navigator.userAgent,
+      location: window.location.href,
+      hostname: window.location.hostname,
+      search: window.location.search,
+      isPlaywrightTest: isPlaywrightTest
+    });
+    
+    if (isPlaywrightTest) {
+      console.log('Loading mock Firebase for test mode');
+      // Set a flag to prevent real Firebase initialization
+      window.MOCK_FIREBASE_MODE = true;
+    } else {
+      console.log('Loading real Firebase for production mode');
+      window.MOCK_FIREBASE_MODE = false;
     }
   </script>
+  
+  <!-- Load mock Firebase synchronously before Flutter if in test mode -->
+  <script src="mock-firebase.js"></script>
 
   <script>
     // The value below is injected by flutter build, do not touch.

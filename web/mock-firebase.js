@@ -354,13 +354,28 @@ window.mockFirebase = {
   }
 };
 
-// Override Firebase if in test mode
-if (window.location.hostname === 'localhost' && window.location.search.includes('mock=true')) {
+// Override Firebase if in test mode (set by index.html)
+const isTestMode = window.MOCK_FIREBASE_MODE === true;
+
+if (isTestMode) {
   console.log('Mock Firebase: Test mode detected, using mock implementation');
+  console.log('User Agent:', navigator.userAgent);
+  console.log('Location:', window.location.href);
   
-  // Override global Firebase
+  // Override global Firebase completely - no real Firebase calls
   window.firebase = window.mockFirebase;
+  
+  // Also ensure any Flutter Firebase plugin calls are mocked
+  window.flutterfire_web = {
+    auth: window.mockFirebase.auth,
+    firestore: window.mockFirebase.firestore,
+    storage: window.mockFirebase.storage
+  };
   
   // Initialize mock data
   window.mockFirebase.createMockData();
+  
+  // Log that we're in mock mode
+  console.log('Mock Firebase: All Firebase services are now mocked');
+  console.log('Mock Firebase: No real API calls will be made');
 }
