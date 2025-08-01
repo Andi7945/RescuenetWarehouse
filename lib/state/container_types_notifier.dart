@@ -1,6 +1,6 @@
 import 'package:rescuenet_warehouse/collection_extensions.dart';
-import 'package:rescuenet_warehouse/db/container_types_data.dart';
 import 'package:rescuenet_warehouse/models/container_type.dart';
+import 'package:rescuenet_warehouse/repositories/repository_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'container_types_notifier.g.dart';
@@ -9,7 +9,16 @@ part 'container_types_notifier.g.dart';
 class ContainerTypesNotifier extends _$ContainerTypesNotifier {
   @override
   List<ContainerType> build() {
-    return ref.watch(containerTypesDataProvider);
+    final repository = ref.watch(containerTypeRepositoryProvider);
+    
+    // Subscribe to stream and update state when data changes
+    repository.watchContainerTypes().listen((containerTypes) {
+      if (mounted) {
+        state = containerTypes;
+      }
+    });
+    
+    return [];
   }
 
   ContainerType? find(String? id) {
@@ -21,9 +30,18 @@ class ContainerTypesNotifier extends _$ContainerTypesNotifier {
     return res;
   }
 
-  Future<void> upsert(ContainerType type) =>
-      ref.read(containerTypesDataProvider.notifier).upsert(type);
+  Future<void> upsert(ContainerType type) async {
+    final repository = ref.read(containerTypeRepositoryProvider);
+    if (type.id.isEmpty) {
+      await repository.createContainerType(type);
+    } else {
+      await repository.updateContainerType(type);
+    }
+  }
 
-  delete(ContainerType? type) async =>
-      ref.read(containerTypesDataProvider.notifier).delete(type);
+  delete(ContainerType? type) async {
+    if (type == null) return;
+    final repository = ref.read(containerTypeRepositoryProvider);
+    await repository.deleteContainerType(type.id);
+  }
 }

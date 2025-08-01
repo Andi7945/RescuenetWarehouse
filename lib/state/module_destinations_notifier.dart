@@ -1,6 +1,6 @@
 import 'package:rescuenet_warehouse/collection_extensions.dart';
-import 'package:rescuenet_warehouse/db/module_destinations_data.dart';
 import 'package:rescuenet_warehouse/models/module_destination.dart';
+import 'package:rescuenet_warehouse/repositories/repository_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'module_destinations_notifier.g.dart';
@@ -9,7 +9,16 @@ part 'module_destinations_notifier.g.dart';
 class ModuleDestinationsNotifier extends _$ModuleDestinationsNotifier {
   @override
   List<ModuleDestination> build() {
-    return ref.watch(moduleDestinationsDataProvider);
+    final repository = ref.watch(moduleDestinationRepositoryProvider);
+    
+    // Subscribe to stream and update state when data changes
+    repository.watchModuleDestinations().listen((moduleDestinations) {
+      if (mounted) {
+        state = moduleDestinations;
+      }
+    });
+    
+    return [];
   }
 
   ModuleDestination? find(String? id) {
@@ -21,9 +30,18 @@ class ModuleDestinationsNotifier extends _$ModuleDestinationsNotifier {
     return res;
   }
 
-  Future<void> upsert(ModuleDestination destination) =>
-      ref.read(moduleDestinationsDataProvider.notifier).upsert(destination);
+  Future<void> upsert(ModuleDestination destination) async {
+    final repository = ref.read(moduleDestinationRepositoryProvider);
+    if (destination.id.isEmpty) {
+      await repository.createModuleDestination(destination);
+    } else {
+      await repository.updateModuleDestination(destination);
+    }
+  }
 
-  delete(ModuleDestination? destination) async =>
-      ref.read(moduleDestinationsDataProvider.notifier).delete(destination);
+  delete(ModuleDestination? destination) async {
+    if (destination == null) return;
+    final repository = ref.read(moduleDestinationRepositoryProvider);
+    await repository.deleteModuleDestination(destination.id);
+  }
 }
