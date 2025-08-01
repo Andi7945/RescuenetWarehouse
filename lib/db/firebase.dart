@@ -5,7 +5,6 @@ import 'package:rescuenet_warehouse/models/current_location.dart';
 import 'package:rescuenet_warehouse/models/item.dart';
 import 'package:rescuenet_warehouse/models/log_entry.dart';
 import 'package:rescuenet_warehouse/models/module_destination.dart';
-
 import '../models/container_dao.dart';
 
 final containersCollection = FirebaseFirestore.instance

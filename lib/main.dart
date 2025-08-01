@@ -47,7 +47,11 @@ import 'features/item_overview/item_overview_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Always initialize real Firebase - E2E tests use web-based mocking
+  print('Initializing Firebase');
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  
   runApp(river.ProviderScope(child: MyApp()));
 }
 

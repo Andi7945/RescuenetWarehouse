@@ -84,7 +84,6 @@ class JsonToCsvExporter {
     String path = await FileSaver.instance.saveFile(
       name: fileName,
       bytes: csvBytesList,
-      ext: 'csv',
       mimeType: MimeType.csv,
     );
     print('Saved to $path}');
