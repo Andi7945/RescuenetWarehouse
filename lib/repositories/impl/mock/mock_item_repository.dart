@@ -13,35 +13,35 @@ class MockItemRepository implements ItemRepository {
     _initializeWithTestData();
   }
 
-  /// Initialize with realistic test data
+  /// Initialize with realistic test data matching Playwright test expectations
   void _initializeWithTestData() {
     final testItems = [
       Item(
-        id: 'test-item-1',
-        name: 'Emergency Medical Kit',
-        rescueNetId: 1001,
-        totalAmount: 5,
+        id: 'item-42649',
+        name: 'Tent Green Dome',
+        rescueNetId: 42649,
+        totalAmount: 10,
         weight: 2.5,
-        description: 'Complete medical kit for emergency situations',
+        description: 'Green dome tent for 2 people',
         operationalStatus: OperationalStatus.deployable,
       ),
       Item(
-        id: 'test-item-2',
+        id: 'item-12345',
+        name: 'Medical Kit',
+        rescueNetId: 12345,
+        totalAmount: 25,
+        weight: 1.8,
+        description: 'Basic medical supply kit',
+        operationalStatus: OperationalStatus.deployable,
+      ),
+      Item(
+        id: 'test-item-3',
         name: 'Water Purification Tablets',
         rescueNetId: 1002,
         totalAmount: 100,
         weight: 0.1,
         description: 'Water purification tablets for emergency water treatment',
         operationalStatus: OperationalStatus.deployable,
-      ),
-      Item(
-        id: 'test-item-3',
-        name: 'Damaged Radio',
-        rescueNetId: 1003,
-        totalAmount: 1,
-        weight: 1.2,
-        description: 'Radio equipment - needs repair',
-        operationalStatus: OperationalStatus.damaged,
       ),
     ];
 
@@ -53,7 +53,24 @@ class MockItemRepository implements ItemRepository {
 
   @override
   Stream<List<Item>> watchItems() {
-    return _itemsController.stream;
+    // Create a new controller that emits current data immediately
+    final controller = StreamController<List<Item>>.broadcast();
+    
+    // Emit current data immediately
+    controller.add(_items.values.toList());
+    
+    // Forward future updates
+    final subscription = _itemsController.stream.listen(
+      (items) => controller.add(items),
+    );
+    
+    // Handle cleanup
+    controller.onCancel = () {
+      subscription.cancel();
+      controller.close();
+    };
+    
+    return controller.stream;
   }
 
   @override

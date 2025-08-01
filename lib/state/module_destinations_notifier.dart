@@ -11,11 +11,14 @@ class ModuleDestinationsNotifier extends _$ModuleDestinationsNotifier {
   List<ModuleDestination> build() {
     final repository = ref.watch(moduleDestinationRepositoryProvider);
     
-    // Subscribe to stream and update state when data changes
-    repository.watchModuleDestinations().listen((moduleDestinations) {
-      if (mounted) {
-        state = moduleDestinations;
-      }
+    // Use proper stream subscription management
+    final subscription = repository.watchModuleDestinations().listen((moduleDestinations) {
+      state = moduleDestinations;
+    });
+    
+    // Dispose subscription when notifier is disposed
+    ref.onDispose(() {
+      subscription.cancel();
     });
     
     return [];

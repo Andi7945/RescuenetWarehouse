@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../routes.dart';
-import '../auth_util.dart';
+import '../repositories/auth_providers.dart';
 
-class RescueNavigationDrawer extends StatelessWidget {
+class RescueNavigationDrawer extends ConsumerWidget {
   RescueNavigationDrawer({super.key});
 
-  final Auth auth = Auth();
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentUser = ref.watch(currentUserProvider);
+    final authNotifier = ref.read(authNotifierProvider.notifier);
     return Drawer(
       child: ListView(
         children: <Widget>[
@@ -28,7 +29,7 @@ class RescueNavigationDrawer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  auth.currentUser?.email ?? 'User email',
+                  currentUser?.email ?? 'User email',
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const Text('Sign Out'),
@@ -37,7 +38,7 @@ class RescueNavigationDrawer extends StatelessWidget {
             leading: const Icon(Icons.login),
             onTap: () async {
               Navigator.of(context).pop();
-              await auth.signOut();
+              await authNotifier.signOut();
               Navigator.of(context).pushReplacementNamed('/login');
             },
           ),

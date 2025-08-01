@@ -63,10 +63,10 @@ module.exports = defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'python3 -m http.server 8080',
-    cwd: '../../build/web',
+    command: 'flutter build web --dart-define=REPOSITORY_MODE=mock && cd build/web && python3 -m http.server 8080',
+    cwd: '../..',
     url: 'http://localhost:8080',
     reuseExistingServer: !process.env.CI,
-    timeout: 10 * 1000,
+    timeout: 30 * 1000,
   },
 });

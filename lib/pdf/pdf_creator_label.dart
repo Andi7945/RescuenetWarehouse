@@ -1,19 +1,18 @@
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:rescuenet_warehouse/auth_util.dart';
 
 import 'packing_list.dart';
 import 'pdf_header_row.dart';
 import 'pdf_utils.dart';
 
-Future<pw.Document> Function(PdfPageFormat) createLabelPdf(PackingList list) {
+Future<pw.Document> Function(PdfPageFormat) createLabelPdf(PackingList list, [String? userName]) {
   return (format) async {
     var goods = await dangerousGoodsLabels(list.dangerousGoods);
     var totalPages =
         (goods.length / 2).floor() + 1; // one on first page, two on others
 
-    var l1 = await label1(list, goods.first, 1, totalPages);
+    var l1 = await label1(list, goods.first, 1, totalPages, userName);
     var lx = [];
     var additional = goods.skip(1).toList();
     for (var i = 0; i < additional.length; i += 2) {
@@ -21,7 +20,7 @@ Future<pw.Document> Function(PdfPageFormat) createLabelPdf(PackingList list) {
       var right =
           additional.length > (i + 1) ? additional[i + 1] : pw.Container();
       lx.add(await labeln(
-          left, right, (i / 2).floor() + 2, totalPages, list.containerNo));
+          left, right, (i / 2).floor() + 2, totalPages, list.containerNo, userName));
     }
 
     var pages = [_labelPage(format, l1, lx.first)];
@@ -48,9 +47,9 @@ _withMeasurements(pw.Widget label) => pw.Container(
     child: pw.SizedBox(width: 14.8 * cm, height: 10.51 * cm, child: label));
 
 Future<pw.Column> label1(PackingList list, pw.Widget good, int currentPage,
-    int numberOfPages) async {
+    int numberOfPages, String? userName) async {
   var top = await rightSideHeader(
-      null, smallText("Label $currentPage / $numberOfPages"));
+      null, smallText("Label $currentPage / $numberOfPages"), userName);
   return pw.Column(children: [
     top,
     pw.SizedBox(height: 8),
@@ -73,9 +72,9 @@ _firstLabel(PackingList list) =>
     ]);
 
 Future<pw.Column> labeln(pw.Widget good, pw.Widget? good2, int currentPage,
-    int numberOfPages, int containerNo) async {
+    int numberOfPages, int containerNo, String? userName) async {
   var top = await _headerPage2(
-      smallText("Label $currentPage / $numberOfPages"), containerNo);
+      smallText("Label $currentPage / $numberOfPages"), containerNo, userName);
   return pw.Column(children: [
     top,
     pw.SizedBox(height: 8),
@@ -87,12 +86,12 @@ Future<pw.Column> labeln(pw.Widget good, pw.Widget? good2, int currentPage,
   ]);
 }
 
-_headerPage2(pw.Widget? companyInfoAppendix, int containerNo) =>
+_headerPage2(pw.Widget? companyInfoAppendix, int containerNo, String? userName) =>
     pw.Row(children: [
       pw.Expanded(
           child: pw.Padding(
               padding: const pw.EdgeInsets.only(right: 8.0),
-              child: _exec(companyInfoAppendix)),
+              child: _exec(companyInfoAppendix, userName)),
           flex: 2),
       pw.Expanded(
           child: _boxPage2(pw.Row(
@@ -110,11 +109,11 @@ _boxPage2(pw.Widget w) => pw.Container(
     decoration: pw.BoxDecoration(border: pw.Border.all(width: 0.5)),
     child: w);
 
-pw.Container _exec(pw.Widget? companyInfoAppendix) => _boxPage2(pw.Column(
+pw.Container _exec(pw.Widget? companyInfoAppendix, String? userName) => _boxPage2(pw.Column(
         mainAxisSize: pw.MainAxisSize.min,
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
-          smallText("Printed by: ${Auth().currentUserName}"),
+          smallText("Printed by: ${userName ?? 'Unknown User'}"),
           smallText("Date: ${_now()}"),
           companyInfoAppendix ?? empty,
         ]));

@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:rescue_net_warehouse/models/container_type.dart';
-import 'package:rescue_net_warehouse/repositories/container_type_repository.dart';
+import 'package:rescuenet_warehouse/models/container_type.dart';
+import 'package:rescuenet_warehouse/repositories/container_type_repository.dart';
 
 /// Mock implementation of ContainerTypeRepository for testing
 /// 
@@ -58,7 +58,11 @@ class MockContainerTypeRepository implements ContainerTypeRepository {
 
   @override
   Stream<List<ContainerType>> watchContainerTypes() {
-    return _streamController.stream;
+    final controller = StreamController<List<ContainerType>>.broadcast();
+    controller.add(_containerTypes.values.toList());
+    final subscription = _streamController.stream.listen((items) => controller.add(items));
+    controller.onCancel = () { subscription.cancel(); controller.close(); };
+    return controller.stream;
   }
 
   @override
@@ -105,6 +109,16 @@ class MockContainerTypeRepository implements ContainerTypeRepository {
 
   /// Get current container type count for testing
   int get containerTypeCount => _containerTypes.length;
+
+  @override
+  Future<void> createContainerType(ContainerType containerType) async {
+    return upsertContainerType(containerType);
+  }
+
+  @override
+  Future<void> updateContainerType(ContainerType containerType) async {
+    return upsertContainerType(containerType);
+  }
 
   /// Dispose resources
   void dispose() {

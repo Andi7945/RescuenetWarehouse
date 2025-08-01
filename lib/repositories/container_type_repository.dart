@@ -1,4 +1,4 @@
-import 'package:rescue_net_warehouse/models/container_type.dart';
+import 'package:rescuenet_warehouse/models/container_type.dart';
 
 /// Repository interface for managing container types.
 /// 
@@ -16,6 +16,14 @@ abstract class ContainerTypeRepository {
 
   /// Create or update a container type
   Future<void> upsertContainerType(ContainerType containerType);
+
+  /// Create a new container type
+  /// Alias for upsertContainerType for compatibility
+  Future<void> createContainerType(ContainerType containerType);
+
+  /// Update an existing container type
+  /// Alias for upsertContainerType for compatibility
+  Future<void> updateContainerType(ContainerType containerType);
 
   /// Delete a container type by ID
   Future<void> deleteContainerType(String id);

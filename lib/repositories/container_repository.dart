@@ -16,6 +16,14 @@ abstract class ContainerRepository {
   /// Uses the container's ID for the document reference.
   Future<void> upsertContainer(ContainerDao container);
 
+  /// Create a new container.
+  /// Alias for upsertContainer for compatibility.
+  Future<void> createContainer(ContainerDao container);
+
+  /// Update an existing container.
+  /// Alias for upsertContainer for compatibility.
+  Future<void> updateContainer(ContainerDao container);
+
   /// Delete a container by ID.
   /// Throws ContainerException if container doesn't exist or deletion fails.
   Future<void> deleteContainer(String id);

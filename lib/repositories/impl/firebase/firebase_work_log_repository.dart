@@ -91,6 +91,11 @@ class FirebaseWorkLogRepository implements WorkLogRepository {
   }
 
   @override
+  Future<void> upsertWorkLog(LogEntry logEntry) async {
+    return createWorkLog(logEntry);
+  }
+
+  @override
   Future<void> batchCreateWorkLogs(List<LogEntry> logEntries) async {
     if (logEntries.isEmpty) return;
 

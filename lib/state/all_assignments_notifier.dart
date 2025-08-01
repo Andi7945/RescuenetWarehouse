@@ -13,11 +13,14 @@ class AllAssignmentsNotifier extends _$AllAssignmentsNotifier {
   List<Assignment> build() {
     final repository = ref.watch(assignmentRepositoryProvider);
     
-    // Subscribe to the stream and update state when data changes
-    repository.watchAssignments().listen((assignments) {
-      if (mounted) {
-        state = assignments;
-      }
+    // Use proper stream subscription management
+    final subscription = repository.watchAssignments().listen((assignments) {
+      state = assignments;
+    });
+    
+    // Dispose subscription when notifier is disposed
+    ref.onDispose(() {
+      subscription.cancel();
     });
     
     return [];

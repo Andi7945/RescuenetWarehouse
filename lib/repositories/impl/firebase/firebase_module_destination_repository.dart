@@ -43,6 +43,16 @@ class FirebaseModuleDestinationRepository implements ModuleDestinationRepository
   }
 
   @override
+  Future<void> createModuleDestination(ModuleDestination moduleDestination) async {
+    return upsertModuleDestination(moduleDestination);
+  }
+
+  @override
+  Future<void> updateModuleDestination(ModuleDestination moduleDestination) async {
+    return upsertModuleDestination(moduleDestination);
+  }
+
+  @override
   Future<void> deleteModuleDestination(String id) async {
     try {
       await moduleDestinationsCollection.doc(id).delete();

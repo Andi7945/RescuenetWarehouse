@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:rescue_net_warehouse/models/current_location.dart';
-import 'package:rescue_net_warehouse/repositories/current_location_repository.dart';
+import 'package:rescuenet_warehouse/models/current_location.dart';
+import 'package:rescuenet_warehouse/repositories/current_location_repository.dart';
 
 /// Mock implementation of CurrentLocationRepository for testing
 /// 
@@ -52,7 +52,11 @@ class MockCurrentLocationRepository implements CurrentLocationRepository {
 
   @override
   Stream<List<CurrentLocation>> watchCurrentLocations() {
-    return _streamController.stream;
+    final controller = StreamController<List<CurrentLocation>>.broadcast();
+    controller.add(_currentLocations.values.toList());
+    final subscription = _streamController.stream.listen((items) => controller.add(items));
+    controller.onCancel = () { subscription.cancel(); controller.close(); };
+    return controller.stream;
   }
 
   @override
@@ -95,6 +99,16 @@ class MockCurrentLocationRepository implements CurrentLocationRepository {
       _currentLocations[location.id] = location;
     }
     _notifyListeners();
+  }
+
+  @override
+  Future<void> createCurrentLocation(CurrentLocation currentLocation) async {
+    return upsertCurrentLocation(currentLocation);
+  }
+
+  @override
+  Future<void> updateCurrentLocation(CurrentLocation currentLocation) async {
+    return upsertCurrentLocation(currentLocation);
   }
 
   /// Get current location count for testing

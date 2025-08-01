@@ -1,13 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:rescuenet_warehouse/auth_util.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rescuenet_warehouse/repositories/auth_providers.dart';
+import 'package:rescuenet_warehouse/repositories/auth_repository.dart';
 
-class AuthForgotPasswordPage extends StatefulWidget {
+class AuthForgotPasswordPage extends ConsumerStatefulWidget {
   @override
-  State createState() => _AuthForgotPasswordPageState();
+  ConsumerState createState() => _AuthForgotPasswordPageState();
 }
 
-class _AuthForgotPasswordPageState extends State<AuthForgotPasswordPage> {
+class _AuthForgotPasswordPageState extends ConsumerState<AuthForgotPasswordPage> {
   final TextEditingController _controllerEmail = TextEditingController();
   String? errorMessage = '';
 
@@ -78,7 +80,18 @@ class _AuthForgotPasswordPageState extends State<AuthForgotPasswordPage> {
   Future<void> _sendMail() async {
     print('pressed send reset mail');
     try {
-      await Auth().sendPasswordResetEmail(_controllerEmail.text);
+      final authNotifier = ref.read(authNotifierProvider.notifier);
+      await authNotifier.sendPasswordResetEmail(_controllerEmail.text);
+      setState(() {
+        errorMessage = '';
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Password reset email sent!')),
+      );
+    } on AuthException catch (e) {
+      setState(() {
+        errorMessage = e.message;
+      });
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;

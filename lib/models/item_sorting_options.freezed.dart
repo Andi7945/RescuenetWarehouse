@@ -1,6 +1,5 @@
-// dart format width=80
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -46,7 +45,7 @@ abstract mixin class $ItemSortingOptionCopyWith<$Res>  {
   factory $ItemSortingOptionCopyWith(ItemSortingOption value, $Res Function(ItemSortingOption) _then) = _$ItemSortingOptionCopyWithImpl;
 @useResult
 $Res call({
- String displayName, String? Function(Item) value, int Function(Item, Item) sort, bool asc
+ String displayName, String? Function(Item item) value, int Function(Item a, Item b) sort, bool asc
 });
 
 
@@ -66,15 +65,145 @@ class _$ItemSortingOptionCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') @override $Res call({Object? displayName = null,Object? value = null,Object? sort = null,Object? asc = null,}) {
   return _then(_self.copyWith(
 displayName: null == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
-as String,value: null == value ? _self.value! : value // ignore: cast_nullable_to_non_nullable
-as String? Function(Item),sort: null == sort ? _self.sort! : sort // ignore: cast_nullable_to_non_nullable
-as int Function(Item, Item),asc: null == asc ? _self.asc : asc // ignore: cast_nullable_to_non_nullable
+as String,value: null == value ? _self.value : value // ignore: cast_nullable_to_non_nullable
+as String? Function(Item item),sort: null == sort ? _self.sort : sort // ignore: cast_nullable_to_non_nullable
+as int Function(Item a, Item b),asc: null == asc ? _self.asc : asc // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
 
 }
 
+
+/// Adds pattern-matching-related methods to [ItemSortingOption].
+extension ItemSortingOptionPatterns on ItemSortingOption {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _ItemSortingOption value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _ItemSortingOption() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _ItemSortingOption value)  $default,){
+final _that = this;
+switch (_that) {
+case _ItemSortingOption():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _ItemSortingOption value)?  $default,){
+final _that = this;
+switch (_that) {
+case _ItemSortingOption() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String displayName,  String? Function(Item item) value,  int Function(Item a, Item b) sort,  bool asc)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _ItemSortingOption() when $default != null:
+return $default(_that.displayName,_that.value,_that.sort,_that.asc);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String displayName,  String? Function(Item item) value,  int Function(Item a, Item b) sort,  bool asc)  $default,) {final _that = this;
+switch (_that) {
+case _ItemSortingOption():
+return $default(_that.displayName,_that.value,_that.sort,_that.asc);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String displayName,  String? Function(Item item) value,  int Function(Item a, Item b) sort,  bool asc)?  $default,) {final _that = this;
+switch (_that) {
+case _ItemSortingOption() when $default != null:
+return $default(_that.displayName,_that.value,_that.sort,_that.asc);case _:
+  return null;
+
+}
+}
+
+}
 
 /// @nodoc
 
@@ -84,8 +213,8 @@ class _ItemSortingOption implements ItemSortingOption {
   
 
 @override final  String displayName;
-@override final  String? Function(Item) value;
-@override final  int Function(Item, Item) sort;
+@override final  String? Function(Item item) value;
+@override final  int Function(Item a, Item b) sort;
 @override@JsonKey() final  bool asc;
 
 /// Create a copy of ItemSortingOption
@@ -118,7 +247,7 @@ abstract mixin class _$ItemSortingOptionCopyWith<$Res> implements $ItemSortingOp
   factory _$ItemSortingOptionCopyWith(_ItemSortingOption value, $Res Function(_ItemSortingOption) _then) = __$ItemSortingOptionCopyWithImpl;
 @override @useResult
 $Res call({
- String displayName, String? Function(Item) value, int Function(Item, Item) sort, bool asc
+ String displayName, String? Function(Item item) value, int Function(Item a, Item b) sort, bool asc
 });
 
 
@@ -139,8 +268,8 @@ class __$ItemSortingOptionCopyWithImpl<$Res>
   return _then(_ItemSortingOption(
 displayName: null == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
 as String,value: null == value ? _self.value : value // ignore: cast_nullable_to_non_nullable
-as String? Function(Item),sort: null == sort ? _self.sort : sort // ignore: cast_nullable_to_non_nullable
-as int Function(Item, Item),asc: null == asc ? _self.asc : asc // ignore: cast_nullable_to_non_nullable
+as String? Function(Item item),sort: null == sort ? _self.sort : sort // ignore: cast_nullable_to_non_nullable
+as int Function(Item a, Item b),asc: null == asc ? _self.asc : asc // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

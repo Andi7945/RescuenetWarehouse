@@ -12,11 +12,14 @@ class AllItemsNotifier extends _$AllItemsNotifier {
   List<Item> build() {
     final repository = ref.watch(itemRepositoryProvider);
     
-    // Subscribe to the stream and update state when data changes
-    repository.watchItems().listen((items) {
-      if (mounted) {
-        state = items;
-      }
+    // Use ref.listen to properly manage the stream subscription
+    final subscription = repository.watchItems().listen((items) {
+      state = items;
+    });
+    
+    // Dispose subscription when notifier is disposed
+    ref.onDispose(() {
+      subscription.cancel();
     });
     
     return [];

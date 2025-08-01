@@ -13,41 +13,30 @@ class MockContainerRepository implements ContainerRepository {
     _initializeWithTestData();
   }
 
-  /// Initialize with realistic test data
+  /// Initialize with realistic test data matching Playwright test expectations
   void _initializeWithTestData() {
     final testContainers = [
       ContainerDao(
-        id: 'test-container-1',
+        id: 'container-1',
         number: 1,
-        name: 'Medical Supplies Container',
-        description: 'Container for medical equipment and supplies',
-        typeId: 'medical-type-1',
+        name: 'Genset 1',
+        description: 'Generator container',
+        typeId: 'type-1',
         sequentialBuild: SequentialBuild.firstBuild,
-        currentLocationId: 'warehouse-1',
-        moduleDestinationId: 'mission-1',
-        isReady: true,
+        currentLocationId: 'loc-1',
+        moduleDestinationId: 'dest-1',
+        isReady: false,
         toDeploy: false,
       ),
       ContainerDao(
-        id: 'test-container-2',
+        id: 'container-2',
         number: 2,
-        name: 'Emergency Supplies',
-        description: 'General emergency supplies container',
-        typeId: 'general-type-1',
-        sequentialBuild: SequentialBuild.laterBuild,
-        currentLocationId: 'warehouse-1',
-        moduleDestinationId: 'mission-2',
-        isReady: false,
-        toDeploy: true,
-      ),
-      ContainerDao(
-        id: 'test-container-3',
-        number: 3,
-        name: 'Water Purification Equipment',
-        description: 'Container with water treatment equipment',
-        typeId: 'water-type-1',
+        name: 'Medical Supplies',
+        description: 'Medical equipment container',
+        typeId: 'type-2',
         sequentialBuild: SequentialBuild.preBuild,
-        currentLocationId: 'warehouse-2',
+        currentLocationId: 'loc-2',
+        moduleDestinationId: 'dest-2',
         isReady: true,
         toDeploy: false,
       ),
@@ -61,7 +50,24 @@ class MockContainerRepository implements ContainerRepository {
 
   @override
   Stream<List<ContainerDao>> watchContainers() {
-    return _containersController.stream;
+    // Create a new controller that emits current data immediately
+    final controller = StreamController<List<ContainerDao>>.broadcast();
+    
+    // Emit current data immediately
+    controller.add(_containers.values.toList());
+    
+    // Forward future updates
+    final subscription = _containersController.stream.listen(
+      (containers) => controller.add(containers),
+    );
+    
+    // Handle cleanup
+    controller.onCancel = () {
+      subscription.cancel();
+      controller.close();
+    };
+    
+    return controller.stream;
   }
 
   @override
@@ -153,6 +159,16 @@ class MockContainerRepository implements ContainerRepository {
   /// Get containers by deploy status
   List<ContainerDao> getContainersByDeployStatus(bool toDeploy) {
     return _containers.values.where((container) => container.toDeploy == toDeploy).toList();
+  }
+
+  @override
+  Future<void> createContainer(ContainerDao container) async {
+    return upsertContainer(container);
+  }
+
+  @override
+  Future<void> updateContainer(ContainerDao container) async {
+    return upsertContainer(container);
   }
 
   /// Dispose resources

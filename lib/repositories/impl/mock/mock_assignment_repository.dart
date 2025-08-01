@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:rescue_net_warehouse/models/assignment.dart';
-import 'package:rescue_net_warehouse/repositories/assignment_repository.dart';
+import 'package:rescuenet_warehouse/models/assignment.dart';
+import 'package:rescuenet_warehouse/repositories/assignment_repository.dart';
 
 /// Mock implementation of AssignmentRepository for testing
 /// 
@@ -57,7 +57,11 @@ class MockAssignmentRepository implements AssignmentRepository {
 
   @override
   Stream<List<Assignment>> watchAssignments() {
-    return _streamController.stream;
+    final controller = StreamController<List<Assignment>>.broadcast();
+    controller.add(_assignments.values.toList());
+    final subscription = _streamController.stream.listen((items) => controller.add(items));
+    controller.onCancel = () { subscription.cancel(); controller.close(); };
+    return controller.stream;
   }
 
   @override

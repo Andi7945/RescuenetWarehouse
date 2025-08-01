@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../routes.dart';
-import '../../auth_util.dart';
+import '../../repositories/auth_providers.dart';
+import '../../repositories/auth_repository.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
   static const routeName = "/login";
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   String? errorMessage = '';
   bool isLogin = true;
 
@@ -21,7 +23,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> signInWithEmailAndPassword() async {
     print('pressed Login');
-    var tryAuth = await Auth().signInWithEmailAndPassword(
+    final authNotifier = ref.read(authNotifierProvider.notifier);
+    final tryAuth = await authNotifier.signInWithEmailAndPassword(
       email: _controllerEmail.text,
       password: _controllerPassword.text,
     );
@@ -42,13 +45,19 @@ class _LoginPageState extends State<LoginPage> {
           errorMessage = "Please use a rescuenet email address to register.";
         });
       } else {
-        await Auth().createUserWithEmailAndPassword(
+        final authNotifier = ref.read(authNotifierProvider.notifier);
+        await authNotifier.createUserWithEmailAndPassword(
           email: _controllerEmail.text,
           password: _controllerPassword.text,
+          name: _controllerEmail.text.split('@').first, // Use email prefix as name
         );
         // Registration successful, navigate to main app
         Navigator.pushNamed(context, routeContainerWithContent);
       }
+    } on AuthException catch (e) {
+      setState(() {
+        errorMessage = e.message;
+      });
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;

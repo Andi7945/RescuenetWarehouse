@@ -1,4 +1,4 @@
-import 'package:rescue_net_warehouse/models/module_destination.dart';
+import 'package:rescuenet_warehouse/models/module_destination.dart';
 
 /// Repository interface for managing module destinations.
 /// 
@@ -16,6 +16,14 @@ abstract class ModuleDestinationRepository {
 
   /// Create or update a module destination
   Future<void> upsertModuleDestination(ModuleDestination moduleDestination);
+
+  /// Create a new module destination
+  /// Alias for upsertModuleDestination for compatibility
+  Future<void> createModuleDestination(ModuleDestination moduleDestination);
+
+  /// Update an existing module destination
+  /// Alias for upsertModuleDestination for compatibility
+  Future<void> updateModuleDestination(ModuleDestination moduleDestination);
 
   /// Delete a module destination by ID
   Future<void> deleteModuleDestination(String id);

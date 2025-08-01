@@ -11,11 +11,14 @@ class AllWorkLogsNotifier extends _$AllWorkLogsNotifier {
   List<LogEntry> build() {
     final repository = ref.watch(workLogRepositoryProvider);
     
-    // Subscribe to the stream and update state when data changes
-    repository.watchWorkLogs().listen((workLogs) {
-      if (mounted) {
-        state = workLogs;
-      }
+    // Use proper stream subscription management
+    final subscription = repository.watchWorkLogs().listen((workLogs) {
+      state = workLogs;
+    });
+    
+    // Dispose subscription when notifier is disposed
+    ref.onDispose(() {
+      subscription.cancel();
     });
     
     return [];

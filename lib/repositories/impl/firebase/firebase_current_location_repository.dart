@@ -43,6 +43,16 @@ class FirebaseCurrentLocationRepository implements CurrentLocationRepository {
   }
 
   @override
+  Future<void> createCurrentLocation(CurrentLocation currentLocation) async {
+    return upsertCurrentLocation(currentLocation);
+  }
+
+  @override
+  Future<void> updateCurrentLocation(CurrentLocation currentLocation) async {
+    return upsertCurrentLocation(currentLocation);
+  }
+
+  @override
   Future<void> deleteCurrentLocation(String id) async {
     try {
       await currentLocationsCollection.doc(id).delete();

@@ -1,4 +1,4 @@
-import 'package:rescue_net_warehouse/models/current_location.dart';
+import 'package:rescuenet_warehouse/models/current_location.dart';
 
 /// Repository interface for managing current locations.
 /// 
@@ -16,6 +16,14 @@ abstract class CurrentLocationRepository {
 
   /// Create or update a current location
   Future<void> upsertCurrentLocation(CurrentLocation currentLocation);
+
+  /// Create a new current location
+  /// Alias for upsertCurrentLocation for compatibility
+  Future<void> createCurrentLocation(CurrentLocation currentLocation);
+
+  /// Update an existing current location
+  /// Alias for upsertCurrentLocation for compatibility
+  Future<void> updateCurrentLocation(CurrentLocation currentLocation);
 
   /// Delete a current location by ID
   Future<void> deleteCurrentLocation(String id);

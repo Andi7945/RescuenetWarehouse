@@ -18,11 +18,14 @@ class AllContainersNotifier extends _$AllContainersNotifier {
   List<RescueContainer> build() {
     final repository = ref.watch(containerRepositoryProvider);
     
-    // Subscribe to the stream and update state when data changes
-    repository.watchContainers().listen((containers) {
-      if (mounted) {
-        state = containers.map(_expand).toList();
-      }
+    // Use proper stream subscription management
+    final subscription = repository.watchContainers().listen((containers) {
+      state = containers.map(_expand).toList();
+    });
+    
+    // Dispose subscription when notifier is disposed
+    ref.onDispose(() {
+      subscription.cancel();
     });
     
     return [];

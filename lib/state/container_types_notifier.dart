@@ -11,11 +11,14 @@ class ContainerTypesNotifier extends _$ContainerTypesNotifier {
   List<ContainerType> build() {
     final repository = ref.watch(containerTypeRepositoryProvider);
     
-    // Subscribe to stream and update state when data changes
-    repository.watchContainerTypes().listen((containerTypes) {
-      if (mounted) {
-        state = containerTypes;
-      }
+    // Use proper stream subscription management
+    final subscription = repository.watchContainerTypes().listen((containerTypes) {
+      state = containerTypes;
+    });
+    
+    // Dispose subscription when notifier is disposed
+    ref.onDispose(() {
+      subscription.cancel();
     });
     
     return [];

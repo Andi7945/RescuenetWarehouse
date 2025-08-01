@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:rescue_net_warehouse/models/module_destination.dart';
-import 'package:rescue_net_warehouse/repositories/module_destination_repository.dart';
+import 'package:rescuenet_warehouse/models/module_destination.dart';
+import 'package:rescuenet_warehouse/repositories/module_destination_repository.dart';
 
 /// Mock implementation of ModuleDestinationRepository for testing
 /// 
@@ -52,7 +52,11 @@ class MockModuleDestinationRepository implements ModuleDestinationRepository {
 
   @override
   Stream<List<ModuleDestination>> watchModuleDestinations() {
-    return _streamController.stream;
+    final controller = StreamController<List<ModuleDestination>>.broadcast();
+    controller.add(_moduleDestinations.values.toList());
+    final subscription = _streamController.stream.listen((items) => controller.add(items));
+    controller.onCancel = () { subscription.cancel(); controller.close(); };
+    return controller.stream;
   }
 
   @override
@@ -95,6 +99,16 @@ class MockModuleDestinationRepository implements ModuleDestinationRepository {
       _moduleDestinations[destination.id] = destination;
     }
     _notifyListeners();
+  }
+
+  @override
+  Future<void> createModuleDestination(ModuleDestination moduleDestination) async {
+    return upsertModuleDestination(moduleDestination);
+  }
+
+  @override
+  Future<void> updateModuleDestination(ModuleDestination moduleDestination) async {
+    return upsertModuleDestination(moduleDestination);
   }
 
   /// Get current destination count for testing

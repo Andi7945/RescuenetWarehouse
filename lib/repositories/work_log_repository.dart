@@ -1,4 +1,4 @@
-import 'package:rescue_net_warehouse/models/log_entry.dart';
+import 'package:rescuenet_warehouse/models/log_entry.dart';
 
 /// Repository interface for managing work log entries (audit trail).
 /// 
@@ -25,6 +25,10 @@ abstract class WorkLogRepository {
 
   /// Create a new work log entry
   Future<void> createWorkLog(LogEntry logEntry);
+
+  /// Create or update a work log entry
+  /// Alias for createWorkLog for compatibility
+  Future<void> upsertWorkLog(LogEntry logEntry);
 
   /// Create multiple work log entries in a batch
   /// This is important for maintaining consistency when logging bulk operations

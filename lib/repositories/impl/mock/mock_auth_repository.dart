@@ -244,6 +244,36 @@ class MockUser implements User {
   }
 
   @override
+  Future<UserCredential> linkWithPopup(AuthProvider provider) async {
+    throw UnimplementedError('linkWithPopup not implemented in mock');
+  }
+
+  @override
+  Future<UserCredential> linkWithProvider(AuthProvider provider) async {
+    throw UnimplementedError('linkWithProvider not implemented in mock');
+  }
+
+  @override
+  Future<void> linkWithRedirect(AuthProvider provider) async {
+    throw UnimplementedError('linkWithRedirect not implemented in mock');
+  }
+
+  @override
+  Future<UserCredential> reauthenticateWithPopup(AuthProvider provider) async {
+    throw UnimplementedError('reauthenticateWithPopup not implemented in mock');
+  }
+
+  @override
+  Future<UserCredential> reauthenticateWithProvider(AuthProvider provider) async {
+    throw UnimplementedError('reauthenticateWithProvider not implemented in mock');
+  }
+
+  @override
+  Future<void> reauthenticateWithRedirect(AuthProvider provider) async {
+    throw UnimplementedError('reauthenticateWithRedirect not implemented in mock');
+  }
+
+  @override
   MultiFactor get multiFactor => throw UnimplementedError('multiFactor not implemented in mock');
 }
 

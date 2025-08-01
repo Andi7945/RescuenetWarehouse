@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:rescue_net_warehouse/models/log_entry.dart';
-import 'package:rescue_net_warehouse/repositories/work_log_repository.dart';
+import 'package:rescuenet_warehouse/models/log_entry.dart';
+import 'package:rescuenet_warehouse/repositories/work_log_repository.dart';
 
 /// Mock implementation of WorkLogRepository for testing
 /// 
@@ -69,7 +69,12 @@ class MockWorkLogRepository implements WorkLogRepository {
 
   @override
   Stream<List<LogEntry>> watchWorkLogs() {
-    return _streamController.stream;
+    final controller = StreamController<List<LogEntry>>.broadcast();
+    final sortedWorkLogs = _workLogs.values.toList()..sort((a, b) => b.date.compareTo(a.date));
+    controller.add(sortedWorkLogs);
+    final subscription = _streamController.stream.listen((items) => controller.add(items));
+    controller.onCancel = () { subscription.cancel(); controller.close(); };
+    return controller.stream;
   }
 
   @override
@@ -125,6 +130,11 @@ class MockWorkLogRepository implements WorkLogRepository {
     await Future.delayed(const Duration(milliseconds: 10));
     _workLogs[logEntry.id] = logEntry;
     _notifyListeners();
+  }
+
+  @override
+  Future<void> upsertWorkLog(LogEntry logEntry) async {
+    return createWorkLog(logEntry);
   }
 
   @override

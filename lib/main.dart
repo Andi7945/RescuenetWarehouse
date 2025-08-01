@@ -139,7 +139,7 @@ class _AuthHome extends river.ConsumerWidget {
     return authState.when(
       data: (user) => user == null 
           ? const LoginPage() 
-          : const ContainerWithContentPage(),
+          : ContainerWithContentPage(),
       loading: () => const Scaffold(
         body: Center(child: CircularProgressIndicator()),
       ),

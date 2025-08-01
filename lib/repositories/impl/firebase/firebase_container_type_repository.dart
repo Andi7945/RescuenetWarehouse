@@ -43,6 +43,16 @@ class FirebaseContainerTypeRepository implements ContainerTypeRepository {
   }
 
   @override
+  Future<void> createContainerType(ContainerType containerType) async {
+    return upsertContainerType(containerType);
+  }
+
+  @override
+  Future<void> updateContainerType(ContainerType containerType) async {
+    return upsertContainerType(containerType);
+  }
+
+  @override
   Future<void> deleteContainerType(String id) async {
     try {
       await containerTypesCollection.doc(id).delete();

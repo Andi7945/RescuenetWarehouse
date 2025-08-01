@@ -128,6 +128,16 @@ class FirebaseContainerRepository implements ContainerRepository {
     }
   }
 
+  @override
+  Future<void> createContainer(ContainerDao container) async {
+    return upsertContainer(container);
+  }
+
+  @override
+  Future<void> updateContainer(ContainerDao container) async {
+    return upsertContainer(container);
+  }
+
   /// Converts Firebase and other exceptions to ContainerException.
   ContainerException _convertException(Object exception) {
     if (exception is FirebaseException) {
