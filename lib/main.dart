@@ -40,7 +40,7 @@ import 'package:rescuenet_warehouse/features/item_csv_import/widgets/import_expo
 import 'package:rescuenet_warehouse/ui/work_log_page/work_log_page.dart';
 import 'package:uuid/uuid.dart';
 
-import 'auth_util.dart';
+import 'repositories/auth_providers.dart';
 import 'features/item_delete_multiple/item_delete_multiple_page.dart';
 import 'firebase_options.dart';
 import 'features/item_overview/item_overview_page.dart';
@@ -79,10 +79,7 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.compact,
         ),
         scrollBehavior: CustomScrollBehavior(),
-        home:
-            Auth().currentUser == null
-                ? LoginPage()
-                : ContainerWithContentPage(),
+        home: const _AuthHome(),
         routes: {
           LoginPage.routeName: (ctx) => const LoginPage(),
           routeForgotPassword: (ctx) => AuthForgotPasswordPage(),
@@ -141,5 +138,26 @@ class _EagerInitialization extends river.ConsumerWidget {
     ref.watch(containerVisibilityNotifierProvider);
     ref.watch(containerCurrentFilterNotifierProvider);
     return child;
+  }
+}
+
+/// Widget that handles authentication routing.
+/// Shows login page when not authenticated, main app when authenticated.
+class _AuthHome extends river.ConsumerWidget {
+  const _AuthHome();
+
+  @override
+  Widget build(BuildContext context, river.WidgetRef ref) {
+    final authState = ref.watch(authStateChangesProvider);
+    
+    return authState.when(
+      data: (user) => user == null 
+          ? const LoginPage() 
+          : const ContainerWithContentPage(),
+      loading: () => const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      ),
+      error: (error, stackTrace) => const LoginPage(),
+    );
   }
 }
