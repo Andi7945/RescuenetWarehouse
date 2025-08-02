@@ -7,7 +7,7 @@ part of 'module_destinations_notifier.dart';
 // **************************************************************************
 
 String _$moduleDestinationsNotifierHash() =>
-    r'ec65835da0472bfd0c3d5b5325770fd6688b6eab';
+    r'23085889f52bf005a5acce36a9bb269930fb0be0';
 
 /// See also [ModuleDestinationsNotifier].
 @ProviderFor(ModuleDestinationsNotifier)

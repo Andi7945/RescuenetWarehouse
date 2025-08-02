@@ -7,7 +7,7 @@ part of 'all_assignments_notifier.dart';
 // **************************************************************************
 
 String _$allAssignmentsNotifierHash() =>
-    r'1e7f0d72ec8e2175959cef9cf12397aeef44900d';
+    r'02432d0b6091e9536171dcf37467b18f03f342af';
 
 /// See also [AllAssignmentsNotifier].
 @ProviderFor(AllAssignmentsNotifier)

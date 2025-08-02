@@ -11,17 +11,18 @@ class AllItemsNotifier extends _$AllItemsNotifier {
   @override
   List<Item> build() {
     final repository = ref.watch(itemRepositoryProvider);
-    
+
     // Use ref.listen to properly manage the stream subscription
     final subscription = repository.watchItems().listen((items) {
+      print("items in listen: $items");
       state = items;
     });
-    
+
     // Dispose subscription when notifier is disposed
     ref.onDispose(() {
       subscription.cancel();
     });
-    
+
     return [];
   }
 
