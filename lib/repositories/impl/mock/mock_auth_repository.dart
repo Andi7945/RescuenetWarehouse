@@ -23,10 +23,31 @@ class MockAuthRepository implements AuthRepository {
       displayName: 'Admin User',
       password: 'admin123',
     );
+    
+    // Immediately emit initial auth state (null = not authenticated)
+    // This prevents the app from hanging in loading state
+    _authStateController.add(_currentUser);
   }
 
   @override
-  Stream<User?> get authStateChanges => _authStateController.stream;
+  Stream<User?> get authStateChanges {
+    // Return a stream that immediately emits the current state when subscribed
+    // This fixes the timing issue where Riverpod stream providers would miss
+    // the initial auth state emission from the constructor
+    return Stream.multi((controller) {
+      // Immediately emit current state when listener attaches
+      controller.add(_currentUser);
+      
+      // Listen to future auth state changes
+      final subscription = _authStateController.stream.listen(
+        (user) => controller.add(user),
+        onError: controller.addError,
+        onDone: controller.close,
+      );
+      
+      controller.onCancel = () => subscription.cancel();
+    });
+  }
 
   @override
   User? get currentUser => _currentUser;
@@ -59,7 +80,7 @@ class MockAuthRepository implements AuthRepository {
     
     // Validate email domain (like the real app)
     if (!email.endsWith('@rescuenet.net')) {
-      throw const AuthException('Invalid email domain', code: 'invalid-email');
+      throw const AuthException('Only rescuenet.net emails allowed', code: 'invalid-email');
     }
     
     final newUser = MockUser(
