@@ -1,0 +1,94 @@
+{
+  "login": {
+    "emailField": { "x": 640, "y": 285 },
+    "passwordField": { "x": 640, "y": 330 },
+    "loginButton": { "x": 487, "y": 393 }
+  },
+  "navigation": {
+    "hamburgerMenu": { "x": 27, "y": 27 },
+    "allItemsMenu": { "x": 85, "y": 215 }
+  },
+  "itemsOverview": {
+    "searchBox": { "x": 300, "y": 100 },
+    "locationFilter": { "x": 400, "y": 200 },
+    "dangerousGoodsFilter": { "x": 500, "y": 200 },
+    "statusFilter": { "x": 600, "y": 200 },
+    "clearFiltersButton": { "x": 600, "y": 200 },
+    "createItemButton": { "x": 800, "y": 150 },
+    "importButton": { "x": 750, "y": 150 },
+    "exportButton": { "x": 800, "y": 150 },
+    "sortNameColumn": { "x": 200, "y": 250 },
+    "sortQuantityColumn": { "x": 400, "y": 250 },
+    "sortExpiryColumn": { "x": 650, "y": 250 },
+    "firstItemArea": { "x": 400, "y": 300 },
+    "secondItemArea": { "x": 400, "y": 350 },
+    "thirdItemArea": { "x": 400, "y": 400 }
+  },
+  "itemForm": {
+    "nameField": { "x": 520, "y": 100 },
+    "descriptionField": { "x": 150, "y": 385 },
+    "quantityField": { "x": 1180, "y": 320 },
+    "unitField": { "x": 400, "y": 450 },
+    "manufacturerField": { "x": 75, "y": 530 },
+    "locationDropdown": { "x": 400, "y": 500 },
+    "expiryDateField": { "x": 400, "y": 550 },
+    "dangerousGoodsDropdown": { "x": 400, "y": 450 },
+    "saveButton": { "x": 500, "y": 600 },
+    "cancelButton": { "x": 400, "y": 600 },
+    "deleteButton": { "x": 750, "y": 400 }
+  },
+  "itemDetail": {
+    "editButton": { "x": 700, "y": 300 },
+    "deleteButton": { "x": 750, "y": 300 },
+    "incrementButton": { "x": 550, "y": 320 },
+    "decrementButton": { "x": 520, "y": 320 },
+    "quantityInputField": { "x": 400, "y": 350 },
+    "assignmentQuantityField": { "x": 400, "y": 380 },
+    "dangerousGoodsSection": { "x": 600, "y": 400 }
+  },
+  "filters": {
+    "warehouseAOption": { "x": 450, "y": 250 },
+    "fieldOfficeOption": { "x": 480, "y": 280 },
+    "class3Option": { "x": 530, "y": 250 },
+    "class8Option": { "x": 480, "y": 580 },
+    "noneOption": { "x": 450, "y": 350 },
+    "expiredFilter": { "x": 530, "y": 250 },
+    "expiringSoonFilter": { "x": 560, "y": 280 }
+  },
+  "dialogs": {
+    "importFileUploadArea": { "x": 400, "y": 300 },
+    "invalidCsvOption": { "x": 400, "y": 350 },
+    "uncheckRowCheckbox": { "x": 350, "y": 400 },
+    "confirmImportButton": { "x": 500, "y": 500 },
+    "csvExportOption": { "x": 400, "y": 300 },
+    "pdfExportOption": { "x": 400, "y": 350 },
+    "exportConfirmButton": { "x": 500, "y": 400 }
+  },
+  "dangerousGoods": {
+    "class1Option": { "x": 430, "y": 420 },
+    "class3Option": { "x": 450, "y": 500 },
+    "class8Option": { "x": 480, "y": 580 },
+    "class9Option": { "x": 490, "y": 620 },
+    "noneClassification": { "x": 450, "y": 350 }
+  },
+  "viewports": {
+    "default": {
+      "width": 1280,
+      "height": 720
+    },
+    "mobile": {
+      "width": 375,
+      "height": 667
+    },
+    "tablet": {
+      "width": 768,
+      "height": 1024
+    }
+  },
+  "timeouts": {
+    "short": 500,
+    "medium": 1000,
+    "long": 3000,
+    "dataLoad": 5000
+  }
+}
