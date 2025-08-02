@@ -24,7 +24,7 @@ test.describe('Item Management (UC02)', () => {
     await page.keyboard.type('test@rescuenet.net');
 
     await page.mouse.click(640, 330); // Password field
-    await page.keyboard.type('testpassword');
+    await page.keyboard.type('password123'); // Correct password from MockAuthRepository
 
     await page.mouse.click(487, 393); // Login button (correct coordinates)
 
@@ -66,19 +66,33 @@ test.describe('Item Management (UC02)', () => {
       // Wait additional time for data loading
       await page.waitForTimeout(3000);
 
-      // Try to take a screenshot after clicking where items should be
-      // This tests if the app is actually interactive
-      try {
-        await page.mouse.click(400, 300); // Click in main content area
-        await page.waitForTimeout(1000);
-        await page.screenshot({ path: 'item-overview-after-click.png' });
-        console.log('T02.1: App appears interactive');
-      } catch (error) {
-        console.log('T02.1: Click test failed, but Flutter elements exist');
-      }
-
-      // Success: Flutter app is running, even if specific data isn't immediately visible
-      expect(true).toBe(true); // Test passes if Flutter elements are present
+      // Verify authentication was successful by checking page content
+      const pageContent = await page.textContent('body');
+      
+      // These assertions will FAIL if authentication doesn't work:
+      expect(pageContent).not.toContain('Wrong password');
+      expect(pageContent).not.toContain('email');
+      expect(pageContent).not.toContain('Login');
+      
+      // Navigate to Items page using the hamburger menu
+      await page.mouse.click(27, 27); // Click hamburger menu
+      await page.waitForTimeout(1500);
+      
+      await page.screenshot({ path: 'item-overview-drawer-opened.png' });
+      
+      // Click on "All Items" in the navigation drawer
+      await page.mouse.click(85, 215);
+      await page.waitForTimeout(3000);
+      
+      await page.screenshot({ path: 'item-overview-after-navigation.png' });
+      
+      // Verify navigation to Items page was successful
+      const currentUrl = page.url();
+      expect(currentUrl).toContain('itemsOverview');
+      
+      // Take final screenshot for visual verification
+      await page.waitForTimeout(2000);
+      await page.screenshot({ path: 'item-overview-final.png' });
     } else {
       // Fallback: Check page content but be more lenient
       const pageContent = await page.textContent('body');
@@ -130,9 +144,14 @@ test.describe('Item Management (UC02)', () => {
     // Validate UI elements exist and are interactive
     const pageContent = await page.textContent('body');
 
-    // This test validates that the page has loaded with actual content
-    // If mock Firebase isn't working, page would be empty or show errors
-    expect(pageContent.length).toBeGreaterThan(100); // Ensure substantial page content
+    // CRITICAL: Test must verify we're in the main app with actual item data
+    // These assertions will FAIL if authentication doesn't work:
+    expect(pageContent).not.toContain('Wrong password'); // Must not show auth error
+    expect(pageContent).not.toContain('email'); // Must not be on login form
+    expect(pageContent).not.toContain('Login'); // Must not show login button
+    
+    // Should contain actual item management content
+    expect(pageContent).toContain('Item'); // Should show items or "Item Management"
 
     console.log('Filtering test: Page has substantial content, mock Firebase working');
   });
@@ -202,9 +221,14 @@ test.describe('Item Management (UC02)', () => {
     // Validate that the page has loaded and can handle interactions
     const pageContent = await page.textContent('body');
 
-    // Test that we can interact with the page without errors
-    // Mock Firebase should be handling the backend operations
-    expect(pageContent.length).toBeGreaterThan(50);
+    // CRITICAL: Test must verify we're in the main app with item creation capability
+    // These assertions will FAIL if authentication doesn't work:
+    expect(pageContent).not.toContain('Wrong password'); // Must not show auth error
+    expect(pageContent).not.toContain('email'); // Must not be on login form
+    expect(pageContent).not.toContain('Login'); // Must not show login button
+    
+    // Should be in item management interface
+    expect(pageContent).toContain('Item'); // Should show "Add Item" or "Item Management"
 
     // Additional validation: check console for mock Firebase logs
     const logs = await page.evaluate(() => {
@@ -261,11 +285,16 @@ test.describe('Item Management (UC02)', () => {
     // Validate that quantity operations are testable with mock data
     const pageContent = await page.textContent('body');
 
-    // Ensure we have content to work with (mock Firebase providing data)
-    expect(pageContent.length).toBeGreaterThan(100);
+    // CRITICAL: Test must verify we're in the main app with quantity management
+    // These assertions will FAIL if authentication doesn't work:
+    expect(pageContent).not.toContain('Wrong password'); // Must not show auth error
+    expect(pageContent).not.toContain('email'); // Must not be on login form
+    expect(pageContent).not.toContain('Login'); // Must not show login button
+    
+    // CRITICAL: Test must verify actual item data is loaded for quantity operations
+    expect(pageContent).toContain('Item'); // Should show "Item" or "Items" in the interface
+    expect(pageContent).toContain('Tent'); // Should show actual item data from mock repository
 
-    // Test validates that the page can handle quantity operations
-    // Mock Firebase should be simulating the backend persistence
     console.log('Quantity Boundary test: Mock Firebase handling quantity operations');
   });
 
@@ -321,8 +350,15 @@ test.describe('Item Management (UC02)', () => {
     // Validate dangerous goods functionality with mock data
     const pageContent = await page.textContent('body');
 
-    // Test that we have a functional page with mock Firebase backend
-    expect(pageContent.length).toBeGreaterThan(50);
+    // CRITICAL: Test must verify we're in the main app with dangerous goods functionality
+    // These assertions will FAIL if authentication doesn't work:
+    expect(pageContent).not.toContain('Wrong password'); // Must not show auth error
+    expect(pageContent).not.toContain('email'); // Must not be on login form
+    expect(pageContent).not.toContain('Login'); // Must not show login button
+    
+    // CRITICAL: Test must verify actual item data is loaded for dangerous goods operations
+    expect(pageContent).toContain('Item'); // Should show "Item" or "Items" in the interface
+    expect(pageContent).toContain('Tent'); // Should show actual item data from mock repository
 
     console.log('Dangerous Goods test: Mock Firebase supporting DG operations');
   });
@@ -379,8 +415,15 @@ test.describe('Item Management (UC02)', () => {
     // Validate expiry date functionality with mock backend
     const pageContent = await page.textContent('body');
 
-    // Ensure mock Firebase is providing data for expiry date testing
-    expect(pageContent.length).toBeGreaterThan(100);
+    // CRITICAL: Test must verify we're in the main app with expiry date functionality
+    // These assertions will FAIL if authentication doesn't work:
+    expect(pageContent).not.toContain('Wrong password'); // Must not show auth error
+    expect(pageContent).not.toContain('email'); // Must not be on login form
+    expect(pageContent).not.toContain('Login'); // Must not show login button
+    
+    // CRITICAL: Test must verify actual item data is loaded for expiry date operations
+    expect(pageContent).toContain('Item'); // Should show "Item" or "Items" in the interface
+    expect(pageContent).toContain('Tent'); // Should show actual item data from mock repository
 
     console.log('Expiry Date test: Mock Firebase handling date operations');
   });
@@ -425,11 +468,14 @@ test.describe('Item Management (UC02)', () => {
     // Validate search functionality with mock data
     const pageContent = await page.textContent('body');
 
-    // Test that search operations have data to work with
-    expect(pageContent.length).toBeGreaterThan(100);
-
-    // Should still contain our mock items after all operations
-    expect(pageContent).toContain('Green Dome'); // Part of tent name from mock data
+    // CRITICAL: Test must verify we're in the main app with search functionality
+    // These assertions will FAIL if authentication doesn't work:
+    expect(pageContent).not.toContain('Wrong password'); // Must not show auth error
+    expect(pageContent).not.toContain('email'); // Must not be on login form
+    expect(pageContent).not.toContain('Login'); // Must not show login button
+    
+    // Should contain search results from mock data
+    expect(pageContent).toContain('Tent'); // Should find tent items from mock data
 
     console.log('Search Integration test: Mock Firebase supporting search operations');
   });
@@ -473,10 +519,16 @@ test.describe('Item Management (UC02)', () => {
     // Validate assignment status display with mock data
     const pageContent = await page.textContent('body');
 
-    // Test that we have assignment data from mock Firebase
-    expect(pageContent.length).toBeGreaterThan(100);
+    // CRITICAL: Test must verify we're in the main app with assignment status display
+    // These assertions will FAIL if authentication doesn't work:
+    expect(pageContent).not.toContain('Wrong password'); // Must not show auth error
+    expect(pageContent).not.toContain('email'); // Must not be on login form
+    expect(pageContent).not.toContain('Login'); // Must not show login button
+    
+    // CRITICAL: Test must verify actual item data is loaded for assignment status display
+    expect(pageContent).toContain('Item'); // Should show "Item" or "Items" in the interface
+    expect(pageContent).toContain('Tent'); // Should show actual item data from mock repository
 
-    // Mock Firebase should provide assignment data (mock-firebase.js:320-326)
     console.log('Assignment Status test: Mock Firebase providing assignment data');
   });
 });
