@@ -30,6 +30,7 @@ part 'repository_providers.g.dart';
 /// Set to 'mock' for testing, 'firebase' for production.
 const String _repositoryMode = String.fromEnvironment('REPOSITORY_MODE', defaultValue: 'firebase');
 
+
 /// Provider for AuthRepository.
 /// Returns Firebase implementation in production, Mock implementation in tests.
 @riverpod

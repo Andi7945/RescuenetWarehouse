@@ -88,6 +88,18 @@ npm run test:debug
 
 # View test report
 npm run test:report
+
+# Run a single spec file
+npx playwright test authentication.spec.js --project=chromium
+
+# Run a specific test within a spec file
+npx playwright test authentication.spec.js --grep "New user registration with rescuenet.net email" --project=chromium
+
+# Run tests with verbose output
+npx playwright test --reporter=line
+
+# Run tests and show browser
+npx playwright test --headed --project=chromium
 ```
 
 ### Configuration
