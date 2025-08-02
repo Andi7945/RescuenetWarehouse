@@ -1,4 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'dart:html' as html;
 import 'auth_repository.dart';
 import 'item_repository.dart';
 import 'container_repository.dart';
@@ -30,17 +31,33 @@ part 'repository_providers.g.dart';
 /// Set to 'mock' for testing, 'firebase' for production.
 const String _repositoryMode = String.fromEnvironment('REPOSITORY_MODE', defaultValue: 'firebase');
 
+/// Runtime detection of mock mode for Playwright tests.
+/// Checks if the web environment has MOCK_FIREBASE_MODE flag set to true.
+bool _isRuntimeMockMode() {
+  try {
+    // Check if we're in a web environment with mock Firebase enabled
+    return (html.window as dynamic).MOCK_FIREBASE_MODE == true;
+  } catch (e) {
+    // If we can't access window properties, fall back to environment variable
+    return false;
+  }
+}
+
+/// Determine whether to use mock repositories.
+/// Returns true if either environment variable is set to 'mock' or runtime mock mode is detected.
+bool _shouldUseMockRepositories() {
+  return _repositoryMode == 'mock' || _isRuntimeMockMode();
+}
+
 
 /// Provider for AuthRepository.
 /// Returns Firebase implementation in production, Mock implementation in tests.
 @riverpod
 AuthRepository authRepository(AuthRepositoryRef ref) {
-  switch (_repositoryMode) {
-    case 'mock':
-      return MockAuthRepository();
-    case 'firebase':
-    default:
-      return FirebaseAuthRepository();
+  if (_shouldUseMockRepositories()) {
+    return MockAuthRepository();
+  } else {
+    return FirebaseAuthRepository();
   }
 }
 
@@ -48,12 +65,10 @@ AuthRepository authRepository(AuthRepositoryRef ref) {
 /// Returns Firebase implementation in production, Mock implementation in tests.
 @riverpod
 ItemRepository itemRepository(ItemRepositoryRef ref) {
-  switch (_repositoryMode) {
-    case 'mock':
-      return MockItemRepository();
-    case 'firebase':
-    default:
-      return FirebaseItemRepository();
+  if (_shouldUseMockRepositories()) {
+    return MockItemRepository();
+  } else {
+    return FirebaseItemRepository();
   }
 }
 
@@ -61,12 +76,10 @@ ItemRepository itemRepository(ItemRepositoryRef ref) {
 /// Returns Firebase implementation in production, Mock implementation in tests.
 @riverpod
 ContainerRepository containerRepository(ContainerRepositoryRef ref) {
-  switch (_repositoryMode) {
-    case 'mock':
-      return MockContainerRepository();
-    case 'firebase':
-    default:
-      return FirebaseContainerRepository();
+  if (_shouldUseMockRepositories()) {
+    return MockContainerRepository();
+  } else {
+    return FirebaseContainerRepository();
   }
 }
 
@@ -74,12 +87,10 @@ ContainerRepository containerRepository(ContainerRepositoryRef ref) {
 /// Returns Firebase implementation in production, Mock implementation in tests.
 @riverpod
 AssignmentRepository assignmentRepository(AssignmentRepositoryRef ref) {
-  switch (_repositoryMode) {
-    case 'mock':
-      return MockAssignmentRepository();
-    case 'firebase':
-    default:
-      return FirebaseAssignmentRepository();
+  if (_shouldUseMockRepositories()) {
+    return MockAssignmentRepository();
+  } else {
+    return FirebaseAssignmentRepository();
   }
 }
 
@@ -87,12 +98,10 @@ AssignmentRepository assignmentRepository(AssignmentRepositoryRef ref) {
 /// Returns Firebase implementation in production, Mock implementation in tests.
 @riverpod
 WorkLogRepository workLogRepository(WorkLogRepositoryRef ref) {
-  switch (_repositoryMode) {
-    case 'mock':
-      return MockWorkLogRepository();
-    case 'firebase':
-    default:
-      return FirebaseWorkLogRepository();
+  if (_shouldUseMockRepositories()) {
+    return MockWorkLogRepository();
+  } else {
+    return FirebaseWorkLogRepository();
   }
 }
 
@@ -100,12 +109,10 @@ WorkLogRepository workLogRepository(WorkLogRepositoryRef ref) {
 /// Returns Firebase implementation in production, Mock implementation in tests.
 @riverpod
 ContainerTypeRepository containerTypeRepository(ContainerTypeRepositoryRef ref) {
-  switch (_repositoryMode) {
-    case 'mock':
-      return MockContainerTypeRepository();
-    case 'firebase':
-    default:
-      return FirebaseContainerTypeRepository();
+  if (_shouldUseMockRepositories()) {
+    return MockContainerTypeRepository();
+  } else {
+    return FirebaseContainerTypeRepository();
   }
 }
 
@@ -113,12 +120,10 @@ ContainerTypeRepository containerTypeRepository(ContainerTypeRepositoryRef ref) 
 /// Returns Firebase implementation in production, Mock implementation in tests.
 @riverpod
 CurrentLocationRepository currentLocationRepository(CurrentLocationRepositoryRef ref) {
-  switch (_repositoryMode) {
-    case 'mock':
-      return MockCurrentLocationRepository();
-    case 'firebase':
-    default:
-      return FirebaseCurrentLocationRepository();
+  if (_shouldUseMockRepositories()) {
+    return MockCurrentLocationRepository();
+  } else {
+    return FirebaseCurrentLocationRepository();
   }
 }
 
@@ -126,12 +131,10 @@ CurrentLocationRepository currentLocationRepository(CurrentLocationRepositoryRef
 /// Returns Firebase implementation in production, Mock implementation in tests.
 @riverpod
 ModuleDestinationRepository moduleDestinationRepository(ModuleDestinationRepositoryRef ref) {
-  switch (_repositoryMode) {
-    case 'mock':
-      return MockModuleDestinationRepository();
-    case 'firebase':
-    default:
-      return FirebaseModuleDestinationRepository();
+  if (_shouldUseMockRepositories()) {
+    return MockModuleDestinationRepository();
+  } else {
+    return FirebaseModuleDestinationRepository();
   }
 }
 
@@ -139,5 +142,5 @@ ModuleDestinationRepository moduleDestinationRepository(ModuleDestinationReposit
 /// Useful for conditional behavior in the app.
 @riverpod
 bool isMockMode(IsMockModeRef ref) {
-  return _repositoryMode == 'mock';
+  return _shouldUseMockRepositories();
 }

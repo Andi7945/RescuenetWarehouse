@@ -14,33 +14,34 @@ class MockItemRepository implements ItemRepository {
   }
 
   /// Initialize with realistic test data matching Playwright test expectations
+  /// This data matches the fixture format from test/fixtures/items/basic_navigation_items.json
   void _initializeWithTestData() {
     final testItems = [
       Item(
-        id: 'item-42649',
-        name: 'Tent Green Dome',
-        rescueNetId: 42649,
-        totalAmount: 10,
+        id: 'item_001',
+        name: 'First Aid Kit',
+        rescueNetId: 1001,
+        totalAmount: 50,
         weight: 2.5,
-        description: 'Green dome tent for 2 people',
+        description: 'Standard medical supplies',
         operationalStatus: OperationalStatus.deployable,
       ),
       Item(
-        id: 'item-12345',
-        name: 'Medical Kit',
-        rescueNetId: 12345,
-        totalAmount: 25,
-        weight: 1.8,
-        description: 'Basic medical supply kit',
-        operationalStatus: OperationalStatus.deployable,
-      ),
-      Item(
-        id: 'test-item-3',
+        id: 'item_002',
         name: 'Water Purification Tablets',
         rescueNetId: 1002,
-        totalAmount: 100,
+        totalAmount: 200,
         weight: 0.1,
-        description: 'Water purification tablets for emergency water treatment',
+        description: 'Chemical water treatment',
+        operationalStatus: OperationalStatus.deployable,
+      ),
+      Item(
+        id: 'item_003',
+        name: 'Emergency Blankets',
+        rescueNetId: 1003,
+        totalAmount: 100,
+        weight: 0.3,
+        description: 'Thermal survival blankets',
         operationalStatus: OperationalStatus.deployable,
       ),
     ];
@@ -55,21 +56,28 @@ class MockItemRepository implements ItemRepository {
   Stream<List<Item>> watchItems() {
     // Create a new controller that emits current data immediately
     final controller = StreamController<List<Item>>.broadcast();
-    
-    // Emit current data immediately
-    controller.add(_items.values.toList());
-    
+
+    // Emit current data immediately using Future.microtask to ensure proper ordering
+    Future.microtask(() {
+      if (!controller.isClosed) {
+        controller.add(_items.values.toList());
+      }
+    });
+
     // Forward future updates
     final subscription = _itemsController.stream.listen(
-      (items) => controller.add(items),
+      (items) {
+        if (!controller.isClosed) {
+          controller.add(items);
+        }
+      },
     );
-    
+
     // Handle cleanup
     controller.onCancel = () {
       subscription.cancel();
       controller.close();
     };
-    
     return controller.stream;
   }
 
@@ -89,11 +97,11 @@ class MockItemRepository implements ItemRepository {
   @override
   Future<void> deleteItem(String id) async {
     await _simulateNetworkDelay();
-    
+
     if (!_items.containsKey(id)) {
       throw const ItemException('Item not found', code: 'not-found');
     }
-    
+
     _items.remove(id);
     _emitItems();
   }
@@ -101,9 +109,9 @@ class MockItemRepository implements ItemRepository {
   @override
   Future<List<Item>> searchItems(String query) async {
     await _simulateNetworkDelay();
-    
+
     if (query.isEmpty) return _items.values.toList();
-    
+
     final lowercaseQuery = query.toLowerCase();
     return _items.values.where((item) {
       return (item.name?.toLowerCase().contains(lowercaseQuery) ?? false) ||
@@ -114,7 +122,7 @@ class MockItemRepository implements ItemRepository {
   @override
   Future<List<Item>> getItemsByStatus(String operationalStatus) async {
     await _simulateNetworkDelay();
-    
+
     return _items.values.where((item) {
       return item.operationalStatus.toString() == operationalStatus;
     }).toList();
@@ -123,7 +131,7 @@ class MockItemRepository implements ItemRepository {
   @override
   Future<void> batchUpdateItems(List<Item> items) async {
     await _simulateNetworkDelay();
-    
+
     for (final item in items) {
       _items[item.id] = item;
     }

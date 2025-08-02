@@ -6,7 +6,7 @@ part of 'repository_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authRepositoryHash() => r'53a3524e4f21d848d157dc923be4dc8ffb98261c';
+String _$authRepositoryHash() => r'febe05ac89fe5d87cf691786d9adfd3625761241';
 
 /// Provider for AuthRepository.
 /// Returns Firebase implementation in production, Mock implementation in tests.
@@ -27,7 +27,7 @@ final authRepositoryProvider = AutoDisposeProvider<AuthRepository>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef AuthRepositoryRef = AutoDisposeProviderRef<AuthRepository>;
-String _$itemRepositoryHash() => r'0a5876582b27afb1b6c977ec22b637fee0ba5fe1';
+String _$itemRepositoryHash() => r'1aaf71e451da55e0fc1f050e29a2770331ec8176';
 
 /// Provider for ItemRepository.
 /// Returns Firebase implementation in production, Mock implementation in tests.
@@ -49,7 +49,7 @@ final itemRepositoryProvider = AutoDisposeProvider<ItemRepository>.internal(
 // ignore: unused_element
 typedef ItemRepositoryRef = AutoDisposeProviderRef<ItemRepository>;
 String _$containerRepositoryHash() =>
-    r'4668e2138c592ef902c1c1598420d7f121aa006d';
+    r'2df2ccf4aae4ec78d34142a5ca6ea26542814fbc';
 
 /// Provider for ContainerRepository.
 /// Returns Firebase implementation in production, Mock implementation in tests.
@@ -72,7 +72,7 @@ final containerRepositoryProvider =
 // ignore: unused_element
 typedef ContainerRepositoryRef = AutoDisposeProviderRef<ContainerRepository>;
 String _$assignmentRepositoryHash() =>
-    r'affca01ccda594e0291d45b6621b4a93170f396a';
+    r'e158b7172331a6a7bcd4a631646071ffcafc7e78';
 
 /// Provider for AssignmentRepository.
 /// Returns Firebase implementation in production, Mock implementation in tests.
@@ -94,7 +94,7 @@ final assignmentRepositoryProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef AssignmentRepositoryRef = AutoDisposeProviderRef<AssignmentRepository>;
-String _$workLogRepositoryHash() => r'935648af518823a7cea446d54d0ffb8703c559c9';
+String _$workLogRepositoryHash() => r'e78d9704a9c052f2165f5852ab54b6235ac55129';
 
 /// Provider for WorkLogRepository.
 /// Returns Firebase implementation in production, Mock implementation in tests.
@@ -117,7 +117,7 @@ final workLogRepositoryProvider =
 // ignore: unused_element
 typedef WorkLogRepositoryRef = AutoDisposeProviderRef<WorkLogRepository>;
 String _$containerTypeRepositoryHash() =>
-    r'1c3cd48f376e82a676eae07ba630606dfbb2ca12';
+    r'25834a6690acd9bbee84598ccde7ddbeba3baf39';
 
 /// Provider for ContainerTypeRepository.
 /// Returns Firebase implementation in production, Mock implementation in tests.
@@ -141,7 +141,7 @@ final containerTypeRepositoryProvider =
 typedef ContainerTypeRepositoryRef =
     AutoDisposeProviderRef<ContainerTypeRepository>;
 String _$currentLocationRepositoryHash() =>
-    r'20d72078a3f5e784f5fc9a8db33315ec446adad9';
+    r'289d49f78187dde84af4b158041df94174150247';
 
 /// Provider for CurrentLocationRepository.
 /// Returns Firebase implementation in production, Mock implementation in tests.
@@ -165,7 +165,7 @@ final currentLocationRepositoryProvider =
 typedef CurrentLocationRepositoryRef =
     AutoDisposeProviderRef<CurrentLocationRepository>;
 String _$moduleDestinationRepositoryHash() =>
-    r'7e3b35f58248bcecc664f4e2b8ef0da811b2dd52';
+    r'4a1348d57d63785ef6e5c63edeea83ed4a8e4306';
 
 /// Provider for ModuleDestinationRepository.
 /// Returns Firebase implementation in production, Mock implementation in tests.
@@ -188,7 +188,7 @@ final moduleDestinationRepositoryProvider =
 // ignore: unused_element
 typedef ModuleDestinationRepositoryRef =
     AutoDisposeProviderRef<ModuleDestinationRepository>;
-String _$isMockModeHash() => r'27486b2a316b9b4f942ee7f5e56db20c6c727f89';
+String _$isMockModeHash() => r'379ec087716577d1ce9204c3dcec62b925df5d47';
 
 /// Utility provider to check if we're running in mock mode.
 /// Useful for conditional behavior in the app.
