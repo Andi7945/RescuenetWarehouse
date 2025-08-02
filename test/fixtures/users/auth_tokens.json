@@ -1,0 +1,70 @@
+{
+  "packer_token": {
+    "uid": "test_user_packer_001",
+    "email": "packer.test@rescuenet.net",
+    "email_verified": true,
+    "role": "Packer",
+    "iat": 1706699400,
+    "exp": 1706785800,
+    "aud": "rescuenet-warehouse",
+    "iss": "https://securetoken.google.com/rescuenet-warehouse",
+    "auth_time": 1706699400,
+    "firebase": {
+      "identities": {
+        "email": ["packer.test@rescuenet.net"]
+      },
+      "sign_in_provider": "password"
+    }
+  },
+  "backoffice_token": {
+    "uid": "test_user_backoffice_001",
+    "email": "backoffice.test@rescuenet.net",
+    "email_verified": true,
+    "role": "Back Office",
+    "iat": 1706699400,
+    "exp": 1706785800,
+    "aud": "rescuenet-warehouse",
+    "iss": "https://securetoken.google.com/rescuenet-warehouse",
+    "auth_time": 1706699400,
+    "firebase": {
+      "identities": {
+        "email": ["backoffice.test@rescuenet.net"]
+      },
+      "sign_in_provider": "password"
+    }
+  },
+  "logistics_token": {
+    "uid": "test_user_logistics_001",
+    "email": "logistics.test@rescuenet.net",
+    "email_verified": true,
+    "role": "Logistics",
+    "iat": 1706699400,
+    "exp": 1706785800,
+    "aud": "rescuenet-warehouse",
+    "iss": "https://securetoken.google.com/rescuenet-warehouse",
+    "auth_time": 1706699400,
+    "firebase": {
+      "identities": {
+        "email": ["logistics.test@rescuenet.net"]
+      },
+      "sign_in_provider": "password"
+    }
+  },
+  "deployment_token": {
+    "uid": "test_user_deployment_001",
+    "email": "deployment.test@rescuenet.net",
+    "email_verified": true,
+    "role": "On Deployment",
+    "iat": 1706699400,
+    "exp": 1706785800,
+    "aud": "rescuenet-warehouse",
+    "iss": "https://securetoken.google.com/rescuenet-warehouse",
+    "auth_time": 1706699400,
+    "firebase": {
+      "identities": {
+        "email": ["deployment.test@rescuenet.net"]
+      },
+      "sign_in_provider": "password"
+    }
+  }
+}

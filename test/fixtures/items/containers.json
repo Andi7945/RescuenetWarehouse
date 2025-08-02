@@ -1,0 +1,30 @@
+[
+  {
+    "id": "container_001",
+    "name": "Test Container Basic",
+    "type": "Standard Box",
+    "location": "Field Office",
+    "destination": "Emergency Response Zone",
+    "capacity_weight": 50.0,
+    "capacity_volume": 100.0,
+    "current_weight": 15.0,
+    "current_volume": 30.0,
+    "status": "packing",
+    "created_at": "2024-01-21T09:00:00Z",
+    "updated_at": "2024-01-21T10:00:00Z"
+  },
+  {
+    "id": "container_qty_001",
+    "name": "Test Container QTY",
+    "type": "Standard Box",
+    "location": "Warehouse A",
+    "destination": "Field Operations",
+    "capacity_weight": 75.0,
+    "capacity_volume": 150.0,
+    "current_weight": 20.0,
+    "current_volume": 40.0,
+    "status": "packing",
+    "created_at": "2024-01-22T09:00:00Z",
+    "updated_at": "2024-01-22T10:00:00Z"
+  }
+]

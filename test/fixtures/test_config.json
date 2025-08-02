@@ -1,0 +1,110 @@
+{
+  "test_environment": {
+    "firebase_project": "rescuenet-warehouse-test",
+    "base_url": "http://localhost:3000",
+    "current_test_date": "2024-08-02T00:00:00Z",
+    "mock_firebase": true,
+    "timeout_ms": 30000
+  },
+  "test_scenarios": {
+    "T02.1": {
+      "name": "Item Overview and Navigation",
+      "fixtures": [
+        "items/basic_navigation_items.json",
+        "users/test_users.json",
+        "reference_data/locations.json"
+      ],
+      "auth_user": "backoffice_test@rescuenet.net"
+    },
+    "T02.2": {
+      "name": "Item Filtering and Sorting",
+      "fixtures": [
+        "items/filtering_sorting_items.json",
+        "users/test_users.json",
+        "reference_data/locations.json",
+        "reference_data/dangerous_goods.json"
+      ],
+      "auth_user": "backoffice_test@rescuenet.net"
+    },
+    "T02.3": {
+      "name": "Item Creation and Editing",
+      "fixtures": [
+        "items/creation_editing_items.json",
+        "items/containers.json",
+        "users/test_users.json",
+        "reference_data/locations.json",
+        "reference_data/units.json"
+      ],
+      "auth_user": "logistics.test@rescuenet.net"
+    },
+    "T02.4": {
+      "name": "Item Quantity Management",
+      "fixtures": [
+        "items/quantity_management_items.json",
+        "items/containers.json",
+        "users/test_users.json",
+        "reference_data/locations.json"
+      ],
+      "auth_user": "backoffice_test@rescuenet.net"
+    },
+    "T02.5": {
+      "name": "Dangerous Goods Management",
+      "fixtures": [
+        "items/dangerous_goods_items.json",
+        "users/test_users.json",
+        "reference_data/locations.json",
+        "reference_data/dangerous_goods.json"
+      ],
+      "auth_user": "logistics.test@rescuenet.net"
+    },
+    "T02.6": {
+      "name": "Expiry Date Tracking",
+      "fixtures": [
+        "items/expiry_tracking_items.json",
+        "users/test_users.json",
+        "reference_data/locations.json"
+      ],
+      "auth_user": "backoffice_test@rescuenet.net"
+    },
+    "T02.7": {
+      "name": "Bulk Item Import",
+      "fixtures": [
+        "items/import_export_items.json",
+        "users/test_users.json",
+        "reference_data/locations.json",
+        "reference_data/dangerous_goods.json",
+        "csv_files/valid_import.csv",
+        "csv_files/invalid_import.csv"
+      ],
+      "auth_user": "logistics.test@rescuenet.net"
+    },
+    "T02.8": {
+      "name": "Item Export and Reporting",
+      "fixtures": [
+        "items/import_export_items.json",
+        "users/test_users.json",
+        "reference_data/locations.json",
+        "reference_data/dangerous_goods.json",
+        "csv_files/export_expected.csv"
+      ],
+      "auth_user": "backoffice_test@rescuenet.net"
+    }
+  },
+  "validation_rules": {
+    "required_fields": {
+      "items": ["name", "location", "total_quantity", "unit"],
+      "containers": ["name", "type", "location"],
+      "assignments": ["item_id", "container_id", "quantity"]
+    },
+    "data_constraints": {
+      "quantity_min": 0,
+      "quantity_max": 999999,
+      "name_max_length": 100,
+      "description_max_length": 500
+    },
+    "dangerous_goods_classes": [
+      "Class 1", "Class 2", "Class 3", "Class 4", "Class 5",
+      "Class 6", "Class 7", "Class 8", "Class 9", "None"
+    ]
+  }
+}

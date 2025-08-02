@@ -1,0 +1,86 @@
+[
+  {
+    "id": "unit_001",
+    "name": "pieces",
+    "description": "Individual countable items",
+    "type": "count",
+    "active": true
+  },
+  {
+    "id": "unit_002",
+    "name": "kits",
+    "description": "Pre-assembled kits or sets",
+    "type": "count",
+    "active": true
+  },
+  {
+    "id": "unit_003",
+    "name": "bottles",
+    "description": "Liquid containers (bottles)",
+    "type": "count",
+    "active": true
+  },
+  {
+    "id": "unit_004",
+    "name": "liters",
+    "description": "Volume measurement in liters",
+    "type": "volume",
+    "active": true
+  },
+  {
+    "id": "unit_005",
+    "name": "kg",
+    "description": "Weight measurement in kilograms",
+    "type": "weight",
+    "active": true
+  },
+  {
+    "id": "unit_006",
+    "name": "boxes",
+    "description": "Packaged box units",
+    "type": "count",
+    "active": true
+  },
+  {
+    "id": "unit_007",
+    "name": "tablets",
+    "description": "Individual tablets or pills",
+    "type": "count",
+    "active": true
+  },
+  {
+    "id": "unit_008",
+    "name": "packages",
+    "description": "Individual packages or sachets",
+    "type": "count",
+    "active": true
+  },
+  {
+    "id": "unit_009",
+    "name": "pairs",
+    "description": "Paired items (gloves, socks, etc.)",
+    "type": "count",
+    "active": true
+  },
+  {
+    "id": "unit_010",
+    "name": "units",
+    "description": "Generic units for equipment",
+    "type": "count",
+    "active": true
+  },
+  {
+    "id": "unit_011",
+    "name": "doses",
+    "description": "Medical dosage units",
+    "type": "count",
+    "active": true
+  },
+  {
+    "id": "unit_012",
+    "name": "sets",
+    "description": "Complete sets of items",
+    "type": "count",
+    "active": true
+  }
+]

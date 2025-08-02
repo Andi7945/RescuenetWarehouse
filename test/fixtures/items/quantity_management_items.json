@@ -1,0 +1,23 @@
+[
+  {
+    "id": "qty_001",
+    "name": "Quantity Test Item",
+    "description": "Item for testing quantity operations",
+    "location": "Warehouse A",
+    "total_quantity": 100,
+    "available_quantity": 70,
+    "unit": "pieces",
+    "expiry_date": "2025-09-15",
+    "dangerous_goods": "None",
+    "assignments": [
+      {
+        "id": "assignment_qty_001",
+        "container_id": "container_qty_001",
+        "quantity": 30,
+        "created_at": "2024-01-22T10:00:00Z"
+      }
+    ],
+    "created_at": "2024-01-22T09:00:00Z",
+    "updated_at": "2024-01-22T10:00:00Z"
+  }
+]

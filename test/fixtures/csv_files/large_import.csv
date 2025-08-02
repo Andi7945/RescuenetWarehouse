@@ -1,0 +1,11 @@
+Name,Description,Location,Quantity,Unit,ExpiryDate,DangerousGoods
+Medical Kit Alpha,Alpha series medical supplies,Warehouse A,100,kits,2025-01-15,None
+Medical Kit Beta,Beta series medical supplies,Warehouse A,150,kits,2025-02-15,None
+Medical Kit Gamma,Gamma series medical supplies,Field Office,80,kits,2025-03-15,None
+Water Tablets Alpha,Alpha water purification,Warehouse A,500,tablets,2024-12-31,Class 9
+Water Tablets Beta,Beta water purification,Field Office,750,tablets,2025-01-31,Class 9
+Disinfectant Alpha,Alpha series disinfectant,Warehouse A,25,liters,2024-11-30,Class 8
+Disinfectant Beta,Beta series disinfectant,Mobile Unit,30,liters,2024-12-15,Class 8
+Emergency Flares Set,Signal flares for emergencies,Warehouse A,40,sets,2025-06-30,Class 3
+Emergency Radios,Two-way communication devices,Field Office,20,units,2027-01-01,None
+Sleeping Bags,Cold weather sleeping systems,Mobile Unit,60,pieces,2026-12-31,None

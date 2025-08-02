@@ -1,0 +1,41 @@
+[
+  {
+    "id": "dg_001",
+    "name": "Fuel Additive",
+    "description": "Chemical fuel treatment",
+    "location": "Warehouse A",
+    "total_quantity": 20,
+    "available_quantity": 20,
+    "unit": "bottles",
+    "expiry_date": "2025-04-30",
+    "dangerous_goods": "None",
+    "created_at": "2024-01-23T10:00:00Z",
+    "updated_at": "2024-01-23T10:00:00Z"
+  },
+  {
+    "id": "dg_002", 
+    "name": "Cleaning Solvent",
+    "description": "Industrial cleaning chemical",
+    "location": "Field Office",
+    "total_quantity": 15,
+    "available_quantity": 15,
+    "unit": "liters",
+    "expiry_date": "2024-12-15",
+    "dangerous_goods": "Class 3",
+    "created_at": "2024-01-23T11:00:00Z",
+    "updated_at": "2024-01-23T11:00:00Z"
+  },
+  {
+    "id": "dg_003",
+    "name": "Battery Acid",
+    "description": "Corrosive battery electrolyte",
+    "location": "Warehouse A",
+    "total_quantity": 8,
+    "available_quantity": 8,
+    "unit": "bottles",
+    "expiry_date": "2026-02-28",
+    "dangerous_goods": "Class 8",
+    "created_at": "2024-01-23T12:00:00Z",
+    "updated_at": "2024-01-23T12:00:00Z"
+  }
+]

@@ -1,0 +1,140 @@
+[
+  {
+    "code": "Class 1",
+    "name": "Explosives",
+    "description": "Explosive substances and articles",
+    "color": "#FF6B6B",
+    "symbol": "💥",
+    "handling_instructions": [
+      "Keep away from heat, sparks, and open flames",
+      "Handle with extreme care",
+      "Store in designated areas only",
+      "Separate from other materials"
+    ],
+    "active": true
+  },
+  {
+    "code": "Class 2",
+    "name": "Gases",
+    "description": "Compressed, liquefied or dissolved under pressure gases",
+    "color": "#4ECDC4",
+    "symbol": "🗲",
+    "handling_instructions": [
+      "Store upright and secured",
+      "Check for leaks regularly",
+      "Use proper ventilation",
+      "Keep containers cool"
+    ],
+    "active": true
+  },
+  {
+    "code": "Class 3",
+    "name": "Flammable Liquids",
+    "description": "Liquids having a flash point of not more than 60°C",
+    "color": "#FF9F43",
+    "symbol": "🔥",
+    "handling_instructions": [
+      "Keep away from ignition sources",
+      "Store in cool, dry place",
+      "Use explosion-proof equipment",
+      "Ensure proper grounding"
+    ],
+    "active": true
+  },
+  {
+    "code": "Class 4",
+    "name": "Flammable Solids",
+    "description": "Solids which are readily combustible",
+    "color": "#FFA502",
+    "symbol": "🔥",
+    "handling_instructions": [
+      "Keep dry and away from heat",
+      "Store in fireproof containers",
+      "Avoid friction and impact",
+      "Separate from oxidizers"
+    ],
+    "active": true
+  },
+  {
+    "code": "Class 5",
+    "name": "Oxidizing Substances",
+    "description": "Substances which may cause or contribute to combustion",
+    "color": "#FFD700",
+    "symbol": "⚠️",
+    "handling_instructions": [
+      "Keep away from combustible materials",
+      "Store in cool, dry conditions",
+      "Use non-metallic tools",
+      "Separate from reducing agents"
+    ],
+    "active": true
+  },
+  {
+    "code": "Class 6",
+    "name": "Toxic Substances",
+    "description": "Substances liable to cause death or serious injury if swallowed or inhaled",
+    "color": "#6C5CE7",
+    "symbol": "☠️",
+    "handling_instructions": [
+      "Use appropriate PPE",
+      "Ensure adequate ventilation",
+      "Avoid skin and eye contact",
+      "Store securely away from access"
+    ],
+    "active": true
+  },
+  {
+    "code": "Class 7",
+    "name": "Radioactive",
+    "description": "Any material containing radionuclides",
+    "color": "#A29BFE",
+    "symbol": "☢️",
+    "handling_instructions": [
+      "Use radiation detection equipment",
+      "Limit exposure time",
+      "Maintain safe distances",
+      "Follow radiation safety protocols"
+    ],
+    "active": true
+  },
+  {
+    "code": "Class 8",
+    "name": "Corrosive",
+    "description": "Substances which may destroy living tissue or damage materials",
+    "color": "#2D3436",
+    "symbol": "🧪",
+    "handling_instructions": [
+      "Use acid-resistant containers",
+      "Wear protective equipment",
+      "Have neutralizing agents available",
+      "Store in ventilated areas"
+    ],
+    "active": true
+  },
+  {
+    "code": "Class 9",
+    "name": "Miscellaneous",
+    "description": "Miscellaneous dangerous substances not covered by other classes",
+    "color": "#636E72",
+    "symbol": "⚡",
+    "handling_instructions": [
+      "Follow specific handling procedures",
+      "Check individual safety data sheets",
+      "Use appropriate containment",
+      "Monitor for specific hazards"
+    ],
+    "active": true
+  },
+  {
+    "code": "None",
+    "name": "No Classification",
+    "description": "Items with no dangerous goods classification",
+    "color": "#00B894",
+    "symbol": "✅",
+    "handling_instructions": [
+      "Standard handling procedures apply",
+      "Follow general safety guidelines"
+    ],
+    "active": true
+  }
+]

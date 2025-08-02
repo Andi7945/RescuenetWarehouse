@@ -1,0 +1,41 @@
+[
+  {
+    "id": "item_001",
+    "name": "First Aid Kit",
+    "description": "Standard medical supplies",
+    "location": "Warehouse A",
+    "total_quantity": 50,
+    "available_quantity": 35,
+    "unit": "pieces",
+    "expiry_date": "2025-12-31",
+    "dangerous_goods": "None",
+    "created_at": "2024-01-15T10:00:00Z",
+    "updated_at": "2024-01-15T10:00:00Z"
+  },
+  {
+    "id": "item_002", 
+    "name": "Water Purification Tablets",
+    "description": "Chemical water treatment",
+    "location": "Field Office",
+    "total_quantity": 200,
+    "available_quantity": 150,
+    "unit": "tablets",
+    "expiry_date": "2024-06-15",
+    "dangerous_goods": "Class 9",
+    "created_at": "2024-01-16T11:00:00Z",
+    "updated_at": "2024-01-16T11:00:00Z"
+  },
+  {
+    "id": "item_003",
+    "name": "Emergency Blankets",
+    "description": "Thermal survival blankets",
+    "location": "Warehouse A", 
+    "total_quantity": 100,
+    "available_quantity": 100,
+    "unit": "pieces",
+    "expiry_date": null,
+    "dangerous_goods": "None",
+    "created_at": "2024-01-17T12:00:00Z",
+    "updated_at": "2024-01-17T12:00:00Z"
+  }
+]

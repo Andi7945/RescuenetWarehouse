@@ -1,0 +1,4 @@
+Name,Description,Location,Total Quantity,Available Quantity,Unit,Expiry Date,Dangerous Goods
+Alpha Medical Kit,First alphabetically,Warehouse A,25,20,kits,2025-03-15,None
+Beta Supplies,Second alphabetically,Field Office,100,75,pieces,2024-12-31,Class 3
+Zulu Equipment,Last alphabetically,Warehouse A,10,10,units,,Class 9

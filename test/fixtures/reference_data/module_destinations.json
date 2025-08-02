@@ -1,0 +1,70 @@
+[
+  {
+    "id": "dest_001",
+    "name": "Emergency Response Zone",
+    "description": "Primary emergency response deployment area",
+    "type": "emergency_response",
+    "coordinates": {
+      "latitude": 45.4215,
+      "longitude": -75.6972
+    },
+    "contact_info": {
+      "phone": "+1-555-0101",
+      "radio": "EMRG-001"
+    },
+    "active": true,
+    "created_at": "2024-01-01T10:00:00Z",
+    "updated_at": "2024-01-01T10:00:00Z"
+  },
+  {
+    "id": "dest_002",
+    "name": "Field Operations",
+    "description": "Field operations base camp",
+    "type": "field_operations",
+    "coordinates": {
+      "latitude": 45.3311,
+      "longitude": -75.9097
+    },
+    "contact_info": {
+      "phone": "+1-555-0102",
+      "radio": "FIELD-002"
+    },
+    "active": true,
+    "created_at": "2024-01-01T10:00:00Z",
+    "updated_at": "2024-01-01T10:00:00Z"
+  },
+  {
+    "id": "dest_003",
+    "name": "Medical Station Alpha",
+    "description": "Primary medical treatment facility",
+    "type": "medical",
+    "coordinates": {
+      "latitude": 45.4042,
+      "longitude": -75.7203
+    },
+    "contact_info": {
+      "phone": "+1-555-0103",
+      "radio": "MED-ALPHA"
+    },
+    "active": true,
+    "created_at": "2024-01-01T10:00:00Z",
+    "updated_at": "2024-01-01T10:00:00Z"
+  },
+  {
+    "id": "dest_004",
+    "name": "Supply Distribution Point",
+    "description": "Central supply distribution hub",
+    "type": "distribution",
+    "coordinates": {
+      "latitude": 45.3781,
+      "longitude": -75.6298
+    },
+    "contact_info": {
+      "phone": "+1-555-0104",
+      "radio": "SUPPLY-001"
+    },
+    "active": true,
+    "created_at": "2024-01-01T10:00:00Z",
+    "updated_at": "2024-01-01T10:00:00Z"
+  }
+]

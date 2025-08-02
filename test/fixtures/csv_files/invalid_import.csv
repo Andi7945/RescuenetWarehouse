@@ -1,0 +1,5 @@
+Name,Description,Location,Quantity,Unit,ExpiryDate,DangerousGoods
+,Missing name item,Warehouse A,50,pieces,2025-01-01,None
+Invalid Quantity Item,Test item,Field Office,-10,pieces,2025-01-01,None
+Invalid Location Item,Test item,Unknown Location,25,pieces,2025-01-01,None
+Valid Item,This item should be valid,Warehouse A,30,pieces,2025-06-15,Class 9

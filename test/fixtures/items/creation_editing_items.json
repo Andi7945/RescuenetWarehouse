@@ -1,0 +1,37 @@
+[
+  {
+    "id": "edit_001",
+    "name": "Test Medical Kit",
+    "description": "Kit for testing purposes",
+    "location": "Warehouse A",
+    "total_quantity": 25,
+    "available_quantity": 25,
+    "unit": "kits",
+    "expiry_date": "2025-06-30",
+    "dangerous_goods": "None",
+    "assignments": [],
+    "created_at": "2024-01-20T14:00:00Z",
+    "updated_at": "2024-01-20T14:00:00Z"
+  },
+  {
+    "id": "assigned_001", 
+    "name": "Assigned Item",
+    "description": "Item with container assignments",
+    "location": "Field Office",
+    "total_quantity": 50,
+    "available_quantity": 20,
+    "unit": "pieces",
+    "expiry_date": "2025-03-15",
+    "dangerous_goods": "None",
+    "assignments": [
+      {
+        "id": "assignment_001",
+        "container_id": "container_001",
+        "quantity": 30,
+        "created_at": "2024-01-21T10:00:00Z"
+      }
+    ],
+    "created_at": "2024-01-21T09:00:00Z",
+    "updated_at": "2024-01-21T10:00:00Z"
+  }
+]

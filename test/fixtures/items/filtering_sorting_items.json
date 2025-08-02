@@ -1,0 +1,67 @@
+[
+  {
+    "id": "filter_001",
+    "name": "Alcohol Hand Sanitizer", 
+    "description": "Alcohol-based hand cleaning solution",
+    "location": "Warehouse A",
+    "total_quantity": 75,
+    "available_quantity": 50,
+    "unit": "bottles",
+    "expiry_date": "2024-03-15",
+    "dangerous_goods": "Class 3",
+    "created_at": "2024-01-10T09:00:00Z",
+    "updated_at": "2024-01-20T15:30:00Z"
+  },
+  {
+    "id": "filter_002",
+    "name": "Bandages Medical",
+    "description": "Standard medical bandages",
+    "location": "Field Office", 
+    "total_quantity": 200,
+    "available_quantity": 0,
+    "unit": "pieces",
+    "expiry_date": "2025-08-20",
+    "dangerous_goods": "None",
+    "created_at": "2024-01-11T10:00:00Z",
+    "updated_at": "2024-01-25T14:00:00Z"
+  },
+  {
+    "id": "filter_003",
+    "name": "Chemical Disinfectant",
+    "description": "Industrial grade disinfectant",
+    "location": "Warehouse A",
+    "total_quantity": 30,
+    "available_quantity": 25,
+    "unit": "liters", 
+    "expiry_date": "2023-12-01",
+    "dangerous_goods": "Class 9",
+    "created_at": "2024-01-12T11:00:00Z",
+    "updated_at": "2024-01-26T16:45:00Z"
+  },
+  {
+    "id": "filter_004",
+    "name": "Disposable Gloves",
+    "description": "Nitrile examination gloves",
+    "location": "Mobile Unit",
+    "total_quantity": 500,
+    "available_quantity": 300,
+    "unit": "pairs",
+    "expiry_date": "2026-01-10",
+    "dangerous_goods": "None",
+    "created_at": "2024-01-13T12:00:00Z",
+    "updated_at": "2024-01-27T10:20:00Z"
+  },
+  {
+    "id": "filter_005",
+    "name": "Emergency Flares",
+    "description": "Signal flares for emergency situations",
+    "location": "Warehouse A",
+    "total_quantity": 40,
+    "available_quantity": 40,
+    "unit": "pieces",
+    "expiry_date": "2024-11-30",
+    "dangerous_goods": "Class 3",
+    "created_at": "2024-01-14T13:00:00Z",
+    "updated_at": "2024-01-28T11:15:00Z"
+  }
+]

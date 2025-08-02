@@ -1,0 +1,4 @@
+Name,Description,Location,Quantity,Unit,ExpiryDate,DangerousGoods
+Medical Bandages,Updated first aid bandages,Warehouse A,150,pieces,2025-12-31,None
+Antiseptic Wipes,Alcohol-based cleaning wipes,Field Office,200,packages,2024-11-15,Class 3
+Emergency Blankets,Thermal emergency blankets,Mobile Unit,75,pieces,,None

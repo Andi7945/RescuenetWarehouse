@@ -1,0 +1,58 @@
+[
+  {
+    "id": "exp_001",
+    "name": "Expired Medication",
+    "description": "Medical supplies past expiry",
+    "location": "Warehouse A", 
+    "total_quantity": 30,
+    "available_quantity": 30,
+    "unit": "doses",
+    "expiry_date": "2024-07-01",
+    "dangerous_goods": "None",
+    "expiry_status": "expired",
+    "created_at": "2024-01-24T10:00:00Z",
+    "updated_at": "2024-01-24T10:00:00Z"
+  },
+  {
+    "id": "exp_002",
+    "name": "Expiring Soon Bandages",
+    "description": "Medical bandages nearing expiry",
+    "location": "Field Office",
+    "total_quantity": 50,
+    "available_quantity": 45,
+    "unit": "pieces", 
+    "expiry_date": "2024-08-20",
+    "dangerous_goods": "None",
+    "expiry_status": "expiring_soon",
+    "created_at": "2024-01-24T11:00:00Z",
+    "updated_at": "2024-01-24T11:00:00Z"
+  },
+  {
+    "id": "exp_003",
+    "name": "Future Expiry Supplies",
+    "description": "Supplies with distant expiry",
+    "location": "Warehouse A",
+    "total_quantity": 100,
+    "available_quantity": 80,
+    "unit": "kits",
+    "expiry_date": "2025-12-31",
+    "dangerous_goods": "Class 9",
+    "expiry_status": "valid",
+    "created_at": "2024-01-24T12:00:00Z",
+    "updated_at": "2024-01-24T12:00:00Z"
+  },
+  {
+    "id": "exp_004",
+    "name": "No Expiry Equipment",
+    "description": "Durable equipment without expiry",
+    "location": "Mobile Unit",
+    "total_quantity": 5,
+    "available_quantity": 5,
+    "unit": "pieces",
+    "expiry_date": null,
+    "dangerous_goods": "None",
+    "expiry_status": "no_expiry",
+    "created_at": "2024-01-24T13:00:00Z",
+    "updated_at": "2024-01-24T13:00:00Z"
+  }
+]

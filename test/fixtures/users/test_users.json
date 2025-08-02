@@ -1,0 +1,86 @@
+[
+  {
+    "uid": "test_user_packer_001",
+    "email": "packer.test@rescuenet.net",
+    "displayName": "Test Packer User",
+    "role": "Packer",
+    "permissions": [
+      "containers:read",
+      "containers:verify",
+      "items:read",
+      "assignments:read",
+      "pdf:generate"
+    ],
+    "created_at": "2024-01-01T10:00:00Z",
+    "last_login": "2024-01-30T09:00:00Z"
+  },
+  {
+    "uid": "test_user_backoffice_001",
+    "email": "backoffice.test@rescuenet.net",
+    "displayName": "Test Back Office User",
+    "role": "Back Office",
+    "permissions": [
+      "items:read",
+      "items:create",
+      "items:update",
+      "items:delete",
+      "containers:read",
+      "containers:create",
+      "containers:update",
+      "assignments:read",
+      "assignments:create",
+      "assignments:update",
+      "assignments:delete",
+      "export:csv",
+      "export:pdf",
+      "import:csv"
+    ],
+    "created_at": "2024-01-01T10:00:00Z",
+    "last_login": "2024-01-30T08:30:00Z"
+  },
+  {
+    "uid": "test_user_logistics_001",
+    "email": "logistics.test@rescuenet.net",
+    "displayName": "Test Logistics User",
+    "role": "Logistics",
+    "permissions": [
+      "items:read",
+      "items:create",
+      "items:update",
+      "items:delete",
+      "containers:read",
+      "containers:create",
+      "containers:update",
+      "containers:delete",
+      "containers:verify",
+      "assignments:read",
+      "assignments:create",
+      "assignments:update",
+      "assignments:delete",
+      "reference_data:manage",
+      "export:csv",
+      "export:pdf",
+      "import:csv",
+      "pdf:generate",
+      "reports:generate"
+    ],
+    "created_at": "2024-01-01T10:00:00Z",
+    "last_login": "2024-01-30T09:15:00Z"
+  },
+  {
+    "uid": "test_user_deployment_001",
+    "email": "deployment.test@rescuenet.net",
+    "displayName": "Test On Deployment User",
+    "role": "On Deployment",
+    "permissions": [
+      "items:read",
+      "items:mark_used",
+      "containers:read",
+      "assignments:read",
+      "work_logs:create",
+      "deployment:update_status"
+    ],
+    "created_at": "2024-01-01T10:00:00Z",
+    "last_login": "2024-01-29T14:20:00Z"
+  }
+]

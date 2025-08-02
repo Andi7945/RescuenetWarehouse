@@ -1,0 +1,78 @@
+[
+  {
+    "id": "type_001",
+    "name": "Standard Box",
+    "description": "Standard shipping container box",
+    "dimensions": {
+      "length": 120.0,
+      "width": 80.0,
+      "height": 60.0
+    },
+    "capacity": {
+      "weight": 50.0,
+      "volume": 576.0
+    },
+    "empty_weight": 5.0,
+    "material": "Corrugated cardboard",
+    "active": true,
+    "created_at": "2024-01-01T10:00:00Z",
+    "updated_at": "2024-01-01T10:00:00Z"
+  },
+  {
+    "id": "type_002",
+    "name": "Heavy Duty Crate",
+    "description": "Reinforced wooden crate for heavy items",
+    "dimensions": {
+      "length": 150.0,
+      "width": 100.0,
+      "height": 80.0
+    },
+    "capacity": {
+      "weight": 200.0,
+      "volume": 1200.0
+    },
+    "empty_weight": 25.0,
+    "material": "Reinforced wood",
+    "active": true,
+    "created_at": "2024-01-01T10:00:00Z",
+    "updated_at": "2024-01-01T10:00:00Z"
+  },
+  {
+    "id": "type_003",
+    "name": "Plastic Tote",
+    "description": "Reusable plastic storage container",
+    "dimensions": {
+      "length": 60.0,
+      "width": 40.0,
+      "height": 30.0
+    },
+    "capacity": {
+      "weight": 25.0,
+      "volume": 72.0
+    },
+    "empty_weight": 2.5,
+    "material": "High-density polyethylene",
+    "active": true,
+    "created_at": "2024-01-01T10:00:00Z",
+    "updated_at": "2024-01-01T10:00:00Z"
+  },
+  {
+    "id": "type_004",
+    "name": "Medical Kit Case",
+    "description": "Specialized case for medical supplies",
+    "dimensions": {
+      "length": 45.0,
+      "width": 35.0,
+      "height": 15.0
+    },
+    "capacity": {
+      "weight": 10.0,
+      "volume": 23.6
+    },
+    "empty_weight": 1.5,
+    "material": "ABS plastic with foam inserts",
+    "active": true,
+    "created_at": "2024-01-01T10:00:00Z",
+    "updated_at": "2024-01-01T10:00:00Z"
+  }
+]

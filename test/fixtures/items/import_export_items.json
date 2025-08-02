@@ -1,0 +1,54 @@
+[
+  {
+    "id": "import_existing_001",
+    "name": "Medical Bandages",
+    "description": "Standard first aid bandages",
+    "location": "Warehouse A",
+    "total_quantity": 100,
+    "available_quantity": 85,
+    "unit": "pieces",
+    "expiry_date": "2025-06-30",
+    "dangerous_goods": "None",
+    "created_at": "2024-01-25T10:00:00Z",
+    "updated_at": "2024-01-25T10:00:00Z"
+  },
+  {
+    "id": "export_001",
+    "name": "Alpha Medical Kit",
+    "description": "First alphabetically",
+    "location": "Warehouse A",
+    "total_quantity": 25,
+    "available_quantity": 20,
+    "unit": "kits",
+    "expiry_date": "2025-03-15",
+    "dangerous_goods": "None",
+    "created_at": "2024-01-25T11:00:00Z",
+    "updated_at": "2024-01-25T11:00:00Z"
+  },
+  {
+    "id": "export_002", 
+    "name": "Beta Supplies",
+    "description": "Second alphabetically",
+    "location": "Field Office",
+    "total_quantity": 100,
+    "available_quantity": 75,
+    "unit": "pieces",
+    "expiry_date": "2024-12-31",
+    "dangerous_goods": "Class 3",
+    "created_at": "2024-01-25T12:00:00Z",
+    "updated_at": "2024-01-25T12:00:00Z"
+  },
+  {
+    "id": "export_003",
+    "name": "Zulu Equipment",
+    "description": "Last alphabetically",
+    "location": "Warehouse A",
+    "total_quantity": 10,
+    "available_quantity": 10,
+    "unit": "units",
+    "expiry_date": null,
+    "dangerous_goods": "Class 9",
+    "created_at": "2024-01-25T13:00:00Z",
+    "updated_at": "2024-01-25T13:00:00Z"
+  }
+]
