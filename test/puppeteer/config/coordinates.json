@@ -6,7 +6,9 @@
   },
   "navigation": {
     "hamburgerMenu": { "x": 27, "y": 27 },
-    "allItemsMenu": { "x": 85, "y": 215 }
+    "allItemsMenu": { "x": 85, "y": 215 },
+    "containersMenu": { "x": 85, "y": 245 },
+    "settingsMenu": { "x": 85, "y": 275 }
   },
   "itemsOverview": {
     "searchBox": { "x": 300, "y": 100 },
@@ -40,6 +42,7 @@
   "itemDetail": {
     "editButton": { "x": 700, "y": 300 },
     "deleteButton": { "x": 750, "y": 300 },
+    "assignmentButton": { "x": 650, "y": 350 },
     "incrementButton": { "x": 550, "y": 320 },
     "decrementButton": { "x": 520, "y": 320 },
     "quantityInputField": { "x": 400, "y": 350 },
@@ -70,6 +73,65 @@
     "class8Option": { "x": 480, "y": 580 },
     "class9Option": { "x": 490, "y": 620 },
     "noneClassification": { "x": 450, "y": 350 }
+  },
+  "containersOverview": {
+    "searchBox": { "x": 300, "y": 100 },
+    "statusFilter": { "x": 400, "y": 200 },
+    "locationFilter": { "x": 500, "y": 200 },
+    "typeFilter": { "x": 600, "y": 200 },
+    "clearFiltersButton": { "x": 700, "y": 200 },
+    "createContainerButton": { "x": 800, "y": 150 },
+    "sortNameColumn": { "x": 200, "y": 250 },
+    "sortTypeColumn": { "x": 300, "y": 250 },
+    "sortStatusColumn": { "x": 400, "y": 250 },
+    "sortCapacityColumn": { "x": 500, "y": 250 },
+    "firstContainerArea": { "x": 400, "y": 300 },
+    "secondContainerArea": { "x": 400, "y": 350 },
+    "thirdContainerArea": { "x": 400, "y": 400 }
+  },
+  "containerForm": {
+    "nameField": { "x": 400, "y": 200 },
+    "typeDropdown": { "x": 400, "y": 250 },
+    "locationDropdown": { "x": 400, "y": 300 },
+    "destinationDropdown": { "x": 400, "y": 350 },
+    "descriptionField": { "x": 400, "y": 400 },
+    "saveButton": { "x": 500, "y": 500 },
+    "cancelButton": { "x": 400, "y": 500 },
+    "deleteButton": { "x": 600, "y": 500 }
+  },
+  "containerDetail": {
+    "editButton": { "x": 700, "y": 300 },
+    "deleteButton": { "x": 750, "y": 300 },
+    "addAssignmentButton": { "x": 600, "y": 400 },
+    "verifyButton": { "x": 650, "y": 450 },
+    "generatePackingListButton": { "x": 500, "y": 500 },
+    "generateLabelButton": { "x": 600, "y": 500 },
+    "generateSummaryButton": { "x": 700, "y": 500 },
+    "generateQrCodeButton": { "x": 800, "y": 500 },
+    "generateDangerousGoodsPdfButton": { "x": 550, "y": 550 },
+    "changeStatusButton": { "x": 750, "y": 350 },
+    "capacityIndicator": { "x": 400, "y": 250 },
+    "assignmentsList": { "x": 400, "y": 450 }
+  },
+  "assignmentForm": {
+    "quantityField": { "x": 400, "y": 300 },
+    "containerDropdown": { "x": 400, "y": 350 },
+    "itemSearchField": { "x": 400, "y": 200 },
+    "saveButton": { "x": 500, "y": 450 },
+    "cancelButton": { "x": 400, "y": 450 }
+  },
+  "verification": {
+    "firstItemCheckbox": { "x": 350, "y": 300 },
+    "foundQuantityField": { "x": 500, "y": 300 },
+    "completeVerificationButton": { "x": 600, "y": 500 },
+    "discrepancyField": { "x": 600, "y": 350 },
+    "markAllFoundButton": { "x": 400, "y": 450 }
+  },
+  "statusDialog": {
+    "readyForDeploymentOption": { "x": 400, "y": 300 },
+    "deployedOption": { "x": 400, "y": 350 },
+    "inTransitOption": { "x": 400, "y": 400 },
+    "saveStatusButton": { "x": 500, "y": 450 }
   },
   "viewports": {
     "default": {

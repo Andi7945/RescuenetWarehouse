@@ -88,6 +88,123 @@
         "csv_files/export_expected.csv"
       ],
       "auth_user": "backoffice_test@rescuenet.net"
+    },
+    "T03.1": {
+      "name": "Container Overview and Status",
+      "fixtures": [
+        "items/containers.json",
+        "users/test_users.json",
+        "reference_data/container_types.json",
+        "reference_data/locations.json"
+      ],
+      "auth_user": "backoffice_test@rescuenet.net"
+    },
+    "T03.2": {
+      "name": "Container Creation and Editing",
+      "fixtures": [
+        "items/containers.json",
+        "users/test_users.json",
+        "reference_data/container_types.json",
+        "reference_data/locations.json"
+      ],
+      "auth_user": "logistics.test@rescuenet.net"
+    },
+    "T03.3": {
+      "name": "Container Data Persistence",
+      "fixtures": [
+        "items/containers.json",
+        "users/test_users.json",
+        "reference_data/container_types.json"
+      ],
+      "auth_user": "backoffice_test@rescuenet.net"
+    },
+    "T03.4": {
+      "name": "Container Type Management",
+      "fixtures": [
+        "reference_data/container_types.json",
+        "users/test_users.json"
+      ],
+      "auth_user": "logistics.test@rescuenet.net"
+    },
+    "T03.5": {
+      "name": "Container Capacity Validation",
+      "fixtures": [
+        "items/containers.json",
+        "items/basic_navigation_items.json",
+        "users/test_users.json",
+        "reference_data/container_types.json"
+      ],
+      "auth_user": "backoffice_test@rescuenet.net"
+    },
+    "T04.1": {
+      "name": "Item-to-Container Assignment",
+      "fixtures": [
+        "items/basic_navigation_items.json",
+        "items/containers.json",
+        "users/test_users.json",
+        "reference_data/locations.json"
+      ],
+      "auth_user": "backoffice_test@rescuenet.net"
+    },
+    "T04.2": {
+      "name": "Container-Based Assignment View",
+      "fixtures": [
+        "items/basic_navigation_items.json",
+        "items/containers.json",
+        "users/test_users.json",
+        "reference_data/locations.json"
+      ],
+      "auth_user": "backoffice_test@rescuenet.net"
+    },
+    "T04.3": {
+      "name": "Assignment Quantity Validation",
+      "fixtures": [
+        "items/quantity_management_items.json",
+        "items/containers.json",
+        "users/test_users.json",
+        "reference_data/locations.json"
+      ],
+      "auth_user": "backoffice_test@rescuenet.net"
+    },
+    "T04.4": {
+      "name": "Assignment Duplicate Prevention",
+      "fixtures": [
+        "items/basic_navigation_items.json",
+        "items/containers.json",
+        "users/test_users.json",
+        "reference_data/locations.json"
+      ],
+      "auth_user": "backoffice_test@rescuenet.net"
+    },
+    "T05.1": {
+      "name": "Container Verification Workflow",
+      "fixtures": [
+        "items/containers.json",
+        "items/basic_navigation_items.json",
+        "users/test_users.json",
+        "reference_data/container_types.json"
+      ],
+      "auth_user": "packer.test@rescuenet.net"
+    },
+    "T05.2": {
+      "name": "PDF Generation - Packing Lists",
+      "fixtures": [
+        "items/containers.json",
+        "items/dangerous_goods_items.json",
+        "users/test_users.json",
+        "reference_data/dangerous_goods.json"
+      ],
+      "auth_user": "packer.test@rescuenet.net"
+    },
+    "T05.3": {
+      "name": "PDF Generation - Labels and Summaries",
+      "fixtures": [
+        "items/containers.json",
+        "users/test_users.json",
+        "reference_data/container_types.json",
+        "reference_data/module_destinations.json"
+      ],
+      "auth_user": "packer.test@rescuenet.net"
     }
   },
   "validation_rules": {
