@@ -241,9 +241,9 @@ async function getItemAssignments(page, itemId) {
       return [];
     }
     
-    // Filter assignments by itemId
+    // Filter assignments by itemId (support both itemId and item_id formats)
     const assignments = Object.values(repositories.assignments)
-      .filter(assignment => assignment.itemId === itemId);
+      .filter(assignment => assignment.itemId === itemId || assignment.item_id === itemId);
     
     console.log(`Found ${assignments.length} assignments for item "${itemId}":`, assignments);
     
@@ -279,14 +279,14 @@ async function verifyAssignmentMath(page, itemId) {
     // Get all assignments for this item
     const assignments = await getItemAssignments(page, itemId);
     
-    // Calculate total assigned quantity
+    // Calculate total assigned quantity (support multiple property name formats)
     const totalAssigned = assignments.reduce((sum, assignment) => {
-      const count = parseInt(assignment.count) || 0;
+      const count = parseInt(assignment.count || assignment.quantity) || 0;
       return sum + count;
     }, 0);
     
-    // Get total available quantity from item
-    const totalAvailable = parseInt(item.totalAmount) || 0;
+    // Get total available quantity from item (support multiple property name formats)
+    const totalAvailable = parseInt(item.totalAmount || item.total_quantity) || 0;
     
     // Verify the math
     const isValid = totalAssigned <= totalAvailable;
@@ -295,7 +295,7 @@ async function verifyAssignmentMath(page, itemId) {
     const result = {
       valid: isValid,
       itemId: itemId,
-      itemName: item.name,
+      itemName: item.name || item.itemName,
       totalAvailable: totalAvailable,
       totalAssigned: totalAssigned,
       remainingQuantity: remainingQuantity,
@@ -950,7 +950,9 @@ module.exports = {
   validateDangerousGoodsClass,
   
   // Core application state functions
-  getCurrentAppState
+  getCurrentAppState,
+  verifyAssignmentMathInPage,
+  getAssignmentSummary
 };
 
 /**
@@ -975,5 +977,58 @@ async function getCurrentAppState(page) {
   } catch (error) {
     console.error('Error getting current app state:', error);
     throw error;
+  }
+}
+
+/**
+ * Verify assignment math for an item in the page context
+ * @param {import('@playwright/test').Page} page - Playwright page object
+ * @param {string} itemId - The item ID to verify assignment math for
+ * @returns {Promise<boolean>} True if assignment math is valid
+ */
+async function verifyAssignmentMathInPage(page, itemId) {
+  try {
+    const result = await verifyAssignmentMath(page, itemId);
+    return result.valid;
+  } catch (error) {
+    console.error(`Error verifying assignment math in page for item "${itemId}":`, error.message);
+    return false;
+  }
+}
+
+/**
+ * Get assignment summary for all items with math validation
+ * @param {import('@playwright/test').Page} page - Playwright page object
+ * @returns {Promise<Object>} Assignment summary with validation results
+ */
+async function getAssignmentSummary(page) {
+  try {
+    const items = await getAllItems(page);
+    const mathValidationResults = [];
+    
+    for (const item of items) {
+      if (item.total_quantity > 0) {
+        const mathResult = await verifyAssignmentMath(page, item.id);
+        mathValidationResults.push({
+          itemId: item.id,
+          itemName: item.name,
+          mathValid: mathResult.valid
+        });
+      }
+    }
+    
+    return {
+      totalItems: items.length,
+      mathValidationResults,
+      allMathValid: mathValidationResults.every(r => r.mathValid)
+    };
+  } catch (error) {
+    console.error('Error getting assignment summary:', error.message);
+    return {
+      totalItems: 0,
+      mathValidationResults: [],
+      allMathValid: false,
+      error: error.message
+    };
   }
 }

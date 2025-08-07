@@ -2,7 +2,9 @@
   "login": {
     "emailField": { "x": 640, "y": 285 },
     "passwordField": { "x": 640, "y": 330 },
-    "loginButton": { "x": 487, "y": 393 }
+    "loginButton": { "x": 487, "y": 393 },
+    "registerInsteadButton": { "x": 604, "y": 393 },
+    "forgotPasswordButton": { "x": 756, "y": 393 }
   },
   "navigation": {
     "hamburgerMenu": { "x": 27, "y": 27 },

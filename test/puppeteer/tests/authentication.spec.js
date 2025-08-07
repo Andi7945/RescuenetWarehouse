@@ -1,7 +1,9 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
+const coordinateHelper = require('../helpers/coordinateHelper');
+const authHelpers = require('../helpers/authHelpers');
 
-test.describe('Authentication Bug Fixes', () => {
+test.describe('Authentication Testing with Strong Assertions', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the Flutter app
     await page.goto('/');
@@ -28,243 +30,405 @@ test.describe('Authentication Bug Fixes', () => {
     }
   });
 
-  test('new user registration should automatically redirect to main app', async ({ page }) => {
-    // This test validates the core authentication bug fix in login_register_page.dart
-    // The fix added automatic redirect after successful registration:
-    // await Auth().createUserWithEmailAndPassword(email: _controllerEmail.text, password: _controllerPassword.text);
-    // Navigator.pushNamed(context, routeContainerWithContent);  // <- This was added
-
+  test('new user registration should create valid session and redirect to main app', async ({ page }) => {
+    // PHASE 2 ENHANCEMENT: Test registration with POSITIVE validation of authentication state
+    
     await page.screenshot({ path: 'registration-test-start.png' });
 
-    // Click "Register instead" button using coordinates (approximately where it appears)
-    await page.mouse.click(604, 393); // Approximate "Register instead" button location
+    // Switch to registration mode using coordinate helper
+    await coordinateHelper.clickElement(page, 'login', 'registerInsteadButton', {
+      offsetX: 117, offsetY: 0 // Adjust from login button to register instead
+    });
     await page.waitForTimeout(1000);
 
-    // Fill in registration form using coordinates
+    // Fill in registration form with test user
     const testEmail = `test-${Date.now()}@rescuenet.net`;
     const testPassword = 'TestPassword123!';
 
-    // Click email field and type
-    await page.mouse.click(640, 285);
-    await page.keyboard.type(testEmail);
+    await coordinateHelper.typeInField(page, 'login', 'emailField', testEmail);
+    await coordinateHelper.typeInField(page, 'login', 'passwordField', testPassword);
 
-    // Click password field and type
-    await page.mouse.click(640, 330);
-    await page.keyboard.type(testPassword);
+    // Monitor authentication state during registration
+    let authStateChanges = [];
+    page.on('console', msg => {
+      if (msg.text().includes('Mock Firebase') || msg.text().includes('auth')) {
+        authStateChanges.push(msg.text());
+      }
+    });
 
-    // Click Register button
-    await page.mouse.click(487, 393);
-
-    // Wait to see what happens
+    // Submit registration
+    await coordinateHelper.clickElement(page, 'login', 'loginButton');
     await page.waitForTimeout(3000);
 
     await page.screenshot({ path: 'registration-test-result.png' });
 
-    // CRITICAL TEST: Validate that mock Firebase auth is actually working
-    const pageContent = await page.textContent('body');
+    // POSITIVE ASSERTION 1: Verify user session was created using auth helpers
+    const sessionValidation = await authHelpers.validateUserSession(page, testEmail);
+    console.log('Session validation after registration:', sessionValidation);
+    console.log('Auth state changes:', authStateChanges);
 
-    // If mock Firebase auth isn't working, we'd see error messages or be stuck on login
-    // The mock should simulate successful registration and navigate away from auth page
-    expect(pageContent.length).toBeGreaterThan(50); // Page should have substantial content
+    // CRITICAL: Test must validate that a user session actually exists
+    expect(sessionValidation.isValid).toBe(true);
+    expect(sessionValidation.authState.hasCurrentUser).toBe(true);
+    expect(sessionValidation.authState.userEmail).toBe(testEmail);
+    expect(sessionValidation.authState.userId).toMatch(/^mock-user-/);
 
-    // Check that we're not stuck on an error page
-    expect(pageContent).not.toContain('Authentication failed');
-    expect(pageContent).not.toContain('Invalid credentials');
-    expect(pageContent).not.toContain('Network error');
-
-    console.log('Registration test: Mock Firebase auth appears to be working');
+    // POSITIVE ASSERTION 2: Verify app access is available (not on auth page)
+    const appAccessValidation = await authHelpers.validateAppAccess(page);
+    console.log('App access validation:', appAccessValidation);
+    
+    expect(appAccessValidation.isValid).toBe(true);
+    expect(appAccessValidation.accessValidation.authSessionExists).toBe(true);
+    expect(appAccessValidation.accessValidation.navigationElementsVisible).toBe(true);
+    
+    console.log('✓ Registration created valid user session and navigated to main app');
   });
 
-  test('registration with non-rescuenet email should show error', async ({ page }) => {
-    // Switch to register mode using coordinates
-    await page.mouse.click(604, 393); // Register instead button
+  test('registration with non-rescuenet email should fail and show specific error', async ({ page }) => {
+    // PHASE 2 ENHANCEMENT: Test invalid registration with POSITIVE error validation
+    
+    // Switch to register mode
+    await coordinateHelper.clickElement(page, 'login', 'registerInsteadButton', {
+      offsetX: 117, offsetY: 0
+    });
     await page.waitForTimeout(1000);
 
-    // Try to register with non-rescuenet.net email using coordinates
-    await page.mouse.click(640, 285); // Email field
-    await page.keyboard.type('test@gmail.com');
+    // Try to register with invalid email domain
+    await coordinateHelper.typeInField(page, 'login', 'emailField', 'test@gmail.com');
+    await coordinateHelper.typeInField(page, 'login', 'passwordField', 'TestPassword123!');
 
-    await page.mouse.click(640, 330); // Password field
-    await page.keyboard.type('TestPassword123!');
+    // Capture console errors during registration attempt
+    let registrationErrors = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error' || msg.text().includes('error') || msg.text().includes('Only rescuenet.net')) {
+        registrationErrors.push(msg.text());
+      }
+    });
 
-    // Submit registration using coordinates
-    await page.mouse.click(487, 393); // Register button
-
-    // Wait and take screenshot to see result
+    // Submit invalid registration
+    await coordinateHelper.clickElement(page, 'login', 'loginButton');
     await page.waitForTimeout(2000);
+    
     await page.screenshot({ path: 'invalid-email-registration-result.png' });
 
-    // Validate that mock Firebase email validation is working
-    const pageContent = await page.textContent('body');
+    // POSITIVE ASSERTION 1: Verify NO user session was created using auth helpers
+    const noAuthValidation = await authHelpers.validateNoAuthentication(page);
+    console.log('No auth validation after invalid registration:', noAuthValidation);
+    console.log('Registration errors:', registrationErrors);
 
-    // Mock Firebase should reject non-rescuenet.net emails (see mock-firebase.js:60-62)
-    // If working correctly, should show validation error
-    expect(pageContent.length).toBeGreaterThan(20);
-    expect(pageContent).toContain('Only rescuenet.net emails allowed');
+    // CRITICAL: Must verify that authentication failed completely
+    expect(noAuthValidation.isValid).toBe(true);
+    expect(noAuthValidation.authState.hasCurrentUser).toBe(false);
+    expect(noAuthValidation.authState.userEmail).toBeNull();
 
-    console.log('Email validation test: Mock Firebase email validation active');
+    // POSITIVE ASSERTION 2: Verify still on authentication page
+    const authPageValidation = await authHelpers.validateStillOnAuthPage(page);
+    expect(authPageValidation.isValid).toBe(true);
+    expect(authPageValidation.pageValidation.hasEmailField).toBe(true);
+    
+    // POSITIVE ASSERTION 3: Verify specific error was shown or caught
+    const hasEmailValidationError = registrationErrors.some(error => 
+      error.includes('Only rescuenet.net emails allowed') ||
+      error.includes('Invalid email')
+    ) || authPageValidation.pageValidation.hasErrorMessages;
+    
+    expect(hasEmailValidationError).toBe(true);
+    
+    console.log('✓ Invalid email registration properly rejected with no session created');
   });
 
-  test('successful login should redirect to main app', async ({ page }) => {
-    // For Flutter Web, we need to use coordinate-based clicking
-    // Based on the screenshot, approximate coordinates for the form elements
+  test('successful login should create session and provide app access', async ({ page }) => {
+    // PHASE 2 ENHANCEMENT: Test login with POSITIVE validation of complete auth flow
+    
+    const testEmail = 'test@rescuenet.net';
+    const testPassword = 'testpassword';
 
-    // Click on email field area (around where the email input would be)
-    await page.mouse.click(640, 285); // Approximate email field location
-    await page.keyboard.type('test@rescuenet.net');
+    // Fill in login form using coordinate helper
+    await coordinateHelper.typeInField(page, 'login', 'emailField', testEmail);
+    await coordinateHelper.typeInField(page, 'login', 'passwordField', testPassword);
 
-    // Click on password field area
-    await page.mouse.click(640, 330); // Approximate password field location
-    await page.keyboard.type('testpassword');
+    // Monitor authentication flow
+    let authFlow = [];
+    page.on('console', msg => {
+      if (msg.text().includes('Mock Firebase') || msg.text().includes('Signing in')) {
+        authFlow.push(msg.text());
+      }
+    });
 
-    // Click the Login button
-    await page.mouse.click(487, 393); // Approximate Login button location
-
-    // Should redirect to main app - wait for some indicator that we're logged in
+    // Submit login
+    await coordinateHelper.clickElement(page, 'login', 'loginButton');
     await page.waitForTimeout(5000);
 
-    // Take a screenshot to verify what happened
     await page.screenshot({ path: 'login-result.png' });
 
-    // CRITICAL AUTH VALIDATION: Test that mock Firebase login actually works
-    const pageContent = await page.textContent('body');
+    // POSITIVE ASSERTION 1: Verify valid user session exists using auth helpers
+    const sessionValidation = await authHelpers.validateUserSession(page, testEmail);
+    console.log('Session validation after login:', sessionValidation);
+    console.log('Authentication flow:', authFlow);
 
-    // If mock auth is working, we should be logged in and see app content
-    expect(pageContent.length).toBeGreaterThan(100); // Should have substantial app content
+    // CRITICAL: Must validate actual authentication state
+    expect(sessionValidation.isValid).toBe(true);
+    expect(sessionValidation.authState.hasCurrentUser).toBe(true);
+    expect(sessionValidation.authState.userEmail).toBe(testEmail);
+    expect(sessionValidation.authState.userId).toMatch(/^mock-user-/);
+    expect(sessionValidation.authState.emailVerified).toBe(true);
 
-    // Should not see login form elements after successful login
-    expect(pageContent).not.toContain('Login failed');
-    expect(pageContent).not.toContain('Authentication error');
-
-    // Should see indicators of being in the main app
-    // Mock Firebase creates mock user and should trigger auth state change
-    console.log('Login test: Mock Firebase authentication appears successful');
+    // POSITIVE ASSERTION 2: Verify app access is available (navigation away from auth page)
+    const appAccessValidation = await authHelpers.validateAppAccess(page);
+    expect(appAccessValidation.isValid).toBe(true);
+    expect(appAccessValidation.accessValidation.navigationElementsVisible).toBe(true);
+    expect(appAccessValidation.accessValidation.authSessionExists).toBe(true);
+    
+    // POSITIVE ASSERTION 3: Verify authentication flow completed
+    const hasSignInFlow = authFlow.some(log => log.includes('Signing in'));
+    expect(hasSignInFlow).toBe(true);
+    
+    console.log('✓ Login created valid session and granted app access');
   });
 
-  test('forgot password link should be accessible', async ({ page }) => {
-    // Click forgot password using coordinates
-    await page.mouse.click(756, 393); // Forgot password button
+  test('wrong password should fail authentication and stay on login page', async ({ page }) => {
+    // PHASE 2 ENHANCEMENT: Test authentication failure with POSITIVE error validation
+    
+    const testEmail = 'test@rescuenet.net';
+    const wrongPassword = 'wrongpassword';
 
-    // Wait for potential navigation
-    await page.waitForTimeout(2000);
+    // Fill in login form with wrong password
+    await coordinateHelper.typeInField(page, 'login', 'emailField', testEmail);
+    await coordinateHelper.typeInField(page, 'login', 'passwordField', wrongPassword);
 
-    // Take screenshot to see result
-    await page.screenshot({ path: 'forgot-password-result.png' });
-
-    // Validate forgot password functionality with mock Firebase
-    const pageContent = await page.textContent('body');
-
-    // Test that mock Firebase handles password reset (see mock-firebase.js:77-81)
-    expect(pageContent.length).toBeGreaterThan(20);
-
-    console.log('Forgot password test: Mock Firebase handling password reset');
-  });
-
-  test('CRITICAL: Mock Firebase Auth Must Be Active', async ({ page }) => {
-    // This test will FAIL if mock Firebase authentication is not working
-
-    // Check that mock Firebase is detected and active
-    const mockFirebaseStatus = await page.evaluate(() => {
-      return {
-        mockModeEnabled: window.MOCK_FIREBASE_MODE,
-        mockFirebaseExists: !!window.mockFirebase,
-        mockAuthExists: !!window.mockFirebase?.auth,
-        userAgent: navigator.userAgent,
-        location: window.location.href
-      };
+    // Monitor authentication errors
+    let authErrors = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error' || msg.text().includes('error') || msg.text().includes('failed')) {
+        authErrors.push(msg.text());
+      }
     });
 
-    await page.screenshot({ path: 'mock-auth-validation.png' });
-
-    console.log('Mock Firebase Status:', mockFirebaseStatus);
-
-    // CRITICAL ASSERTIONS - These will fail if mocking isn't working
-    expect(mockFirebaseStatus.mockModeEnabled).toBe(true);
-    expect(mockFirebaseStatus.mockFirebaseExists).toBe(true);
-    expect(mockFirebaseStatus.mockAuthExists).toBe(true);
-
-    // Test that Playwright is detected as test environment
-    const isPlaywrightDetected = mockFirebaseStatus.userAgent.includes('HeadlessChrome') ||
-                                 mockFirebaseStatus.userAgent.includes('Playwright') ||
-                                 mockFirebaseStatus.userAgent.includes('Chrome');
-    expect(isPlaywrightDetected).toBe(true);
-
-    // Perform actual login to test mock auth functionality
-    await page.mouse.click(640, 285); // Email field
-    await page.keyboard.type('test@rescuenet.net');
-
-    await page.mouse.click(640, 330); // Password field
-    await page.keyboard.type('testpassword');
-
-    // Monitor console for mock Firebase messages
-    const consoleLogs = [];
-    page.on('console', msg => consoleLogs.push(msg.text()));
-
-    await page.mouse.click(487, 393); // Login button
+    // Submit login with wrong credentials
+    await coordinateHelper.clickElement(page, 'login', 'loginButton');
     await page.waitForTimeout(3000);
 
-    await page.screenshot({ path: 'mock-firebase-validation.png' });
+    await page.screenshot({ path: 'wrong-password-result.png' });
 
-    // Check that mock Firebase auth messages appeared in console
-    const mockAuthLogs = consoleLogs.filter(log =>
-      log.includes('Mock Firebase: Signing in') ||
-      log.includes('Mock Firebase: Test mode') ||
-      log.includes('Mock Firebase: All Firebase services are now mocked')
-    );
+    // POSITIVE ASSERTION 1: Verify NO user session was created using auth helpers
+    const noAuthValidation = await authHelpers.validateNoAuthentication(page);
+    console.log('No auth validation after wrong password:', noAuthValidation);
+    console.log('Authentication errors:', authErrors);
 
-    console.log('Mock Firebase Console Logs:', mockAuthLogs);
+    // CRITICAL: Must verify authentication completely failed
+    expect(noAuthValidation.isValid).toBe(true);
+    expect(noAuthValidation.authState.hasCurrentUser).toBe(false);
+    expect(noAuthValidation.authState.userEmail).toBeNull();
 
-    // CRITICAL: If no mock Firebase logs, the mocking system is broken
-    expect(mockAuthLogs.length).toBeGreaterThan(0);
-
-    // Validate that we're in the app (not stuck on login page)
-    const finalPageContent = await page.textContent('body');
-    expect(finalPageContent.length).toBeGreaterThan(200); // Should have substantial app content
-
-    console.log('CRITICAL TEST PASSED: Mock Firebase authentication is working correctly');
+    // POSITIVE ASSERTION 2: Verify still on authentication page
+    const authPageValidation = await authHelpers.validateStillOnAuthPage(page);
+    expect(authPageValidation.isValid).toBe(true);
+    expect(authPageValidation.pageValidation.hasEmailField).toBe(true);
+    expect(authPageValidation.pageValidation.hasPasswordField).toBe(true);
+    
+    // POSITIVE ASSERTION 3: Verify authentication errors were detected
+    const hasAuthErrors = authErrors.length > 0 || authPageValidation.pageValidation.hasErrorMessages;
+    expect(hasAuthErrors).toBe(true);
+    
+    console.log('✓ Wrong password properly rejected with no session created');
   });
 
-  test('CRITICAL: Mock Firestore Data Must Be Available', async ({ page }) => {
-    // This test validates that mock Firestore data is loaded and accessible
+  test('ROLE-BASED: Packer role should authenticate and have correct session data', async ({ page }) => {
+    // PHASE 2 ENHANCEMENT: Test role-based authentication with session validation
+    
+    const packerEmail = 'packer@rescuenet.net';
+    const packerPassword = 'packerpass123';
 
-    // First login to access the app
-    await page.mouse.click(640, 285); // Email field
-    await page.keyboard.type('test@rescuenet.net');
-    await page.mouse.click(640, 330); // Password field
-    await page.keyboard.type('testpassword');
-    await page.mouse.click(487, 393); // Login button
-    await page.waitForTimeout(5000);
+    // Login as Packer role user
+    await coordinateHelper.typeInField(page, 'login', 'emailField', packerEmail);
+    await coordinateHelper.typeInField(page, 'login', 'passwordField', packerPassword);
 
-    // Check that mock data is available in the DOM/page content
-    const pageContent = await page.textContent('body');
-
-    await page.screenshot({ path: 'mock-data-validation.png' });
-
-    // Check if we're seeing Flutter app content vs raw HTML
-    const isFlutterApp = !pageContent.includes('_flutter.loader.loadEntrypoint');
-    const hasAppContent = pageContent.length > 500 && isFlutterApp;
-
-    console.log('Mock Data Detection:', {
-      pageContentLength: pageContent.length,
-      isFlutterApp,
-      hasAppContent,
-      isRawHTML: pageContent.includes('_flutter.loader.loadEntrypoint'),
-      firstChars: pageContent.substring(0, 200)
+    // Monitor role-based authentication
+    let roleAuthFlow = [];
+    page.on('console', msg => {
+      if (msg.text().includes('role') || msg.text().includes('Packer') || msg.text().includes('Mock Firebase')) {
+        roleAuthFlow.push(msg.text());
+      }
     });
 
-    // If mock Firestore is working, we should either:
-    // 1. Have rendered Flutter content with substantial size, OR
-    // 2. At minimum, not be stuck showing raw HTML loader code
-    if (isFlutterApp) {
-      // Flutter app has loaded - check for substantial content
-      expect(pageContent.length).toBeGreaterThan(100);
-      console.log('CRITICAL TEST PASSED: Flutter app loaded with mock Firestore');
-    } else {
-      // Still showing HTML - this might be timing issue, but validate mock setup
-      console.log('Flutter app still loading, but mock Firebase should be initialized');
-      expect(pageContent.length).toBeGreaterThan(300); // At least the HTML should be there
-    }
+    await coordinateHelper.clickElement(page, 'login', 'loginButton');
+    await page.waitForTimeout(3000);
 
-    console.log('CRITICAL TEST PASSED: Mock Firestore data is accessible');
+    await page.screenshot({ path: 'packer-role-auth.png' });
+
+    // POSITIVE ASSERTION 1: Verify Packer role authentication using auth helpers
+    const packerRoleValidation = await authHelpers.validateRoleBasedAuth(page, 'Packer', packerEmail);
+    console.log('Packer role validation:', packerRoleValidation);
+    console.log('Role auth flow:', roleAuthFlow);
+
+    // CRITICAL: Validate Packer role authentication
+    expect(packerRoleValidation.isValid).toBe(true);
+    expect(packerRoleValidation.sessionValidation.authState.hasCurrentUser).toBe(true);
+    expect(packerRoleValidation.sessionValidation.authState.userEmail).toBe(packerEmail);
+    expect(packerRoleValidation.sessionValidation.authState.userId).toMatch(/^mock-user-/);
+
+    // POSITIVE ASSERTION 2: Verify Packer has access to app
+    const appAccessValidation = await authHelpers.validateAppAccess(page);
+    expect(appAccessValidation.isValid).toBe(true);
+    expect(appAccessValidation.accessValidation.authSessionExists).toBe(true);
+    
+    console.log('✓ Packer role authentication successful with proper session');
+  });
+
+  test('ROLE-BASED: Back Office role should authenticate with correct permissions', async ({ page }) => {
+    // PHASE 2 ENHANCEMENT: Test Back Office role authentication
+    
+    const backofficeEmail = 'backoffice@rescuenet.net';
+    const backofficePassword = 'backofficepass123';
+
+    // Login as Back Office role user
+    await coordinateHelper.typeInField(page, 'login', 'emailField', backofficeEmail);
+    await coordinateHelper.typeInField(page, 'login', 'passwordField', backofficePassword);
+
+    await coordinateHelper.clickElement(page, 'login', 'loginButton');
+    await page.waitForTimeout(3000);
+
+    await page.screenshot({ path: 'backoffice-role-auth.png' });
+
+    // POSITIVE ASSERTION 1: Verify Back Office role authentication using auth helpers
+    const backofficeRoleValidation = await authHelpers.validateRoleBasedAuth(page, 'Back Office', backofficeEmail);
+    console.log('Back Office role validation:', backofficeRoleValidation);
+
+    // CRITICAL: Validate Back Office role authentication
+    expect(backofficeRoleValidation.isValid).toBe(true);
+    expect(backofficeRoleValidation.sessionValidation.authState.hasCurrentUser).toBe(true);
+    expect(backofficeRoleValidation.sessionValidation.authState.userEmail).toBe(backofficeEmail);
+    expect(backofficeRoleValidation.sessionValidation.authState.userId).toMatch(/^mock-user-/);
+
+    // POSITIVE ASSERTION 2: Verify navigation to main app using app access validation
+    const appAccessValidation = await authHelpers.validateAppAccess(page);
+    expect(appAccessValidation.isValid).toBe(true);
+    expect(appAccessValidation.accessValidation.navigationElementsVisible).toBe(true);
+    
+    console.log('✓ Back Office role authentication successful');
+  });
+
+  test('ROLE-BASED: Logistics role should authenticate with combined permissions', async ({ page }) => {
+    // PHASE 2 ENHANCEMENT: Test Logistics role authentication
+    
+    const logisticsEmail = 'logistics@rescuenet.net';
+    const logisticsPassword = 'logisticspass123';
+
+    // Login as Logistics role user
+    await coordinateHelper.typeInField(page, 'login', 'emailField', logisticsEmail);
+    await coordinateHelper.typeInField(page, 'login', 'passwordField', logisticsPassword);
+
+    await coordinateHelper.clickElement(page, 'login', 'loginButton');
+    await page.waitForTimeout(3000);
+
+    await page.screenshot({ path: 'logistics-role-auth.png' });
+
+    // POSITIVE ASSERTION 1: Verify Logistics role authentication using auth helpers
+    const logisticsRoleValidation = await authHelpers.validateRoleBasedAuth(page, 'Logistics', logisticsEmail);
+    console.log('Logistics role validation:', logisticsRoleValidation);
+
+    // CRITICAL: Validate Logistics role authentication
+    expect(logisticsRoleValidation.isValid).toBe(true);
+    expect(logisticsRoleValidation.sessionValidation.authState.hasCurrentUser).toBe(true);
+    expect(logisticsRoleValidation.sessionValidation.authState.userEmail).toBe(logisticsEmail);
+    expect(logisticsRoleValidation.sessionValidation.authState.userId).toMatch(/^mock-user-/);
+
+    // POSITIVE ASSERTION 2: Verify full app access (Logistics has combined permissions)
+    const appAccessValidation = await authHelpers.validateAppAccess(page);
+    expect(appAccessValidation.isValid).toBe(true);
+    expect(appAccessValidation.accessValidation.authSessionExists).toBe(true);
+    expect(appAccessValidation.accessValidation.navigationElementsVisible).toBe(true);
+    
+    console.log('✓ Logistics role authentication successful with combined permissions');
+  });
+
+  test('CRITICAL: Authentication must fail when system is broken', async ({ page }) => {
+    // PHASE 2 ENHANCEMENT: Test that demonstrates tests will FAIL when auth is broken
+    
+    // First verify authentication system is working using auth helpers
+    const systemValidation = await authHelpers.validateAuthSystem(page);
+    console.log('Auth System Validation:', systemValidation);
+
+    // CRITICAL: These assertions will fail if mock system is broken
+    expect(systemValidation.isValid).toBe(true);
+    expect(systemValidation.systemValidation.mockModeEnabled).toBe(true);
+    expect(systemValidation.systemValidation.mockFirebaseExists).toBe(true);
+    expect(systemValidation.systemValidation.mockAuthExists).toBe(true);
+    expect(systemValidation.systemValidation.authMethodsAvailable).toBe(true);
+
+    // Test that authentication actually works by performing login
+    await coordinateHelper.typeInField(page, 'login', 'emailField', 'test@rescuenet.net');
+    await coordinateHelper.typeInField(page, 'login', 'passwordField', 'testpassword');
+
+    // Monitor authentication flow
+    let authLogs = [];
+    page.on('console', msg => {
+      if (msg.text().includes('Mock Firebase')) {
+        authLogs.push(msg.text());
+      }
+    });
+
+    await coordinateHelper.clickElement(page, 'login', 'loginButton');
+    await page.waitForTimeout(3000);
+
+    await page.screenshot({ path: 'auth-system-validation.png' });
+
+    // CRITICAL: Verify authentication system is functioning using auth helpers
+    const finalSessionValidation = await authHelpers.validateUserSession(page, 'test@rescuenet.net');
+    console.log('Final auth system validation:', finalSessionValidation);
+    console.log('Auth logs:', authLogs);
+
+    // These will FAIL if authentication is broken (no false positives)
+    expect(finalSessionValidation.isValid).toBe(true);
+    expect(finalSessionValidation.authState.hasCurrentUser).toBe(true);
+    expect(finalSessionValidation.authState.userEmail).toBe('test@rescuenet.net');
+    expect(authLogs.length).toBeGreaterThan(0);
+    
+    console.log('✓ Authentication system is functioning correctly');
+  });
+
+  test('VALIDATION: Test demonstrates failure detection when auth system broken', async ({ page }) => {
+    // PHASE 2 ENHANCEMENT: Demonstrate that weak assertions would miss authentication issues
+    
+    // This test shows how the new positive assertions will catch auth failures
+    // that the old negative assertions (like expect().not.toContain()) would miss
+    
+    // First verify the auth system is working
+    const systemValidation = await authHelpers.validateAuthSystem(page);
+    expect(systemValidation.isValid).toBe(true);
+    
+    // Simulate a scenario where authentication appears to work but is actually broken
+    // by checking what old weak assertions would have missed
+    
+    // OLD WAY (weak - would give false positives):
+    // const pageContent = await page.textContent('body');
+    // expect(pageContent).not.toContain('Authentication failed'); // Could pass even if auth is broken!
+    
+    // NEW WAY (strong - catches actual failures):
+    // Perform actual authentication and validate the session state
+    await coordinateHelper.typeInField(page, 'login', 'emailField', 'test@rescuenet.net');
+    await coordinateHelper.typeInField(page, 'login', 'passwordField', 'testpassword');
+    await coordinateHelper.clickElement(page, 'login', 'loginButton');
+    await page.waitForTimeout(3000);
+    
+    // Validate authentication worked by checking actual session state
+    const sessionValidation = await authHelpers.validateUserSession(page, 'test@rescuenet.net');
+    
+    // This WILL FAIL if authentication is broken (no false positives)
+    expect(sessionValidation.isValid).toBe(true);
+    expect(sessionValidation.authState.isAuthenticated).toBe(true);
+    expect(sessionValidation.authState.hasCurrentUser).toBe(true);
+    
+    // Validate app access is available
+    const appAccessValidation = await authHelpers.validateAppAccess(page);
+    expect(appAccessValidation.isValid).toBe(true);
+    
+    // Log what the old weak assertions would have checked
+    const pageContent = await page.textContent('body');
+    const oldAssertionWouldPass = !pageContent.includes('Authentication failed');
+    
+    console.log('Old weak assertion would pass:', oldAssertionWouldPass);
+    console.log('New strong assertion validates actual auth state:', sessionValidation.isValid);
+    console.log('✓ Strong assertions provide real confidence in authentication functionality');
   });
 });

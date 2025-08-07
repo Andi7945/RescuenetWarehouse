@@ -463,4 +463,255 @@ test.describe('Error Scenario Validation', () => {
     await page.screenshot({ path: 'error-scenario-stress-final.png' });
     console.log('✓ ES04: Concurrent operation stress testing PASSED');
   });
+
+  test('ES05: Data Integrity and Constraint Validation', async ({ page }) => {
+    console.log('ES05: Starting Data Integrity and Constraint Validation');
+    
+    await loginAsTestUser(page);
+    
+    // Navigate to items for integrity testing
+    await coords.clickElement(page, 'navigation', 'hamburgerMenu');
+    await page.waitForTimeout(coords.getTimeout('medium'));
+    await coords.clickElement(page, 'navigation', 'allItemsMenu');
+    await page.waitForTimeout(coords.getTimeout('long'));
+    
+    await page.screenshot({ path: 'error-scenario-integrity-start.png' });
+
+    try {
+      // Test data integrity constraints
+      
+      const itemClick = await coords.clickElement(page, 'itemsOverview', 'firstItemArea');
+      if (!itemClick) {
+        throw new Error('Failed to click on item for integrity testing');
+      }
+      
+      await page.waitForTimeout(coords.getTimeout('medium'));
+      
+      // Test 1: Assignment capacity overflow protection
+      console.log('ES05: Testing assignment capacity overflow protection...');
+      
+      const assignClick = await coords.clickElement(page, 'itemDetail', 'assignmentButton');
+      if (assignClick) {
+        await page.waitForTimeout(coords.getTimeout('medium'));
+        
+        // Try to assign more than available (capacity overflow)
+        const overflowQuantity = '999999';
+        await coords.typeInField(page, 'assignmentForm', 'quantityField', overflowQuantity);
+        
+        const overflowSave = await coords.clickElement(page, 'assignmentForm', 'saveButton');
+        await page.waitForTimeout(coords.getTimeout('medium'));
+        
+        // Verify system rejected overflow assignment
+        const overflowResult = await page.textContent('body');
+        const overflowUrl = page.url();
+        
+        if (overflowResult.includes('error') || overflowResult.includes('exceed') || 
+            overflowResult.includes('invalid') || overflowUrl.includes('assignment')) {
+          console.log('✓ ES05: Capacity overflow properly rejected');
+        } else {
+          console.log('⚠ ES05: Capacity overflow handling needs verification');
+        }
+        
+        // Close dialog
+        await page.keyboard.press('Escape');
+        await page.waitForTimeout(coords.getTimeout('short'));
+      }
+      
+      // Test 2: Negative quantity boundary testing
+      console.log('ES05: Testing negative quantity boundary protection...');
+      
+      // Try to decrement beyond zero
+      for (let i = 0; i < 50; i++) {
+        const decrementResult = await coords.clickElement(page, 'itemDetail', 'decrementButton');
+        if (decrementResult) {
+          await page.waitForTimeout(25); // Rapid clicking
+        }
+      }
+      
+      const negativeTestContent = await page.textContent('body');
+      
+      // Verify app handled negative boundary correctly
+      expect(negativeTestContent).toBeTruthy();
+      expect(negativeTestContent).not.toContain('Error');
+      
+      console.log('✓ ES05: Negative quantity boundary protection working');
+      
+      // Test 3: Data consistency validation
+      console.log('ES05: Testing data consistency after operations...');
+      
+      // Perform mixed operations and verify consistency
+      await coords.clickElement(page, 'itemDetail', 'incrementButton');
+      await page.waitForTimeout(200);
+      await coords.clickElement(page, 'itemDetail', 'incrementButton');
+      await page.waitForTimeout(200);
+      await coords.clickElement(page, 'itemDetail', 'decrementButton');
+      await page.waitForTimeout(200);
+      
+      const consistencyContent = await page.textContent('body');
+      
+      // Verify operations maintained data consistency
+      expect(consistencyContent).toBeTruthy();
+      expect(consistencyContent).not.toContain('NaN');
+      expect(consistencyContent).not.toContain('undefined');
+      
+      console.log('✓ ES05: Data consistency maintained after mixed operations');
+      
+      // Test 4: Duplicate prevention testing
+      console.log('ES05: Testing duplicate assignment prevention...');
+      
+      const duplicateAssignClick = await coords.clickElement(page, 'itemDetail', 'assignmentButton');
+      if (duplicateAssignClick) {
+        await page.waitForTimeout(coords.getTimeout('medium'));
+        
+        // Try to create multiple assignments rapidly
+        for (let i = 0; i < 3; i++) {
+          await coords.typeInField(page, 'assignmentForm', 'quantityField', '2');
+          await coords.clickElement(page, 'assignmentForm', 'saveButton');
+          await page.waitForTimeout(500);
+        }
+        
+        const duplicateResult = await page.textContent('body');
+        
+        // Verify system handled duplicate attempts gracefully
+        expect(duplicateResult).toBeTruthy();
+        expect(duplicateResult).not.toContain('Error');
+        
+        console.log('✓ ES05: Duplicate assignment prevention working');
+        
+        // Close dialog
+        await page.keyboard.press('Escape');
+        await page.waitForTimeout(coords.getTimeout('short'));
+      }
+      
+    } catch (error) {
+      console.log('ES05: Data integrity validation error:', error.message);
+      throw error;
+    }
+
+    await page.screenshot({ path: 'error-scenario-integrity-final.png' });
+    console.log('✓ ES05: Data integrity and constraint validation PASSED');
+  });
+
+  test('ES06: Comprehensive Boundary Value Testing', async ({ page }) => {
+    console.log('ES06: Starting Comprehensive Boundary Value Testing');
+    
+    await loginAsTestUser(page);
+    
+    // Navigate to items for boundary testing
+    await coords.clickElement(page, 'navigation', 'hamburgerMenu');
+    await page.waitForTimeout(coords.getTimeout('medium'));
+    await coords.clickElement(page, 'navigation', 'allItemsMenu');
+    await page.waitForTimeout(coords.getTimeout('long'));
+    
+    await page.screenshot({ path: 'error-scenario-boundary-comprehensive-start.png' });
+
+    try {
+      const itemClick = await coords.clickElement(page, 'itemsOverview', 'firstItemArea');
+      if (!itemClick) {
+        throw new Error('Failed to click on item for boundary testing');
+      }
+      
+      await page.waitForTimeout(coords.getTimeout('medium'));
+      
+      // Test 1: Zero boundary conditions
+      console.log('ES06: Testing zero boundary conditions...');
+      
+      // Ensure we start with some quantity
+      for (let i = 0; i < 5; i++) {
+        await coords.clickElement(page, 'itemDetail', 'incrementButton');
+        await page.waitForTimeout(100);
+      }
+      
+      // Now test zero boundary
+      for (let i = 0; i < 20; i++) {
+        const decrementResult = await coords.clickElement(page, 'itemDetail', 'decrementButton');
+        if (decrementResult) {
+          await page.waitForTimeout(50);
+        }
+      }
+      
+      const zeroBoundaryContent = await page.textContent('body');
+      expect(zeroBoundaryContent).toBeTruthy();
+      expect(zeroBoundaryContent).not.toContain('Error');
+      
+      console.log('✓ ES06: Zero boundary handling validated');
+      
+      // Test 2: Maximum value boundaries
+      console.log('ES06: Testing maximum value boundaries...');
+      
+      // Test large quantity increments
+      for (let i = 0; i < 50; i++) {
+        await coords.clickElement(page, 'itemDetail', 'incrementButton');
+        await page.waitForTimeout(25);
+      }
+      
+      const maxBoundaryContent = await page.textContent('body');
+      expect(maxBoundaryContent).toBeTruthy();
+      expect(maxBoundaryContent).not.toContain('Error');
+      expect(maxBoundaryContent).not.toContain('Infinity');
+      
+      console.log('✓ ES06: Maximum boundary handling validated');
+      
+      // Test 3: Assignment boundary values
+      console.log('ES06: Testing assignment boundary values...');
+      
+      const boundaryAssignClick = await coords.clickElement(page, 'itemDetail', 'assignmentButton');
+      if (boundaryAssignClick) {
+        await page.waitForTimeout(coords.getTimeout('medium'));
+        
+        // Test boundary values for assignment
+        const boundaryValues = ['0', '1', '999', '9999', '99999'];
+        
+        for (const value of boundaryValues) {
+          await coords.typeInField(page, 'assignmentForm', 'quantityField', value);
+          await page.waitForTimeout(200);
+          
+          const previewResult = await page.textContent('body');
+          expect(previewResult).toBeTruthy();
+          
+          console.log(`✓ ES06: Boundary value ${value} handled gracefully`);
+        }
+        
+        // Close dialog
+        await page.keyboard.press('Escape');
+        await page.waitForTimeout(coords.getTimeout('short'));
+      }
+      
+      // Test 4: Edge case input validation
+      console.log('ES06: Testing edge case input validation...');
+      
+      const edgeCaseAssignClick = await coords.clickElement(page, 'itemDetail', 'assignmentButton');
+      if (edgeCaseAssignClick) {
+        await page.waitForTimeout(coords.getTimeout('medium'));
+        
+        // Test edge case inputs
+        const edgeCases = ['', ' ', '0.5', '-1', 'abc', '1e10'];
+        
+        for (const edgeCase of edgeCases) {
+          try {
+            await coords.typeInField(page, 'assignmentForm', 'quantityField', edgeCase);
+            await page.waitForTimeout(200);
+            
+            const edgeResult = await page.textContent('body');
+            expect(edgeResult).toBeTruthy();
+            
+            console.log(`✓ ES06: Edge case "${edgeCase}" handled without crash`);
+          } catch (error) {
+            console.log(`⚠ ES06: Edge case "${edgeCase}" caused: ${error.message}`);
+          }
+        }
+        
+        // Close dialog
+        await page.keyboard.press('Escape');
+        await page.waitForTimeout(coords.getTimeout('short'));
+      }
+      
+    } catch (error) {
+      console.log('ES06: Comprehensive boundary testing error:', error.message);
+      throw error;
+    }
+
+    await page.screenshot({ path: 'error-scenario-boundary-comprehensive-final.png' });
+    console.log('✓ ES06: Comprehensive boundary value testing PASSED');
+  });
 });

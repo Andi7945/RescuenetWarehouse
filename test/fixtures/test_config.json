@@ -141,6 +141,7 @@
       "fixtures": [
         "items/basic_navigation_items.json",
         "items/containers.json",
+        "assignments/basic_assignments.json",
         "users/test_users.json",
         "reference_data/locations.json"
       ],
@@ -151,6 +152,7 @@
       "fixtures": [
         "items/basic_navigation_items.json",
         "items/containers.json",
+        "assignments/basic_assignments.json",
         "users/test_users.json",
         "reference_data/locations.json"
       ],
@@ -161,6 +163,7 @@
       "fixtures": [
         "items/quantity_management_items.json",
         "items/containers.json",
+        "assignments/basic_assignments.json",
         "users/test_users.json",
         "reference_data/locations.json"
       ],
@@ -171,6 +174,18 @@
       "fixtures": [
         "items/basic_navigation_items.json",
         "items/containers.json",
+        "assignments/basic_assignments.json",
+        "users/test_users.json",
+        "reference_data/locations.json"
+      ],
+      "auth_user": "backoffice_test@rescuenet.net"
+    },
+    "T04.5": {
+      "name": "Comprehensive Assignment Workflow Integration",
+      "fixtures": [
+        "items/basic_navigation_items.json",
+        "items/containers.json",
+        "assignments/basic_assignments.json",
         "users/test_users.json",
         "reference_data/locations.json"
       ],
