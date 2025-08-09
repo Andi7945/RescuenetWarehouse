@@ -40,11 +40,11 @@ import 'features/item_overview/item_overview_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Always initialize real Firebase - E2E tests use web-based mocking
   print('Initializing Firebase');
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  
+
   runApp(river.ProviderScope(child: MyApp()));
 }
 
@@ -108,21 +108,28 @@ class _EagerInitialization extends river.ConsumerWidget {
 
   @override
   Widget build(BuildContext context, river.WidgetRef ref) {
-    // Eagerly initialize providers by watching them.
-    // By using "watch", the provider will stay alive and not be disposed.
-    // See https://riverpod.dev/docs/essentials/eager_initialization
-    ref.watch(containerTypesNotifierProvider);
-    ref.watch(moduleDestinationsNotifierProvider);
-    ref.watch(currentLocationsNotifierProvider);
-    ref.watch(allContainersNotifierProvider);
-    ref.watch(allItemsNotifierProvider);
-    ref.watch(allAssignmentsNotifierProvider);
-    ref.watch(itemsCurrentFilterNotifierProvider);
-    ref.watch(itemsCurrentSortNotifierProvider);
-    ref.watch(itemsFilteredAndSortedNotifierProvider);
-    ref.watch(containerHiddenBySelectionNotifierProvider);
-    ref.watch(containerVisibilityNotifierProvider);
-    ref.watch(containerCurrentFilterNotifierProvider);
+    // Only eagerly initialize providers when user is authenticated
+    // This prevents Firebase permission errors on app start
+    final isAuthenticated = ref.watch(isAuthenticatedProvider);
+
+    if (isAuthenticated) {
+      // Eagerly initialize providers by watching them.
+      // By using "watch", the provider will stay alive and not be disposed.
+      // See https://riverpod.dev/docs/essentials/eager_initialization
+      ref.watch(containerTypesNotifierProvider);
+      ref.watch(moduleDestinationsNotifierProvider);
+      ref.watch(currentLocationsNotifierProvider);
+      ref.watch(allContainersNotifierProvider);
+      ref.watch(allItemsNotifierProvider);
+      ref.watch(allAssignmentsNotifierProvider);
+      ref.watch(itemsCurrentFilterNotifierProvider);
+      ref.watch(itemsCurrentSortNotifierProvider);
+      ref.watch(itemsFilteredAndSortedNotifierProvider);
+      ref.watch(containerHiddenBySelectionNotifierProvider);
+      ref.watch(containerVisibilityNotifierProvider);
+      ref.watch(containerCurrentFilterNotifierProvider);
+    }
+
     return child;
   }
 }
@@ -135,10 +142,10 @@ class _AuthHome extends river.ConsumerWidget {
   @override
   Widget build(BuildContext context, river.WidgetRef ref) {
     final authState = ref.watch(authStateChangesProvider);
-    
+
     return authState.when(
-      data: (user) => user == null 
-          ? const LoginPage() 
+      data: (user) => user == null
+          ? const LoginPage()
           : ContainerWithContentPage(),
       loading: () => const Scaffold(
         body: Center(child: CircularProgressIndicator()),

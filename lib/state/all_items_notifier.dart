@@ -14,7 +14,6 @@ class AllItemsNotifier extends _$AllItemsNotifier {
 
     // Use ref.listen to properly manage the stream subscription
     final subscription = repository.watchItems().listen((items) {
-      print("items in listen: $items");
       state = items;
     });
 
