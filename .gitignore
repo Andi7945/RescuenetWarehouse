@@ -59,3 +59,4 @@ android/app/google-services.json
 
 # Playwright test screenshots
 test/puppeteer/*.png
+test/puppeteer/screenshots/*.png

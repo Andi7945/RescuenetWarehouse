@@ -16,12 +16,28 @@
 async function getAuthenticationState(page) {
   try {
     const authState = await page.evaluate(() => {
+      console.log('=== GETTING AUTH STATE ===');
+      console.log('window.mockFirebase exists:', !!window.mockFirebase);
+      console.log('window.MOCK_FIREBASE_MODE:', window.MOCK_FIREBASE_MODE);
+      
       if (!window.mockFirebase) {
         throw new Error('Mock Firebase not available - ensure test is running in mock mode');
       }
       
       const auth = window.mockFirebase.auth();
+      console.log('auth object:', auth);
+      console.log('auth.currentUser:', auth?.currentUser);
+      
       const currentUser = auth?.currentUser;
+      
+      if (currentUser) {
+        console.log('Current user details:', {
+          uid: currentUser.uid,
+          email: currentUser.email,
+          displayName: currentUser.displayName,
+          emailVerified: currentUser.emailVerified
+        });
+      }
       
       return {
         isAuthenticated: !!currentUser,
@@ -37,7 +53,7 @@ async function getAuthenticationState(page) {
       };
     });
     
-    console.log('Current authentication state:', authState);
+    console.log('=== FINAL AUTH STATE ===', authState);
     return authState;
   } catch (error) {
     console.error('Failed to get authentication state:', error.message);
@@ -84,7 +100,7 @@ async function validateUserSession(page, expectedEmail = null) {
       validationResult.errors.push('No current user session found');
     }
     
-    if (!authState.userId || !authState.userId.startsWith('mock-user-')) {
+    if (!authState.userId || (!authState.userId.startsWith('mock-user-') && !authState.userId.startsWith('test_user_'))) {
       validationResult.errors.push('Invalid or missing user ID');
     }
     

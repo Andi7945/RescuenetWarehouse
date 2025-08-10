@@ -10,12 +10,14 @@ class MockAuthRepository implements AuthRepository {
   final Map<String, MockUser> _users = {};
 
   MockAuthRepository() {
+    print('✨ MockAuthRepository CONSTRUCTOR - Initializing mock auth');
+    
     // Add some default test users
     _users['test@rescuenet.net'] = MockUser(
       uid: 'test-uid-1',
       email: 'test@rescuenet.net',
       displayName: 'Test User',
-      password: 'password123',
+      password: 'testpassword',
     );
     _users['admin@rescuenet.net'] = MockUser(
       uid: 'admin-uid-1',
@@ -24,9 +26,38 @@ class MockAuthRepository implements AuthRepository {
       password: 'admin123',
     );
     
+    // Add test users from fixtures
+    _users['backoffice.test@rescuenet.net'] = MockUser(
+      uid: 'test_user_backoffice_001',
+      email: 'backoffice.test@rescuenet.net',
+      displayName: 'Test Back Office User',
+      password: 'testpassword',
+    );
+    _users['packer.test@rescuenet.net'] = MockUser(
+      uid: 'test_user_packer_001', 
+      email: 'packer.test@rescuenet.net',
+      displayName: 'Test Packer User',
+      password: 'testpassword',
+    );
+    _users['logistics.test@rescuenet.net'] = MockUser(
+      uid: 'test_user_logistics_001',
+      email: 'logistics.test@rescuenet.net', 
+      displayName: 'Test Logistics User',
+      password: 'logisticspass123',
+    );
+    _users['deployment.test@rescuenet.net'] = MockUser(
+      uid: 'test_user_deployment_001',
+      email: 'deployment.test@rescuenet.net',
+      displayName: 'Test On Deployment User', 
+      password: 'deploymentpass123',
+    );
+    
+    print('✨ MockAuthRepository - Added ${_users.length} test users: ${_users.keys.toList()}');
+    
     // Immediately emit initial auth state (null = not authenticated)
     // This prevents the app from hanging in loading state
     _authStateController.add(_currentUser);
+    print('✨ MockAuthRepository - Emitted initial auth state: $_currentUser');
   }
 
   @override
@@ -54,19 +85,25 @@ class MockAuthRepository implements AuthRepository {
 
   @override
   Future<User?> signInWithEmailAndPassword(String email, String password) async {
+    print('🔐 MockAuthRepository.signInWithEmailAndPassword() - email: $email, password: $password');
+    print('🔐 Available users: ${_users.keys.toList()}');
+    
     await Future.delayed(const Duration(milliseconds: 100)); // Simulate network delay
     
     final mockUser = _users[email];
     if (mockUser == null) {
+      print('❌ MockAuthRepository - User not found: $email');
       throw const AuthException('User not found', code: 'user-not-found');
     }
     
     if (mockUser.password != password) {
+      print('❌ MockAuthRepository - Wrong password for $email. Expected: ${mockUser.password}, Got: $password');
       throw const AuthException('Wrong password', code: 'wrong-password');
     }
     
     _currentUser = mockUser;
     _authStateController.add(_currentUser);
+    print('✅ MockAuthRepository - Login successful for $email, user: ${mockUser.uid}');
     return _currentUser;
   }
 

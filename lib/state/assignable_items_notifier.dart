@@ -16,7 +16,7 @@ class AssignableItemsNotifier extends _$AssignableItemsNotifier {
         .groupBy((a) => a.itemId)
         .mapValues((a) => a.fold(0, (p, e) => p + e.count));
     var items = ref.watch(allItemsNotifierProvider);
-    print("Items in ass: $items");
+    //print("Items in ass: $items");
     return Map.fromEntries(items.map((i) {
       if (alreadyAssigned[i.id] == null ||
           i.totalAmount <= alreadyAssigned[i.id]!) {

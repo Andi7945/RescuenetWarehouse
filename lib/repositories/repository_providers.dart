@@ -36,9 +36,17 @@ const String _repositoryMode = String.fromEnvironment('REPOSITORY_MODE', default
 bool _isRuntimeMockMode() {
   try {
     // Check if we're in a web environment with mock Firebase enabled
-    return (html.window as dynamic).MOCK_FIREBASE_MODE == true;
+    final mockMode = (html.window as dynamic).MOCK_FIREBASE_MODE == true;
+    print('🔍 _isRuntimeMockMode() - MOCK_FIREBASE_MODE: ${(html.window as dynamic).MOCK_FIREBASE_MODE}, result: $mockMode');
+    
+    // Also log to JavaScript console for debugging
+    html.window.console.log('🔍 FLUTTER: _isRuntimeMockMode() - MOCK_FIREBASE_MODE: ${(html.window as dynamic).MOCK_FIREBASE_MODE}, result: $mockMode');
+    
+    return mockMode;
   } catch (e) {
     // If we can't access window properties, fall back to environment variable
+    print('🔍 _isRuntimeMockMode() - ERROR accessing window: $e');
+    html.window.console.log('🔍 FLUTTER: _isRuntimeMockMode() - ERROR accessing window: $e');
     return false;
   }
 }
@@ -46,7 +54,12 @@ bool _isRuntimeMockMode() {
 /// Determine whether to use mock repositories.
 /// Returns true if either environment variable is set to 'mock' or runtime mock mode is detected.
 bool _shouldUseMockRepositories() {
-  return _repositoryMode == 'mock' || _isRuntimeMockMode();
+  final envMockMode = _repositoryMode == 'mock';
+  final runtimeMockMode = _isRuntimeMockMode();
+  final result = envMockMode || runtimeMockMode;
+  print('🎯 _shouldUseMockRepositories() - env: $_repositoryMode, envMock: $envMockMode, runtimeMock: $runtimeMockMode, RESULT: $result');
+  html.window.console.log('🎯 FLUTTER: _shouldUseMockRepositories() - env: $_repositoryMode, envMock: $envMockMode, runtimeMock: $runtimeMockMode, RESULT: $result');
+  return result;
 }
 
 
@@ -54,9 +67,14 @@ bool _shouldUseMockRepositories() {
 /// Returns Firebase implementation in production, Mock implementation in tests.
 @riverpod
 AuthRepository authRepository(AuthRepositoryRef ref) {
-  if (_shouldUseMockRepositories()) {
+  final useMock = _shouldUseMockRepositories();
+  if (useMock) {
+    print('🚀 AUTH REPOSITORY: Creating MockAuthRepository');
+    html.window.console.log('🚀 FLUTTER: AUTH REPOSITORY Creating MockAuthRepository');
     return MockAuthRepository();
   } else {
+    print('🚀 AUTH REPOSITORY: Creating FirebaseAuthRepository');
+    html.window.console.log('🚀 FLUTTER: AUTH REPOSITORY Creating FirebaseAuthRepository');
     return FirebaseAuthRepository();
   }
 }

@@ -3,10 +3,23 @@ window.mockFirebaseEnabled = true;
 
 // Mock Firebase Auth
 class MockUser {
-  constructor(email) {
-    this.uid = 'mock-user-' + Date.now();
-    this.email = email;
+  constructor(email, userData = null) {
+    if (userData) {
+      this.uid = userData.uid;
+      this.email = userData.email;
+      this.displayName = userData.displayName;
+      this.role = userData.role;
+      this.permissions = userData.permissions;
+    } else {
+      this.uid = 'mock-user-' + Date.now();
+      this.email = email;
+      this.displayName = null;
+    }
     this.emailVerified = true;
+    this.metadata = {
+      creationTime: userData?.created_at || new Date().toISOString(),
+      lastSignInTime: new Date().toISOString()
+    };
   }
 }
 
@@ -14,6 +27,54 @@ class MockAuth {
   constructor() {
     this.currentUser = null;
     this._listeners = [];
+    this._authCalls = [];  // Track auth method calls for debugging
+    this._testUsers = [
+      {
+        uid: "test_user_packer_001",
+        email: "packer.test@rescuenet.net",
+        password: "testpassword",
+        displayName: "Test Packer User",
+        role: "Packer",
+        permissions: ["containers:read", "containers:verify", "items:read", "assignments:read", "pdf:generate"],
+        created_at: "2024-01-01T10:00:00Z"
+      },
+      {
+        uid: "test_user_backoffice_001", 
+        email: "backoffice.test@rescuenet.net",
+        password: "testpassword",
+        displayName: "Test Back Office User",
+        role: "Back Office",
+        permissions: ["items:read", "items:create", "items:update", "items:delete", "containers:read", "containers:create", "containers:update", "assignments:read", "assignments:create", "assignments:update", "assignments:delete", "export:csv", "export:pdf", "import:csv"],
+        created_at: "2024-01-01T10:00:00Z"
+      },
+      {
+        uid: "test_user_logistics_001",
+        email: "logistics.test@rescuenet.net", 
+        password: "logisticspass123",
+        displayName: "Test Logistics User",
+        role: "Logistics",
+        permissions: ["items:read", "items:create", "items:update", "items:delete", "containers:read", "containers:create", "containers:update", "containers:delete", "containers:verify", "assignments:read", "assignments:create", "assignments:update", "assignments:delete", "reference_data:manage", "export:csv", "export:pdf", "import:csv", "pdf:generate", "reports:generate"],
+        created_at: "2024-01-01T10:00:00Z"
+      },
+      {
+        uid: "test_user_deployment_001",
+        email: "deployment.test@rescuenet.net",
+        password: "deploymentpass123", 
+        displayName: "Test On Deployment User",
+        role: "On Deployment",
+        permissions: ["items:read", "items:mark_used", "containers:read", "assignments:read", "work_logs:create", "deployment:update_status"],
+        created_at: "2024-01-01T10:00:00Z"
+      },
+      {
+        uid: "mock-user-legacy",
+        email: "test@rescuenet.net",
+        password: "testpassword",
+        displayName: "Legacy Test User",
+        role: "Back Office",
+        permissions: [],
+        created_at: "2024-01-01T10:00:00Z"
+      }
+    ];
   }
 
   onAuthStateChanged(callback) {
@@ -27,27 +88,44 @@ class MockAuth {
   }
 
   async signInWithEmailAndPassword(email, password) {
-    console.log('Mock Firebase: Signing in', email);
+    this._authCalls.push({ method: 'signInWithEmailAndPassword', email, password, timestamp: Date.now() });
+    console.log('=== MOCK FIREBASE SIGN IN ATTEMPT ===');
+    console.log('Email:', email);
+    console.log('Password:', password);
+    console.log('Available test users:', this._testUsers.map(u => ({ email: u.email, password: u.password })));
     
     // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 500));
     
-    // Mock validation
-    if (!email.includes('@')) {
-      throw new Error('Invalid email');
+    // Find test user by email and password
+    const testUser = this._testUsers.find(user => user.email === email && user.password === password);
+    console.log('Found matching user:', testUser ? 'YES' : 'NO');
+    
+    if (!testUser) {
+      console.error('LOGIN FAILED: Invalid email or password');
+      console.log('Tried:', email, '/', password);
+      console.log('Available:', this._testUsers.map(u => `${u.email}/${u.password}`));
+      throw new Error('Invalid email or password');
     }
     
-    if (password.length < 6) {
-      throw new Error('Password too short');
-    }
+    this.currentUser = new MockUser(email, testUser);
+    console.log('Created user object:', this.currentUser);
+    console.log('Current user UID:', this.currentUser.uid);
+    console.log('Current user email:', this.currentUser.email);
     
-    this.currentUser = new MockUser(email);
     this._notifyListeners();
+    console.log('Notified', this._listeners.length, 'auth state listeners');
     
+    console.log('=== SIGN IN SUCCESS ===');
     return {
       user: this.currentUser,
       operationType: 'signIn'
     };
+  }
+
+  // Debug method to check auth calls
+  getAuthCalls() {
+    return this._authCalls;
   }
 
   async createUserWithEmailAndPassword(email, password) {
@@ -236,11 +314,11 @@ class MockFirebaseApp {
   }
 }
 
-// Global mock Firebase object
+// Global mock Firebase object  
 window.mockFirebase = {
-  auth: () => new MockAuth(),
-  firestore: () => new MockFirestore(),
-  storage: () => new MockStorage(),
+  auth: () => window._mockAuthInstance || new MockAuth(),
+  firestore: () => window._mockFirestoreInstance || new MockFirestore(),
+  storage: () => window._mockStorageInstance || new MockStorage(),
   initializeApp: (config) => {
     console.log('Mock Firebase: Initializing app', config);
     return new MockFirebaseApp();
@@ -362,20 +440,48 @@ if (isTestMode) {
   console.log('User Agent:', navigator.userAgent);
   console.log('Location:', window.location.href);
   
+  // Create auth instance that will be reused
+  const mockAuthInstance = new MockAuth();
+  const mockFirestoreInstance = new MockFirestore();
+  const mockStorageInstance = new MockStorage();
+  
   // Override global Firebase completely - no real Firebase calls
   window.firebase = window.mockFirebase;
   
-  // Also ensure any Flutter Firebase plugin calls are mocked
+  // Override Flutter Firebase Web plugin more aggressively
   window.flutterfire_web = {
-    auth: window.mockFirebase.auth,
-    firestore: window.mockFirebase.firestore,
-    storage: window.mockFirebase.storage
+    auth: () => mockAuthInstance,
+    firestore: () => mockFirestoreInstance, 
+    storage: () => mockStorageInstance
   };
+  
+  // Override common Firebase Web SDK patterns
+  if (typeof window.firebase === 'undefined') {
+    window.firebase = window.mockFirebase;
+  }
+  
+  // Intercept any Firebase imports/requires
+  if (typeof window.require !== 'undefined') {
+    const originalRequire = window.require;
+    window.require = function(module) {
+      if (module === 'firebase/auth' || module === 'firebase/app' || module === 'firebase/firestore') {
+        console.log('Mock Firebase: Intercepted require for', module);
+        return window.mockFirebase;
+      }
+      return originalRequire.apply(this, arguments);
+    };
+  }
   
   // Initialize mock data
   window.mockFirebase.createMockData();
   
+  // Set up global instances for reuse
+  window._mockAuthInstance = mockAuthInstance;
+  window._mockFirestoreInstance = mockFirestoreInstance;
+  window._mockStorageInstance = mockStorageInstance;
+  
   // Log that we're in mock mode
   console.log('Mock Firebase: All Firebase services are now mocked');
   console.log('Mock Firebase: No real API calls will be made');
+  console.log('Mock Firebase: Auth instance created:', mockAuthInstance);
 }
