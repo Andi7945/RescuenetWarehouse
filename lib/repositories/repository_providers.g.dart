@@ -6,7 +6,7 @@ part of 'repository_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authRepositoryHash() => r'febe05ac89fe5d87cf691786d9adfd3625761241';
+String _$authRepositoryHash() => r'447c1954c986cc5c99a07c96f3b04bdbd931ab91';
 
 /// Provider for AuthRepository.
 /// Returns Firebase implementation in production, Mock implementation in tests.
