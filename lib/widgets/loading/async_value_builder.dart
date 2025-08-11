@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// A generic widget that handles AsyncValue states from Riverpod providers.
@@ -55,42 +56,64 @@ class AsyncValueBuilder<T> extends StatelessWidget {
 
   /// Default loading widget when none provided
   Widget _defaultLoading(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator(
-        semanticsLabel: 'Loading data',
+    return Semantics(
+      liveRegion: true,
+      label: 'Loading data',
+      child: const Center(
+        child: CircularProgressIndicator(
+          semanticsLabel: 'Loading data',
+        ),
       ),
     );
   }
 
   /// Default error widget when none provided
   Widget _defaultError(BuildContext context, Object error) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.error_outline,
-            size: 48,
-            color: Theme.of(context).colorScheme.error,
-            semanticLabel: 'Error',
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'An error occurred',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+    final errorMessage = 'Error occurred: ${error.toString()}';
+    
+    // Announce error to screen readers
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      SemanticsService.announce(
+        errorMessage,
+        TextDirection.ltr,
+        assertiveness: Assertiveness.assertive,
+      );
+    });
+    
+    return Semantics(
+      liveRegion: true,
+      label: errorMessage,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.error_outline,
+              size: 48,
               color: Theme.of(context).colorScheme.error,
+              semanticLabel: 'Error occurred',
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            error.toString(),
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            const SizedBox(height: 16),
+            Text(
+              'An error occurred',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: Theme.of(context).colorScheme.error,
+              ),
             ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+            const SizedBox(height: 8),
+            Semantics(
+              label: 'Error details: ${error.toString()}',
+              child: Text(
+                error.toString(),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -98,7 +121,7 @@ class AsyncValueBuilder<T> extends StatelessWidget {
 
 /// Specialized version of AsyncValueBuilder for optional data types.
 /// 
-/// Handles the common pattern where AsyncValue\<T?\> might contain null data,
+/// Handles the common pattern where AsyncValue of nullable T might contain null data,
 /// which is different from loading state.
 class AsyncValueNullableBuilder<T> extends StatelessWidget {
   /// The AsyncValue to handle
@@ -141,67 +164,95 @@ class AsyncValueNullableBuilder<T> extends StatelessWidget {
 
   /// Default no data widget when none provided
   Widget _defaultNoData(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.inbox_outlined,
-            size: 48,
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-            semanticLabel: 'No data',
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'No data available',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+    const message = 'No data available';
+    
+    return Semantics(
+      liveRegion: true,
+      label: message,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.inbox_outlined,
+              size: 48,
               color: Theme.of(context).colorScheme.onSurfaceVariant,
+              semanticLabel: 'No data available',
             ),
-          ),
-        ],
+            const SizedBox(height: 16),
+            Text(
+              message,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   /// Default loading widget when none provided
   Widget _defaultLoading(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator(
-        semanticsLabel: 'Loading data',
+    return Semantics(
+      liveRegion: true,
+      label: 'Loading data',
+      child: const Center(
+        child: CircularProgressIndicator(
+          semanticsLabel: 'Loading data',
+        ),
       ),
     );
   }
 
   /// Default error widget when none provided
   Widget _defaultError(BuildContext context, Object error) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.error_outline,
-            size: 48,
-            color: Theme.of(context).colorScheme.error,
-            semanticLabel: 'Error',
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'An error occurred',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+    final errorMessage = 'Error occurred: ${error.toString()}';
+    
+    // Announce error to screen readers
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      SemanticsService.announce(
+        errorMessage,
+        TextDirection.ltr,
+        assertiveness: Assertiveness.assertive,
+      );
+    });
+    
+    return Semantics(
+      liveRegion: true,
+      label: errorMessage,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.error_outline,
+              size: 48,
               color: Theme.of(context).colorScheme.error,
+              semanticLabel: 'Error occurred',
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            error.toString(),
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            const SizedBox(height: 16),
+            Text(
+              'An error occurred',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: Theme.of(context).colorScheme.error,
+              ),
             ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+            const SizedBox(height: 8),
+            Semantics(
+              label: 'Error details: ${error.toString()}',
+              child: Text(
+                error.toString(),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

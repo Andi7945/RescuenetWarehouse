@@ -9,11 +9,14 @@ import 'package:rescuenet_warehouse/features/item_overview/item_add_button.dart'
 import 'package:rescuenet_warehouse/ui/item_overview_page/item_sort_button.dart';
 import 'package:rescuenet_warehouse/ui/rescue_navigation_drawer.dart';
 import 'package:rescuenet_warehouse/widgets/items/item_grid.dart';
+import 'package:rescuenet_warehouse/widgets/loading/async_value_builder.dart';
+import 'package:rescuenet_warehouse/widgets/loading/data_loading_indicator.dart';
+import 'package:rescuenet_warehouse/widgets/loading/error_retry_widget.dart';
 
 class ItemOverviewPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var items = ref.watch(itemsFilteredAndSortedNotifierProvider);
+    final itemsAsync = ref.watch(itemsFilteredAndSortedAsyncProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -28,11 +31,24 @@ class ItemOverviewPage extends ConsumerWidget {
         ],
       ),
       drawer: RescueNavigationDrawer(),
-      body: _body(items, context, ref),
+      body: _buildBody(context, ref, itemsAsync),
     );
   }
 
-  _body(List<Item> items, BuildContext context, WidgetRef ref) {
+  Widget _buildBody(BuildContext context, WidgetRef ref, AsyncValue<List<Item>> itemsAsync) {
+    return AsyncValueBuilder<List<Item>>(
+      value: itemsAsync,
+      data: (items) => _buildItemsContent(items, context, ref),
+      loading: () => _buildLoadingState(),
+      error: (error, stackTrace) => _buildErrorState(error, ref),
+    );
+  }
+
+  Widget _buildItemsContent(List<Item> items, BuildContext context, WidgetRef ref) {
+    if (items.isEmpty) {
+      return _buildEmptyState();
+    }
+    
     return ItemGrid(
       items: items,
       onSelect: (itm) => _navigateToItem(itm, ref, context),
@@ -40,8 +56,56 @@ class ItemOverviewPage extends ConsumerWidget {
     );
   }
 
-  _navigateToItem(Item item, WidgetRef ref, BuildContext context) {
-    ref.watch(currentItemNotifierProvider.notifier).setItem(item);
+  Widget _buildLoadingState() {
+    return const DataGridLoadingIndicator(
+      crossAxisCount: 2,
+      itemCount: 6,
+      childAspectRatio: 1.0,
+    );
+  }
+
+  Widget _buildErrorState(Object error, WidgetRef ref) {
+    return ErrorRetryWidget.forFirebaseError(
+      error: error,
+      onRetry: () => ref.refresh(itemsFilteredAndSortedAsyncProvider),
+      retryText: 'Reload Items',
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.inventory_2_outlined,
+            size: 64,
+            color: Colors.grey[400],
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'No items found',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey[600],
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Try adjusting your filters or add new items',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey[500],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _navigateToItem(Item item, WidgetRef ref, BuildContext context) {
+    ref.read(currentItemNotifierProvider.notifier).setItem(item);
     Navigator.pushNamed(context, routeItemEditPage, arguments: item.id);
   }
 }

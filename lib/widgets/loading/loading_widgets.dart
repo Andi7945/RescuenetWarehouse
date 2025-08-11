@@ -3,7 +3,7 @@ library;
 /// 
 /// This library provides a complete set of loading widgets that integrate
 /// seamlessly with Riverpod's AsyncValue pattern and follow Material Design
-/// guidelines.
+/// guidelines, including debounced loading to prevent loading flashes.
 /// 
 /// ## Core Components:
 /// 
@@ -18,6 +18,14 @@ library;
 /// ### OperationLoadingOverlay
 /// Modal overlay for CRUD operations that prevents user interaction during
 /// processing with helper methods for easy integration.
+/// 
+/// ### DebouncedLoadingSystem
+/// Intelligent loading system that prevents loading flashes for fast operations
+/// while maintaining proper feedback for longer operations.
+/// 
+/// ### DebouncedLoadingWidgets
+/// Collection of widgets that use debounced loading: buttons, overlays, indicators
+/// optimized for different operation types (quick, medium, slow, immediate).
 /// 
 /// ### ErrorRetryWidget
 /// Comprehensive error display with retry functionality, including specialized
@@ -43,6 +51,20 @@ library;
 ///   task: () => itemRepository.saveItem(item),
 /// );
 /// 
+/// // Debounced loading for quick operations (prevents flashing)
+/// DebouncedLoadingButton.quick(
+///   operationKey: 'update_quantity_${itemId}',
+///   onPressed: () => updateQuantity(),
+///   child: Text('Update'),
+/// );
+/// 
+/// // Debounced icon button for assignment changes
+/// DebouncedLoadingIconButton.quick(
+///   operationKey: 'assignment_${assignmentId}',
+///   icon: Icon(Icons.plus_one),
+///   onPressed: () => incrementAssignment(),
+/// );
+/// 
 /// // Simple error handling
 /// ErrorRetryWidget.withMessage(
 ///   message: 'Failed to load data',
@@ -55,3 +77,5 @@ export 'async_value_builder.dart';
 export 'data_loading_indicator.dart';
 export 'operation_loading_overlay.dart';
 export 'error_retry_widget.dart';
+export 'debounced_loading_system.dart';
+export 'debounced_loading_widgets.dart';

@@ -2,6 +2,8 @@
 const { test, expect } = require('@playwright/test');
 const coords = require('../helpers/coordinateHelper');
 const dataHelpers = require('../helpers/dataExtraction');
+const visualValidation = require('../helpers/visualValidation');
+const loadingHelpers = require('../helpers/loadingHelpers');
 
 /**
  * Critical Integration Scenarios Test Suite
@@ -33,18 +35,33 @@ async function loginAsRole(page, role = 'backoffice') {
 
   await page.goto('/');
   await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(coords.getTimeout('dataLoad'));
+  
+  // Wait for app to be ready with loading state awareness
+  await visualValidation.waitForFlutterReady(page, 30000, {
+    waitForLoadingComplete: true,
+    checkInteractionReady: true
+  });
 
-  const emailSuccess = await coords.typeInField(page, 'login', 'emailField', creds.email);
+  const emailSuccess = await coords.typeInField(page, 'login', 'emailField', creds.email, {
+    operationType: 'quick',
+    expectLoading: false
+  });
   if (!emailSuccess) throw new Error(`Failed to login as ${role}: email input failed`);
 
-  const passwordSuccess = await coords.typeInField(page, 'login', 'passwordField', creds.password);
+  const passwordSuccess = await coords.typeInField(page, 'login', 'passwordField', creds.password, {
+    operationType: 'quick',
+    expectLoading: false
+  });
   if (!passwordSuccess) throw new Error(`Failed to login as ${role}: password input failed`);
 
-  const loginSuccess = await coords.clickElement(page, 'login', 'loginButton');
-  if (!loginSuccess) throw new Error(`Failed to login as ${role}: login button failed`);
-
-  await page.waitForTimeout(coords.getTimeout('dataLoad'));
+  const loginResult = await coords.clickElementWithLoadingWait(page, 'login', 'loginButton', {
+    operationType: 'medium',
+    expectLoading: true,
+    maxLoadingTime: 10000
+  });
+  if (!loginResult.clickSuccess) throw new Error(`Failed to login as ${role}: login button failed`);
+  
+  console.log(`✓ Login as ${role} completed with loading handling`);
 }
 
 test.describe('Critical Integration Scenarios', () => {

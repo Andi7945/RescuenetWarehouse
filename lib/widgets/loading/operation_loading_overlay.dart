@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 
 /// A modal loading overlay for operations like create, update, delete.
 /// 
@@ -99,41 +100,57 @@ class OperationLoadingOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loadingMessage = details != null ? '$operation $details' : operation;
+    
+    // Announce operation start to screen readers
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      SemanticsService.announce(
+        loadingMessage,
+        TextDirection.ltr,
+        assertiveness: Assertiveness.polite,
+      );
+    });
+    
     return PopScope(
       canPop: canDismiss,
-      child: Dialog(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        child: Center(
-          child: Container(
-            padding: const EdgeInsets.all(24),
-            constraints: const BoxConstraints(
-              minWidth: 280,
-              maxWidth: 400,
-            ),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _buildProgressIndicator(context),
-                const SizedBox(height: 20),
-                _buildOperationText(context),
-                if (details != null) ...[
-                  const SizedBox(height: 8),
-                  _buildDetailsText(context),
+      child: Semantics(
+        liveRegion: true,
+        label: loadingMessage,
+        hint: canDismiss ? 'Operation in progress, tap outside to dismiss' : 'Operation in progress, please wait',
+        child: Dialog(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          child: Center(
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              constraints: const BoxConstraints(
+                minWidth: 280,
+                maxWidth: 400,
+              ),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
                 ],
-              ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _buildProgressIndicator(context),
+                  const SizedBox(height: 20),
+                  _buildOperationText(context),
+                  if (details != null) ...[
+                    const SizedBox(height: 8),
+                    _buildDetailsText(context),
+                  ],
+                ],
+              ),
             ),
           ),
         ),
@@ -144,47 +161,60 @@ class OperationLoadingOverlay extends StatelessWidget {
   Widget _buildProgressIndicator(BuildContext context) {
     if (progress != null) {
       // Determinate progress indicator
-      return SizedBox(
-        width: 48,
-        height: 48,
-        child: CircularProgressIndicator(
-          value: progress,
-          semanticsLabel: 'Operation progress: ${(progress! * 100).round()}%',
-          semanticsValue: '${(progress! * 100).round()}%',
+      final progressPercent = (progress! * 100).round();
+      return Semantics(
+        label: 'Progress: $progressPercent percent complete',
+        value: '$progressPercent%',
+        child: SizedBox(
+          width: 48,
+          height: 48,
+          child: CircularProgressIndicator(
+            value: progress,
+            semanticsLabel: 'Operation progress: $progressPercent%',
+            semanticsValue: '$progressPercent%',
+          ),
         ),
       );
     }
     
     // Indeterminate progress indicator
-    return const SizedBox(
-      width: 48,
-      height: 48,
-      child: CircularProgressIndicator(
-        semanticsLabel: 'Operation in progress',
+    return Semantics(
+      label: 'Operation in progress',
+      hint: 'Loading indicator',
+      child: const SizedBox(
+        width: 48,
+        height: 48,
+        child: CircularProgressIndicator(
+          semanticsLabel: 'Operation in progress',
+        ),
       ),
     );
   }
 
   Widget _buildOperationText(BuildContext context) {
-    return Text(
-      operation,
-      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-        color: Theme.of(context).colorScheme.onSurface,
-        fontWeight: FontWeight.w500,
+    return Semantics(
+      label: 'Operation: $operation',
+      child: Text(
+        operation,
+        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+          color: Theme.of(context).colorScheme.onSurface,
+          fontWeight: FontWeight.w500,
+        ),
+        textAlign: TextAlign.center,
       ),
-      textAlign: TextAlign.center,
-      semanticsLabel: operation,
     );
   }
 
   Widget _buildDetailsText(BuildContext context) {
-    return Text(
-      details!,
-      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-        color: Theme.of(context).colorScheme.onSurfaceVariant,
+    return Semantics(
+      label: 'Operation details: ${details!}',
+      child: Text(
+        details!,
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
+        textAlign: TextAlign.center,
       ),
-      textAlign: TextAlign.center,
-      semanticsLabel: details,
     );
   }
 }
@@ -213,42 +243,65 @@ class SimpleLoadingOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loadingMessage = message ?? 'Loading';
+    
+    // Announce loading to screen readers
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      SemanticsService.announce(
+        loadingMessage,
+        TextDirection.ltr,
+        assertiveness: Assertiveness.polite,
+      );
+    });
+    
     return PopScope(
       canPop: false,
-      child: Dialog(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        child: Center(
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const CircularProgressIndicator(
-                  semanticsLabel: 'Loading',
-                ),
-                if (message != null) ...[
-                  const SizedBox(height: 16),
-                  Text(
-                    message!,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                    textAlign: TextAlign.center,
+      child: Semantics(
+        liveRegion: true,
+        label: loadingMessage,
+        hint: 'Operation in progress, please wait',
+        child: Dialog(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          child: Center(
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
                   ),
                 ],
-              ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Semantics(
+                    label: 'Loading indicator',
+                    hint: 'Operation in progress',
+                    child: const CircularProgressIndicator(
+                      semanticsLabel: 'Loading',
+                    ),
+                  ),
+                  if (message != null) ...[
+                    const SizedBox(height: 16),
+                    Semantics(
+                      label: 'Loading message: $message',
+                      child: Text(
+                        message!,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ),
           ),
         ),

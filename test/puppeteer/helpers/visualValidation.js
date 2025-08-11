@@ -3,10 +3,13 @@
  * 
  * This module provides enhanced visual testing capabilities for Flutter web apps
  * that render to Canvas, addressing the limitations identified in the test review.
+ * 
+ * Updated to handle loading states, overlays, and debounced loading indicators.
  */
 
 const fs = require('fs');
 const path = require('path');
+const loadingHelpers = require('./loadingHelpers');
 
 /**
  * Capture screenshot with standardized naming and validation
@@ -46,19 +49,39 @@ async function captureValidationScreenshot(page, testName, step, options = {}) {
 
 /**
  * Compare page state before and after action using visual validation
+ * Enhanced to handle loading states and wait for completion
  * @param {import('@playwright/test').Page} page 
  * @param {string} testName 
  * @param {Function} action 
+ * @param {Object} options - Action options
+ * @param {string} options.operationType - Type of operation (quick, medium, slow, immediate)
+ * @param {boolean} options.expectLoading - Whether loading is expected
+ * @param {number} options.maxActionTime - Maximum time for action to complete
  */
-async function validateActionWithScreenshots(page, testName, action) {
+async function validateActionWithScreenshots(page, testName, action, options = {}) {
+  const {
+    operationType = 'medium',
+    expectLoading = true,
+    maxActionTime = 10000
+  } = options;
+  
   // Capture before state
   const beforePath = await captureValidationScreenshot(page, testName, 'before-action');
   
-  // Perform action
-  const actionResult = await action();
+  // Perform action with loading handling
+  const actionWithLoadingResult = await loadingHelpers.performActionWithLoadingWait(
+    page, 
+    action, 
+    {
+      operationType,
+      expectLoading,
+      maxActionTime,
+      actionDescription: testName
+    }
+  );
   
-  // Wait for any visual changes to complete
-  await page.waitForTimeout(1000);
+  // Wait additional time for visual changes to stabilize
+  await page.waitForTimeout(500);
   
   // Capture after state
   const afterPath = await captureValidationScreenshot(page, testName, 'after-action');
@@ -70,13 +93,23 @@ async function validateActionWithScreenshots(page, testName, action) {
   const sizeDifference = Math.abs(afterStats.size - beforeStats.size);
   const percentDifference = (sizeDifference / beforeStats.size) * 100;
   
-  if (percentDifference > 1) {
+  const visualChanged = percentDifference > 1;
+  
+  if (visualChanged) {
     console.log(`✓ Visual change detected: ${percentDifference.toFixed(2)}% size difference`);
-    return { changed: true, beforePath, afterPath, actionResult };
   } else {
     console.log(`⚠ Minimal visual change: ${percentDifference.toFixed(2)}% size difference`);
-    return { changed: false, beforePath, afterPath, actionResult };
   }
+  
+  return { 
+    changed: visualChanged, 
+    beforePath, 
+    afterPath, 
+    actionResult: actionWithLoadingResult.actionResult,
+    loadingHandled: actionWithLoadingResult.loadingCycleResult?.cycleComplete || false,
+    actionSuccess: actionWithLoadingResult.actionSuccess,
+    totalTime: actionWithLoadingResult.totalTime
+  };
 }
 
 /**
@@ -185,42 +218,122 @@ async function validateApplicationState(page, expectedState) {
 
 /**
  * Wait for Flutter app to be fully loaded and ready
+ * Enhanced to handle new loading states and overlays
  * @param {import('@playwright/test').Page} page 
  * @param {number} timeout 
+ * @param {Object} options - Additional options
+ * @param {boolean} options.waitForLoadingComplete - Wait for all loading to complete
+ * @param {boolean} options.checkInteractionReady - Check if page is ready for interactions
  */
-async function waitForFlutterReady(page, timeout = 30000) {
-  console.log('Waiting for Flutter app to be ready...');
+async function waitForFlutterReady(page, timeout = 30000, options = {}) {
+  const {
+    waitForLoadingComplete = true,
+    checkInteractionReady = true
+  } = options;
   
-  const startTime = Date.now();
+  console.log('Waiting for Flutter app to be ready with enhanced loading detection...');
   
-  while (Date.now() - startTime < timeout) {
-    try {
-      // Check for Flutter-specific indicators
-      const canvasElements = await page.$$('canvas');
-      
-      if (canvasElements.length > 0) {
-        // Check if Canvas has proper dimensions
-        const bounds = await canvasElements[0].boundingBox();
-        
-        if (bounds && bounds.width > 100 && bounds.height > 100) {
-          // Additional check - ensure no loading indicators
-          const bodyText = await page.textContent('body');
-          
-          if (bodyText && !bodyText.includes('Loading') && !bodyText.includes('loading')) {
-            console.log('✓ Flutter app is ready');
-            return true;
-          }
-        }
-      }
-      
-      await page.waitForTimeout(500);
-    } catch (error) {
-      // Continue waiting
-      await page.waitForTimeout(500);
+  // Use the new comprehensive app ready check
+  const readyResult = await loadingHelpers.waitForAppReady(page, {
+    timeout,
+    checkLoadingState: waitForLoadingComplete
+  });
+  
+  if (!readyResult.isReady) {
+    throw new Error(`Flutter app not ready after ${timeout}ms: ${JSON.stringify(readyResult.readinessChecks)}`);
+  }
+  
+  // Additional check for interaction readiness if requested
+  if (checkInteractionReady) {
+    const interactionReady = await loadingHelpers.waitForInteractionReady(page, {
+      timeout: 5000
+    });
+    
+    if (!interactionReady) {
+      console.log('⚠ App ready but may have blocking overlays');
     }
   }
   
-  throw new Error(`Flutter app not ready after ${timeout}ms`);
+  console.log('✓ Flutter app is ready for testing');
+  return true;
+}
+
+/**
+ * Wait for action to complete including any loading states
+ * @param {import('@playwright/test').Page} page - Playwright page object
+ * @param {Function} action - Action to perform
+ * @param {Object} options - Wait options
+ * @returns {Promise<Object>} Action completion result
+ */
+async function waitForActionComplete(page, action, options = {}) {
+  const {
+    operationType = 'medium',
+    expectLoading = true,
+    maxTime = 10000,
+    actionDescription = 'action'
+  } = options;
+  
+  console.log(`Waiting for ${actionDescription} to complete with loading handling`);
+  
+  return await loadingHelpers.performActionWithLoadingWait(
+    page,
+    action,
+    {
+      operationType,
+      expectLoading,
+      maxActionTime: maxTime,
+      actionDescription
+    }
+  );
+}
+
+/**
+ * Enhanced application state validation that includes loading state checks
+ * @param {import('@playwright/test').Page} page - Playwright page object
+ * @param {string} expectedState - Expected application state
+ * @param {Object} options - Validation options
+ * @returns {Promise<Object>} Enhanced validation results
+ */
+async function validateApplicationStateWithLoading(page, expectedState, options = {}) {
+  const {
+    allowLoadingStates = false,
+    checkInteractionReady = true
+  } = options;
+  
+  // Get base application state validation
+  const baseValidation = await validateApplicationState(page, expectedState);
+  
+  // Add loading state validation
+  const loadingState = await loadingHelpers.detectLoadingIndicators(page);
+  const interactionState = checkInteractionReady ? 
+    await loadingHelpers.checkForModalLoadingOverlays(page) : 
+    { canInteract: true };
+  
+  const enhancedValidation = {
+    ...baseValidation,
+    loadingState,
+    interactionReady: interactionState.canInteract,
+    hasBlockingOverlays: interactionState.hasBlockingOverlay,
+    loadingDetected: loadingState.hasLoadingOverlay || loadingState.hasOperationOverlay
+  };
+  
+  // Adjust overall validity based on loading states
+  if (!allowLoadingStates && enhancedValidation.loadingDetected) {
+    enhancedValidation.overallValid = false;
+    console.log('⚠ Application state invalid due to active loading states');
+  } else if (!enhancedValidation.interactionReady) {
+    enhancedValidation.overallValid = false;
+    console.log('⚠ Application state invalid due to blocking overlays');
+  }
+  
+  console.log('Enhanced application state validation:', {
+    baseValid: baseValidation.overallValid,
+    loadingDetected: enhancedValidation.loadingDetected,
+    interactionReady: enhancedValidation.interactionReady,
+    finalValid: enhancedValidation.overallValid
+  });
+  
+  return enhancedValidation;
 }
 
 module.exports = {
@@ -228,5 +341,7 @@ module.exports = {
   validateActionWithScreenshots,
   validateFlutterCanvasContent,
   validateApplicationState,
-  waitForFlutterReady
+  validateApplicationStateWithLoading,
+  waitForFlutterReady,
+  waitForActionComplete
 };

@@ -2,6 +2,8 @@
 const { test, expect } = require('@playwright/test');
 const coordinateHelper = require('../helpers/coordinateHelper');
 const authHelpers = require('../helpers/authHelpers');
+const loadingHelpers = require('../helpers/loadingHelpers');
+const visualValidation = require('../helpers/visualValidation');
 
 test.describe('Authentication Workflows - Core Scenarios', () => {
   let sharedPage;
@@ -25,10 +27,17 @@ test.describe('Authentication Workflows - Core Scenarios', () => {
   });
 
   test.beforeEach(async ({ page }) => {
-    // Refresh page state for each test
+    // Refresh page state for each test with enhanced loading handling
     await page.goto('/');
     await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(2000);
+    
+    // Wait for Flutter app to be ready with loading state awareness
+    await visualValidation.waitForFlutterReady(page, 30000, {
+      waitForLoadingComplete: true,
+      checkInteractionReady: true
+    });
+    
+    console.log('✓ Test setup complete - page ready for authentication test');
   });
 
   test('1. Valid login creates authenticated session', async ({ page }) => {
@@ -45,16 +54,27 @@ test.describe('Authentication Workflows - Core Scenarios', () => {
     const initialAuth = await authHelpers.getAuthenticationState(page);
     console.log('Initial auth state:', initialAuth);
 
-    // Login credentials
+    // Login credentials with loading awareness
     console.log('=== TYPING LOGIN CREDENTIALS ===');
-    await coordinateHelper.typeInField(page, 'login', 'emailField', testEmail);
-    await coordinateHelper.typeInField(page, 'login', 'passwordField', testPassword);
+    await coordinateHelper.typeInField(page, 'login', 'emailField', testEmail, {
+      operationType: 'quick',
+      expectLoading: false
+    });
+    await coordinateHelper.typeInField(page, 'login', 'passwordField', testPassword, {
+      operationType: 'quick',
+      expectLoading: false
+    });
 
-    // Submit login
+    // Submit login with loading handling
     console.log('=== CLICKING LOGIN BUTTON ===');
-    await coordinateHelper.clickElement(page, 'login', 'loginButton');
+    const loginClickResult = await coordinateHelper.clickElementWithLoadingWait(page, 'login', 'loginButton', {
+      operationType: 'medium',
+      expectLoading: true,
+      maxLoadingTime: 10000
+    });
     
-    await page.waitForTimeout(5000);  // Increased timeout
+    expect(loginClickResult.clickSuccess).toBe(true);
+    console.log('✓ Login click completed with loading handling');
     
     console.log('=== CHECKING FINAL AUTH STATE ===');
 
@@ -84,11 +104,30 @@ test.describe('Authentication Workflows - Core Scenarios', () => {
     const testEmail = 'test@rescuenet.net';
     const wrongPassword = 'wrongpassword';
 
-    // Invalid login attempt
-    await coordinateHelper.typeInField(page, 'login', 'emailField', testEmail);
-    await coordinateHelper.typeInField(page, 'login', 'passwordField', wrongPassword);
-    await coordinateHelper.clickElement(page, 'login', 'loginButton');
-    await page.waitForTimeout(2000);
+    // Invalid login attempt with loading handling
+    await coordinateHelper.typeInField(page, 'login', 'emailField', testEmail, {
+      operationType: 'quick',
+      expectLoading: false
+    });
+    await coordinateHelper.typeInField(page, 'login', 'passwordField', wrongPassword, {
+      operationType: 'quick',
+      expectLoading: false
+    });
+    
+    // Click login and wait for loading (even failed auth may show loading)
+    const loginClickResult = await coordinateHelper.clickElementWithLoadingWait(page, 'login', 'loginButton', {
+      operationType: 'medium',
+      expectLoading: false, // Failed auth may not show loading or show very briefly
+      maxLoadingTime: 5000
+    });
+    
+    expect(loginClickResult.clickSuccess).toBe(true);
+    
+    // Wait for any error states or transitions to complete
+    await loadingHelpers.smartWaitForLoadingComplete(page, {
+      timeout: 3000,
+      maxRetries: 2
+    });
 
     // Verify authentication failed
     const noAuthValidation = await authHelpers.validateNoAuthentication(page);
@@ -103,20 +142,36 @@ test.describe('Authentication Workflows - Core Scenarios', () => {
   });
 
   test('3. User registration with email validation', async ({ page }) => {
-    // Switch to registration mode
-    await coordinateHelper.clickElement(page, 'login', 'registerInsteadButton', {
-      offsetX: 117, offsetY: 0
+    // Switch to registration mode with loading handling
+    const registerClickResult = await coordinateHelper.clickElementWithLoadingWait(page, 'login', 'registerInsteadButton', {
+      offsetX: 117, 
+      offsetY: 0,
+      operationType: 'quick',
+      expectLoading: false,
+      maxLoadingTime: 2000
     });
-    await page.waitForTimeout(1000);
+    expect(registerClickResult.clickSuccess).toBe(true);
 
-    // Valid registration
+    // Valid registration with loading awareness
     const testEmail = `test-${Date.now()}@rescuenet.net`;
     const testPassword = 'TestPassword123!';
 
-    await coordinateHelper.typeInField(page, 'login', 'emailField', testEmail);
-    await coordinateHelper.typeInField(page, 'login', 'passwordField', testPassword);
-    await coordinateHelper.clickElement(page, 'login', 'loginButton');
-    await page.waitForTimeout(3000);
+    await coordinateHelper.typeInField(page, 'login', 'emailField', testEmail, {
+      operationType: 'quick',
+      expectLoading: false
+    });
+    await coordinateHelper.typeInField(page, 'login', 'passwordField', testPassword, {
+      operationType: 'quick',
+      expectLoading: false
+    });
+    
+    // Submit registration with loading handling
+    const registrationResult = await coordinateHelper.clickElementWithLoadingWait(page, 'login', 'loginButton', {
+      operationType: 'medium',
+      expectLoading: true,
+      maxLoadingTime: 8000
+    });
+    expect(registrationResult.clickSuccess).toBe(true);
 
     // Verify successful registration and session creation
     const sessionValidation = await authHelpers.validateUserSession(page, testEmail);
@@ -131,17 +186,38 @@ test.describe('Authentication Workflows - Core Scenarios', () => {
   });
 
   test('4. Invalid email domain registration fails', async ({ page }) => {
-    // Switch to registration mode
-    await coordinateHelper.clickElement(page, 'login', 'registerInsteadButton', {
-      offsetX: 117, offsetY: 0
+    // Switch to registration mode with loading handling
+    const registerClickResult = await coordinateHelper.clickElementWithLoadingWait(page, 'login', 'registerInsteadButton', {
+      offsetX: 117, 
+      offsetY: 0,
+      operationType: 'quick',
+      expectLoading: false,
+      maxLoadingTime: 2000
     });
-    await page.waitForTimeout(1000);
+    expect(registerClickResult.clickSuccess).toBe(true);
 
-    // Invalid email domain
-    await coordinateHelper.typeInField(page, 'login', 'emailField', 'test@gmail.com');
-    await coordinateHelper.typeInField(page, 'login', 'passwordField', 'TestPassword123!');
-    await coordinateHelper.clickElement(page, 'login', 'loginButton');
-    await page.waitForTimeout(2000);
+    // Invalid email domain with loading awareness
+    await coordinateHelper.typeInField(page, 'login', 'emailField', 'test@gmail.com', {
+      operationType: 'quick',
+      expectLoading: false
+    });
+    await coordinateHelper.typeInField(page, 'login', 'passwordField', 'TestPassword123!', {
+      operationType: 'quick',
+      expectLoading: false
+    });
+    
+    // Submit invalid registration (may briefly show loading)
+    const invalidRegResult = await coordinateHelper.clickElementWithLoadingWait(page, 'login', 'loginButton', {
+      operationType: 'medium',
+      expectLoading: false, // Invalid operations may not show loading or show very briefly
+      maxLoadingTime: 5000
+    });
+    expect(invalidRegResult.clickSuccess).toBe(true);
+    
+    // Wait for any error handling to complete
+    await loadingHelpers.smartWaitForLoadingComplete(page, {
+      timeout: 3000
+    });
 
     // Verify registration rejected
     const noAuthValidation = await authHelpers.validateNoAuthentication(page);
@@ -157,11 +233,22 @@ test.describe('Authentication Workflows - Core Scenarios', () => {
     const packerEmail = 'packer@rescuenet.net';
     const packerPassword = 'packerpass123';
 
-    // Login as Packer
-    await coordinateHelper.typeInField(page, 'login', 'emailField', packerEmail);
-    await coordinateHelper.typeInField(page, 'login', 'passwordField', packerPassword);
-    await coordinateHelper.clickElement(page, 'login', 'loginButton');
-    await page.waitForTimeout(3000);
+    // Login as Packer with loading handling
+    await coordinateHelper.typeInField(page, 'login', 'emailField', packerEmail, {
+      operationType: 'quick',
+      expectLoading: false
+    });
+    await coordinateHelper.typeInField(page, 'login', 'passwordField', packerPassword, {
+      operationType: 'quick',
+      expectLoading: false
+    });
+    
+    const packerLoginResult = await coordinateHelper.clickElementWithLoadingWait(page, 'login', 'loginButton', {
+      operationType: 'medium',
+      expectLoading: true,
+      maxLoadingTime: 8000
+    });
+    expect(packerLoginResult.clickSuccess).toBe(true);
 
     // Validate Packer role authentication
     const packerRoleValidation = await authHelpers.validateRoleBasedAuth(page, 'Packer', packerEmail);
@@ -179,11 +266,22 @@ test.describe('Authentication Workflows - Core Scenarios', () => {
     const logisticsEmail = 'logistics@rescuenet.net';
     const logisticsPassword = 'logisticspass123';
 
-    // Login as Logistics
-    await coordinateHelper.typeInField(page, 'login', 'emailField', logisticsEmail);
-    await coordinateHelper.typeInField(page, 'login', 'passwordField', logisticsPassword);
-    await coordinateHelper.clickElement(page, 'login', 'loginButton');
-    await page.waitForTimeout(3000);
+    // Login as Logistics with loading handling
+    await coordinateHelper.typeInField(page, 'login', 'emailField', logisticsEmail, {
+      operationType: 'quick',
+      expectLoading: false
+    });
+    await coordinateHelper.typeInField(page, 'login', 'passwordField', logisticsPassword, {
+      operationType: 'quick',
+      expectLoading: false
+    });
+    
+    const logisticsLoginResult = await coordinateHelper.clickElementWithLoadingWait(page, 'login', 'loginButton', {
+      operationType: 'medium',
+      expectLoading: true,
+      maxLoadingTime: 8000
+    });
+    expect(logisticsLoginResult.clickSuccess).toBe(true);
 
     // Validate Logistics role authentication
     const logisticsRoleValidation = await authHelpers.validateRoleBasedAuth(page, 'Logistics', logisticsEmail);

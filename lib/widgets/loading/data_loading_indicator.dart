@@ -68,46 +68,59 @@ class DataLoadingIndicator extends StatelessWidget {
   /// Builds the main content with loading indicator and optional message
   Widget _buildContent(BuildContext context) {
     final theme = Theme.of(context);
+    final loadingLabel = semanticsLabel ?? (message != null ? 'Loading: $message' : 'Loading');
     
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: isCompact ? MainAxisSize.min : MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: isCompact ? 24 : 36,
-            height: isCompact ? 24 : 36,
-            child: CircularProgressIndicator(
-              strokeWidth: isCompact ? 2.5 : 3.0,
-              semanticsLabel: semanticsLabel ?? 'Loading',
+    return Semantics(
+      liveRegion: true,
+      label: loadingLabel,
+      hint: 'Please wait while content loads',
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: isCompact ? MainAxisSize.min : MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: isCompact ? 24 : 36,
+              height: isCompact ? 24 : 36,
+              child: CircularProgressIndicator(
+                strokeWidth: isCompact ? 2.5 : 3.0,
+                semanticsLabel: loadingLabel,
+              ),
             ),
-          ),
-          if (message != null) ...[
-            SizedBox(height: isCompact ? 8 : 16),
-            Text(
-              message!,
-              style: isCompact 
-                ? theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  )
-                : theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-              textAlign: TextAlign.center,
-              semanticsLabel: message,
-            ),
+            if (message != null) ...[
+              SizedBox(height: isCompact ? 8 : 16),
+              Semantics(
+                label: 'Loading message: $message',
+                child: Text(
+                  message!,
+                  style: isCompact 
+                    ? theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      )
+                    : theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
 
   /// Builds overlay wrapper for covering existing content
   Widget _buildOverlay(BuildContext context, Widget content) {
-    return Container(
-      color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.8),
-      child: content,
+    return Semantics(
+      label: 'Loading overlay active',
+      hint: 'Content is loading, please wait',
+      container: true,
+      child: Container(
+        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.8),
+        child: content,
+      ),
     );
   }
 }
@@ -134,65 +147,73 @@ class DataListLoadingIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: itemCount,
-      separatorBuilder: (context, index) => const SizedBox(height: 8),
-      itemBuilder: (context, index) => _buildPlaceholderItem(context),
+    return Semantics(
+      label: 'Loading list items',
+      hint: 'Displaying $itemCount placeholder items while content loads',
+      liveRegion: true,
+      child: ListView.separated(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: itemCount,
+        separatorBuilder: (context, index) => const SizedBox(height: 8),
+        itemBuilder: (context, index) => _buildPlaceholderItem(context, index),
+      ),
     );
   }
 
-  Widget _buildPlaceholderItem(BuildContext context) {
+  Widget _buildPlaceholderItem(BuildContext context, int index) {
     final theme = Theme.of(context);
     final shimmerColor = theme.colorScheme.surfaceContainerHighest;
     
-    Widget content = Container(
-      height: itemHeight,
-      decoration: BoxDecoration(
-        color: shimmerColor.withValues(alpha: 0.3),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        children: [
-          // Leading placeholder (like item image)
-          Container(
-            margin: const EdgeInsets.all(12),
-            width: itemHeight - 24,
-            height: itemHeight - 24,
-            decoration: BoxDecoration(
-              color: shimmerColor.withValues(alpha: 0.5),
-              borderRadius: BorderRadius.circular(4),
+    Widget content = Semantics(
+      label: 'Loading placeholder item ${index + 1} of $itemCount',
+      child: Container(
+        height: itemHeight,
+        decoration: BoxDecoration(
+          color: shimmerColor.withValues(alpha: 0.3),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          children: [
+            // Leading placeholder (like item image)
+            Container(
+              margin: const EdgeInsets.all(12),
+              width: itemHeight - 24,
+              height: itemHeight - 24,
+              decoration: BoxDecoration(
+                color: shimmerColor.withValues(alpha: 0.5),
+                borderRadius: BorderRadius.circular(4),
+              ),
             ),
-          ),
-          // Content placeholder
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: 16,
-                  decoration: BoxDecoration(
-                    color: shimmerColor.withValues(alpha: 0.7),
-                    borderRadius: BorderRadius.circular(4),
+            // Content placeholder
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 16,
+                    decoration: BoxDecoration(
+                      color: shimmerColor.withValues(alpha: 0.7),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  width: 120,
-                  height: 12,
-                  decoration: BoxDecoration(
-                    color: shimmerColor.withValues(alpha: 0.5),
-                    borderRadius: BorderRadius.circular(4),
+                  const SizedBox(height: 8),
+                  Container(
+                    width: 120,
+                    height: 12,
+                    decoration: BoxDecoration(
+                      color: shimmerColor.withValues(alpha: 0.5),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const SizedBox(width: 12),
-        ],
+            const SizedBox(width: 12),
+          ],
+        ),
       ),
     );
 
@@ -227,60 +248,70 @@ class DataGridLoadingIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: crossAxisCount,
-        childAspectRatio: childAspectRatio,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
+    return Semantics(
+      label: 'Loading grid items',
+      hint: 'Displaying $itemCount placeholder items in $crossAxisCount columns while content loads',
+      liveRegion: true,
+      child: GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: crossAxisCount,
+          childAspectRatio: childAspectRatio,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+        ),
+        itemCount: itemCount,
+        itemBuilder: (context, index) => _buildPlaceholderItem(context, index),
       ),
-      itemCount: itemCount,
-      itemBuilder: (context, index) => _buildPlaceholderItem(context),
     );
   }
 
-  Widget _buildPlaceholderItem(BuildContext context) {
+  Widget _buildPlaceholderItem(BuildContext context, int index) {
     final theme = Theme.of(context);
     final shimmerColor = theme.colorScheme.surfaceContainerHighest;
+    final row = (index ~/ crossAxisCount) + 1;
+    final col = (index % crossAxisCount) + 1;
     
-    return Card(
-      child: Container(
-        decoration: BoxDecoration(
-          color: shimmerColor.withValues(alpha: 0.3),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: shimmerColor.withValues(alpha: 0.7),
-                borderRadius: BorderRadius.circular(8),
+    return Semantics(
+      label: 'Loading placeholder item at row $row, column $col',
+      child: Card(
+        child: Container(
+          decoration: BoxDecoration(
+            color: shimmerColor.withValues(alpha: 0.3),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: shimmerColor.withValues(alpha: 0.7),
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            Container(
-              width: 80,
-              height: 12,
-              decoration: BoxDecoration(
-                color: shimmerColor.withValues(alpha: 0.7),
-                borderRadius: BorderRadius.circular(4),
+              const SizedBox(height: 12),
+              Container(
+                width: 80,
+                height: 12,
+                decoration: BoxDecoration(
+                  color: shimmerColor.withValues(alpha: 0.7),
+                  borderRadius: BorderRadius.circular(4),
+                ),
               ),
-            ),
-            const SizedBox(height: 4),
-            Container(
-              width: 60,
-              height: 10,
-              decoration: BoxDecoration(
-                color: shimmerColor.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(4),
+              const SizedBox(height: 4),
+              Container(
+                width: 60,
+                height: 10,
+                decoration: BoxDecoration(
+                  color: shimmerColor.withValues(alpha: 0.5),
+                  borderRadius: BorderRadius.circular(4),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

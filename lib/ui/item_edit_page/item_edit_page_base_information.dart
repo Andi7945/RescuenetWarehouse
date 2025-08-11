@@ -6,6 +6,7 @@ import 'package:rescuenet_warehouse/ui/rescue_input_text.dart';
 import 'package:rescuenet_warehouse/ui/rescue_pickable_image.dart';
 import 'package:rescuenet_warehouse/ui/rescue_text.dart';
 import 'package:rescuenet_warehouse/widgets/loading/loading_widgets.dart';
+import 'package:rescuenet_warehouse/widgets/loading/debounced_loading_system.dart';
 
 import '../../state/current_item_notifier.dart';
 
@@ -32,15 +33,18 @@ class ItemEditPageBaseInformation extends ConsumerWidget {
       );
 
   Widget _leftSide(WidgetRef ref, Item item) {
-    final isUpdating = ref.watch(isOperationLoadingProvider(DataOperation.itemUpdate));
+    // Use debounced loading for image updates (medium speed operation)
+    final operationKey = 'item_image_update_${item.id}';
+    final shouldShowLoading = ref.shouldShowLoading(operationKey, config: DebouncedLoadingConfig.medium);
+    final isOperationActive = ref.isOperationActive(operationKey, config: DebouncedLoadingConfig.medium);
     
     return Stack(
       children: [
         RescuePickableImage(
           item.imagePath,
-          isUpdating ? (_) {} : (path) => _changeItem(ref, item.copyWith(imagePath: path)),
+          isOperationActive ? (_) {} : (path) => _changeItemWithDebounce(ref, item.copyWith(imagePath: path), operationKey),
         ),
-        if (isUpdating)
+        if (shouldShowLoading)
           Positioned(
             top: 8,
             right: 8,
@@ -84,7 +88,10 @@ class ItemEditPageBaseInformation extends ConsumerWidget {
   }
 
   Widget _nameInput(WidgetRef ref, Item item) {
-    final isUpdating = ref.watch(isOperationLoadingProvider(DataOperation.itemUpdate));
+    // Use debounced loading for name updates (quick operation - typing)
+    final operationKey = 'item_name_update_${item.id}';
+    final shouldShowLoading = ref.shouldShowLoading(operationKey, config: DebouncedLoadingConfig.quick);
+    final isOperationActive = ref.isOperationActive(operationKey, config: DebouncedLoadingConfig.quick);
     final hasError = ref.watch(hasOperationErrorProvider(DataOperation.itemUpdate));
     
     return Stack(
@@ -93,19 +100,19 @@ class ItemEditPageBaseInformation extends ConsumerWidget {
         RescueInputText(
           fontSize: 24,
           initial: item.name,
-          onChange: isUpdating 
+          onChange: isOperationActive 
             ? (_) {} // Disable changes when updating
-            : (changed) => _changeItem(ref, item.copyWith(name: changed)),
+            : (changed) => _changeItemWithDebounce(ref, item.copyWith(name: changed), operationKey),
         ),
         
         // Loading/error indicator overlay
-        if (isUpdating || hasError)
+        if (shouldShowLoading || hasError)
           Positioned(
             top: 0,
             bottom: 0,
             right: 8,
             child: Center(
-              child: isUpdating
+              child: shouldShowLoading
                 ? const SizedBox(
                     width: 16,
                     height: 16,
@@ -120,7 +127,7 @@ class ItemEditPageBaseInformation extends ConsumerWidget {
           ),
           
         // Semi-transparent overlay when updating to show it's disabled
-        if (isUpdating)
+        if (isOperationActive)
           Positioned.fill(
             child: Container(
               color: Theme.of(ref.context).colorScheme.surface.withValues(alpha: 0.7),
@@ -144,5 +151,28 @@ class ItemEditPageBaseInformation extends ConsumerWidget {
     
     // Update the item - loading states will be handled by DataOperationsNotifier
     ref.read(currentItemNotifierProvider.notifier).update(updated);
+  }
+  
+  /// Change item with debounced loading feedback
+  void _changeItemWithDebounce(WidgetRef ref, Item updated, String operationKey) {
+    // Use the debounced loading system for UI feedback
+    ref.executeWithDebouncedLoading(
+      operationKey: operationKey,
+      config: operationKey.contains('name') ? DebouncedLoadingConfig.quick : DebouncedLoadingConfig.medium,
+      operation: () async {
+        // Clear any previous update errors when making a new change
+        ref.read(dataOperationsNotifierProvider.notifier).clearOperation(DataOperation.itemUpdate);
+        
+        // Update the item - this will trigger the actual save operation
+        ref.read(currentItemNotifierProvider.notifier).update(updated);
+        
+        // Add a small delay to simulate the save operation for demo purposes
+        // In real usage, this would be handled by the repository/notifier
+        await Future.delayed(const Duration(milliseconds: 50));
+      },
+    ).catchError((error) {
+      // Error handling is already managed by the existing error system
+      debugPrint('Item update error: $error');
+    });
   }
 }

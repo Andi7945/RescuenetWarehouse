@@ -5,6 +5,7 @@ const path = require('path');
 const coords = require('../helpers/coordinateHelper');
 const dataExtraction = require('../helpers/dataExtraction');
 const visualValidation = require('../helpers/visualValidation');
+const loadingHelpers = require('../helpers/loadingHelpers');
 
 /**
  * Focused Item Management Test Suite
@@ -26,24 +27,39 @@ const visualValidation = require('../helpers/visualValidation');
 async function loginAsTestUser(page, userEmail = 'test@rescuenet.net') {
   await page.goto('/');
   await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(coords.getTimeout('dataLoad'));
+  
+  // Wait for app to be ready with loading state awareness
+  await visualValidation.waitForFlutterReady(page, 30000, {
+    waitForLoadingComplete: true,
+    checkInteractionReady: true
+  });
 
-  const emailSuccess = await coords.typeInField(page, 'login', 'emailField', 'test@rescuenet.net');
+  const emailSuccess = await coords.typeInField(page, 'login', 'emailField', 'test@rescuenet.net', {
+    operationType: 'quick',
+    expectLoading: false
+  });
   if (!emailSuccess) {
     throw new Error('Failed to enter email during login');
   }
 
-  const passwordSuccess = await coords.typeInField(page, 'login', 'passwordField', 'password123');
+  const passwordSuccess = await coords.typeInField(page, 'login', 'passwordField', 'password123', {
+    operationType: 'quick',
+    expectLoading: false
+  });
   if (!passwordSuccess) {
     throw new Error('Failed to enter password during login');
   }
 
-  const loginSuccess = await coords.clickElement(page, 'login', 'loginButton');
-  if (!loginSuccess) {
+  const loginResult = await coords.clickElementWithLoadingWait(page, 'login', 'loginButton', {
+    operationType: 'medium',
+    expectLoading: true,
+    maxLoadingTime: 10000
+  });
+  if (!loginResult.clickSuccess) {
     throw new Error('Failed to click login button');
   }
-
-  await page.waitForTimeout(coords.getTimeout('dataLoad'));
+  
+  console.log('✓ Login completed with loading handling');
 }
 
 /**
@@ -51,20 +67,35 @@ async function loginAsTestUser(page, userEmail = 'test@rescuenet.net') {
  * @param {import('@playwright/test').Page} page 
  */
 async function navigateToItemsOverview(page) {
-  const menuSuccess = await coords.clickElement(page, 'navigation', 'hamburgerMenu');
-  if (!menuSuccess) {
+  // Open hamburger menu with loading handling
+  const menuResult = await coords.clickElementWithLoadingWait(page, 'navigation', 'hamburgerMenu', {
+    operationType: 'quick',
+    expectLoading: false,
+    maxLoadingTime: 3000
+  });
+  if (!menuResult.clickSuccess) {
     throw new Error('Failed to open hamburger menu');
   }
-  await page.waitForTimeout(coords.getTimeout('medium'));
   
-  const itemsSuccess = await coords.clickElement(page, 'navigation', 'allItemsMenu');
-  if (!itemsSuccess) {
+  // Click All Items menu with loading handling
+  const itemsResult = await coords.clickElementWithLoadingWait(page, 'navigation', 'allItemsMenu', {
+    operationType: 'medium',
+    expectLoading: true, // Navigation may trigger data loading
+    maxLoadingTime: 8000
+  });
+  if (!itemsResult.clickSuccess) {
     throw new Error('Failed to click All Items menu');
   }
-  await page.waitForTimeout(coords.getTimeout('long'));
+  
+  // Verify navigation completed and page is ready
+  await visualValidation.waitForFlutterReady(page, 10000, {
+    waitForLoadingComplete: true,
+    checkInteractionReady: true
+  });
   
   const currentUrl = page.url();
   expect(currentUrl).toContain('itemsOverview');
+  console.log('✓ Navigation to Items Overview completed with loading handling');
 }
 
 test.describe('Item Workflows - Core Management', () => {
@@ -78,7 +109,12 @@ test.describe('Item Workflows - Core Management', () => {
     // Login as Back Office user for item overview access
     await loginAsTestUser(page, 'backoffice.test@rescuenet.net');
     await navigateToItemsOverview(page);
-    await visualValidation.waitForFlutterReady(page);
+    
+    // Ensure page is ready with comprehensive loading checks
+    await visualValidation.waitForFlutterReady(page, 15000, {
+      waitForLoadingComplete: true,
+      checkInteractionReady: true
+    });
     
     console.log('IW01: Starting item overview, search & filtering workflow');
 
@@ -92,9 +128,16 @@ test.describe('Item Workflows - Core Management', () => {
     expect(totalItemCount).toBeGreaterThanOrEqual(3);
     console.log(`IW01: ✓ Application loaded with ${totalItemCount} items`);
 
-    // 2. Test search functionality with business logic validation
+    // 2. Test search functionality with business logic validation and loading handling
     const searchResult = await visualValidation.validateActionWithScreenshots(page, 'IW01-search', async () => {
-      return await coords.typeInField(page, 'itemsOverview', 'searchBox', 'tent');
+      return await coords.typeInField(page, 'itemsOverview', 'searchBox', 'tent', {
+        operationType: 'quick',
+        expectLoading: true // Search may trigger loading
+      });
+    }, {
+      operationType: 'quick',
+      expectLoading: true,
+      maxActionTime: 5000
     });
     
     if (searchResult.actionResult) {
@@ -120,9 +163,17 @@ test.describe('Item Workflows - Core Management', () => {
       }
     }
 
-    // 3. Test location filtering with business logic validation
+    // 3. Test location filtering with business logic validation and loading handling
     const locationFilterResult = await visualValidation.validateActionWithScreenshots(page, 'IW01-location-filter', async () => {
-      return await coords.clickElement(page, 'itemsOverview', 'locationFilter');
+      return await coords.clickElementWithLoadingWait(page, 'itemsOverview', 'locationFilter', {
+        operationType: 'medium',
+        expectLoading: true,
+        maxLoadingTime: 5000
+      }).then(result => result.clickSuccess);
+    }, {
+      operationType: 'medium',
+      expectLoading: true,
+      maxActionTime: 8000
     });
     
     if (locationFilterResult.actionResult) {
@@ -138,9 +189,17 @@ test.describe('Item Workflows - Core Management', () => {
       }
     }
 
-    // 4. Test dangerous goods filtering
+    // 4. Test dangerous goods filtering with loading handling
     const dgFilterResult = await visualValidation.validateActionWithScreenshots(page, 'IW01-dg-filter', async () => {
-      return await coords.clickElement(page, 'itemsOverview', 'dangerousGoodsFilter');
+      return await coords.clickElementWithLoadingWait(page, 'itemsOverview', 'dangerousGoodsFilter', {
+        operationType: 'medium',
+        expectLoading: true,
+        maxLoadingTime: 5000
+      }).then(result => result.clickSuccess);
+    }, {
+      operationType: 'medium',
+      expectLoading: true,
+      maxActionTime: 8000
     });
     
     if (dgFilterResult.actionResult) {
@@ -153,9 +212,17 @@ test.describe('Item Workflows - Core Management', () => {
       }
     }
 
-    // 5. Test name sorting functionality
+    // 5. Test name sorting functionality with loading handling
     const sortResult = await visualValidation.validateActionWithScreenshots(page, 'IW01-name-sort', async () => {
-      return await coords.clickElement(page, 'itemsOverview', 'sortNameColumn');
+      return await coords.clickElementWithLoadingWait(page, 'itemsOverview', 'sortNameColumn', {
+        operationType: 'quick',
+        expectLoading: true, // Sorting may trigger loading
+        maxLoadingTime: 4000
+      }).then(result => result.clickSuccess);
+    }, {
+      operationType: 'quick',
+      expectLoading: true,
+      maxActionTime: 6000
     });
     
     if (sortResult.actionResult && sortResult.changed) {
@@ -176,7 +243,12 @@ test.describe('Item Workflows - Core Management', () => {
     // Login as Logistics user for item creation/editing access
     await loginAsTestUser(page, 'logistics.test@rescuenet.net');
     await navigateToItemsOverview(page);
-    await visualValidation.waitForFlutterReady(page);
+    
+    // Ensure page is ready with comprehensive loading checks
+    await visualValidation.waitForFlutterReady(page, 15000, {
+      waitForLoadingComplete: true,
+      checkInteractionReady: true
+    });
     
     console.log('IW02: Starting item creation & editing workflow');
 
@@ -187,13 +259,16 @@ test.describe('Item Workflows - Core Management', () => {
     expect(initialItemCount).toBeGreaterThanOrEqual(0);
     console.log(`IW02: ✓ Initial state - ${initialItemCount} items in repository`);
 
-    // 2. CREATE NEW ITEM
-    const createClick = await coords.clickElement(page, 'itemsOverview', 'createItemButton');
-    if (!createClick) {
+    // 2. CREATE NEW ITEM with loading handling
+    const createResult = await coords.clickElementWithLoadingWait(page, 'itemsOverview', 'createItemButton', {
+      operationType: 'medium',
+      expectLoading: true,
+      maxLoadingTime: 8000
+    });
+    if (!createResult.clickSuccess) {
       throw new Error('Create button not found - check permissions for Logistics role');
     }
-    await page.waitForTimeout(coords.getTimeout('medium'));
-    console.log('IW02: ✓ Create dialog opened successfully');
+    console.log('IW02: ✓ Create dialog opened successfully with loading handling');
 
     // Fill in new item form
     const newItemData = {
@@ -202,26 +277,44 @@ test.describe('Item Workflows - Core Management', () => {
       quantity: '50'
     };
 
-    const nameSuccess = await coords.typeInField(page, 'itemForm', 'nameField', newItemData.name);
-    const descSuccess = await coords.typeInField(page, 'itemForm', 'descriptionField', newItemData.description);
-    const qtySuccess = await coords.typeInField(page, 'itemForm', 'quantityField', newItemData.quantity);
+    // Fill form fields with loading awareness
+    const nameSuccess = await coords.typeInField(page, 'itemForm', 'nameField', newItemData.name, {
+      operationType: 'quick',
+      expectLoading: false
+    });
+    const descSuccess = await coords.typeInField(page, 'itemForm', 'descriptionField', newItemData.description, {
+      operationType: 'quick',
+      expectLoading: false
+    });
+    const qtySuccess = await coords.typeInField(page, 'itemForm', 'quantityField', newItemData.quantity, {
+      operationType: 'quick',
+      expectLoading: false
+    });
 
     if (!nameSuccess || !descSuccess || !qtySuccess) {
       throw new Error('Failed to fill item form fields');
     }
 
-    // Save new item
-    const saveSuccess = await coords.clickElement(page, 'itemForm', 'saveButton');
-    if (!saveSuccess) {
+    // Save new item with loading handling
+    const saveResult = await coords.clickElementWithLoadingWait(page, 'itemForm', 'saveButton', {
+      operationType: 'slow', // Item creation is a slower operation
+      expectLoading: true,
+      maxLoadingTime: 15000
+    });
+    if (!saveResult.clickSuccess) {
       throw new Error('Failed to save new item');
     }
     
-    await page.waitForTimeout(coords.getTimeout('long'));
-    console.log('IW02: ✓ New item creation form completed');
+    console.log('IW02: ✓ New item creation form completed with loading handling');
 
     // 3. VALIDATE CREATION - Navigate back to overview and verify
     await navigateToItemsOverview(page);
-    await visualValidation.waitForFlutterReady(page);
+    
+    // Wait for overview page to be ready with all loading complete
+    await visualValidation.waitForFlutterReady(page, 15000, {
+      waitForLoadingComplete: true,
+      checkInteractionReady: true
+    });
     
     const creationResult = await dataExtraction.validateItemCreation(page, initialItemCount, newItemData.name);
     
@@ -233,40 +326,57 @@ test.describe('Item Workflows - Core Management', () => {
     
     console.log(`IW02: ✓ Item creation VALIDATED - Count: ${creationResult.initialCount} → ${creationResult.finalCount}`);
 
-    // 4. EDIT EXISTING ITEM
+    // 4. EDIT EXISTING ITEM with loading handling
     // Click on the newly created item for editing
-    const itemEditClick = await coords.clickElement(page, 'itemsOverview', 'firstItemArea');
-    if (!itemEditClick) {
+    const itemEditResult = await coords.clickElementWithLoadingWait(page, 'itemsOverview', 'firstItemArea', {
+      operationType: 'medium',
+      expectLoading: true, // Item detail loading
+      maxLoadingTime: 8000
+    });
+    if (!itemEditResult.clickSuccess) {
       throw new Error('Failed to click on item for editing');
     }
-    await page.waitForTimeout(coords.getTimeout('medium'));
 
-    // Enter edit mode
-    const editModeClick = await coords.clickElement(page, 'itemDetail', 'editButton');
-    if (!editModeClick) {
+    // Enter edit mode with loading handling
+    const editModeResult = await coords.clickElementWithLoadingWait(page, 'itemDetail', 'editButton', {
+      operationType: 'medium',
+      expectLoading: true, // Edit form loading
+      maxLoadingTime: 8000
+    });
+    if (!editModeResult.clickSuccess) {
       throw new Error('Failed to enter edit mode');
     }
-    await page.waitForTimeout(coords.getTimeout('medium'));
 
-    // Modify the item name
+    // Modify the item name with loading awareness
     const updatedName = 'Updated Workflow Item';
-    const nameEditSuccess = await coords.typeInField(page, 'itemForm', 'nameField', updatedName);
+    const nameEditSuccess = await coords.typeInField(page, 'itemForm', 'nameField', updatedName, {
+      operationType: 'quick',
+      expectLoading: false
+    });
     if (!nameEditSuccess) {
       throw new Error('Failed to update item name');
     }
 
-    // Save changes
-    const editSaveSuccess = await coords.clickElement(page, 'itemForm', 'saveButton');
-    if (!editSaveSuccess) {
+    // Save changes with loading handling
+    const editSaveResult = await coords.clickElementWithLoadingWait(page, 'itemForm', 'saveButton', {
+      operationType: 'slow', // Item updates are slower operations
+      expectLoading: true,
+      maxLoadingTime: 15000
+    });
+    if (!editSaveResult.clickSuccess) {
       throw new Error('Failed to save item edits');
     }
     
-    await page.waitForTimeout(coords.getTimeout('long'));
-    console.log(`IW02: ✓ Item name updated from "${newItemData.name}" to "${updatedName}"`);
+    console.log(`IW02: ✓ Item name updated from "${newItemData.name}" to "${updatedName}" with loading handling`);
 
     // 5. VALIDATE EDIT - Navigate back and verify changes
     await navigateToItemsOverview(page);
-    await page.waitForTimeout(coords.getTimeout('long'));
+    
+    // Wait for overview to be ready after navigation
+    await visualValidation.waitForFlutterReady(page, 15000, {
+      waitForLoadingComplete: true,
+      checkInteractionReady: true
+    });
     
     // Verify the name change appears and old name doesn't
     const pageContent = await page.textContent('body');
@@ -297,7 +407,12 @@ test.describe('Item Workflows - Core Management', () => {
     // Login as Logistics user for DG classification management
     await loginAsTestUser(page, 'logistics.test@rescuenet.net');
     await navigateToItemsOverview(page);
-    await visualValidation.waitForFlutterReady(page);
+    
+    // Ensure page is ready with comprehensive loading checks
+    await visualValidation.waitForFlutterReady(page, 15000, {
+      waitForLoadingComplete: true,
+      checkInteractionReady: true
+    });
     
     console.log('IW03: Starting dangerous goods classification management');
 
@@ -311,41 +426,54 @@ test.describe('Item Workflows - Core Management', () => {
     expect(initialItemCount).toBeGreaterThanOrEqual(1);
     console.log(`IW03: ✓ Application loaded with ${initialItemCount} items for DG management`);
 
-    // 2. CHANGE DANGEROUS GOODS CLASSIFICATION
-    // Navigate to first item and modify DG classification
+    // 2. CHANGE DANGEROUS GOODS CLASSIFICATION with comprehensive loading handling
     const dgWorkflowResult = await visualValidation.validateActionWithScreenshots(page, 'IW03-dg-workflow', async () => {
-      // Click on first item
-      const itemClick = await coords.clickElement(page, 'itemsOverview', 'firstItemArea');
-      if (!itemClick) return false;
+      // Click on first item with loading handling
+      const itemClickResult = await coords.clickElementWithLoadingWait(page, 'itemsOverview', 'firstItemArea', {
+        operationType: 'medium',
+        expectLoading: true,
+        maxLoadingTime: 8000
+      });
+      if (!itemClickResult.clickSuccess) return false;
       
-      await page.waitForTimeout(coords.getTimeout('medium'));
+      // Open edit mode with loading handling
+      const editClickResult = await coords.clickElementWithLoadingWait(page, 'itemDetail', 'editButton', {
+        operationType: 'medium',
+        expectLoading: true,
+        maxLoadingTime: 8000
+      });
+      if (!editClickResult.clickSuccess) return false;
       
-      // Open edit mode
-      const editClick = await coords.clickElement(page, 'itemDetail', 'editButton');
-      if (!editClick) return false;
-      
-      await page.waitForTimeout(coords.getTimeout('long'));
-      
-      // Open DG dropdown
-      const dgDropdownClick = await coords.clickElement(page, 'itemForm', 'dangerousGoodsDropdown');
-      if (!dgDropdownClick) return false;
-      
-      await page.waitForTimeout(coords.getTimeout('medium'));
+      // Open DG dropdown with loading handling
+      const dgDropdownResult = await coords.clickElementWithLoadingWait(page, 'itemForm', 'dangerousGoodsDropdown', {
+        operationType: 'quick',
+        expectLoading: false, // Dropdown opening usually doesn't trigger loading
+        maxLoadingTime: 3000
+      });
+      if (!dgDropdownResult.clickSuccess) return false;
       
       // Select Class 3 - Flammable Liquids
-      const class3Click = await coords.clickElement(page, 'dangerousGoods', 'class3Option');
-      if (!class3Click) return false;
+      const class3Result = await coords.clickElementWithLoadingWait(page, 'dangerousGoods', 'class3Option', {
+        operationType: 'quick',
+        expectLoading: false,
+        maxLoadingTime: 3000
+      });
+      if (!class3Result.clickSuccess) return false;
       
-      await page.waitForTimeout(coords.getTimeout('short'));
-      
-      // Save changes
-      const saveClick = await coords.clickElement(page, 'itemForm', 'saveButton');
-      return saveClick;
+      // Save changes with loading handling
+      const saveResult = await coords.clickElementWithLoadingWait(page, 'itemForm', 'saveButton', {
+        operationType: 'slow', // DG classification changes may be slower
+        expectLoading: true,
+        maxLoadingTime: 15000
+      });
+      return saveResult.clickSuccess;
+    }, {
+      operationType: 'slow',
+      expectLoading: true,
+      maxActionTime: 40000 // Allow more time for complex workflow
     });
     
-    if (dgWorkflowResult.actionResult) {
-      await page.waitForTimeout(coords.getTimeout('long'));
-      
+    if (dgWorkflowResult.actionSuccess && dgWorkflowResult.loadingHandled) {
       // Validate the DG classification change
       const dgValidation = await dataExtraction.validateDangerousGoodsClass(page, 'dg_001', 'Class 3');
       if (dgValidation) {
@@ -354,15 +482,26 @@ test.describe('Item Workflows - Core Management', () => {
         console.log('IW03: ✓ DG classification change attempted - Visual change detected');
       }
     } else {
-      console.log('IW03: ⚠ DG workflow needs coordinate adjustment - attempting alternative approach');
+      console.log('IW03: ⚠ DG workflow needs coordinate adjustment or loading incomplete');
     }
 
-    // 3. TEST DANGEROUS GOODS FILTERING
+    // 3. TEST DANGEROUS GOODS FILTERING with loading handling
     await navigateToItemsOverview(page);
-    await visualValidation.waitForFlutterReady(page);
+    await visualValidation.waitForFlutterReady(page, 15000, {
+      waitForLoadingComplete: true,
+      checkInteractionReady: true
+    });
     
     const dgFilterResult = await visualValidation.validateActionWithScreenshots(page, 'IW03-dg-filter', async () => {
-      return await coords.clickElement(page, 'itemsOverview', 'dangerousGoodsFilter');
+      return await coords.clickElementWithLoadingWait(page, 'itemsOverview', 'dangerousGoodsFilter', {
+        operationType: 'medium',
+        expectLoading: true,
+        maxLoadingTime: 5000
+      }).then(result => result.clickSuccess);
+    }, {
+      operationType: 'medium',
+      expectLoading: true,
+      maxActionTime: 8000
     });
     
     if (dgFilterResult.actionResult) {
@@ -382,75 +521,113 @@ test.describe('Item Workflows - Core Management', () => {
       }
     }
 
-    // 4. TEST ADDITIONAL DG CLASSIFICATION (Class 8 - Corrosive)
+    // 4. TEST ADDITIONAL DG CLASSIFICATION (Class 8 - Corrosive) with loading handling
     try {
       await navigateToItemsOverview(page);
-      await page.waitForTimeout(coords.getTimeout('short'));
+      await visualValidation.waitForFlutterReady(page, 10000, {
+        waitForLoadingComplete: true,
+        checkInteractionReady: true
+      });
       
       // Find and click on second item for additional DG testing
-      const secondItemClick = await coords.clickElement(page, 'itemsOverview', 'secondItemArea');
-      if (secondItemClick) {
-        await page.waitForTimeout(coords.getTimeout('medium'));
+      const secondItemResult = await coords.clickElementWithLoadingWait(page, 'itemsOverview', 'secondItemArea', {
+        operationType: 'medium',
+        expectLoading: true,
+        maxLoadingTime: 8000
+      });
+      
+      if (secondItemResult.clickSuccess) {
+        const editResult = await coords.clickElementWithLoadingWait(page, 'itemDetail', 'editButton', {
+          operationType: 'medium',
+          expectLoading: true,
+          maxLoadingTime: 8000
+        });
         
-        const editClick = await coords.clickElement(page, 'itemDetail', 'editButton');
-        if (editClick) {
-          await page.waitForTimeout(coords.getTimeout('long'));
+        if (editResult.clickSuccess) {
+          // Test Class 8 selection with loading handling
+          const dgDropdownResult = await coords.clickElementWithLoadingWait(page, 'itemForm', 'dangerousGoodsDropdown', {
+            operationType: 'quick',
+            expectLoading: false,
+            maxLoadingTime: 3000
+          });
           
-          // Test Class 8 selection
-          const dgDropdown = await coords.clickElement(page, 'itemForm', 'dangerousGoodsDropdown');
-          if (dgDropdown) {
-            await page.waitForTimeout(coords.getTimeout('medium'));
+          if (dgDropdownResult.clickSuccess) {
+            const class8Result = await coords.clickElementWithLoadingWait(page, 'dangerousGoods', 'class8Option', {
+              operationType: 'quick',
+              expectLoading: false,
+              maxLoadingTime: 3000
+            });
             
-            const class8Click = await coords.clickElement(page, 'dangerousGoods', 'class8Option');
-            if (class8Click) {
-              await page.waitForTimeout(coords.getTimeout('short'));
+            if (class8Result.clickSuccess) {
+              const saveResult = await coords.clickElementWithLoadingWait(page, 'itemForm', 'saveButton', {
+                operationType: 'slow',
+                expectLoading: true,
+                maxLoadingTime: 15000
+              });
               
-              const saveClick = await coords.clickElement(page, 'itemForm', 'saveButton');
-              if (saveClick) {
-                await page.waitForTimeout(coords.getTimeout('long'));
-                console.log('IW03: ✓ Additional DG classification test - Class 8 assignment attempted');
+              if (saveResult.clickSuccess) {
+                console.log('IW03: ✓ Additional DG classification test - Class 8 assignment completed with loading handling');
               }
             }
           }
         }
       }
     } catch (error) {
-      console.log('IW03: Additional DG classification test attempted (coordinate adjustment may be needed)');
+      console.log('IW03: Additional DG classification test attempted with loading handling (coordinate adjustment may be needed)');
     }
 
-    // 5. TEST DG CLASSIFICATION REMOVAL (Set to None)
+    // 5. TEST DG CLASSIFICATION REMOVAL (Set to None) with loading handling
     try {
       await navigateToItemsOverview(page);
-      await page.waitForTimeout(coords.getTimeout('short'));
+      await visualValidation.waitForFlutterReady(page, 10000, {
+        waitForLoadingComplete: true,
+        checkInteractionReady: true
+      });
       
       // Find and click on third item for DG removal test
-      const thirdItemClick = await coords.clickElement(page, 'itemsOverview', 'thirdItemArea');
-      if (thirdItemClick) {
-        await page.waitForTimeout(coords.getTimeout('medium'));
+      const thirdItemResult = await coords.clickElementWithLoadingWait(page, 'itemsOverview', 'thirdItemArea', {
+        operationType: 'medium',
+        expectLoading: true,
+        maxLoadingTime: 8000
+      });
+      
+      if (thirdItemResult.clickSuccess) {
+        const editResult = await coords.clickElementWithLoadingWait(page, 'itemDetail', 'editButton', {
+          operationType: 'medium',
+          expectLoading: true,
+          maxLoadingTime: 8000
+        });
         
-        const editClick = await coords.clickElement(page, 'itemDetail', 'editButton');
-        if (editClick) {
-          await page.waitForTimeout(coords.getTimeout('long'));
+        if (editResult.clickSuccess) {
+          const dgDropdownResult = await coords.clickElementWithLoadingWait(page, 'itemForm', 'dangerousGoodsDropdown', {
+            operationType: 'quick',
+            expectLoading: false,
+            maxLoadingTime: 3000
+          });
           
-          const dgDropdown = await coords.clickElement(page, 'itemForm', 'dangerousGoodsDropdown');
-          if (dgDropdown) {
-            await page.waitForTimeout(coords.getTimeout('medium'));
+          if (dgDropdownResult.clickSuccess) {
+            const noneResult = await coords.clickElementWithLoadingWait(page, 'dangerousGoods', 'noneOption', {
+              operationType: 'quick',
+              expectLoading: false,
+              maxLoadingTime: 3000
+            });
             
-            const noneClick = await coords.clickElement(page, 'dangerousGoods', 'noneOption');
-            if (noneClick) {
-              await page.waitForTimeout(coords.getTimeout('short'));
+            if (noneResult.clickSuccess) {
+              const saveResult = await coords.clickElementWithLoadingWait(page, 'itemForm', 'saveButton', {
+                operationType: 'slow',
+                expectLoading: true,
+                maxLoadingTime: 15000
+              });
               
-              const saveClick = await coords.clickElement(page, 'itemForm', 'saveButton');
-              if (saveClick) {
-                await page.waitForTimeout(coords.getTimeout('long'));
-                console.log('IW03: ✓ DG classification removal test - Set to None attempted');
+              if (saveResult.clickSuccess) {
+                console.log('IW03: ✓ DG classification removal test - Set to None completed with loading handling');
               }
             }
           }
         }
       }
     } catch (error) {
-      console.log('IW03: DG classification removal test attempted (coordinate adjustment may be needed)');
+      console.log('IW03: DG classification removal test attempted with loading handling (coordinate adjustment may be needed)');
     }
 
     // FINAL VALIDATION

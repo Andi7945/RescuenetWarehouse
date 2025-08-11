@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 /// A widget that displays error messages with retry functionality.
@@ -86,26 +87,42 @@ class ErrorRetryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(isCompact ? 12.0 : 24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: isCompact ? MainAxisSize.min : MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _buildErrorIcon(context),
-            SizedBox(height: isCompact ? 12 : 16),
-            _buildErrorMessage(context),
-            if (showDetails && error != null) ...[
-              SizedBox(height: isCompact ? 8 : 12),
-              _buildErrorDetails(context),
+    final displayMessage = message ?? _getErrorMessage(error);
+    final errorAnnouncement = 'Error occurred: $displayMessage';
+    
+    // Announce error to screen readers
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      SemanticsService.announce(
+        errorAnnouncement,
+        TextDirection.ltr,
+        assertiveness: Assertiveness.assertive,
+      );
+    });
+    
+    return Semantics(
+      liveRegion: true,
+      label: errorAnnouncement,
+      child: Center(
+        child: Padding(
+          padding: EdgeInsets.all(isCompact ? 12.0 : 24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: isCompact ? MainAxisSize.min : MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _buildErrorIcon(context),
+              SizedBox(height: isCompact ? 12 : 16),
+              _buildErrorMessage(context),
+              if (showDetails && error != null) ...[
+                SizedBox(height: isCompact ? 8 : 12),
+                _buildErrorDetails(context),
+              ],
+              if (onRetry != null) ...[
+                SizedBox(height: isCompact ? 16 : 24),
+                _buildRetryButton(context),
+              ],
             ],
-            if (onRetry != null) ...[
-              SizedBox(height: isCompact ? 16 : 24),
-              _buildRetryButton(context),
-            ],
-          ],
+          ),
         ),
       ),
     );
@@ -124,19 +141,21 @@ class ErrorRetryWidget extends StatelessWidget {
     final theme = Theme.of(context);
     final displayMessage = message ?? _getErrorMessage(error);
     
-    return Text(
-      displayMessage,
-      style: isCompact 
-        ? theme.textTheme.titleSmall?.copyWith(
-            color: theme.colorScheme.error,
-            fontWeight: FontWeight.w500,
-          )
-        : theme.textTheme.titleMedium?.copyWith(
-            color: theme.colorScheme.error,
-            fontWeight: FontWeight.w500,
-          ),
-      textAlign: TextAlign.center,
-      semanticsLabel: displayMessage,
+    return Semantics(
+      label: 'Error message: $displayMessage',
+      child: Text(
+        displayMessage,
+        style: isCompact 
+          ? theme.textTheme.titleSmall?.copyWith(
+              color: theme.colorScheme.error,
+              fontWeight: FontWeight.w500,
+            )
+          : theme.textTheme.titleMedium?.copyWith(
+              color: theme.colorScheme.error,
+              fontWeight: FontWeight.w500,
+            ),
+        textAlign: TextAlign.center,
+      ),
     );
   }
 
@@ -144,28 +163,32 @@ class ErrorRetryWidget extends StatelessWidget {
     final theme = Theme.of(context);
     final errorDetails = error.toString();
     
-    return Container(
-      padding: EdgeInsets.all(isCompact ? 8 : 12),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.errorContainer.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: theme.colorScheme.errorContainer.withValues(alpha: 0.3),
-          width: 1,
+    return Semantics(
+      label: 'Technical error details: $errorDetails',
+      hint: 'Detailed error information for troubleshooting',
+      child: Container(
+        padding: EdgeInsets.all(isCompact ? 8 : 12),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.errorContainer.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: theme.colorScheme.errorContainer.withValues(alpha: 0.3),
+            width: 1,
+          ),
         ),
-      ),
-      child: Text(
-        errorDetails,
-        style: isCompact 
-          ? theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onErrorContainer,
-              fontFamily: 'monospace',
-            )
-          : theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onErrorContainer,
-              fontFamily: 'monospace',
-            ),
-        textAlign: TextAlign.center,
+        child: Text(
+          errorDetails,
+          style: isCompact 
+            ? theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onErrorContainer,
+                fontFamily: 'monospace',
+              )
+            : theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onErrorContainer,
+                fontFamily: 'monospace',
+              ),
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }
@@ -175,25 +198,35 @@ class ErrorRetryWidget extends StatelessWidget {
     final buttonText = retryText ?? 'Try Again';
     
     if (isCompact) {
-      return TextButton.icon(
-        onPressed: onRetry,
-        icon: const Icon(Icons.refresh, size: 16),
-        label: Text(buttonText),
-        style: TextButton.styleFrom(
-          foregroundColor: theme.colorScheme.primary,
-          textStyle: theme.textTheme.labelMedium,
+      return Semantics(
+        button: true,
+        label: '$buttonText button',
+        hint: 'Tap to retry the failed operation',
+        child: TextButton.icon(
+          onPressed: onRetry,
+          icon: const Icon(Icons.refresh, size: 16),
+          label: Text(buttonText),
+          style: TextButton.styleFrom(
+            foregroundColor: theme.colorScheme.primary,
+            textStyle: theme.textTheme.labelMedium,
+          ),
         ),
       );
     }
     
-    return ElevatedButton.icon(
-      onPressed: onRetry,
-      icon: const Icon(Icons.refresh, size: 20),
-      label: Text(buttonText),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: theme.colorScheme.primary,
-        foregroundColor: theme.colorScheme.onPrimary,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+    return Semantics(
+      button: true,
+      label: '$buttonText button',
+      hint: 'Tap to retry the failed operation',
+      child: ElevatedButton.icon(
+        onPressed: onRetry,
+        icon: const Icon(Icons.refresh, size: 20),
+        label: Text(buttonText),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: theme.colorScheme.primary,
+          foregroundColor: theme.colorScheme.onPrimary,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        ),
       ),
     );
   }
@@ -308,59 +341,87 @@ class ErrorBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.errorContainer,
-        border: Border(
-          left: BorderSide(
-            color: theme.colorScheme.error,
-            width: 4,
+    // Announce banner message
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      SemanticsService.announce(
+        'Error: $message',
+        TextDirection.ltr,
+        assertiveness: Assertiveness.polite,
+      );
+    });
+    
+    return Semantics(
+      liveRegion: true,
+      label: 'Error banner: $message',
+      container: true,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.errorContainer,
+          border: Border(
+            left: BorderSide(
+              color: theme.colorScheme.error,
+              width: 4,
+            ),
           ),
         ),
-      ),
-      child: Row(
-        children: [
-          Icon(
-            icon ?? Icons.warning_amber_outlined,
-            color: theme.colorScheme.error,
-            size: 20,
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              message,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onErrorContainer,
-              ),
-            ),
-          ),
-          if (onRetry != null) ...[
-            const SizedBox(width: 8),
-            TextButton(
-              onPressed: onRetry,
-              style: TextButton.styleFrom(
-                foregroundColor: theme.colorScheme.error,
-                textStyle: theme.textTheme.labelMedium,
-              ),
-              child: const Text('Retry'),
-            ),
-          ],
-          if (onDismiss != null) ...[
-            const SizedBox(width: 4),
-            IconButton(
-              onPressed: onDismiss,
-              icon: const Icon(Icons.close, size: 18),
+        child: Row(
+          children: [
+            Icon(
+              icon ?? Icons.warning_amber_outlined,
               color: theme.colorScheme.error,
-              constraints: const BoxConstraints(
-                minWidth: 32,
-                minHeight: 32,
-              ),
-              padding: EdgeInsets.zero,
+              size: 20,
+              semanticLabel: 'Warning',
             ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Semantics(
+                label: 'Error message: $message',
+                child: Text(
+                  message,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onErrorContainer,
+                  ),
+                ),
+              ),
+            ),
+            if (onRetry != null) ...[
+              const SizedBox(width: 8),
+              Semantics(
+                button: true,
+                label: 'Retry button',
+                hint: 'Tap to retry the failed operation',
+                child: TextButton(
+                  onPressed: onRetry,
+                  style: TextButton.styleFrom(
+                    foregroundColor: theme.colorScheme.error,
+                    textStyle: theme.textTheme.labelMedium,
+                  ),
+                  child: const Text('Retry'),
+                ),
+              ),
+            ],
+            if (onDismiss != null) ...[
+              const SizedBox(width: 4),
+              Semantics(
+                button: true,
+                label: 'Dismiss error banner',
+                hint: 'Tap to dismiss this error message',
+                child: IconButton(
+                  onPressed: onDismiss,
+                  icon: const Icon(Icons.close, size: 18),
+                  color: theme.colorScheme.error,
+                  constraints: const BoxConstraints(
+                    minWidth: 32,
+                    minHeight: 32,
+                  ),
+                  padding: EdgeInsets.zero,
+                ),
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }

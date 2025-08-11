@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ItemDeleteButtons extends StatelessWidget {
   final int selected;
-  final Function() triggerDeletion;
+  final Function()? triggerDeletion;
 
   const ItemDeleteButtons({
     super.key,
@@ -19,9 +19,9 @@ class ItemDeleteButtons extends StatelessWidget {
       spacing: 4.0,
       children: [
         OutlinedButton(
-          onPressed: () {
-            triggerDeletion();
-          },
+          onPressed: triggerDeletion != null ? () {
+            triggerDeletion!();
+          } : null,
           child: Text("Delete ($selected)"),
         ),
       ],

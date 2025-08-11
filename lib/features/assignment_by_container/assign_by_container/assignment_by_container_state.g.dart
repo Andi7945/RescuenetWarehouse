@@ -7,7 +7,7 @@ part of 'assignment_by_container_state.dart';
 // **************************************************************************
 
 String _$assignmentByContainerStateHash() =>
-    r'22fc7fbf783e5446fbab0a12e29470e1c5ea77a3';
+    r'678d1e37720188328c54e7edbf984f132d8829e9';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -175,6 +175,235 @@ class _AssignmentByContainerStateProviderElement
   @override
   String get containerId =>
       (origin as AssignmentByContainerStateProvider).containerId;
+}
+
+String _$assignmentByContainerAsyncHash() =>
+    r'5e9a0ebd4ff0bca8057ea2ac65715c2ca7f79393';
+
+abstract class _$AssignmentByContainerAsync
+    extends BuildlessAutoDisposeStreamNotifier<Map<Item, Assignment>> {
+  late final String containerId;
+
+  Stream<Map<Item, Assignment>> build(String containerId);
+}
+
+/// AsyncValue-based assignment by container state provider for loading states support.
+///
+/// This provider wraps the container assignment data in AsyncValue to provide proper
+/// loading, error, and data states for UI components during assignment operations.
+///
+/// Usage:
+/// ```dart
+/// AsyncValueBuilder<Map<Item, Assignment>>(
+///   value: ref.watch(assignmentByContainerAsyncProvider(containerId)),
+///   data: (assignedItems) => AssignmentsList(assignedItems: assignedItems),
+/// )
+/// ```
+///
+/// Copied from [AssignmentByContainerAsync].
+@ProviderFor(AssignmentByContainerAsync)
+const assignmentByContainerAsyncProvider = AssignmentByContainerAsyncFamily();
+
+/// AsyncValue-based assignment by container state provider for loading states support.
+///
+/// This provider wraps the container assignment data in AsyncValue to provide proper
+/// loading, error, and data states for UI components during assignment operations.
+///
+/// Usage:
+/// ```dart
+/// AsyncValueBuilder<Map<Item, Assignment>>(
+///   value: ref.watch(assignmentByContainerAsyncProvider(containerId)),
+///   data: (assignedItems) => AssignmentsList(assignedItems: assignedItems),
+/// )
+/// ```
+///
+/// Copied from [AssignmentByContainerAsync].
+class AssignmentByContainerAsyncFamily
+    extends Family<AsyncValue<Map<Item, Assignment>>> {
+  /// AsyncValue-based assignment by container state provider for loading states support.
+  ///
+  /// This provider wraps the container assignment data in AsyncValue to provide proper
+  /// loading, error, and data states for UI components during assignment operations.
+  ///
+  /// Usage:
+  /// ```dart
+  /// AsyncValueBuilder<Map<Item, Assignment>>(
+  ///   value: ref.watch(assignmentByContainerAsyncProvider(containerId)),
+  ///   data: (assignedItems) => AssignmentsList(assignedItems: assignedItems),
+  /// )
+  /// ```
+  ///
+  /// Copied from [AssignmentByContainerAsync].
+  const AssignmentByContainerAsyncFamily();
+
+  /// AsyncValue-based assignment by container state provider for loading states support.
+  ///
+  /// This provider wraps the container assignment data in AsyncValue to provide proper
+  /// loading, error, and data states for UI components during assignment operations.
+  ///
+  /// Usage:
+  /// ```dart
+  /// AsyncValueBuilder<Map<Item, Assignment>>(
+  ///   value: ref.watch(assignmentByContainerAsyncProvider(containerId)),
+  ///   data: (assignedItems) => AssignmentsList(assignedItems: assignedItems),
+  /// )
+  /// ```
+  ///
+  /// Copied from [AssignmentByContainerAsync].
+  AssignmentByContainerAsyncProvider call(String containerId) {
+    return AssignmentByContainerAsyncProvider(containerId);
+  }
+
+  @override
+  AssignmentByContainerAsyncProvider getProviderOverride(
+    covariant AssignmentByContainerAsyncProvider provider,
+  ) {
+    return call(provider.containerId);
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'assignmentByContainerAsyncProvider';
+}
+
+/// AsyncValue-based assignment by container state provider for loading states support.
+///
+/// This provider wraps the container assignment data in AsyncValue to provide proper
+/// loading, error, and data states for UI components during assignment operations.
+///
+/// Usage:
+/// ```dart
+/// AsyncValueBuilder<Map<Item, Assignment>>(
+///   value: ref.watch(assignmentByContainerAsyncProvider(containerId)),
+///   data: (assignedItems) => AssignmentsList(assignedItems: assignedItems),
+/// )
+/// ```
+///
+/// Copied from [AssignmentByContainerAsync].
+class AssignmentByContainerAsyncProvider
+    extends
+        AutoDisposeStreamNotifierProviderImpl<
+          AssignmentByContainerAsync,
+          Map<Item, Assignment>
+        > {
+  /// AsyncValue-based assignment by container state provider for loading states support.
+  ///
+  /// This provider wraps the container assignment data in AsyncValue to provide proper
+  /// loading, error, and data states for UI components during assignment operations.
+  ///
+  /// Usage:
+  /// ```dart
+  /// AsyncValueBuilder<Map<Item, Assignment>>(
+  ///   value: ref.watch(assignmentByContainerAsyncProvider(containerId)),
+  ///   data: (assignedItems) => AssignmentsList(assignedItems: assignedItems),
+  /// )
+  /// ```
+  ///
+  /// Copied from [AssignmentByContainerAsync].
+  AssignmentByContainerAsyncProvider(String containerId)
+    : this._internal(
+        () => AssignmentByContainerAsync()..containerId = containerId,
+        from: assignmentByContainerAsyncProvider,
+        name: r'assignmentByContainerAsyncProvider',
+        debugGetCreateSourceHash:
+            const bool.fromEnvironment('dart.vm.product')
+                ? null
+                : _$assignmentByContainerAsyncHash,
+        dependencies: AssignmentByContainerAsyncFamily._dependencies,
+        allTransitiveDependencies:
+            AssignmentByContainerAsyncFamily._allTransitiveDependencies,
+        containerId: containerId,
+      );
+
+  AssignmentByContainerAsyncProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.containerId,
+  }) : super.internal();
+
+  final String containerId;
+
+  @override
+  Stream<Map<Item, Assignment>> runNotifierBuild(
+    covariant AssignmentByContainerAsync notifier,
+  ) {
+    return notifier.build(containerId);
+  }
+
+  @override
+  Override overrideWith(AssignmentByContainerAsync Function() create) {
+    return ProviderOverride(
+      origin: this,
+      override: AssignmentByContainerAsyncProvider._internal(
+        () => create()..containerId = containerId,
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        containerId: containerId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeStreamNotifierProviderElement<
+    AssignmentByContainerAsync,
+    Map<Item, Assignment>
+  >
+  createElement() {
+    return _AssignmentByContainerAsyncProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is AssignmentByContainerAsyncProvider &&
+        other.containerId == containerId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, containerId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin AssignmentByContainerAsyncRef
+    on AutoDisposeStreamNotifierProviderRef<Map<Item, Assignment>> {
+  /// The parameter `containerId` of this provider.
+  String get containerId;
+}
+
+class _AssignmentByContainerAsyncProviderElement
+    extends
+        AutoDisposeStreamNotifierProviderElement<
+          AssignmentByContainerAsync,
+          Map<Item, Assignment>
+        >
+    with AssignmentByContainerAsyncRef {
+  _AssignmentByContainerAsyncProviderElement(super.provider);
+
+  @override
+  String get containerId =>
+      (origin as AssignmentByContainerAsyncProvider).containerId;
 }
 
 // ignore_for_file: type=lint

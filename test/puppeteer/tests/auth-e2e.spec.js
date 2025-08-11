@@ -2,6 +2,8 @@
 const { test, expect } = require('@playwright/test');
 const coordinateHelper = require('../helpers/coordinateHelper');
 const authHelpers = require('../helpers/authHelpers');
+const visualValidation = require('../helpers/visualValidation');
+const loadingHelpers = require('../helpers/loadingHelpers');
 
 test.describe('Authentication Workflows - Core Scenarios', () => {
     let sharedPage;
@@ -25,22 +27,40 @@ test.describe('Authentication Workflows - Core Scenarios', () => {
     // });
 
     test.beforeEach(async ({ page }) => {
-        // Refresh page state for each test
+        // Refresh page state for each test with enhanced loading handling
         await page.goto('/');
         await page.waitForLoadState('networkidle');
-        await page.waitForTimeout(2000);
+        
+        // Wait for Flutter app to be ready with loading state awareness
+        await visualValidation.waitForFlutterReady(page, 30000, {
+            waitForLoadingComplete: true,
+            checkInteractionReady: true
+        });
+        
+        console.log('✓ Test setup complete - page ready for authentication test');
     });
 
     test('1. Valid login creates authenticated session', async ({ page }) => {
         const testEmail = 'backoffice.test@rescuenet.net';
         const testPassword = 'testpassword';
 
-        // Login credentials
-        await coordinateHelper.typeInField(page, 'login', 'emailField', testEmail);
-        await coordinateHelper.typeInField(page, 'login', 'passwordField', testPassword);
+        // Login credentials with loading awareness
+        await coordinateHelper.typeInField(page, 'login', 'emailField', testEmail, {
+            operationType: 'quick',
+            expectLoading: false
+        });
+        await coordinateHelper.typeInField(page, 'login', 'passwordField', testPassword, {
+            operationType: 'quick',
+            expectLoading: false
+        });
 
-        // Submit login
-        await coordinateHelper.clickElement(page, 'login', 'loginButton');
+        // Submit login with loading handling
+        const loginResult = await coordinateHelper.clickElementWithLoadingWait(page, 'login', 'loginButton', {
+            operationType: 'medium',
+            expectLoading: true,
+            maxLoadingTime: 10000
+        });
+        expect(loginResult.clickSuccess).toBe(true);
 
         // Is logged in
         const currentUrl = page.url();

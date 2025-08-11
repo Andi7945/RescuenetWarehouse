@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as river;
 import 'package:rescuenet_warehouse/routes.dart';
-import 'package:rescuenet_warehouse/state/all_containers_notifier.dart';
 import 'package:rescuenet_warehouse/state/container_types_notifier.dart';
 import 'package:rescuenet_warehouse/state/current_locations_notifier.dart';
 import 'package:rescuenet_warehouse/state/module_destinations_notifier.dart';
+import 'package:rescuenet_warehouse/state/data_operations_notifier.dart';
 
 import '../../models/rescue_container.dart';
 import '../../models/sequential_build.dart';
+import '../../models/container_dao.dart';
 
 class ContainerEditPage extends river.ConsumerStatefulWidget {
   final ValueNotifier<RescueContainer> _container;
@@ -149,7 +150,7 @@ class _ContainerEditPageState extends river.ConsumerState<ContainerEditPage> {
               icon: const Icon(Icons.edit),
               onPressed: () => Navigator.pushNamed(context, routeName)));
 
-  _sendChangesToStore() {
+  Future<void> _sendChangesToStore() async {
     var changedContainer = widget._container.value.copyWith(
         name: _nameController.text,
         description: _descriptionController.text,
@@ -159,8 +160,26 @@ class _ContainerEditPageState extends river.ConsumerState<ContainerEditPage> {
         moduleDestination: _destination(),
         currentLocation: _location());
     widget._container.value = changedContainer;
-    // Persist changes to database
-    ref.read(allContainersNotifierProvider.notifier).update(changedContainer);
+    
+    // Persist changes to database with loading state
+    try {
+      await ref.read(dataOperationsNotifierProvider.notifier)
+          .updateContainer(ContainerDao.fromContainer(changedContainer));
+    } catch (error) {
+      // Error will be handled by DataOperationsNotifier and shown in UI
+      // Reset UI state to previous value on error
+      if (mounted) {
+        setState(() {
+          _nameController.text = widget._container.value.name;
+          _descriptionController.text = widget._container.value.description ?? "";
+          _containerTypeController.value = widget._container.value.type?.id;
+          _moduleDestinationController.value = widget._container.value.moduleDestination?.id;
+          _currentLocationController.value = widget._container.value.currentLocation?.id;
+          _sequentialBuildController.value = widget._container.value.sequentialBuild.name;
+        });
+      }
+      rethrow;
+    }
   }
 
   _type() => _containerTypeController.value == null

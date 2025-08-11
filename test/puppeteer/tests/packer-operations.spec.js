@@ -4,6 +4,8 @@ const fs = require('fs');
 const path = require('path');
 const coords = require('../helpers/coordinateHelper');
 const dataExtraction = require('../helpers/dataExtraction');
+const visualValidation = require('../helpers/visualValidation');
+const loadingHelpers = require('../helpers/loadingHelpers');
 
 /**
  * Focused Packer Operations Test Suite
@@ -24,13 +26,33 @@ const dataExtraction = require('../helpers/dataExtraction');
 async function loginAsPacker(page) {
   await page.goto('/');
   await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(coords.getTimeout('dataLoad'));
+  
+  // Wait for app to be ready with loading state awareness
+  await visualValidation.waitForFlutterReady(page, 30000, {
+    waitForLoadingComplete: true,
+    checkInteractionReady: true
+  });
 
-  // Login with test credentials
-  await coords.typeInField(page, 'login', 'emailField', 'test@rescuenet.net');
-  await coords.typeInField(page, 'login', 'passwordField', 'password123');
-  await coords.clickElement(page, 'login', 'loginButton');
-  await page.waitForTimeout(coords.getTimeout('dataLoad'));
+  // Login with test credentials and loading handling
+  await coords.typeInField(page, 'login', 'emailField', 'test@rescuenet.net', {
+    operationType: 'quick',
+    expectLoading: false
+  });
+  await coords.typeInField(page, 'login', 'passwordField', 'password123', {
+    operationType: 'quick',
+    expectLoading: false
+  });
+  
+  const loginResult = await coords.clickElementWithLoadingWait(page, 'login', 'loginButton', {
+    operationType: 'medium',
+    expectLoading: true,
+    maxLoadingTime: 10000
+  });
+  if (!loginResult.clickSuccess) {
+    throw new Error('Failed to login as packer');
+  }
+  
+  console.log('✓ Packer login completed with loading handling');
 }
 
 /**
@@ -38,10 +60,32 @@ async function loginAsPacker(page) {
  * @param {import('@playwright/test').Page} page 
  */
 async function navigateToContainers(page) {
-  await coords.clickElement(page, 'navigation', 'hamburgerMenu');
-  await page.waitForTimeout(coords.getTimeout('medium'));
-  await coords.clickElement(page, 'navigation', 'containersMenu');
-  await page.waitForTimeout(coords.getTimeout('long'));
+  // Navigate to containers with loading handling
+  const menuResult = await coords.clickElementWithLoadingWait(page, 'navigation', 'hamburgerMenu', {
+    operationType: 'quick',
+    expectLoading: false,
+    maxLoadingTime: 3000
+  });
+  if (!menuResult.clickSuccess) {
+    throw new Error('Failed to open hamburger menu');
+  }
+  
+  const containersResult = await coords.clickElementWithLoadingWait(page, 'navigation', 'containersMenu', {
+    operationType: 'medium',
+    expectLoading: true,
+    maxLoadingTime: 8000
+  });
+  if (!containersResult.clickSuccess) {
+    throw new Error('Failed to navigate to containers');
+  }
+  
+  // Wait for containers page to be ready
+  await visualValidation.waitForFlutterReady(page, 10000, {
+    waitForLoadingComplete: true,
+    checkInteractionReady: true
+  });
+  
+  console.log('✓ Navigation to containers completed with loading handling');
 }
 
 /**

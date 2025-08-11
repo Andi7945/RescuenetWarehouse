@@ -2,6 +2,8 @@
 const { test, expect } = require('@playwright/test');
 const coords = require('../helpers/coordinateHelper');
 const dataHelpers = require('../helpers/dataExtraction');
+const visualValidation = require('../helpers/visualValidation');
+const loadingHelpers = require('../helpers/loadingHelpers');
 
 /**
  * Focused Assignment Management Workflows Test Suite
@@ -23,18 +25,33 @@ let sharedBrowser;
 async function loginAsTestUser(page) {
   await page.goto('/');
   await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(coords.getTimeout('dataLoad'));
+  
+  // Wait for app to be ready with loading state awareness
+  await visualValidation.waitForFlutterReady(page, 30000, {
+    waitForLoadingComplete: true,
+    checkInteractionReady: true
+  });
 
-  const emailSuccess = await coords.typeInField(page, 'login', 'emailField', 'test@rescuenet.net');
+  const emailSuccess = await coords.typeInField(page, 'login', 'emailField', 'test@rescuenet.net', {
+    operationType: 'quick',
+    expectLoading: false
+  });
   if (!emailSuccess) throw new Error('Failed to enter email during login');
 
-  const passwordSuccess = await coords.typeInField(page, 'login', 'passwordField', 'password123');
+  const passwordSuccess = await coords.typeInField(page, 'login', 'passwordField', 'password123', {
+    operationType: 'quick',
+    expectLoading: false
+  });
   if (!passwordSuccess) throw new Error('Failed to enter password during login');
 
-  const loginSuccess = await coords.clickElement(page, 'login', 'loginButton');
-  if (!loginSuccess) throw new Error('Failed to click login button');
-
-  await page.waitForTimeout(coords.getTimeout('dataLoad'));
+  const loginResult = await coords.clickElementWithLoadingWait(page, 'login', 'loginButton', {
+    operationType: 'medium',
+    expectLoading: true,
+    maxLoadingTime: 10000
+  });
+  if (!loginResult.clickSuccess) throw new Error('Failed to click login button');
+  
+  console.log('✓ Login completed with loading handling');
 }
 
 /**
@@ -42,15 +59,30 @@ async function loginAsTestUser(page) {
  * @param {import('@playwright/test').Page} page 
  */
 async function navigateToItemsOverview(page) {
-  const menuSuccess = await coords.clickElement(page, 'navigation', 'hamburgerMenu');
-  if (!menuSuccess) throw new Error('Failed to open hamburger menu');
-  await page.waitForTimeout(coords.getTimeout('medium'));
+  // Open hamburger menu with loading handling
+  const menuResult = await coords.clickElementWithLoadingWait(page, 'navigation', 'hamburgerMenu', {
+    operationType: 'quick',
+    expectLoading: false,
+    maxLoadingTime: 3000
+  });
+  if (!menuResult.clickSuccess) throw new Error('Failed to open hamburger menu');
   
-  const itemsSuccess = await coords.clickElement(page, 'navigation', 'allItemsMenu');
-  if (!itemsSuccess) throw new Error('Failed to click All Items menu');
-  await page.waitForTimeout(coords.getTimeout('long'));
+  // Click All Items menu with loading handling
+  const itemsResult = await coords.clickElementWithLoadingWait(page, 'navigation', 'allItemsMenu', {
+    operationType: 'medium',
+    expectLoading: true, // Navigation may trigger data loading
+    maxLoadingTime: 8000
+  });
+  if (!itemsResult.clickSuccess) throw new Error('Failed to click All Items menu');
+  
+  // Verify navigation completed and page is ready
+  await visualValidation.waitForFlutterReady(page, 10000, {
+    waitForLoadingComplete: true,
+    checkInteractionReady: true
+  });
   
   expect(page.url()).toContain('itemsOverview');
+  console.log('✓ Navigation to Items Overview completed with loading handling');
 }
 
 test.describe('Assignment Workflows - Core Scenarios', () => {
@@ -64,7 +96,12 @@ test.describe('Assignment Workflows - Core Scenarios', () => {
     
     await loginAsTestUser(page);
     await navigateToItemsOverview(page);
-    await page.waitForTimeout(3000);
+    
+    // Ensure page is fully ready for assignment operations
+    await visualValidation.waitForFlutterReady(page, 15000, {
+      waitForLoadingComplete: true,
+      checkInteractionReady: true
+    });
     
     // Get initial application state for business logic validation
     const initialState = await dataHelpers.getCurrentAppState(page);
@@ -91,33 +128,50 @@ test.describe('Assignment Workflows - Core Scenarios', () => {
     const initialAssignments = await dataHelpers.getItemAssignments(page, testItem.id);
     const initialAssignmentsCount = initialAssignments.length;
     
-    // Execute assignment workflow
-    const itemClick = await coords.clickElement(page, 'itemsOverview', 'firstItemArea');
-    if (!itemClick) throw new Error('Failed to click item for assignment');
+    // Execute assignment workflow with loading handling
+    const itemResult = await coords.clickElementWithLoadingWait(page, 'itemsOverview', 'firstItemArea', {
+      operationType: 'medium',
+      expectLoading: true, // Item detail loading
+      maxLoadingTime: 8000
+    });
+    if (!itemResult.clickSuccess) throw new Error('Failed to click item for assignment');
     
-    await page.waitForTimeout(coords.getTimeout('medium'));
+    const assignResult = await coords.clickElementWithLoadingWait(page, 'itemDetail', 'assignmentButton', {
+      operationType: 'medium',
+      expectLoading: true, // Assignment form loading
+      maxLoadingTime: 8000
+    });
+    if (!assignResult.clickSuccess) throw new Error('Failed to open assignment dialog');
     
-    const assignClick = await coords.clickElement(page, 'itemDetail', 'assignmentButton');
-    if (!assignClick) throw new Error('Failed to open assignment dialog');
-    
-    await page.waitForTimeout(coords.getTimeout('medium'));
-    
-    // Create assignment with business validation
+    // Create assignment with business validation and loading handling
     const assignmentQuantity = Math.min(10, testItem.available_quantity);
-    const quantitySuccess = await coords.typeInField(page, 'assignmentForm', 'quantityField', assignmentQuantity.toString());
+    const quantitySuccess = await coords.typeInField(page, 'assignmentForm', 'quantityField', assignmentQuantity.toString(), {
+      operationType: 'quick',
+      expectLoading: false
+    });
     if (!quantitySuccess) throw new Error('Failed to enter assignment quantity');
     
-    const containerSuccess = await coords.clickElement(page, 'assignmentForm', 'containerDropdown');
-    if (containerSuccess) {
-      await page.waitForTimeout(coords.getTimeout('short'));
-      await coords.clickElement(page, 'assignmentForm', 'firstContainerOption');
-      await page.waitForTimeout(coords.getTimeout('short'));
+    const containerResult = await coords.clickElementWithLoadingWait(page, 'assignmentForm', 'containerDropdown', {
+      operationType: 'quick',
+      expectLoading: false,
+      maxLoadingTime: 3000
+    });
+    if (containerResult.clickSuccess) {
+      await coords.clickElementWithLoadingWait(page, 'assignmentForm', 'firstContainerOption', {
+        operationType: 'quick',
+        expectLoading: false,
+        maxLoadingTime: 3000
+      });
     }
     
-    const saveSuccess = await coords.clickElement(page, 'assignmentForm', 'saveButton');
-    if (!saveSuccess) throw new Error('Failed to save assignment');
+    const saveResult = await coords.clickElementWithLoadingWait(page, 'assignmentForm', 'saveButton', {
+      operationType: 'slow', // Assignment creation is a slower operation
+      expectLoading: true,
+      maxLoadingTime: 15000
+    });
+    if (!saveResult.clickSuccess) throw new Error('Failed to save assignment');
     
-    await page.waitForTimeout(coords.getTimeout('long'));
+    console.log('Assignment creation completed with loading handling');
     
     // CRITICAL: Validate assignment creation outcome
     const finalAssignments = await dataHelpers.getItemAssignments(page, testItem.id);
@@ -147,7 +201,12 @@ test.describe('Assignment Workflows - Core Scenarios', () => {
     
     await loginAsTestUser(page);
     await navigateToItemsOverview(page);
-    await page.waitForTimeout(3000);
+    
+    // Ensure page is fully ready for assignment validation operations
+    await visualValidation.waitForFlutterReady(page, 15000, {
+      waitForLoadingComplete: true,
+      checkInteractionReady: true
+    });
     
     const initialState = await dataHelpers.getCurrentAppState(page);
     
@@ -165,16 +224,20 @@ test.describe('Assignment Workflows - Core Scenarios', () => {
     const initialAssignments = await dataHelpers.getItemAssignments(page, testItem.id);
     const initialCount = initialAssignments.length;
     
-    // Navigate to assignment form
-    const itemClick = await coords.clickElement(page, 'itemsOverview', 'firstItemArea');
-    if (!itemClick) throw new Error('Failed to access item for validation testing');
+    // Navigate to assignment form with loading handling
+    const itemResult = await coords.clickElementWithLoadingWait(page, 'itemsOverview', 'firstItemArea', {
+      operationType: 'medium',
+      expectLoading: true,
+      maxLoadingTime: 8000
+    });
+    if (!itemResult.clickSuccess) throw new Error('Failed to access item for validation testing');
     
-    await page.waitForTimeout(coords.getTimeout('medium'));
-    
-    const assignClick = await coords.clickElement(page, 'itemDetail', 'assignmentButton');
-    if (!assignClick) throw new Error('Failed to open assignment dialog');
-    
-    await page.waitForTimeout(coords.getTimeout('medium'));
+    const assignResult = await coords.clickElementWithLoadingWait(page, 'itemDetail', 'assignmentButton', {
+      operationType: 'medium',
+      expectLoading: true,
+      maxLoadingTime: 8000
+    });
+    if (!assignResult.clickSuccess) throw new Error('Failed to open assignment dialog');
     
     // Test constraint validations
     const constraintTests = [
@@ -205,21 +268,33 @@ test.describe('Assignment Workflows - Core Scenarios', () => {
     for (const [index, test] of constraintTests.entries()) {
       console.log(`AW.2: Test ${index + 1}: ${test.description} (quantity: ${test.quantity})`);
       
-      // Enter test quantity
-      const quantityEntry = await coords.typeInField(page, 'assignmentForm', 'quantityField', test.quantity.toString());
+      // Enter test quantity with loading awareness
+      const quantityEntry = await coords.typeInField(page, 'assignmentForm', 'quantityField', test.quantity.toString(), {
+        operationType: 'quick',
+        expectLoading: false
+      });
       if (quantityEntry) {
-        // Select container
-        const containerSelect = await coords.clickElement(page, 'assignmentForm', 'containerDropdown');
-        if (containerSelect) {
-          await page.waitForTimeout(coords.getTimeout('short'));
-          await coords.clickElement(page, 'assignmentForm', 'firstContainerOption');
-          await page.waitForTimeout(coords.getTimeout('short'));
+        // Select container with loading handling
+        const containerResult = await coords.clickElementWithLoadingWait(page, 'assignmentForm', 'containerDropdown', {
+          operationType: 'quick',
+          expectLoading: false,
+          maxLoadingTime: 3000
+        });
+        if (containerResult.clickSuccess) {
+          await coords.clickElementWithLoadingWait(page, 'assignmentForm', 'firstContainerOption', {
+            operationType: 'quick',
+            expectLoading: false,
+            maxLoadingTime: 3000
+          });
         }
         
-        // Attempt to save
-        const saveAttempt = await coords.clickElement(page, 'assignmentForm', 'saveButton');
-        if (saveAttempt) {
-          await page.waitForTimeout(coords.getTimeout('medium'));
+        // Attempt to save with appropriate loading expectations
+        const saveResult = await coords.clickElementWithLoadingWait(page, 'assignmentForm', 'saveButton', {
+          operationType: test.shouldSucceed ? 'slow' : 'medium', // Valid operations may take longer
+          expectLoading: test.shouldSucceed, // Only expect loading for valid operations
+          maxLoadingTime: test.shouldSucceed ? 15000 : 5000
+        });
+        if (saveResult.clickSuccess) {
           
           // Validate outcome against expectation
           const currentAssignments = await dataHelpers.getItemAssignments(page, testItem.id);
@@ -254,7 +329,10 @@ test.describe('Assignment Workflows - Core Scenarios', () => {
       }
       
       // Clear field for next test
-      await coords.typeInField(page, 'assignmentForm', 'quantityField', '');
+      await coords.typeInField(page, 'assignmentForm', 'quantityField', '', {
+        operationType: 'quick',
+        expectLoading: false
+      });
       await page.waitForTimeout(coords.getTimeout('short'));
     }
     
@@ -274,7 +352,12 @@ test.describe('Assignment Workflows - Core Scenarios', () => {
     
     await loginAsTestUser(page);
     await navigateToItemsOverview(page);
-    await page.waitForTimeout(3000);
+    
+    // Ensure page is fully ready for assignment tracking operations
+    await visualValidation.waitForFlutterReady(page, 15000, {
+      waitForLoadingComplete: true,
+      checkInteractionReady: true
+    });
     
     const initialState = await dataHelpers.getCurrentAppState(page);
     
@@ -295,31 +378,48 @@ test.describe('Assignment Workflows - Core Scenarios', () => {
     
     console.log(`AW.3: Initial state - Item: ${itemInitialAssignments.length} assignments, Container: ${containerInitialAssignments.length} assignments`);
     
-    // Create a new assignment to track
+    // Create a new assignment to track with loading handling
     if (testItem.available_quantity > 0) {
-      const itemClick = await coords.clickElement(page, 'itemsOverview', 'firstItemArea');
-      if (itemClick) {
-        await page.waitForTimeout(coords.getTimeout('medium'));
+      const itemResult = await coords.clickElementWithLoadingWait(page, 'itemsOverview', 'firstItemArea', {
+        operationType: 'medium',
+        expectLoading: true,
+        maxLoadingTime: 8000
+      });
+      
+      if (itemResult.clickSuccess) {
+        const assignResult = await coords.clickElementWithLoadingWait(page, 'itemDetail', 'assignmentButton', {
+          operationType: 'medium',
+          expectLoading: true,
+          maxLoadingTime: 8000
+        });
         
-        const assignClick = await coords.clickElement(page, 'itemDetail', 'assignmentButton');
-        if (assignClick) {
-          await page.waitForTimeout(coords.getTimeout('medium'));
-          
+        if (assignResult.clickSuccess) {
           const trackingQuantity = Math.min(5, testItem.available_quantity);
-          await coords.typeInField(page, 'assignmentForm', 'quantityField', trackingQuantity.toString());
-          await page.waitForTimeout(coords.getTimeout('short'));
+          await coords.typeInField(page, 'assignmentForm', 'quantityField', trackingQuantity.toString(), {
+            operationType: 'quick',
+            expectLoading: false
+          });
           
-          const containerSelect = await coords.clickElement(page, 'assignmentForm', 'containerDropdown');
-          if (containerSelect) {
-            await page.waitForTimeout(coords.getTimeout('short'));
-            await coords.clickElement(page, 'assignmentForm', 'firstContainerOption');
-            await page.waitForTimeout(coords.getTimeout('short'));
+          const containerResult = await coords.clickElementWithLoadingWait(page, 'assignmentForm', 'containerDropdown', {
+            operationType: 'quick',
+            expectLoading: false,
+            maxLoadingTime: 3000
+          });
+          if (containerResult.clickSuccess) {
+            await coords.clickElementWithLoadingWait(page, 'assignmentForm', 'firstContainerOption', {
+              operationType: 'quick',
+              expectLoading: false,
+              maxLoadingTime: 3000
+            });
           }
           
-          const saveTracking = await coords.clickElement(page, 'assignmentForm', 'saveButton');
-          if (saveTracking) {
-            await page.waitForTimeout(coords.getTimeout('long'));
-            console.log(`AW.3: ✓ Created assignment for tracking - quantity: ${trackingQuantity}`);
+          const saveResult = await coords.clickElementWithLoadingWait(page, 'assignmentForm', 'saveButton', {
+            operationType: 'slow',
+            expectLoading: true,
+            maxLoadingTime: 15000
+          });
+          if (saveResult.clickSuccess) {
+            console.log(`AW.3: ✓ Created assignment for tracking - quantity: ${trackingQuantity} with loading handling`);
           }
         }
       }
@@ -328,14 +428,23 @@ test.describe('Assignment Workflows - Core Scenarios', () => {
     // Verify assignment tracking through navigation
     console.log('AW.3: Testing assignment persistence through navigation');
     
-    // Navigate to containers overview
-    const menuSuccess = await coords.clickElement(page, 'navigation', 'hamburgerMenu');
-    if (menuSuccess) {
-      await page.waitForTimeout(coords.getTimeout('medium'));
-      
-      const containersSuccess = await coords.clickElement(page, 'navigation', 'containersMenu');
-      if (containersSuccess) {
-        await page.waitForTimeout(coords.getTimeout('long'));
+    // Navigate to containers overview with loading handling
+    const menuResult = await coords.clickElementWithLoadingWait(page, 'navigation', 'hamburgerMenu', {
+      operationType: 'quick',
+      expectLoading: false,
+      maxLoadingTime: 3000
+    });
+    if (menuResult.clickSuccess) {
+      const containersResult = await coords.clickElementWithLoadingWait(page, 'navigation', 'containersMenu', {
+        operationType: 'medium',
+        expectLoading: true,
+        maxLoadingTime: 8000
+      });
+      if (containersResult.clickSuccess) {
+        await visualValidation.waitForFlutterReady(page, 10000, {
+          waitForLoadingComplete: true,
+          checkInteractionReady: true
+        });
         expect(page.url()).toContain('containers');
         
         // Verify assignment is visible from container perspective
@@ -367,11 +476,16 @@ test.describe('Assignment Workflows - Core Scenarios', () => {
       }
     }
     
-    // Test assignment persistence through page refresh
+    // Test assignment persistence through page refresh with loading handling
     console.log('AW.3: Testing assignment persistence through page refresh');
     await page.reload();
     await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(coords.getTimeout('dataLoad'));
+    
+    // Wait for app to fully reload with loading state awareness
+    await visualValidation.waitForFlutterReady(page, 30000, {
+      waitForLoadingComplete: true,
+      checkInteractionReady: true
+    });
     
     const persistedAssignments = await dataHelpers.getAllAssignments(page);
     expect(persistedAssignments.length).toBeGreaterThanOrEqual(initialAssignments.length);

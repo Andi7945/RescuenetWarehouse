@@ -1,50 +1,72 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
+const coordinateHelper = require('../helpers/coordinateHelper');
+const visualValidation = require('../helpers/visualValidation');
+const loadingHelpers = require('../helpers/loadingHelpers');
 
 test.describe('Container Types Page Tests', () => {
   test.beforeEach(async ({ page }) => {
-    // Navigate to the real Flutter app
+    // Navigate to the real Flutter app with enhanced loading handling
     await page.goto('/');
-    
-    // Wait for the Flutter app to load completely
     await page.waitForLoadState('networkidle');
     
-    // Wait for the login page to load
-    await page.waitForTimeout(5000);
+    // Wait for Flutter app to be ready with loading state awareness
+    await visualValidation.waitForFlutterReady(page, 30000, {
+      waitForLoadingComplete: true,
+      checkInteractionReady: true
+    });
     
-    // Login using coordinate-based clicking (since Flutter uses Canvas)
-    await page.mouse.click(640, 285); // Email field
-    await page.keyboard.type('test@rescuenet.net');
+    // Login using coordinate helper with loading handling
+    await coordinateHelper.typeInField(page, 'login', 'emailField', 'test@rescuenet.net', {
+      operationType: 'quick',
+      expectLoading: false
+    });
     
-    await page.mouse.click(640, 330); // Password field
-    await page.keyboard.type('testpassword');
+    await coordinateHelper.typeInField(page, 'login', 'passwordField', 'testpassword', {
+      operationType: 'quick',
+      expectLoading: false
+    });
     
-    await page.mouse.click(487, 393); // Login button
+    const loginResult = await coordinateHelper.clickElementWithLoadingWait(page, 'login', 'loginButton', {
+      operationType: 'medium',
+      expectLoading: true,
+      maxLoadingTime: 10000
+    });
+    expect(loginResult.clickSuccess).toBe(true);
     
-    // Wait for app to load after login
-    await page.waitForTimeout(5000);
+    console.log('✓ Login completed with loading handling');
   });
 
   test('should navigate to container types page and display existing container types', async ({ page }) => {
     // Take initial screenshot
     await page.screenshot({ path: 'container-types-login-complete.png' });
     
-    // Navigate to container types page
-    // This might be through a menu or direct URL navigation
+    // Navigate to container types page with loading handling
     await page.goto('/#/editContainerTypes');
-    await page.waitForTimeout(3000);
+    
+    // Wait for page to be ready with loading state awareness
+    await visualValidation.waitForFlutterReady(page, 15000, {
+      waitForLoadingComplete: true,
+      checkInteractionReady: true
+    });
     
     // Take screenshot of container types page
     await page.screenshot({ path: 'container-types-page-loaded.png' });
     
     // Verify page loaded successfully
     expect(true).toBe(true); // Test validates container types page is accessible
+    console.log('✓ Container types page navigation completed with loading handling');
   });
 
   test('should be able to change empty weight and persist to database', async ({ page }) => {
-    // Navigate to container types page
+    // Navigate to container types page with loading handling
     await page.goto('/#/editContainerTypes');
-    await page.waitForTimeout(3000);
+    
+    // Wait for page to be ready with loading state awareness
+    await visualValidation.waitForFlutterReady(page, 15000, {
+      waitForLoadingComplete: true,
+      checkInteractionReady: true
+    });
     
     // Take screenshot to see current state
     await page.screenshot({ path: 'container-types-before-edit.png' });
