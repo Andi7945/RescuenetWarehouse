@@ -30,13 +30,13 @@ test.describe('Authentication Workflows - Core Scenarios', () => {
         // Refresh page state for each test with enhanced loading handling
         await page.goto('/');
         await page.waitForLoadState('networkidle');
-        
+
         // Wait for Flutter app to be ready with loading state awareness
         await visualValidation.waitForFlutterReady(page, 30000, {
             waitForLoadingComplete: true,
             checkInteractionReady: true
         });
-        
+
         console.log('✓ Test setup complete - page ready for authentication test');
     });
 
@@ -44,23 +44,30 @@ test.describe('Authentication Workflows - Core Scenarios', () => {
         const testEmail = 'backoffice.test@rescuenet.net';
         const testPassword = 'testpassword';
 
-        // Login credentials with loading awareness
-        await coordinateHelper.typeInField(page, 'login', 'emailField', testEmail, {
-            operationType: 'quick',
-            expectLoading: false
-        });
-        await coordinateHelper.typeInField(page, 'login', 'passwordField', testPassword, {
-            operationType: 'quick',
-            expectLoading: false
-        });
-
-        // Submit login with loading handling
-        const loginResult = await coordinateHelper.clickElementWithLoadingWait(page, 'login', 'loginButton', {
-            operationType: 'medium',
-            expectLoading: true,
-            maxLoadingTime: 10000
-        });
-        expect(loginResult.clickSuccess).toBe(true);
+        try {
+            // Try HTML renderer selectors first
+            await page.getByLabel('Email').fill(testEmail);
+            await page.getByLabel('Password').fill(testPassword);
+            await page.getByRole('button', { name: 'Login' }).click();
+            await page.waitForTimeout(3000);
+        } catch (error) {
+            console.log('HTML selectors failed, falling back to coordinates:', error.message);
+            // Fallback to coordinate-based approach
+            await coordinateHelper.typeInField(page, 'login', 'emailField', testEmail, {
+                operationType: 'quick',
+                expectLoading: false
+            });
+            await coordinateHelper.typeInField(page, 'login', 'passwordField', testPassword, {
+                operationType: 'quick',
+                expectLoading: false
+            });
+            const loginResult = await coordinateHelper.clickElementWithLoadingWait(page, 'login', 'loginButton', {
+                operationType: 'medium',
+                expectLoading: true,
+                maxLoadingTime: 10000
+            });
+            expect(loginResult.clickSuccess).toBe(true);
+        }
 
         // Is logged in
         const currentUrl = page.url();
@@ -71,11 +78,20 @@ test.describe('Authentication Workflows - Core Scenarios', () => {
         const testEmail = 'test@rescuenet.net';
         const wrongPassword = 'wrongpassword';
 
-        // Invalid login attempt
-        await coordinateHelper.typeInField(page, 'login', 'emailField', testEmail);
-        await coordinateHelper.typeInField(page, 'login', 'passwordField', wrongPassword);
-        await coordinateHelper.clickElement(page, 'login', 'loginButton');
-        await page.waitForTimeout(2000);
+        try {
+            // Try HTML renderer selectors first
+            await page.getByLabel('Email').fill(testEmail);
+            await page.getByLabel('Password').fill(wrongPassword);
+            await page.getByRole('button', { name: 'Login' }).click();
+            await page.waitForTimeout(2000);
+        } catch (error) {
+            console.log('HTML selectors failed, falling back to coordinates:', error.message);
+            // Fallback to coordinate-based approach
+            await coordinateHelper.typeInField(page, 'login', 'emailField', testEmail);
+            await coordinateHelper.typeInField(page, 'login', 'passwordField', wrongPassword);
+            await coordinateHelper.clickElement(page, 'login', 'loginButton');
+            await page.waitForTimeout(2000);
+        }
 
         // Verify authentication failed
         const noAuthValidation = await authHelpers.validateNoAuthentication(page);

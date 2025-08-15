@@ -61,6 +61,17 @@
   <!-- Load mock Firebase synchronously before Flutter if in test mode -->
   <script src="mock-firebase.js"></script>
 
+  <!-- Flutter renderer configuration -->
+  <script>
+    // Force HTML rendering for Playwright tests to enable DOM selectors
+    if (isPlaywrightTest) {
+      window.flutterConfiguration = {
+        renderer: "html"  // Use HTML renderer instead of canvas for testing
+      };
+      console.log('Using HTML renderer for testing');
+    }
+  </script>
+
   <script>
     // The value below is injected by flutter build, do not touch.
     var serviceWorkerVersion = null;

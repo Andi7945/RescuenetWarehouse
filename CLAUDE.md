@@ -21,27 +21,6 @@ dart run build_runner watch
 ```
 *Required after modifying JSON serializable models or Riverpod providers*
 
-### Building & Testing
-```bash
-# Build for web
-flutter build web
-
-# Run Playwright tests
-cd test/puppeteer
-npm test
-
-# Run specific browser tests
-cd test/puppeteer  
-npx playwright test --project=chromium
-
-# View test results
-cd test/puppeteer
-npx playwright show-report
-
-# Analyze code
-flutter analyze
-```
-
 ### Firebase
 ```bash
 # Deploy to Firebase
@@ -83,39 +62,6 @@ Uses `pdf` package for:
 - Container labels  
 - Summary reports
 Located in `lib/pdf/`
-
-## Testing
-
-### Current Testing Strategy
-The project uses a comprehensive testing approach to prevent regressions and ensure quality:
-
-**Documentation:**
-- `USE_CASES.md` - Defines all user workflows and business scenarios
-- `TEST_SPECIFICATIONS.md` - Detailed test cases for each use case
-- `TESTING_PROGRESS.md` - Implementation status and learnings
-
-### Playwright E2E Tests
-- Located in `test/puppeteer/`
-- Tests use coordinate-based interaction (Flutter Canvas rendering)
-- Mock Firebase backend loaded during testing
-- Existing test files (legacy bug fixes):
-  - `authentication.spec.js` - User registration/login
-  - `container-persistence.spec.js` - Container data persistence
-  - `item-quantity.spec.js` - Item assignment workflows
-  - `container-types.spec.js` - Container types management
-  - `integration.spec.js` - Cross-feature workflows
-
-### Test Categories
-1. **Use Case Tests** - Complete user workflows (UC01-UC09)
-2. **Regression Tests** - Validate specific bug fixes remain resolved
-3. **Integration Tests** - Cross-feature functionality
-4. **Performance Tests** - Large dataset and concurrent user scenarios
-
-### Test Implementation Notes
-- Tests require coordinate-based clicking due to Flutter Canvas rendering
-- Mock Firebase automatically loads when Playwright user agent detected
-- Screenshots captured at key points for debugging
-- Test data should be predictable and reproducible
 
 ## Domain Model
 

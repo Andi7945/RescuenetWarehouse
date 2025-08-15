@@ -75,18 +75,18 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   Widget _entryField(String title, TextEditingController controller) {
-    return TextField(
+    return Semantics(label: title, child: TextField(
       controller: controller,
-      decoration: InputDecoration(labelText: title),
-    );
+      decoration: InputDecoration(labelText: title, hint: Text(title)),
+    ));
   }
 
   Widget _secureEntryField(String title, TextEditingController controller) {
-    return TextField(
+    return Semantics(label: title, child:TextField(
       controller: controller,
       obscureText: true,
       decoration: InputDecoration(labelText: title),
-    );
+    ));
   }
 
   Widget _errorMessage() {
