@@ -14,8 +14,12 @@ part 'container_with_items_notifier.g.dart';
 class ContainerWithItemsNotifier extends _$ContainerWithItemsNotifier {
   @override
   Map<RescueContainer, Map<Item, int>> build() {
-    var assignments = ref.watch(allAssignmentsNotifierProvider);
-    return _container(assignments);
+    var assignmentsAsync = ref.watch(allAssignmentsAsyncProvider);
+    return assignmentsAsync.when(
+      data: (assignments) => _container(assignments),
+      loading: () => <RescueContainer, Map<Item, int>>{},
+      error: (_, __) => <RescueContainer, Map<Item, int>>{},
+    );
   }
 
   Map<RescueContainer, Map<Item, int>> _container(
@@ -32,12 +36,18 @@ class ContainerWithItemsNotifier extends _$ContainerWithItemsNotifier {
   }
 
   Map<Item, int> _items(List<Assignment> assignments) {
-    var items = ref.watch(allItemsNotifierProvider.notifier);
-    return Map.fromEntries(assignments.map((a) {
-      var item = items.byId(a.itemId);
-      if (item != null) {
-        return MapEntry(item, a.count);
-      }
-    }).nonNulls);
+    var itemsAsync = ref.watch(allItemsAsyncProvider);
+    return itemsAsync.when(
+      data: (items) {
+        return Map.fromEntries(assignments.map((a) {
+          var item = items.firstWhereOrNull((item) => item.id == a.itemId);
+          if (item != null) {
+            return MapEntry(item, a.count);
+          }
+        }).nonNulls);
+      },
+      loading: () => <Item, int>{},
+      error: (_, __) => <Item, int>{},
+    );
   }
 }

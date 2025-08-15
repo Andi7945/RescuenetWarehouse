@@ -26,5 +26,25 @@ final containerTypesNotifierProvider = AutoDisposeNotifierProvider<
 );
 
 typedef _$ContainerTypesNotifier = AutoDisposeNotifier<List<ContainerType>>;
+String _$containerTypesAsyncHash() =>
+    r'ea117bab0823ab19ae3c2e43db93517ac3a9caa4';
+
+/// See also [ContainerTypesAsync].
+@ProviderFor(ContainerTypesAsync)
+final containerTypesAsyncProvider = AutoDisposeStreamNotifierProvider<
+  ContainerTypesAsync,
+  List<ContainerType>
+>.internal(
+  ContainerTypesAsync.new,
+  name: r'containerTypesAsyncProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$containerTypesAsyncHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$ContainerTypesAsync = AutoDisposeStreamNotifier<List<ContainerType>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

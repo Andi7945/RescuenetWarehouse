@@ -24,3 +24,12 @@ class AllWorkLogsNotifier extends _$AllWorkLogsNotifier {
     return [];
   }
 }
+
+@riverpod
+class AllWorkLogsAsync extends _$AllWorkLogsAsync {
+  @override
+  Stream<List<LogEntry>> build() {
+    final repository = ref.watch(workLogRepositoryProvider);
+    return repository.watchWorkLogs();
+  }
+}

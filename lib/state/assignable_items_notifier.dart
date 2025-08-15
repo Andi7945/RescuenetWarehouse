@@ -12,18 +12,30 @@ part 'assignable_items_notifier.g.dart';
 class AssignableItemsNotifier extends _$AssignableItemsNotifier {
   @override
   Map<Item, int> build() {
-    var assignments = ref.watch(allAssignmentsNotifierProvider);
-    var alreadyAssigned = assignments
-        .groupBy((a) => a.itemId)
-        .mapValues((a) => a.fold(0, (p, e) => p + e.count));
-    var items = ref.watch(allItemsNotifierProvider);
-    //print("Items in ass: $items");
-    return Map.fromEntries(items.map((i) {
-      if (alreadyAssigned[i.id] == null ||
-          i.totalAmount <= alreadyAssigned[i.id]!) {
-        return MapEntry(i, i.totalAmount - (alreadyAssigned[i.id] ?? 0));
-      }
-    }).nonNulls);
+    var assignmentsAsync = ref.watch(allAssignmentsAsyncProvider);
+    var itemsAsync = ref.watch(allItemsAsyncProvider);
+    
+    return assignmentsAsync.when(
+      data: (assignments) {
+        return itemsAsync.when(
+          data: (items) {
+            var alreadyAssigned = assignments
+                .groupBy((a) => a.itemId)
+                .mapValues((a) => a.fold(0, (p, e) => p + e.count));
+            return Map.fromEntries(items.map((i) {
+              if (alreadyAssigned[i.id] == null ||
+                  i.totalAmount > (alreadyAssigned[i.id] ?? 0)) {
+                return MapEntry(i, i.totalAmount - (alreadyAssigned[i.id] ?? 0));
+              }
+            }).nonNulls);
+          },
+          loading: () => <Item, int>{},
+          error: (_, __) => <Item, int>{},
+        );
+      },
+      loading: () => <Item, int>{},
+      error: (_, __) => <Item, int>{},
+    );
   }
 }
 

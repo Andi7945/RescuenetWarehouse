@@ -48,3 +48,12 @@ class ModuleDestinationsNotifier extends _$ModuleDestinationsNotifier {
     await repository.deleteModuleDestination(destination.id);
   }
 }
+
+@riverpod
+class ModuleDestinationsAsync extends _$ModuleDestinationsAsync {
+  @override
+  Stream<List<ModuleDestination>> build() {
+    final repository = ref.watch(moduleDestinationRepositoryProvider);
+    return repository.watchModuleDestinations();
+  }
+}

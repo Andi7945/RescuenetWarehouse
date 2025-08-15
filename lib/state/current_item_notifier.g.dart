@@ -7,7 +7,7 @@ part of 'current_item_notifier.dart';
 // **************************************************************************
 
 String _$currentItemNotifierHash() =>
-    r'ef3addc2138d9b722e276173ced7e39a931cd7f3';
+    r'9beac67040199b91ffcffe2e20b1f4287759baa9';
 
 /// See also [CurrentItemNotifier].
 @ProviderFor(CurrentItemNotifier)

@@ -48,3 +48,12 @@ class CurrentLocationsNotifier extends _$CurrentLocationsNotifier {
     await repository.deleteCurrentLocation(location.id);
   }
 }
+
+@riverpod
+class CurrentLocationsAsync extends _$CurrentLocationsAsync {
+  @override
+  Stream<List<CurrentLocation>> build() {
+    final repository = ref.watch(currentLocationRepositoryProvider);
+    return repository.watchCurrentLocations();
+  }
+}

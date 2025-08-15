@@ -5,6 +5,7 @@ import 'package:rescuenet_warehouse/state/container_types_notifier.dart';
 import 'package:rescuenet_warehouse/state/current_locations_notifier.dart';
 import 'package:rescuenet_warehouse/state/module_destinations_notifier.dart';
 import 'package:rescuenet_warehouse/state/data_operations_notifier.dart';
+import 'package:rescuenet_warehouse/widgets/loading/async_value_builder.dart';
 
 import '../../models/rescue_container.dart';
 import '../../models/sequential_build.dart';
@@ -78,30 +79,72 @@ class _ContainerEditPageState extends river.ConsumerState<ContainerEditPage> {
   }
 
   _containerTypeDropdown() {
-    var options = ref.watch(containerTypesNotifierProvider);
-    return _dropdownWithEdit(
-        "container type",
-        routeEditContainerTypes,
-        _containerTypeController,
-        options.map((e) => DropdownMenuEntry(value: e.id, label: e.name)));
+    final asyncOptions = ref.watch(containerTypesAsyncProvider);
+    return AsyncValueBuilder(
+      value: asyncOptions,
+      data: (options) => _dropdownWithEdit(
+          "container type",
+          routeEditContainerTypes,
+          _containerTypeController,
+          options.map((e) => DropdownMenuEntry(value: e.id, label: e.name))),
+      loading: () => ListTile(
+        title: DropdownMenu<String?>(
+          enabled: false,
+          label: const Text("container type"),
+          dropdownMenuEntries: const [],
+        ),
+        trailing: IconButton(
+          icon: const Icon(Icons.edit),
+          onPressed: () => Navigator.pushNamed(context, routeEditContainerTypes),
+        ),
+      ),
+    );
   }
 
   _moduleDestinationDropdown() {
-    var dests = ref.watch(moduleDestinationsNotifierProvider);
-    return _dropdownWithEdit(
-        "module destination",
-        routeEditModuleDestinations,
-        _moduleDestinationController,
-        dests.map((e) => DropdownMenuEntry(value: e.id, label: e.name)));
+    final asyncDests = ref.watch(moduleDestinationsAsyncProvider);
+    return AsyncValueBuilder(
+      value: asyncDests,
+      data: (dests) => _dropdownWithEdit(
+          "module destination",
+          routeEditModuleDestinations,
+          _moduleDestinationController,
+          dests.map((e) => DropdownMenuEntry(value: e.id, label: e.name))),
+      loading: () => ListTile(
+        title: DropdownMenu<String?>(
+          enabled: false,
+          label: const Text("module destination"),
+          dropdownMenuEntries: const [],
+        ),
+        trailing: IconButton(
+          icon: const Icon(Icons.edit),
+          onPressed: () => Navigator.pushNamed(context, routeEditModuleDestinations),
+        ),
+      ),
+    );
   }
 
   _currentLocationsDropdown() {
-    var locs = ref.watch(currentLocationsNotifierProvider);
-    return _dropdownWithEdit(
-        "current location",
-        routeEditCurrentLocations,
-        _currentLocationController,
-        locs.map((e) => DropdownMenuEntry(value: e.id, label: e.name)));
+    final asyncLocs = ref.watch(currentLocationsAsyncProvider);
+    return AsyncValueBuilder(
+      value: asyncLocs,
+      data: (locs) => _dropdownWithEdit(
+          "current location",
+          routeEditCurrentLocations,
+          _currentLocationController,
+          locs.map((e) => DropdownMenuEntry(value: e.id, label: e.name))),
+      loading: () => ListTile(
+        title: DropdownMenu<String?>(
+          enabled: false,
+          label: const Text("current location"),
+          dropdownMenuEntries: const [],
+        ),
+        trailing: IconButton(
+          icon: const Icon(Icons.edit),
+          onPressed: () => Navigator.pushNamed(context, routeEditCurrentLocations),
+        ),
+      ),
+    );
   }
 
   _textField(String label, TextEditingController controller) => ListTile(
@@ -182,18 +225,36 @@ class _ContainerEditPageState extends river.ConsumerState<ContainerEditPage> {
     }
   }
 
-  _type() => _containerTypeController.value == null
-      ? null
-      : ref.read(containerTypesNotifierProvider).firstWhere(
-          (element) => element.id == _containerTypeController.value);
+  _type() {
+    if (_containerTypeController.value == null) return null;
+    final containerTypes = ref.read(containerTypesAsyncProvider);
+    return containerTypes.when(
+      data: (types) => types.firstWhere(
+          (element) => element.id == _containerTypeController.value),
+      loading: () => null,
+      error: (_, __) => null,
+    );
+  }
 
-  _destination() => _moduleDestinationController.value == null
-      ? null
-      : ref.read(moduleDestinationsNotifierProvider).firstWhere(
-          (element) => element.id == _moduleDestinationController.value);
+  _destination() {
+    if (_moduleDestinationController.value == null) return null;
+    final moduleDestinations = ref.read(moduleDestinationsAsyncProvider);
+    return moduleDestinations.when(
+      data: (destinations) => destinations.firstWhere(
+          (element) => element.id == _moduleDestinationController.value),
+      loading: () => null,
+      error: (_, __) => null,
+    );
+  }
 
-  _location() => _currentLocationController.value == null
-      ? null
-      : ref.read(currentLocationsNotifierProvider).firstWhere(
-          (element) => element.id == _currentLocationController.value);
+  _location() {
+    if (_currentLocationController.value == null) return null;
+    final currentLocations = ref.read(currentLocationsAsyncProvider);
+    return currentLocations.when(
+      data: (locations) => locations.firstWhere(
+          (element) => element.id == _currentLocationController.value),
+      loading: () => null,
+      error: (_, __) => null,
+    );
+  }
 }

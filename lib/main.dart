@@ -8,6 +8,7 @@ import 'package:rescuenet_warehouse/features/item_export/item_export_page.dart';
 import 'package:rescuenet_warehouse/state/all_assignments_notifier.dart';
 import 'package:rescuenet_warehouse/state/all_containers_notifier.dart';
 import 'package:rescuenet_warehouse/state/all_items_notifier.dart';
+import 'package:rescuenet_warehouse/state/all_work_logs_notifier.dart';
 import 'package:rescuenet_warehouse/state/container_current_filter_notifier.dart';
 import 'package:rescuenet_warehouse/state/container_hidden_by_selection_notifier.dart';
 import 'package:rescuenet_warehouse/state/container_types_notifier.dart';
@@ -116,18 +117,19 @@ class _EagerInitialization extends river.ConsumerWidget {
       // Eagerly initialize providers by watching them.
       // By using "watch", the provider will stay alive and not be disposed.
       // See https://riverpod.dev/docs/essentials/eager_initialization
-      ref.watch(containerTypesNotifierProvider);
-      ref.watch(moduleDestinationsNotifierProvider);
-      ref.watch(currentLocationsNotifierProvider);
+      ref.watch(containerTypesAsyncProvider);
+      ref.watch(moduleDestinationsAsyncProvider);
+      ref.watch(currentLocationsAsyncProvider);
       ref.watch(allContainersNotifierProvider);
-      ref.watch(allItemsNotifierProvider);
-      ref.watch(allAssignmentsNotifierProvider);
+      ref.watch(allItemsAsyncProvider);
+      ref.watch(allAssignmentsAsyncProvider);
       ref.watch(itemsCurrentFilterNotifierProvider);
       ref.watch(itemsCurrentSortNotifierProvider);
-      ref.watch(itemsFilteredAndSortedNotifierProvider);
+      ref.watch(itemsFilteredAndSortedAsyncProvider);
       ref.watch(containerHiddenBySelectionNotifierProvider);
       ref.watch(containerVisibilityNotifierProvider);
       ref.watch(containerCurrentFilterNotifierProvider);
+      ref.watch(allWorkLogsAsyncProvider);
     }
 
     return child;

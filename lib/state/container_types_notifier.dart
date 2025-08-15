@@ -48,3 +48,12 @@ class ContainerTypesNotifier extends _$ContainerTypesNotifier {
     await repository.deleteContainerType(type.id);
   }
 }
+
+@riverpod
+class ContainerTypesAsync extends _$ContainerTypesAsync {
+  @override
+  Stream<List<ContainerType>> build() {
+    final repository = ref.watch(containerTypeRepositoryProvider);
+    return repository.watchContainerTypes();
+  }
+}

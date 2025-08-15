@@ -17,11 +17,18 @@ class WorkLogSinceNotifier extends _$WorkLogSinceNotifier {
   }
 
   Iterable<LogEntry> logs() {
-    var logs = ref.watch(allWorkLogsNotifierProvider);
+    var logsAsync = ref.watch(allWorkLogsAsyncProvider);
     var date = ref.watch(workLogDateFilterNotifierProvider);
-    if (date != null) {
-      return logs.where((e) => e.date.isAfter(date));
-    }
-    return logs;
+    
+    return logsAsync.when(
+      data: (logs) {
+        if (date != null) {
+          return logs.where((e) => e.date.isAfter(date));
+        }
+        return logs;
+      },
+      loading: () => <LogEntry>[],
+      error: (_, __) => <LogEntry>[],
+    );
   }
 }

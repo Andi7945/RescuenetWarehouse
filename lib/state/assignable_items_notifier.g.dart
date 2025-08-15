@@ -7,7 +7,7 @@ part of 'assignable_items_notifier.dart';
 // **************************************************************************
 
 String _$assignableItemsNotifierHash() =>
-    r'aaef4e052bd0567a670e6e34173a35e45f92f5e7';
+    r'4d6eac620bacd35ec3a8e951597d217ae41cfc8f';
 
 /// See also [AssignableItemsNotifier].
 @ProviderFor(AssignableItemsNotifier)
