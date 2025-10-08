@@ -15,18 +15,23 @@ class ContainerWithItemsNotifier extends _$ContainerWithItemsNotifier {
   @override
   Map<RescueContainer, Map<Item, int>> build() {
     var assignmentsAsync = ref.watch(allAssignmentsAsyncProvider);
+    var containersAsync = ref.watch(allContainersAsyncProvider);
+    
     return assignmentsAsync.when(
-      data: (assignments) => _container(assignments),
+      data: (assignments) => containersAsync.when(
+        data: (containers) => _container(assignments, containers),
+        loading: () => <RescueContainer, Map<Item, int>>{},
+        error: (_, __) => <RescueContainer, Map<Item, int>>{},
+      ),
       loading: () => <RescueContainer, Map<Item, int>>{},
       error: (_, __) => <RescueContainer, Map<Item, int>>{},
     );
   }
 
   Map<RescueContainer, Map<Item, int>> _container(
-      List<Assignment> assignments) {
-    var container = ref.watch(allContainersNotifierProvider.notifier);
+      List<Assignment> assignments, List<RescueContainer> containers) {
     var entries = assignments.groupBy((a) => a.containerId).entries.map((e) {
-      var cont = container.byId(e.key);
+      var cont = containers.firstWhereOrNull((container) => container.id == e.key);
       if (cont != null) {
         return MapEntry(cont, _items(e.value));
       }

@@ -6,29 +6,8 @@ part of 'container_visibility_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$containerVisibilityNotifierHash() =>
-    r'6c9bfd34f429570cd4ce95d4eccdc8826ec28fdd';
-
-/// See also [ContainerVisibilityNotifier].
-@ProviderFor(ContainerVisibilityNotifier)
-final containerVisibilityNotifierProvider = AutoDisposeNotifierProvider<
-  ContainerVisibilityNotifier,
-  Map<RescueContainer, bool>
->.internal(
-  ContainerVisibilityNotifier.new,
-  name: r'containerVisibilityNotifierProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$containerVisibilityNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$ContainerVisibilityNotifier =
-    AutoDisposeNotifier<Map<RescueContainer, bool>>;
 String _$containerVisibilityAsyncHash() =>
-    r'ab8a312101dc2f1ac5ec63e8931b37e1f4265bb0';
+    r'97dae472922413a694bdb517c773111ee7f9ca34';
 
 /// AsyncValue-based container visibility provider for loading states support.
 ///

@@ -10,6 +10,7 @@ import 'package:rescuenet_warehouse/state/data_operations_notifier.dart';
 import 'package:rescuenet_warehouse/ui/rescue_navigation_drawer.dart';
 import 'package:rescuenet_warehouse/ui/rescue_text.dart';
 import 'package:rescuenet_warehouse/widgets/loading/loading_widgets.dart';
+import 'package:rescuenet_warehouse/widgets/loading/async_value_builder.dart';
 
 import '../../../models/rescue_container.dart';
 
@@ -17,20 +18,47 @@ class AssignmentByContainerPage extends river.ConsumerWidget {
   @override
   Widget build(BuildContext context, river.WidgetRef ref) {
     var containerId = ModalRoute.of(context)!.settings.arguments as String;
-    var container = ref
-        .watch(allContainersNotifierProvider.notifier)
-        .byId(containerId);
-        
+    
     // Watch loading state for assignment creation
     final isCreatingAssignment = ref.watch(isOperationLoadingProvider(DataOperation.assignmentCreate));
     
-    if (container == null) {
-      return const CircularProgressIndicator();
-    }
-    return Scaffold(
-      appBar: AppBar(title: Text("Assign items to ${container.printName}")),
-      drawer: RescueNavigationDrawer(),
-      body: _page(context, container, ref, isCreatingAssignment),
+    return AsyncValueBuilder<List<RescueContainer>>(
+      value: ref.watch(allContainersAsyncProvider),
+      loading: () => Scaffold(
+        appBar: AppBar(title: const Text("Loading...")),
+        drawer: RescueNavigationDrawer(),
+        body: const DataLoadingIndicator(
+          message: 'Loading container information...',
+        ),
+      ),
+      error: (error, stackTrace) => Scaffold(
+        appBar: AppBar(title: const Text("Error")),
+        drawer: RescueNavigationDrawer(),
+        body: ErrorRetryWidget(
+          error: error,
+          message: 'Failed to load container information',
+          onRetry: () => ref.refresh(allContainersAsyncProvider),
+        ),
+      ),
+      data: (containers) {
+        var container = containers.where((c) => c.id == containerId).firstOrNull;
+        
+        if (container == null) {
+          return Scaffold(
+            appBar: AppBar(title: const Text("Container not found")),
+            drawer: RescueNavigationDrawer(),
+            body: const Center(
+              child: Text("Container not found"),
+            ),
+          );
+        }
+        
+        return Scaffold(
+          appBar: AppBar(title: Text("Assign items to ${container.printName}")),
+          drawer: RescueNavigationDrawer(),
+          body: _page(context, container, ref, isCreatingAssignment),
+        );
+      },
     );
   }
 

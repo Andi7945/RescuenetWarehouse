@@ -11,19 +11,25 @@ part 'current_location_usage_notifier.g.dart';
 @riverpod
 class CurrentLocationUsageNotifier extends _$CurrentLocationUsageNotifier {
   @override
-  Map<CurrentLocation, Set<String>> build() {
-    var containers = ref.watch(allContainersNotifierProvider);
+  AsyncValue<Map<CurrentLocation, Set<String>>> build() {
+    var containersAsync = ref.watch(allContainersAsyncProvider);
     var dests = ref.watch(currentLocationsNotifierProvider);
 
-    Map<CurrentLocation, Set<String>> grouped = containers
-        .where((element) => element.type != null)
-        .groupBy((p0) => p0.currentLocation!)
-        .mapValues(
-            (value) => value.map((e) => e.printName).whereNotNull().toSet());
+    return containersAsync.when(
+      data: (containers) {
+        Map<CurrentLocation, Set<String>> grouped = containers
+            .where((element) => element.type != null)
+            .groupBy((p0) => p0.currentLocation!)
+            .mapValues(
+                (value) => value.map((e) => e.printName).whereNotNull().toSet());
 
-    Map<CurrentLocation, Set<String>> map = {
-      for (var e in dests) e: grouped[e] ?? Set()
-    };
-    return map;
+        Map<CurrentLocation, Set<String>> map = {
+          for (var e in dests) e: grouped[e] ?? Set()
+        };
+        return AsyncValue.data(map);
+      },
+      loading: () => const AsyncValue.loading(),
+      error: (error, stackTrace) => AsyncValue.error(error, stackTrace),
+    );
   }
 }

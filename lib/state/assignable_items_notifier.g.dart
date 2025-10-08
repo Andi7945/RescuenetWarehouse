@@ -6,26 +6,6 @@ part of 'assignable_items_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$assignableItemsNotifierHash() =>
-    r'4d6eac620bacd35ec3a8e951597d217ae41cfc8f';
-
-/// See also [AssignableItemsNotifier].
-@ProviderFor(AssignableItemsNotifier)
-final assignableItemsNotifierProvider = AutoDisposeNotifierProvider<
-  AssignableItemsNotifier,
-  Map<Item, int>
->.internal(
-  AssignableItemsNotifier.new,
-  name: r'assignableItemsNotifierProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$assignableItemsNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$AssignableItemsNotifier = AutoDisposeNotifier<Map<Item, int>>;
 String _$assignableItemsAsyncHash() =>
     r'4a5301e743d564fbd248245d02cba5e13be2543e';
 

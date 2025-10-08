@@ -37,8 +37,7 @@
     // Load mock Firebase when running Playwright tests or when mock=true parameter is present
     const isPlaywrightTest = navigator.userAgent.includes('Playwright') || 
                              navigator.userAgent.includes('HeadlessChrome') ||
-                             window.location.search.includes('mock=true') ||
-                             window.location.hostname === 'localhost';
+                             window.location.search.includes('mock=true');
     
     console.log('Mock Firebase detection:', {
       userAgent: navigator.userAgent,
@@ -63,9 +62,12 @@
 
   <!-- Flutter renderer configuration -->
   <script>
+    // Store Flutter configuration for use with engineInitializer
+    window.flutterConfig = {};
+    
     // Force HTML rendering for Playwright tests to enable DOM selectors
     if (isPlaywrightTest) {
-      window.flutterConfiguration = {
+      window.flutterConfig = {
         renderer: "html"  // Use HTML renderer instead of canvas for testing
       };
       console.log('Using HTML renderer for testing');
@@ -76,6 +78,41 @@
     // The value below is injected by flutter build, do not touch.
     var serviceWorkerVersion = null;
   </script>
+  <!-- Override Flutter loader to use our config -->
+  <script>
+    // Create a custom Flutter loader that applies our configuration
+    window.addEventListener('DOMContentLoaded', function() {
+      // Store the original load function
+      const originalLoad = window._flutter?.loader?.load;
+      
+      // Override the loader when it becomes available
+      const overrideLoader = () => {
+        if (window._flutter && window._flutter.loader && !window._flutter.loader._configOverridden) {
+          const loader = window._flutter.loader;
+          const originalLoad = loader.load.bind(loader);
+          
+          loader.load = function(options = {}) {
+            // Merge our config with any existing config
+            const mergedOptions = {
+              ...options,
+              config: {
+                ...options.config,
+                ...window.flutterConfig
+              }
+            };
+            return originalLoad(mergedOptions);
+          };
+          
+          loader._configOverridden = true;
+        } else if (!window._flutter?.loader?._configOverridden) {
+          setTimeout(overrideLoader, 10);
+        }
+      };
+      
+      overrideLoader();
+    });
+  </script>
+  
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter_bootstrap.js" async></script>
 </head>

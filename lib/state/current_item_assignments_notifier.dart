@@ -20,15 +20,33 @@ class CurrentItemAssignmentsNotifier extends _$CurrentItemAssignmentsNotifier {
   Map<RescueContainer, int> build() {
     var currentItem = ref.watch(currentItemNotifierProvider);
     if (currentItem == null) return {};
-    var assignments = ref.watch(allAssignmentsNotifierProvider);
+    var assignmentsAsync = ref.watch(allAssignmentsAsyncProvider);
+    var containersAsync = ref.watch(allContainersAsyncProvider);
 
-    var containerNotifier = ref.watch(allContainersNotifierProvider.notifier);
-    var grouped = assignments
-        .where((a) => a.itemId == currentItem.id)
-        .groupBy((a) => a.containerId)
-        .map((k, v) => MapEntry(containerNotifier.byId(k)!, _sumAmounts(v)));
-
-    return grouped;
+    return assignmentsAsync.when(
+      data: (assignments) {
+        return containersAsync.when(
+          data: (containers) {
+            var grouped = assignments
+                .where((a) => a.itemId == currentItem.id)
+                .groupBy((a) => a.containerId);
+            
+            Map<RescueContainer, int> result = {};
+            for (var entry in grouped.entries) {
+              var container = containers.firstWhereOrNull((c) => c.id == entry.key);
+              if (container != null) {
+                result[container] = _sumAmounts(entry.value);
+              }
+            }
+            return result;
+          },
+          loading: () => <RescueContainer, int>{},
+          error: (_, __) => <RescueContainer, int>{},
+        );
+      },
+      loading: () => <RescueContainer, int>{},
+      error: (_, __) => <RescueContainer, int>{},
+    );
   }
 
   int _sumAmounts(List<Assignment> assignments) => assignments.fold(
@@ -41,7 +59,7 @@ class CurrentItemAssignmentsNotifier extends _$CurrentItemAssignmentsNotifier {
     
     // Check if assignment already exists to prevent duplicates
     var existingAssignment = ref
-        .read(allAssignmentsNotifierProvider.notifier)
+        .read(allAssignmentsAsyncProvider.notifier)
         .byIds(currentItem!.id, containerIdToAdd);
     
     if (existingAssignment != null) {
@@ -65,7 +83,7 @@ class CurrentItemAssignmentsNotifier extends _$CurrentItemAssignmentsNotifier {
   setAmount(String containerId, int amount) {
     var item = ref.read(currentItemNotifierProvider)!;
     var current = ref
-        .read(allAssignmentsNotifierProvider.notifier)
+        .read(allAssignmentsAsyncProvider.notifier)
         .byIds(item.id, containerId);
 
     if (current != null) {

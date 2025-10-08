@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ItemExportButtons extends StatelessWidget {
   final int selectedToExport;
   final Function() triggerExport;
-  final Function() triggerExportAll;
+  final Function()? triggerExportAll;
 
   const ItemExportButtons({
     super.key,
@@ -27,9 +27,9 @@ class ItemExportButtons extends StatelessWidget {
           child: Text("Export ($selectedToExport)"),
         ),
         OutlinedButton(
-          onPressed: () {
-            triggerExportAll();
-          },
+          onPressed: triggerExportAll != null ? () {
+            triggerExportAll!();
+          } : null,
           child: Text("Export All"),
         ),
       ],

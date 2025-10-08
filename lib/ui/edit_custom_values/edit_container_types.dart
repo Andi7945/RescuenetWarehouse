@@ -33,10 +33,25 @@ class _EditContainerTypesState extends river.ConsumerState<EditContainerTypes> {
   }
 
   _body() {
-    var usage = ref.watch(containerTypeUsageNotifierProvider);
+    var usageAsync = ref.watch(containerTypeUsageNotifierProvider);
     return Padding(
         padding: const EdgeInsets.only(left: 40, right: 40),
-        child: _table(usage));
+        child: usageAsync.when(
+          data: (usage) => _table(usage),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stackTrace) => Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Error loading container types: $error'),
+                ElevatedButton(
+                  onPressed: () => ref.refresh(containerTypeUsageNotifierProvider),
+                  child: const Text('Retry'),
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 
   Widget _table(Map<ContainerType, Set<String>> currentTypes) => RescueTable(

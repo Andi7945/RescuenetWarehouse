@@ -13,13 +13,20 @@ List<(Item, int)> assignableItems(
   bool hideWithoutRemainingAmount,
   ItemSortingOption sorting,
 ) {
-  var itemsAssignable = ref.watch(assignableItemsNotifierProvider);
-  var alreadyAssigned =
-      ref
-          .watch(allAssignmentsNotifierProvider)
-          .where((a) => a.containerId == containerId && a.count != 0)
-          .map((a) => a.itemId)
-          .toList();
+  final itemsAssignableAsync = ref.watch(assignableItemsAsyncProvider);
+  final assignmentsAsync = ref.watch(allAssignmentsAsyncProvider);
+  
+  // Return empty list if either assignable items or assignments are loading or in error state
+  final itemsAssignable = itemsAssignableAsync.valueOrNull;
+  final assignments = assignmentsAsync.valueOrNull;
+  if (itemsAssignable == null || assignments == null) {
+    return [];
+  }
+  
+  var alreadyAssigned = assignments
+      .where((a) => a.containerId == containerId && a.count != 0)
+      .map((a) => a.itemId)
+      .toList();
 
   var available =
       itemsAssignable.entries

@@ -34,8 +34,8 @@ class ContainerWithContentHeaderCheckbox extends ConsumerWidget {
         value: value,
         onChanged: (bool? value) {
           ref
-              .read(allContainersNotifierProvider.notifier)
-              .update(provideChanged(value ?? false));
+              .read(allContainersAsyncProvider.notifier)
+              .updateContainer(provideChanged(value ?? false));
         },
       ),
     );

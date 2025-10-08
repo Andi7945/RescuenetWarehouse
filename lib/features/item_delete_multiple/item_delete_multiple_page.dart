@@ -28,7 +28,7 @@ class _ItemDeleteMultiplePageState
 
   @override
   Widget build(BuildContext context) {
-    var items = ref.watch(itemsFilteredAndSortedNotifierProvider);
+    final itemsAsync = ref.watch(itemsFilteredAndSortedAsyncProvider);
     
     // Watch loading states for batch operations
     final isDeletingItems = ref.watch(isOperationLoadingProvider(DataOperation.itemBatchUpdate));
@@ -69,7 +69,33 @@ class _ItemDeleteMultiplePageState
         absorbing: isDeletingItems,
         child: Opacity(
           opacity: isDeletingItems ? 0.6 : 1.0,
-          child: _body(items),
+          child: itemsAsync.when(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (error, stackTrace) => Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 48,
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Error loading items: $error',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () => ref.refresh(itemsFilteredAndSortedAsyncProvider),
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+            ),
+            data: (items) => _body(items),
+          ),
         ),
       ),
     );
@@ -86,21 +112,39 @@ class _ItemDeleteMultiplePageState
   }
 
   _changeSelectionForItem(Item item) {
-    var assignments = ref
-        .read(allAssignmentsNotifierProvider.notifier)
-        .byItem(item.id);
-    if (assignments.isEmpty) {
-      itemDeletionList.insertOrDelete(item);
-      setState(() {
-        itemsInList = itemDeletionList.length;
-      });
-    } else {
-      var containers = assignments.map((a) => a.containerId.toString());
-      showSnackbar(
-        context,
-        'Can not delete item. It is still used in containers ${containers.join(", ")}',
-      );
-    }
+    final assignmentsAsync = ref.read(allAssignmentsAsyncProvider);
+    
+    assignmentsAsync.when(
+      loading: () {
+        // While assignments are loading, prevent selection to be safe
+        showSnackbar(
+          context,
+          'Loading assignment data. Please wait before selecting items.',
+        );
+      },
+      error: (error, _) {
+        // On error, prevent selection to be safe
+        showSnackbar(
+          context,
+          'Error loading assignment data. Cannot verify if item can be deleted.',
+        );
+      },
+      data: (assignments) {
+        var itemAssignments = assignments.where((a) => a.itemId == item.id).toList();
+        if (itemAssignments.isEmpty) {
+          itemDeletionList.insertOrDelete(item);
+          setState(() {
+            itemsInList = itemDeletionList.length;
+          });
+        } else {
+          var containers = itemAssignments.map((a) => a.containerId.toString());
+          showSnackbar(
+            context,
+            'Can not delete item. It is still used in containers ${containers.join(", ")}',
+          );
+        }
+      },
+    );
   }
 
   Future<void> _delete(BuildContext context) async {

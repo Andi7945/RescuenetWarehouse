@@ -120,14 +120,14 @@ class _EagerInitialization extends river.ConsumerWidget {
       ref.watch(containerTypesAsyncProvider);
       ref.watch(moduleDestinationsAsyncProvider);
       ref.watch(currentLocationsAsyncProvider);
-      ref.watch(allContainersNotifierProvider);
+      ref.watch(allContainersAsyncProvider);
       ref.watch(allItemsAsyncProvider);
       ref.watch(allAssignmentsAsyncProvider);
       ref.watch(itemsCurrentFilterNotifierProvider);
       ref.watch(itemsCurrentSortNotifierProvider);
       ref.watch(itemsFilteredAndSortedAsyncProvider);
       ref.watch(containerHiddenBySelectionNotifierProvider);
-      ref.watch(containerVisibilityNotifierProvider);
+      ref.watch(containerVisibilityAsyncProvider);
       ref.watch(containerCurrentFilterNotifierProvider);
       ref.watch(allWorkLogsAsyncProvider);
     }

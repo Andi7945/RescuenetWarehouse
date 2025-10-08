@@ -24,16 +24,28 @@ class _ItemExportPageState extends ConsumerState<ItemExportPage> {
 
   @override
   Widget build(BuildContext context) {
-    var items = ref.watch(itemsFilteredAndSortedNotifierProvider);
+    final itemsAsync = ref.watch(itemsFilteredAndSortedAsyncProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text("Item export"),
         actions: [
-          ItemExportButtons(
-            selectedToExport: itemsInList,
-            triggerExport: () => _exportItems(itemExportList),
-            triggerExportAll: () => _exportItems(items),
+          itemsAsync.when(
+            loading: () => ItemExportButtons(
+              selectedToExport: itemsInList,
+              triggerExport: () => _exportItems(itemExportList),
+              triggerExportAll: null, // Disable export all while loading
+            ),
+            error: (error, stackTrace) => ItemExportButtons(
+              selectedToExport: itemsInList,
+              triggerExport: () => _exportItems(itemExportList),
+              triggerExportAll: null, // Disable export all on error
+            ),
+            data: (items) => ItemExportButtons(
+              selectedToExport: itemsInList,
+              triggerExport: () => _exportItems(itemExportList),
+              triggerExportAll: () => _exportItems(items),
+            ),
           ),
           const Padding(
             padding: EdgeInsets.only(right: 8, left: 8),
@@ -43,7 +55,33 @@ class _ItemExportPageState extends ConsumerState<ItemExportPage> {
         ],
       ),
       drawer: RescueNavigationDrawer(),
-      body: _body(items),
+      body: itemsAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stackTrace) => Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.error_outline,
+                size: 48,
+                color: Theme.of(context).colorScheme.error,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Error loading items: $error',
+                style: Theme.of(context).textTheme.bodyLarge,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () => ref.refresh(itemsFilteredAndSortedAsyncProvider),
+                child: const Text('Retry'),
+              ),
+            ],
+          ),
+        ),
+        data: (items) => _body(items),
+      ),
     );
   }
 

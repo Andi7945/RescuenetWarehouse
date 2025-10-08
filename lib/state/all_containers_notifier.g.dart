@@ -31,26 +31,6 @@ final allContainersStreamProvider =
 // ignore: unused_element
 typedef AllContainersStreamRef =
     AutoDisposeStreamProviderRef<List<RescueContainer>>;
-String _$allContainersNotifierHash() =>
-    r'1433cb34c36bfe3d8bb47954010e88c537908c40';
-
-/// See also [AllContainersNotifier].
-@ProviderFor(AllContainersNotifier)
-final allContainersNotifierProvider = AutoDisposeNotifierProvider<
-  AllContainersNotifier,
-  List<RescueContainer>
->.internal(
-  AllContainersNotifier.new,
-  name: r'allContainersNotifierProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$allContainersNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$AllContainersNotifier = AutoDisposeNotifier<List<RescueContainer>>;
 String _$allContainersAsyncHash() =>
     r'2f32fa441390bca4d37ffa7feac60a2d123da5f2';
 

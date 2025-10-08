@@ -28,26 +28,6 @@ final itemsFilteredAndSortedCompatProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef ItemsFilteredAndSortedCompatRef = AutoDisposeProviderRef<List<Item>>;
-String _$itemsFilteredAndSortedNotifierHash() =>
-    r'0ba39c73c80cf9a854dea5bdbf0bfd5b38f6e9b0';
-
-/// See also [ItemsFilteredAndSortedNotifier].
-@ProviderFor(ItemsFilteredAndSortedNotifier)
-final itemsFilteredAndSortedNotifierProvider = AutoDisposeNotifierProvider<
-  ItemsFilteredAndSortedNotifier,
-  List<Item>
->.internal(
-  ItemsFilteredAndSortedNotifier.new,
-  name: r'itemsFilteredAndSortedNotifierProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$itemsFilteredAndSortedNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$ItemsFilteredAndSortedNotifier = AutoDisposeNotifier<List<Item>>;
 String _$itemsFilteredAndSortedAsyncHash() =>
     r'359bc7c713767972abc55c02000ada61b5fc3e7a';
 

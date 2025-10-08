@@ -8,29 +8,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'container_visibility_notifier.g.dart';
 
-@riverpod
-class ContainerVisibilityNotifier extends _$ContainerVisibilityNotifier {
-  @override
-  Map<RescueContainer, bool> build() {
-    var container = ref.watch(allContainersNotifierProvider);
-    var filter = ref.watch(containerCurrentFilterNotifierProvider);
-    var assignments = ref.watch(allAssignmentsNotifierProvider.notifier);
-    var items = ref.watch(allItemsNotifierProvider.notifier);
-    var hiddenContainers =
-        ref.watch(containerHiddenBySelectionNotifierProvider);
-    return Map.fromEntries(container.map((c) {
-      if (hiddenContainers.contains(c)) {
-        return MapEntry(c, false);
-      }
-      var itms = assignments
-          .byContainer(c.id)
-          .map((a) => items.byId(a.itemId))
-          .nonNulls
-          .toList();
-      return MapEntry(c, filter.matches(c, itms));
-    }));
-  }
-}
 
 /// AsyncValue-based container visibility provider for loading states support.
 /// 
@@ -43,28 +20,40 @@ class ContainerVisibilityAsync extends _$ContainerVisibilityAsync {
     // Watch the async containers stream
     final containersAsync = ref.watch(allContainersAsyncProvider);
     final filter = ref.watch(containerCurrentFilterNotifierProvider);
-    final assignments = ref.watch(allAssignmentsNotifierProvider.notifier);
+    final assignmentsAsync = ref.watch(allAssignmentsAsyncProvider);
     final items = ref.watch(allItemsNotifierProvider.notifier);
     final hiddenContainers = ref.watch(containerHiddenBySelectionNotifierProvider);
     
-    // Emit visibility map based on current containers state
-    yield* containersAsync.when(
-      data: (containers) async* {
-        final visibilityMap = Map.fromEntries(containers.map((c) {
-          if (hiddenContainers.contains(c)) {
-            return MapEntry(c, false);
-          }
-          var itms = assignments
-              .byContainer(c.id)
-              .map((a) => items.byId(a.itemId))
-              .nonNulls
-              .toList();
-          return MapEntry(c, filter.matches(c, itms));
-        }));
-        yield visibilityMap;
+    // Emit visibility map based on current containers and assignments state
+    yield* assignmentsAsync.when(
+      data: (assignments) async* {
+        yield* containersAsync.when(
+          data: (containers) async* {
+            final visibilityMap = Map.fromEntries(containers.map((c) {
+              if (hiddenContainers.contains(c)) {
+                return MapEntry(c, false);
+              }
+              var itms = assignments
+                  .where((a) => a.containerId == c.id)
+                  .map((a) => items.byId(a.itemId))
+                  .nonNulls
+                  .toList();
+              return MapEntry(c, filter.matches(c, itms));
+            }));
+            yield visibilityMap;
+          },
+          loading: () async* {
+            // While loading containers, yield empty map
+            yield <RescueContainer, bool>{};
+          },
+          error: (error, stackTrace) async* {
+            // On error, yield empty map (could also throw the error)
+            yield <RescueContainer, bool>{};
+          },
+        );
       },
       loading: () async* {
-        // While loading, yield empty map
+        // While loading assignments, yield empty map
         yield <RescueContainer, bool>{};
       },
       error: (error, stackTrace) async* {

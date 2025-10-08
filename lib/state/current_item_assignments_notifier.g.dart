@@ -7,7 +7,7 @@ part of 'current_item_assignments_notifier.dart';
 // **************************************************************************
 
 String _$currentItemAssignmentsNotifierHash() =>
-    r'beb3d2728f28c565dd0c564c64929fdc88936074';
+    r'214f81bea8232195064169bb65bd22e2cb0936b7';
 
 /// See also [CurrentItemAssignmentsNotifier].
 @ProviderFor(CurrentItemAssignmentsNotifier)

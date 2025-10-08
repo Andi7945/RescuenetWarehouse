@@ -8,14 +8,31 @@ import '../item_card.dart';
 
 class ContainerWithContentUnassigned extends ConsumerWidget {
   @override
-  Widget build(BuildContext context, WidgetRef ref) => ListView(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final assignableItemsAsync = ref.watch(assignableItemsAsyncProvider);
+    
+    return assignableItemsAsync.when(
+      data: (assignableItems) => ListView(
         shrinkWrap: true,
         children: [
           _header(),
-          ..._sortedEntries(ref.watch(assignableItemsNotifierProvider))
+          ..._sortedEntries(assignableItems)
               .map((e) => ItemCard(e.key, e.value, true))
         ],
-      );
+      ),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stack) => Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error, color: Colors.red, size: 48),
+            const SizedBox(height: 8),
+            Text('Error loading unassigned items: $error'),
+          ],
+        ),
+      ),
+    );
+  }
 
   _header() {
     return Container(

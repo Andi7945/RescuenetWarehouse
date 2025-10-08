@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rescuenet_warehouse/state/container_hidden_by_selection_notifier.dart';
 import 'package:rescuenet_warehouse/ui/rescue_text.dart';
+import 'package:rescuenet_warehouse/widgets/loading/async_value_builder.dart';
 
 import '../models/rescue_container.dart';
 import '../state/container_visibility_notifier.dart';
@@ -14,10 +15,32 @@ class ContainerChooserModal extends ConsumerWidget {
         Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [ContainerFilterDropdown()]),
-        _table(ref)
+        AsyncValueBuilder<Map<RescueContainer, bool>>(
+          value: ref.watch(containerVisibilityAsyncProvider),
+          loading: () => const Padding(
+            padding: EdgeInsets.all(24.0),
+            child: Center(child: CircularProgressIndicator()),
+          ),
+          error: (error, stackTrace) => Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              children: [
+                const Icon(Icons.error_outline, color: Colors.red),
+                const SizedBox(height: 8),
+                Text('Error: ${error.toString()}'),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: () => ref.refresh(containerVisibilityAsyncProvider),
+                  child: const Text('Retry'),
+                ),
+              ],
+            ),
+          ),
+          data: (visibilityMap) => _table(ref, visibilityMap),
+        )
       ]);
 
-  Widget _table(WidgetRef ref) => Padding(
+  Widget _table(WidgetRef ref, Map<RescueContainer, bool> visibilityMap) => Padding(
       padding: const EdgeInsets.only(top: 8),
       child: Table(columnWidths: const {
         0: IntrinsicColumnWidth(),
@@ -26,7 +49,7 @@ class ContainerChooserModal extends ConsumerWidget {
         3: IntrinsicColumnWidth()
       }, children: [
         _header(),
-        ..._options(ref)
+        ..._options(ref, visibilityMap)
       ]));
 
   TableRow _header() => TableRow(children: [
@@ -36,9 +59,8 @@ class ContainerChooserModal extends ConsumerWidget {
         Align(child: RescueText.normal("ready", FontWeight.w700)),
       ]);
 
-  List<TableRow> _options(WidgetRef ref) {
-    var containerWithVisible =
-        ref.watch(containerVisibilityNotifierProvider).entries.toList();
+  List<TableRow> _options(WidgetRef ref, Map<RescueContainer, bool> visibilityMap) {
+    var containerWithVisible = visibilityMap.entries.toList();
     containerWithVisible.sort((a, b) => a.key.number.compareTo(b.key.number));
     return containerWithVisible
         .map((entry) => _option(MapEntry(entry.key, entry.value), ref))

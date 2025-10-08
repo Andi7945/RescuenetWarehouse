@@ -28,11 +28,26 @@ class _EditModuleDestinationsState
   }
 
   _body() {
-    var usage = ref.watch(moduleDestinationUsageNotifierProvider);
+    var usageAsync = ref.watch(moduleDestinationUsageNotifierProvider);
 
     return Padding(
         padding: const EdgeInsets.only(left: 40, right: 40),
-        child: _table(usage));
+        child: usageAsync.when(
+          data: (usage) => _table(usage),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stackTrace) => Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Error loading module destinations: $error'),
+                ElevatedButton(
+                  onPressed: () => ref.refresh(moduleDestinationUsageNotifierProvider),
+                  child: const Text('Retry'),
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 
   Widget _table(Map<ModuleDestination, Set<String>> moduleDestinations) =>

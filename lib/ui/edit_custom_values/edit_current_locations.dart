@@ -28,11 +28,26 @@ class _EditCurrentLocationsState
   }
 
   _body() {
-    var usage = ref.watch(currentLocationUsageNotifierProvider);
+    var usageAsync = ref.watch(currentLocationUsageNotifierProvider);
 
     return Padding(
         padding: const EdgeInsets.only(left: 40, right: 40),
-        child: _table(usage));
+        child: usageAsync.when(
+          data: (usage) => _table(usage),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stackTrace) => Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Error loading current locations: $error'),
+                ElevatedButton(
+                  onPressed: () => ref.refresh(currentLocationUsageNotifierProvider),
+                  child: const Text('Retry'),
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 
   Widget _table(Map<CurrentLocation, Set<String>> withUsage) => RescueTable(

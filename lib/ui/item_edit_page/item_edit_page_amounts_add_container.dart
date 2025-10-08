@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as river;
 import 'package:rescuenet_warehouse/models/rescue_container.dart';
 import 'package:rescuenet_warehouse/state/current_item_assignments_notifier.dart';
+import 'package:rescuenet_warehouse/widgets/loading/loading_widgets.dart';
 
 import '../../state/all_containers_notifier.dart';
 import '../rescue_dropdown_button.dart';
@@ -24,10 +25,42 @@ class _ItemEditPageAmountsAddContainerState
 
   @override
   Widget build(BuildContext context) {
-    var container = ref.watch(allContainersNotifierProvider);
-    var availableOptions =
-        container.where((c) => !widget.haveBeenUsed.contains(c)).toList();
-    return _body(_options(availableOptions));
+    return ref.watch(allContainersAsyncProvider).when(
+      loading: () => const Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Center(
+          child: SizedBox(
+            width: 20,
+            height: 20,
+            child: CircularProgressIndicator(strokeWidth: 2),
+          ),
+        ),
+      ),
+      error: (error, stackTrace) => Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.error_outline, color: Colors.red, size: 24),
+            const SizedBox(height: 8),
+            Text(
+              'Failed to load containers',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            const SizedBox(height: 8),
+            ElevatedButton(
+              onPressed: () => ref.refresh(allContainersAsyncProvider),
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
+      ),
+      data: (containers) {
+        var availableOptions =
+            containers.where((c) => !widget.haveBeenUsed.contains(c)).toList();
+        return _body(_options(availableOptions));
+      },
+    );
   }
 
   Map<String, String> _options(List<RescueContainer> availableOptions) {

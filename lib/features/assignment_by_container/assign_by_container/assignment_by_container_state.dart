@@ -12,19 +12,26 @@ part 'assignment_by_container_state.g.dart';
 class AssignmentByContainerState extends _$AssignmentByContainerState {
   @override
   Map<Item, Assignment> build(String containerId) {
-    var assignments = ref
-        .watch(allAssignmentsNotifierProvider)
-        .where((a) => a.containerId == containerId);
+    var assignmentsAsync = ref.watch(allAssignmentsAsyncProvider);
 
-    var assignedItems = Map.fromEntries(
-      assignments.map((a) {
-        var i = ref.read(allItemsNotifierProvider.notifier).byId(a.itemId);
-        if (i != null && a.count > 0) {
-          return MapEntry(i, a);
-        }
-      }).nonNulls,
+    return assignmentsAsync.when(
+      data: (assignments) {
+        var containerAssignments = assignments
+            .where((a) => a.containerId == containerId);
+
+        var assignedItems = Map.fromEntries(
+          containerAssignments.map((a) {
+            var i = ref.read(allItemsNotifierProvider.notifier).byId(a.itemId);
+            if (i != null && a.count > 0) {
+              return MapEntry(i, a);
+            }
+          }).nonNulls,
+        );
+        return assignedItems;
+      },
+      loading: () => <Item, Assignment>{},
+      error: (_, __) => <Item, Assignment>{},
     );
-    return assignedItems;
   }
 
   Future<void> addItem(String containerId, Item item) async {

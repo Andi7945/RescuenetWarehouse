@@ -31,26 +31,6 @@ final allAssignmentsStreamProvider =
 // ignore: unused_element
 typedef AllAssignmentsStreamRef =
     AutoDisposeStreamProviderRef<List<Assignment>>;
-String _$allAssignmentsNotifierHash() =>
-    r'02432d0b6091e9536171dcf37467b18f03f342af';
-
-/// See also [AllAssignmentsNotifier].
-@ProviderFor(AllAssignmentsNotifier)
-final allAssignmentsNotifierProvider = AutoDisposeNotifierProvider<
-  AllAssignmentsNotifier,
-  List<Assignment>
->.internal(
-  AllAssignmentsNotifier.new,
-  name: r'allAssignmentsNotifierProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$allAssignmentsNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$AllAssignmentsNotifier = AutoDisposeNotifier<List<Assignment>>;
 String _$allAssignmentsAsyncHash() =>
     r'66a170e0c5d73a9e5c944f6a9f1a33042f885a4d';
 

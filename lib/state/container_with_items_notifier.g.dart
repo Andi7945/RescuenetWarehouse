@@ -7,7 +7,7 @@ part of 'container_with_items_notifier.dart';
 // **************************************************************************
 
 String _$containerWithItemsNotifierHash() =>
-    r'91d3fb6b30fd052926657f8b76b71265d361464f';
+    r'68d0c7a8f3d3093852844c0a736c5abdc52aa98f';
 
 /// See also [ContainerWithItemsNotifier].
 @ProviderFor(ContainerWithItemsNotifier)

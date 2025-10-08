@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'dart:html' as html;
+import 'dart:js' as js;
 import 'auth_repository.dart';
 import 'item_repository.dart';
 import 'container_repository.dart';
@@ -36,17 +37,19 @@ const String _repositoryMode = String.fromEnvironment('REPOSITORY_MODE', default
 bool _isRuntimeMockMode() {
   try {
     // Check if we're in a web environment with mock Firebase enabled
-    final mockMode = (html.window as dynamic).MOCK_FIREBASE_MODE == true;
-    print('🔍 _isRuntimeMockMode() - MOCK_FIREBASE_MODE: ${(html.window as dynamic).MOCK_FIREBASE_MODE}, result: $mockMode');
+    // Only return true if MOCK_FIREBASE_MODE is explicitly set to true
+    final mockModeValue = js.context['MOCK_FIREBASE_MODE'];
+    final mockMode = mockModeValue == true;
+    print('🔍 _isRuntimeMockMode() - MOCK_FIREBASE_MODE: $mockModeValue, result: $mockMode');
     
     // Also log to JavaScript console for debugging
-    html.window.console.log('🔍 FLUTTER: _isRuntimeMockMode() - MOCK_FIREBASE_MODE: ${(html.window as dynamic).MOCK_FIREBASE_MODE}, result: $mockMode');
+    html.window.console.log('🔍 FLUTTER: _isRuntimeMockMode() - MOCK_FIREBASE_MODE: $mockModeValue, result: $mockMode');
     
     return mockMode;
   } catch (e) {
-    // If we can't access window properties, fall back to environment variable
-    print('🔍 _isRuntimeMockMode() - ERROR accessing window: $e');
-    html.window.console.log('🔍 FLUTTER: _isRuntimeMockMode() - ERROR accessing window: $e');
+    // If we can't access window properties, assume normal Firebase mode
+    print('🔍 _isRuntimeMockMode() - ERROR accessing window: $e, defaulting to false');
+    html.window.console.log('🔍 FLUTTER: _isRuntimeMockMode() - ERROR accessing window: $e, defaulting to false');
     return false;
   }
 }
