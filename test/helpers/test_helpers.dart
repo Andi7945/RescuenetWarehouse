@@ -68,21 +68,26 @@ Item createTestItem({
 ContainerDao createTestContainer({
   String id = 'test-container',
   String name = 'Test Container',
+  String? description,
   String? typeId = 'euro-box',
   String? currentLocationId = 'warehouse-a',
   String? moduleDestinationId = 'module-1',
   int number = 1,
+  SequentialBuild sequentialBuild = SequentialBuild.firstBuild,
+  bool isReady = false,
+  bool toDeploy = false,
 }) {
   return ContainerDao(
     id: id,
     number: number,
     name: name,
+    description: description,
     typeId: typeId,
     currentLocationId: currentLocationId,
     moduleDestinationId: moduleDestinationId,
-    sequentialBuild: SequentialBuild.firstBuild,
-    isReady: true,
-    toDeploy: false,
+    sequentialBuild: sequentialBuild,
+    isReady: isReady,
+    toDeploy: toDeploy,
   );
 }
 
