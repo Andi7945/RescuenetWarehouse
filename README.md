@@ -50,36 +50,67 @@ flutter build web
 ```
 
 ## Testing
-We use Playwright for end-to-end testing of the Flutter web app. The tests validate bug fixes and core functionality.
+
+We use a multi-layered testing approach for this project. See [TEST_APPROACH.md](TEST_APPROACH.md) for detailed testing strategy.
+
+### Flutter Integration Tests
+
+Integration tests validate CRUD operations and business logic using mock repositories (no Firebase required).
+
+**Run all integration tests:**
+```bash
+flutter test test/integration/
+```
+
+**Run specific test file:**
+```bash
+flutter test test/integration/item_crud_integration_test.dart
+```
+
+**Run tests with coverage:**
+```bash
+flutter test --coverage
+```
+
+**Current integration tests:**
+- `item_crud_integration_test.dart` - Item create, update, delete operations (10 tests)
+
+**Future tests planned:**
+- Container CRUD operations - See [TODO_CONTAINER_CRUD_TESTS.md](TODO_CONTAINER_CRUD_TESTS.md)
+- Assignment operations - See [TODO_ASSIGNMENT_TESTS.md](TODO_ASSIGNMENT_TESTS.md)
+
+### Playwright E2E Tests
+
+End-to-end tests validate the full Flutter web app with coordinate-based interaction.
 
 The tests use coordinate-based interaction to work with Flutter's Canvas rendering. Mock Firebase backend is automatically loaded during testing.
 
-### Run Playwright tests
+**Run Playwright tests:**
 ```bash
 cd test/puppeteer
 npm test
 ```
 
-### Run tests for specific browser
+**Run tests for specific browser:**
 ```bash
 cd test/puppeteer
 npx playwright test --project=chromium
 ```
 
-### View test results in browser
+**View test results in browser:**
 ```bash
 cd test/puppeteer
 npx playwright show-report
 ```
 
-### Test files
+**Test files:**
 - `authentication.spec.js` - Tests registration redirect fix
-- `container-persistence.spec.js` - Tests container data persistence fix  
+- `container-persistence.spec.js` - Tests container data persistence fix
 - `item-quantity.spec.js` - Tests item quantity/assignment fixes
 - `container-types.spec.js` - Tests container types page and empty weight database persistence
 - `integration.spec.js` - Tests combined workflows
 
-### Notes
+**Notes:**
 - Tests run against the real Flutter app with mocked Firebase backend
 - Mock Firebase is only loaded when Playwright user agent is detected
 - Screenshots are captured at key points for debugging

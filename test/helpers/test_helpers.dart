@@ -3,6 +3,7 @@ import 'package:rescuenet_warehouse/models/item.dart';
 import 'package:rescuenet_warehouse/models/container_dao.dart';
 import 'package:rescuenet_warehouse/models/assignment.dart';
 import 'package:rescuenet_warehouse/models/operational_status.dart';
+import 'package:rescuenet_warehouse/models/sequential_build.dart';
 import 'package:rescuenet_warehouse/repositories/repository_providers.dart';
 import 'package:rescuenet_warehouse/repositories/impl/mock/mock_item_repository.dart';
 import 'package:rescuenet_warehouse/repositories/impl/mock/mock_container_repository.dart';
@@ -17,8 +18,8 @@ import 'package:rescuenet_warehouse/repositories/container_repository.dart';
 import 'package:rescuenet_warehouse/repositories/assignment_repository.dart';
 
 /// Test helpers for creating test data and provider containers
-/// 
-/// This file provides utilities for testing loading states and 
+///
+/// This file provides utilities for testing loading states and
 /// creating test fixtures for the loading infrastructure tests.
 
 /// Creates a test provider container with mock repositories
@@ -79,7 +80,7 @@ ContainerDao createTestContainer({
     typeId: typeId,
     currentLocationId: currentLocationId,
     moduleDestinationId: moduleDestinationId,
-    sequentialBuild: 1,
+    sequentialBuild: SequentialBuild.firstBuild,
     isReady: true,
     toDeploy: false,
   );
@@ -226,7 +227,7 @@ class ThrowingMockContainerRepository implements ContainerRepository {
   }
 }
 
-/// Mock repository that throws errors for assignment operations  
+/// Mock repository that throws errors for assignment operations
 class ThrowingMockAssignmentRepository implements AssignmentRepository {
   @override
   Future<void> upsertAssignment(Assignment assignment) async {
