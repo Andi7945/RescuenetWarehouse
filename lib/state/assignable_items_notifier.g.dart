@@ -7,7 +7,7 @@ part of 'assignable_items_notifier.dart';
 // **************************************************************************
 
 String _$assignableItemsAsyncHash() =>
-    r'4a5301e743d564fbd248245d02cba5e13be2543e';
+    r'95123dddd339828a23f6b9a8623700beb0d80009';
 
 /// AsyncValue-based assignable items provider for loading states support.
 ///
