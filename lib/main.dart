@@ -36,15 +36,21 @@ import 'package:uuid/uuid.dart';
 
 import 'repositories/auth_providers.dart';
 import 'features/item_delete_multiple/item_delete_multiple_page.dart';
-import 'firebase_options.dart';
+import 'config/org_registry.dart';
 import 'features/item_overview/item_overview_page.dart';
+
+// Read from --dart-define flags
+const String kOrgId = String.fromEnvironment('ORG', defaultValue: 'rescuenet');
+const String kEnvironment = String.fromEnvironment('ENV', defaultValue: 'staging');
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Always initialize real Firebase - E2E tests use web-based mocking
-  print('Initializing Firebase');
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // Get Firebase options for selected org and environment
+  final firebaseOptions = getFirebaseOptions(kOrgId, kEnvironment);
+
+  print('🚀 Initializing Firebase for $kOrgId ($kEnvironment)');
+  await Firebase.initializeApp(options: firebaseOptions);
 
   runApp(river.ProviderScope(child: MyApp()));
 }

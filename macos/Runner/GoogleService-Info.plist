@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>net.rescuenet.app</string>
+	<string>com.example.rescuenetWarehouse</string>
 	<key>PROJECT_ID</key>
 	<string>rescuenet-testing</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:415629158289:ios:9cb7353bb350bd229f9c30</string>
+	<string>1:415629158289:ios:9c4cb5d844914cf29f9c30</string>
 </dict>
 </plist>

@@ -25,8 +25,7 @@ echo "🏗️  Building $ORG for $ENV environment..."
 flutter build web \
   --dart-define=ORG="$ORG" \
   --dart-define=ENV="$ENV" \
-  --release \
-  --web-renderer canvaskit
+  --release
 
 # Move to environment-specific directory
 BUILD_DIR="build/web_${ORG}_${ENV}"

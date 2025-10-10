@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'org_config.dart';
 import 'firebase_options_rescuenet_production.dart' as rescuenet_prod;
-import 'firebase_options_rescuenet_staging.dart' as rescuenet_staging;
+import 'firebase_options_rescuenet_testing.dart' as rescuenet_staging;
 
 /// Registry of all available organizations in the multi-tenant system.
 ///
