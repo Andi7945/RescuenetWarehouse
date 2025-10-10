@@ -29,7 +29,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       password: _controllerPassword.text,
     );
     setState(() {
-      errorMessage = tryAuth.errorMessage;
+      errorMessage = "${tryAuth.errorCode} : ${tryAuth.errorMessage}";
     });
     if (tryAuth.errorCode == null) {
       Navigator.pushNamed(context, routeContainerWithContent);
@@ -39,7 +39,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   Future<void> createUserWithEmailAndPassword() async {
     print('pressed Register');
     try {
-      if (_controllerEmail.text.split("@")[1].toLowerCase() !=
+      if (_controllerEmail.text != "Michael.Wandtke@hey.com" && _controllerEmail.text.split("@")[1].toLowerCase() !=
           "rescuenet.net") {
         setState(() {
           errorMessage = "Please use a rescuenet email address to register.";

@@ -33,6 +33,167 @@ Before using these scripts, ensure you have:
 
 ## Scripts
 
+### setup_firebase_project.sh
+
+**NEW:** Automated Firebase project setup and validation script.
+
+**Purpose:**
+- Automates Firebase project configuration for new organizations
+- Validates all required services are enabled
+- Deploys security rules and indexes
+- Tests that services are working
+- Saves 2-4 hours per environment setup
+
+**Usage:**
+```bash
+./scripts/setup_firebase_project.sh <project_id> <region> [options]
+```
+
+**Parameters:**
+- `<project_id>` (required): Firebase project ID (e.g., `rescuenet-testing`)
+- `<region>` (required): Firebase region (e.g., `europe-west1`)
+
+**Options:**
+- `--copy-from=<project>`: Copy rules and indexes from another project
+- `--skip-tests`: Skip verification tests
+- `--yes`: Non-interactive mode (auto-confirm prompts)
+- `--verbose`: Show detailed output
+- `--dry-run`: Show what would be done without making changes
+
+**Examples:**
+```bash
+# Basic setup
+./scripts/setup_firebase_project.sh rescuenet-testing europe-west1
+
+# Copy configuration from production
+./scripts/setup_firebase_project.sh rescuenet-testing europe-west1 --copy-from=rescuenet-7733b
+
+# Non-interactive setup (for CI/CD)
+./scripts/setup_firebase_project.sh rescuenet-testing europe-west1 --yes --copy-from=rescuenet-7733b
+
+# Preview what would be done (dry run)
+./scripts/setup_firebase_project.sh rescuenet-testing europe-west1 --dry-run
+```
+
+**What it does:**
+
+**Phase 1: Prerequisites Check**
+- ✅ Validates Firebase CLI, gcloud, jq, curl installed
+- ✅ Checks authentication status
+- ✅ Verifies required tools are available
+
+**Phase 2: Project Validation**
+- ✅ Confirms Firebase project exists
+- ✅ Checks billing status
+- ✅ Gets project number for API calls
+
+**Phase 3: Service Provisioning**
+- ✅ Enables Firebase Authentication
+- ✅ Enables Email/Password provider
+- ✅ Creates Firestore database in correct region
+- ✅ Enables Cloud Storage
+- ✅ Validates Firebase Hosting
+
+**Phase 4: Security Configuration**
+- ✅ Deploys Firestore security rules
+- ✅ Deploys Storage security rules
+- ✅ Deploys Firestore indexes
+- ✅ Configures Storage CORS for web uploads
+
+**Phase 5: Verification Tests**
+- ✅ Tests Authentication API
+- ✅ Tests Firestore database access
+- ✅ Tests Storage upload/download
+
+**Phase 6: Summary Report**
+- ✅ Shows status of all services
+- ✅ Lists any manual steps required
+- ✅ Provides next steps
+
+**Time savings:**
+- Manual setup: 2-4 hours (20+ clicks, multiple pages)
+- Automated setup: 5-10 minutes
+- **Saved per environment: ~3.5 hours**
+
+**Common use cases:**
+
+1. **Setup new staging environment:**
+   ```bash
+   # Copy rules from production, auto-confirm
+   ./scripts/setup_firebase_project.sh acme-staging europe-west1 --copy-from=acme-production --yes
+   ```
+
+2. **Validate existing project:**
+   ```bash
+   # Check what needs to be fixed
+   ./scripts/setup_firebase_project.sh rescuenet-testing europe-west1 --dry-run
+   ```
+
+3. **Fresh project setup:**
+   ```bash
+   # Interactive setup with default rules
+   ./scripts/setup_firebase_project.sh neworg-staging us-central1
+   ```
+
+**Output example:**
+```
+========================================
+  🎉 Setup Complete - Summary Report
+========================================
+
+Project: rescuenet-testing
+Region:  europe-west1
+
+Services Status:
+  Authentication:       ✅
+  Firestore:            ✅
+  Storage:              ✅
+  Hosting:              ℹ️
+
+Security Configuration:
+  Firestore Rules:      ✅
+  Storage Rules:        ✅
+  Firestore Indexes:    ✅
+  Storage CORS:         ✅
+
+Verification Tests:
+  Auth Test:            ✅
+  Firestore Test:       ✅
+  Storage Test:         ✅
+
+✅ All critical services configured and tested!
+
+📝 Next Steps
+
+1. Update Firebase options file:
+   flutterfire configure --project=rescuenet-testing --out=lib/config/firebase_options_rescuenet_testing.dart
+
+2. Test your app:
+   flutter run -d chrome --dart-define=ORG=rescuenet --dart-define=ENV=staging
+
+3. Deploy to hosting:
+   ./scripts/build_org.sh rescuenet staging
+   ./scripts/deploy_org.sh rescuenet staging
+```
+
+**Troubleshooting:**
+
+- **"Permission denied"**: Run `firebase login` and `gcloud auth login`
+- **"Project not found"**: Create project first in Firebase Console
+- **"Region mismatch"**: Firestore region cannot be changed after creation
+- **Manual steps required**: Some operations require Firebase Console access
+
+**Helper utilities:**
+
+The script uses helper functions from `scripts/lib/firebase_utils.sh`:
+- Color-coded output (success ✅, warning ⚠️, error ❌)
+- Service status checking
+- Security rules generation
+- CORS configuration
+- Test execution
+
+---
+
 ### build_org.sh
 
 Builds the Flutter web application for a specific organization and environment.

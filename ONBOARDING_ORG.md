@@ -443,3 +443,28 @@ Before considering onboarding complete:
 **URLs:**
 - Staging: `https://<org_id>-staging.web.app`
 - Production: `https://<org_id>-production.web.app`
+
+
+## ToDo Firestore
+Firestore Database:
+```
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+```
+Storage -> Regeln:
+```
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+```
