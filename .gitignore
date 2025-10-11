@@ -61,3 +61,8 @@ android/app/google-services.json
 # Playwright test screenshots
 test/puppeteer/*.png
 test/puppeteer/screenshots/*.png
+
+# Node.js scripts
+scripts/secrets/
+scripts/*.log
+scripts/node_modules/

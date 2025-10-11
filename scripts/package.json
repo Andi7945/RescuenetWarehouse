@@ -1,0 +1,16 @@
+{
+  "name": "rescuenet-firebase-export",
+  "version": "1.0.0",
+  "scripts": {
+    "export": "node export-firebase.js",
+    "import": "node import-firebase.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.0.0",
+    "commander": "^11.0.0",
+    "p-limit": "^4.0.0",
+    "cli-progress": "^3.12.0",
+    "prompts": "^2.4.2",
+    "chalk": "^4.1.2"
+  }
+}

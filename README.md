@@ -120,3 +120,26 @@ npx playwright show-report
 ```bash
 firebase firestore:import --collection-name "items" --project "RescueNet" --csv "~/Documents/Blad1-Table 1.csv" --field-separator ";"
 ```
+
+## Data Export
+
+The project includes a Node.js tool for exporting Firebase data (Firestore collections and Storage files) to timestamped backups in Google Cloud Storage.
+
+**Key features:**
+- Read-only operation (safe to run on production)
+- Exports all or selected Firestore collections as JSON
+- Copies Firebase Storage files
+- Creates timestamped backups with manifest metadata
+- Dry-run mode to preview exports
+
+**Quick example:**
+```bash
+cd scripts
+npm install
+npm run export -- \
+  --project rescuenet-testing \
+  --bucket rescuenet-testing-backups \
+  --dry-run
+```
+
+**Full documentation:** See [scripts/README-export.md](scripts/README-export.md) for complete setup instructions, usage examples, and troubleshooting.
