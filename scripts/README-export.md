@@ -646,6 +646,7 @@ Note: Manual imports require additional scripting and careful handling of docume
 
 - **Build/Deploy Scripts**: See [README.md](README.md) for Flutter build and deployment
 - **Import Tool Plan**: See [PLAN-import.md](PLAN-import.md) for future import functionality
+- **Cross-Project Migration**: See [README-cross-project.md](README-cross-project.md) for production → testing workflows
 - **Firebase Admin SDK**: [Official Documentation](https://firebase.google.com/docs/admin/setup)
 - **Google Cloud Storage**: [GCS Documentation](https://cloud.google.com/storage/docs)
 

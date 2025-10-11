@@ -12,11 +12,14 @@
 
 const { program } = require('commander');
 const chalk = require('chalk');
+const { Storage } = require('@google-cloud/storage');
+const path = require('path');
 const { parseGcsUri, readJSON, getGcsUri } = require('./lib/gcs-client');
-const { initFirebaseReadOnly } = require('./lib/firebase-init');
+const { initFirebaseReadOnly, getServiceAccountPath } = require('./lib/firebase-init');
 const { validateManifest, importAllCollections } = require('./lib/firestore-import');
 const { restoreStorageFiles } = require('./lib/storage-import');
 const { displayManifest, confirmImport } = require('./lib/safety-prompts');
+const { detectStorageBucket } = require('./lib/storage-bucket-detector');
 
 /**
  * Main import function
@@ -45,10 +48,11 @@ async function importFirebase() {
     const { bucketName, path: manifestPath } = parseGcsUri(options.source);
     console.log(chalk.green(`✓ Parsed: gs://${bucketName}/${manifestPath}`));
 
-    // Step 2: Initialize source Firebase (to access GCS bucket)
+    // Step 2: Connect to GCS bucket using Storage SDK
     console.log(chalk.white('\nStep 2: Connecting to GCS bucket...'));
-    const sourceFirebase = await initFirebaseReadOnly(options.project);
-    const sourceBucket = sourceFirebase.storageBucket.bucket(bucketName);
+    const serviceAccountPath = getServiceAccountPath(options.project);
+    const storage = new Storage({ keyFilename: path.resolve(serviceAccountPath) });
+    const sourceBucket = storage.bucket(bucketName);
     console.log(chalk.green(`✓ Connected to bucket: ${bucketName}`));
 
     // Step 3: Read manifest from GCS
@@ -107,8 +111,14 @@ async function importFirebase() {
 
     // Step 8: Initialize target Firebase
     console.log(chalk.white('\nStep 7: Initializing target Firebase...'));
-    const targetFirebase = await initFirebaseReadOnly(options.project);
+    const { db } = await initFirebaseReadOnly(options.project);
     console.log(chalk.green(`✓ Connected to project: ${options.project}`));
+
+    // Initialize target storage bucket with auto-detection
+    console.log(chalk.white('Detecting target storage bucket...'));
+    const targetBucketName = await detectStorageBucket(options.project, storage);
+    const targetStorageBucket = storage.bucket(targetBucketName);
+    console.log(chalk.green(`✓ Target storage: ${targetBucketName}\n`));
 
     // Step 9: Read collection data from GCS
     console.log(chalk.white('\nStep 8: Loading collection data from GCS...'));
@@ -141,7 +151,7 @@ async function importFirebase() {
     console.log(chalk.white('\nStep 9: Importing collections to Firestore...'));
     const clearFirst = !options.skipClear;
     const importResults = await importAllCollections(
-      targetFirebase.db,
+      db,
       collectionsData,
       clearFirst
     );
@@ -154,7 +164,7 @@ async function importFirebase() {
       storageResults = await restoreStorageFiles(
         sourceBucket,
         storagePrefix,
-        targetFirebase.storageBucket
+        targetStorageBucket
       );
     } else if (options.skipStorage) {
       console.log(chalk.yellow('\nSkipping storage import (--skip-storage flag)'));

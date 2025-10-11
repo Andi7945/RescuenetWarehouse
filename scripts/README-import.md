@@ -749,6 +749,7 @@ You accidentally imported staging data to production!
 ## Related Documentation
 
 - **Export Tool**: See [README-export.md](README-export.md) for creating backups
+- **Cross-Project Migration**: See [README-cross-project.md](README-cross-project.md) for production → testing workflows
 - **Multi-Tenant Setup**: See [../CLAUDE.md](../CLAUDE.md) for organization configuration
 - **Service Accounts**: See [SERVICE_ACCOUNTS.md](SERVICE_ACCOUNTS.md) for detailed setup
 - **Firebase Admin SDK**: [Official Documentation](https://firebase.google.com/docs/admin/setup)

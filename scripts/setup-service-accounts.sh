@@ -34,8 +34,7 @@ DESCRIPTION="Read-only service account for Firebase data export tool"
 # Required roles for export functionality
 ROLES=(
   "roles/datastore.user"        # Read Firestore collections
-  "roles/storage.objectViewer"  # Read Firebase Storage files
-  "roles/storage.objectCreator" # Write to GCS backup bucket
+  "roles/storage.objectAdmin"   # Read/write GCS buckets (needed for bucket.exists() checks and file operations)
 )
 
 # =============================================================================

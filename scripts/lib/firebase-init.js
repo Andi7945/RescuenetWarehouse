@@ -29,7 +29,7 @@ function getServiceAccountPath(projectId) {
 /**
  * Initializes Firebase Admin SDK in read-only mode
  * @param {string} projectId - Firebase project ID
- * @returns {Promise<{db: admin.firestore.Firestore, storageBucket: admin.storage.Storage, projectId: string}>}
+ * @returns {Promise<{db: admin.firestore.Firestore, projectId: string}>}
  * @throws {Error} If service account file doesn't exist or initialization fails
  */
 async function initFirebaseReadOnly(projectId) {
@@ -49,18 +49,17 @@ async function initFirebaseReadOnly(projectId) {
   const serviceAccount = require(path.resolve(serviceAccountPath));
 
   // Initialize Firebase Admin SDK with named app
+  // Note: We don't specify storageBucket here because we use GCS Storage SDK
+  // directly with auto-detection for better compatibility with legacy projects
   const app = admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    storageBucket: `${projectId}.appspot.com`
+    credential: admin.credential.cert(serviceAccount)
   }, projectId); // Use projectId as app name for multiple connections
 
-  // Get Firestore and Storage instances
+  // Get Firestore instance
   const db = app.firestore();
-  const storageBucket = app.storage().bucket();
 
   return {
     db,
-    storageBucket,
     projectId
   };
 }

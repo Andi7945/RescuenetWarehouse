@@ -7,6 +7,7 @@ const { initFirebaseReadOnly, getServiceAccountPath } = require('./lib/firebase-
 const { writeJSON } = require('./lib/gcs-client');
 const { exportAllCollections, createManifest } = require('./lib/firestore-export');
 const { copyStorageFiles } = require('./lib/storage-export');
+const { detectStorageBucket } = require('./lib/storage-bucket-detector');
 
 async function exportFirebase() {
   const program = new Command();
@@ -60,11 +61,13 @@ async function exportFirebase() {
     const serviceAccountPath = getServiceAccountPath(options.project);
     const storage = new Storage({ keyFilename: path.resolve(serviceAccountPath) });
 
-    // Create bucket references using the SAME Storage SDK instance
-    // Note: Firebase Storage now uses .firebasestorage.app domain (not .appspot.com)
-    const sourceBucket = storage.bucket(`${options.project}.firebasestorage.app`);
+    // Auto-detect which storage bucket domain exists (.appspot.com or .firebasestorage.app)
+    // This handles both legacy and modern Firebase projects
+    const sourceBucketName = await detectStorageBucket(options.project, storage);
+    const sourceBucket = storage.bucket(sourceBucketName);
     const targetBucket = storage.bucket(options.bucket);
-    console.log('✓ GCS Storage SDK initialized\n');
+
+    console.log(`✓ GCS Storage SDK initialized (source: ${sourceBucketName})\n`);
 
     // Export Firestore collections
     console.log('Exporting Firestore collections...');
