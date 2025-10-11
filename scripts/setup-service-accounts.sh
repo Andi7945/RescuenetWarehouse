@@ -74,6 +74,39 @@ print_info() {
   echo -e "${BLUE}→${NC} $1"
 }
 
+# Retry a command with exponential backoff
+# Usage: retry_with_backoff <max_attempts> <initial_wait_seconds> <command...>
+# Returns: 0 on success, 1 on failure after all attempts
+retry_with_backoff() {
+  local max_attempts=$1
+  local wait_time=$2
+  shift 2
+  local command=("$@")
+  local attempt=1
+
+  while [ $attempt -le $max_attempts ]; do
+    # Execute command and capture exit code
+    if "${command[@]}" 2>/dev/null; then
+      return 0  # Success
+    fi
+
+    # Check if this was the last attempt
+    if [ $attempt -eq $max_attempts ]; then
+      return 1  # Failed after all attempts
+    fi
+
+    # Log retry and wait
+    print_warning "Attempt ${attempt}/${max_attempts} failed, retrying in ${wait_time}s..."
+    sleep $wait_time
+
+    # Exponential backoff: double the wait time
+    wait_time=$((wait_time * 2))
+    attempt=$((attempt + 1))
+  done
+
+  return 1
+}
+
 check_prerequisites() {
   print_header "Checking Prerequisites"
 
@@ -147,16 +180,29 @@ grant_permissions() {
 
   print_header "Granting Permissions"
 
+  # Wait a few seconds before first attempt (helps with propagation)
+  print_info "Waiting for service account to propagate..."
+  sleep 5
+
   for role in "${ROLES[@]}"; do
     print_info "Granting ${role}..."
 
-    gcloud projects add-iam-policy-binding "${project_id}" \
-      --member="serviceAccount:${service_account_email}" \
-      --role="${role}" \
-      --condition=None \
-      --quiet > /dev/null
-
-    print_success "${role}"
+    # Try with retry logic: max 10 attempts, start with 5s wait
+    if retry_with_backoff 10 5 \
+      gcloud projects add-iam-policy-binding "${project_id}" \
+        --member="serviceAccount:${service_account_email}" \
+        --role="${role}" \
+        --condition=None \
+        --quiet; then
+      print_success "${role}"
+    else
+      print_error "Failed to grant ${role} after multiple attempts"
+      print_error "The service account may not have propagated yet. Wait a few minutes and try:"
+      print_error "  gcloud projects add-iam-policy-binding ${project_id} \\"
+      print_error "    --member='serviceAccount:${service_account_email}' \\"
+      print_error "    --role='${role}'"
+      exit 1
+    fi
   done
 
   echo ""
@@ -216,6 +262,7 @@ print_summary() {
   echo ""
 
   print_success "Service account is ready to use!"
+  print_info "Note: IAM permissions may take up to 2 minutes to fully propagate"
   echo ""
   echo "Test it with:"
   echo "  cd .."

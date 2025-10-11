@@ -2,7 +2,7 @@ const pLimit = require('p-limit');
 
 /**
  * Lists all files in a storage bucket with optional prefix filter
- * @param {object} sourceBucket - Firebase storage bucket instance
+ * @param {object} sourceBucket - GCS bucket instance (@google-cloud/storage)
  * @param {string} prefix - Optional prefix to filter files
  * @returns {Promise<Array>} Array of file metadata objects
  */
@@ -23,8 +23,8 @@ async function listStorageFiles(sourceBucket, prefix = '') {
 
 /**
  * Copies files from source bucket to target bucket with concurrency control
- * @param {object} sourceBucket - Source Firebase storage bucket
- * @param {object} targetBucket - Target Firebase storage bucket
+ * @param {object} sourceBucket - Source GCS bucket (@google-cloud/storage)
+ * @param {object} targetBucket - Target GCS bucket (@google-cloud/storage)
  * @param {string} targetPrefix - Prefix to prepend to file paths in target bucket
  * @param {number} concurrency - Number of concurrent copy operations (default: 5)
  * @returns {Promise<object>} Stats object with files, totalBytes, copied, and errors
@@ -58,12 +58,13 @@ async function copyStorageFiles(sourceBucket, targetBucket, targetPrefix, concur
         const sourcePath = file.name;
         const targetPath = targetPrefix ? `${targetPrefix}/${sourcePath}` : sourcePath;
 
-        // Copy file to target bucket
-        await file.copy(targetBucket.file(targetPath));
-
         // Get file metadata for size
         const [metadata] = await file.getMetadata();
         const fileSize = parseInt(metadata.size || 0);
+
+        // Copy file using GCS copy (source and destination can be in different buckets)
+        const destinationFile = targetBucket.file(targetPath);
+        await file.copy(destinationFile);
 
         stats.totalBytes += fileSize;
         stats.copied++;

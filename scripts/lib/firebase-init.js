@@ -10,8 +10,8 @@ const path = require('path');
  */
 function getServiceAccountPath(projectId) {
   const serviceAccountMap = {
-    'rescuenet-7733b': 'scripts/secrets/rescuenet-production.json',
-    'rescuenet-testing': 'scripts/secrets/rescuenet-testing.json'
+    'rescuenet-7733b': 'secrets/rescuenet-production.json',
+    'rescuenet-testing': 'secrets/rescuenet-testing.json'
   };
 
   const serviceAccountPath = serviceAccountMap[projectId];

@@ -2,8 +2,9 @@
 
 const { Command } = require('commander');
 const path = require('path');
-const { initFirebaseReadOnly } = require('./lib/firebase-init');
-const { createGCSClient, uploadToGCS } = require('./lib/gcs-client');
+const { Storage } = require('@google-cloud/storage');
+const { initFirebaseReadOnly, getServiceAccountPath } = require('./lib/firebase-init');
+const { writeJSON } = require('./lib/gcs-client');
 const { exportAllCollections, createManifest } = require('./lib/firestore-export');
 const { copyStorageFiles } = require('./lib/storage-export');
 
@@ -48,71 +49,70 @@ async function exportFirebase() {
   console.log(`Target: gs://${options.bucket}/${outputPath}\n`);
 
   try {
-    // Initialize Firebase
+    // Initialize Firebase (for Firestore only)
     console.log('Initializing Firebase...');
-    const { db, bucket: sourceBucket } = await initFirebaseReadOnly(options.project);
+    const { db } = await initFirebaseReadOnly(options.project);
     console.log('✓ Firebase initialized\n');
 
-    // Initialize GCS client
-    console.log('Initializing GCS client...');
-    const gcsClient = createGCSClient(options.bucket);
-    console.log('✓ GCS client initialized\n');
+    // Initialize GCS Storage SDK (used for BOTH source and target buckets)
+    // This ensures bucket references are compatible for cross-bucket copying
+    console.log('Initializing GCS Storage SDK...');
+    const serviceAccountPath = getServiceAccountPath(options.project);
+    const storage = new Storage({ keyFilename: path.resolve(serviceAccountPath) });
+
+    // Create bucket references using the SAME Storage SDK instance
+    // Note: Firebase Storage now uses .firebasestorage.app domain (not .appspot.com)
+    const sourceBucket = storage.bucket(`${options.project}.firebasestorage.app`);
+    const targetBucket = storage.bucket(options.bucket);
+    console.log('✓ GCS Storage SDK initialized\n');
 
     // Export Firestore collections
     console.log('Exporting Firestore collections...');
     const collectionsToExport = options.collections
       ? options.collections.split(',').map(s => s.trim())
-      : null;
+      : undefined;
 
-    const collections = await exportAllCollections(db, collectionsToExport);
-    console.log(`✓ Exported ${Object.keys(collections).length} collections\n`);
+    const collectionsData = await exportAllCollections(db, collectionsToExport);
+    console.log(`✓ Exported ${Object.keys(collectionsData).length} collections\n`);
 
     // Export Storage files (if not skipped)
     let storageResult = null;
     if (!options.skipStorage) {
       console.log('Exporting Storage files...');
-      storageResult = await copyStorageFiles(sourceBucket, gcsClient);
-      console.log(`✓ Copied ${storageResult.filesCopied} files (${storageResult.bytesTransferred} bytes)\n`);
+      storageResult = await copyStorageFiles(sourceBucket, targetBucket, `${outputPath}/storage`, 5);
+      console.log(`✓ Copied ${storageResult.copied} files (${storageResult.totalBytes} bytes)\n`);
     } else {
       console.log('⊘ Skipping Storage export\n');
     }
 
     // Create manifest
     console.log('Creating manifest...');
-    const manifest = createManifest(options.project, collections, storageResult);
+    const manifest = createManifest(collectionsData, options.project);
+    if (storageResult) {
+      manifest.storage = {
+        filesCopied: storageResult.copied,
+        bytesTransferred: storageResult.totalBytes,
+        errors: storageResult.errors.length
+      };
+    }
     console.log('✓ Manifest created\n');
 
     // Write all data to GCS
     console.log('Writing data to GCS...');
 
     // Write manifest
-    await uploadToGCS(
-      gcsClient,
-      `${outputPath}/manifest.json`,
-      JSON.stringify(manifest, null, 2),
-      'application/json'
-    );
+    await writeJSON(targetBucket, `${outputPath}/manifest.json`, manifest);
     console.log(`  ✓ manifest.json`);
 
     // Write each collection
-    for (const [collectionName, documents] of Object.entries(collections)) {
-      await uploadToGCS(
-        gcsClient,
-        `${outputPath}/firestore/${collectionName}.json`,
-        JSON.stringify(documents, null, 2),
-        'application/json'
-      );
-      console.log(`  ✓ firestore/${collectionName}.json (${documents.length} documents)`);
+    for (const [collectionName, collectionData] of Object.entries(collectionsData)) {
+      await writeJSON(targetBucket, `${outputPath}/firestore/${collectionName}.json`, collectionData.docs);
+      console.log(`  ✓ firestore/${collectionName}.json (${collectionData.count} documents)`);
     }
 
     // Write storage summary (if storage was exported)
     if (storageResult) {
-      await uploadToGCS(
-        gcsClient,
-        `${outputPath}/storage/summary.json`,
-        JSON.stringify(storageResult, null, 2),
-        'application/json'
-      );
+      await writeJSON(targetBucket, `${outputPath}/storage/summary.json`, storageResult);
       console.log(`  ✓ storage/summary.json`);
     }
 
@@ -123,11 +123,11 @@ async function exportFirebase() {
     console.log('\n=== Export Complete ===');
     console.log(`Location: gs://${options.bucket}/${outputPath}`);
     console.log('\nCollections exported:');
-    for (const [collectionName, documents] of Object.entries(collections)) {
-      console.log(`  - ${collectionName}: ${documents.length} documents`);
+    for (const [collectionName, collectionData] of Object.entries(collectionsData)) {
+      console.log(`  - ${collectionName}: ${collectionData.count} documents`);
     }
     if (storageResult) {
-      console.log(`\nStorage files: ${storageResult.filesCopied} files (${storageResult.bytesTransferred} bytes)`);
+      console.log(`\nStorage files: ${storageResult.copied} files (${storageResult.totalBytes} bytes)`);
     }
     console.log(`\nTotal time: ${elapsedSeconds}s\n`);
 
