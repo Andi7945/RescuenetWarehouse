@@ -129,17 +129,20 @@ async function importFirebase() {
     }
     console.log(chalk.green('✓ Manifest is valid'));
 
-    // Normalize collections format (handle both old and new manifest formats)
-    const normalizedCollections = manifest.normalizeCollections(importManifest.collections);
-
     // Step 5: Display what will be imported
     console.log(chalk.white('\nStep 5: Preview of import operation...'));
     displayManifest(importManifest);
 
+    // Build collection map for easy lookup
+    const collectionsMap = {};
+    importManifest.collections.forEach(col => {
+      collectionsMap[col.name] = col;
+    });
+
     // Filter collections if specified
     const collectionsToImport = options.collections
       ? options.collections.split(',').map(c => c.trim())
-      : Object.keys(normalizedCollections);
+      : importManifest.collections.map(c => c.name);
 
     console.log(chalk.cyan('Target Project:'), chalk.yellow.bold(options.project));
     console.log(chalk.cyan('Collections to import:'), collectionsToImport.join(', '));
@@ -176,32 +179,26 @@ async function importFirebase() {
     const { db } = await initFirebaseReadOnly(options.project);
     console.log(chalk.green(`✓ Connected to project: ${options.project}`));
 
-    // Initialize target storage bucket with auto-detection
-    console.log(chalk.white('Detecting target storage bucket...'));
-    const targetBucketName = await detectStorageBucket(options.project, storage);
-    const targetStorageBucket = storage.bucket(targetBucketName);
-    console.log(chalk.green(`✓ Target storage: ${targetBucketName}\n`));
-
     // Step 9: Read collection data
     console.log(chalk.white(`\nStep 8: Loading collection data from ${isLocalMode ? 'local filesystem' : 'GCS'}...`));
     const collectionsData = {};
 
     for (const collectionName of collectionsToImport) {
-      const collectionInfo = normalizedCollections[collectionName];
+      const collectionInfo = collectionsMap[collectionName];
       if (!collectionInfo) {
         console.log(chalk.yellow(`  ⚠️  Collection "${collectionName}" not found in manifest, skipping`));
         continue;
       }
 
-      console.log(chalk.white(`  Loading ${collectionName} from ${collectionInfo.file}...`));
+      console.log(chalk.white(`  Loading ${collectionName} from ${collectionInfo.filePath}...`));
 
       try {
         let collectionData;
         if (isLocalMode) {
-          const collectionPath = path.join(basePath, collectionInfo.file);
+          const collectionPath = path.join(basePath, collectionInfo.filePath);
           collectionData = await localClient.readJSON(collectionPath);
         } else {
-          const collectionPath = `${basePath}/${collectionInfo.file}`;
+          const collectionPath = `${basePath}/${collectionInfo.filePath}`;
           collectionData = await gcsClient.readJSON(sourceBucket, collectionPath);
         }
 
@@ -226,6 +223,12 @@ async function importFirebase() {
     let storageResults = null;
     if (!options.skipStorage && importManifest.storage && importManifest.storage.fileCount > 0) {
       console.log(chalk.white('\nStep 10: Importing storage files...'));
+
+      // Initialize target storage bucket with auto-detection
+      console.log(chalk.white('Detecting target storage bucket...'));
+      const targetBucketName = await detectStorageBucket(options.project, storage);
+      const targetStorageBucket = storage.bucket(targetBucketName);
+      console.log(chalk.green(`✓ Target storage: ${targetBucketName}`));
 
       if (isLocalMode) {
         const storageDir = path.join(basePath, 'storage');

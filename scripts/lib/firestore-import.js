@@ -223,8 +223,11 @@ async function importAllCollections(db, collectionsData, clearFirst = true) {
       }
 
       // Import documents
-      if (data.docs && Array.isArray(data.docs)) {
-        const importResult = await importCollection(db, collectionName, data.docs);
+      // Handle both formats: flat array [...] or wrapped {docs: [...]}
+      const docsArray = Array.isArray(data) ? data : data.docs;
+
+      if (docsArray && Array.isArray(docsArray)) {
+        const importResult = await importCollection(db, collectionName, docsArray);
         collectionResult.imported = importResult.imported;
         collectionResult.errors.push(...importResult.errors);
       } else {
