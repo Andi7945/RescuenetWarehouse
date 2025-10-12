@@ -144,9 +144,7 @@ async function importCollection(db, collectionName, docs, batchSize = 500) {
 
     for (const doc of batchDocs) {
       try {
-        const { id, ...data } = doc;
-
-        if (!id) {
+        if (!doc.id) {
           errors.push({
             collection: collectionName,
             error: 'Document missing id field',
@@ -155,10 +153,11 @@ async function importCollection(db, collectionName, docs, batchSize = 500) {
           continue;
         }
 
-        // Restore timestamps in the data
-        const restoredData = restoreTimestamps(data);
+        // Restore timestamps in the entire document (including id field)
+        // This preserves the id field that exists in the document data
+        const restoredData = restoreTimestamps(doc);
 
-        const docRef = collectionRef.doc(id);
+        const docRef = collectionRef.doc(doc.id);
         batch.set(docRef, restoredData);
       } catch (error) {
         errors.push({
