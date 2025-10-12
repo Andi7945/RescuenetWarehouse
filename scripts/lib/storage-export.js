@@ -105,7 +105,7 @@ async function copyStorageFiles(sourceBucket, targetBucket, targetPrefix, concur
  * @param {object} sourceBucket - Source GCS bucket (@google-cloud/storage)
  * @param {string} localOutputDir - Local directory path to download files to
  * @param {number} concurrency - Number of concurrent download operations (default: 5)
- * @returns {Promise<object>} Stats object with files, totalBytes, downloaded, and errors
+ * @returns {Promise<object>} Stats object with files, totalBytes, downloaded, skipped, and errors
  */
 async function copyStorageFilesLocal(sourceBucket, localOutputDir, concurrency = 5) {
   console.log(`Starting storage download to local filesystem with concurrency: ${concurrency}`);
@@ -115,7 +115,7 @@ async function copyStorageFilesLocal(sourceBucket, localOutputDir, concurrency =
 
   if (files.length === 0) {
     console.log('No files to download');
-    return { files: 0, totalBytes: 0, downloaded: 0, errors: [] };
+    return { files: 0, totalBytes: 0, downloaded: 0, skipped: 0, errors: [] };
   }
 
   // Create storage subdirectory
@@ -127,6 +127,7 @@ async function copyStorageFilesLocal(sourceBucket, localOutputDir, concurrency =
     files: files.length,
     totalBytes: 0,
     downloaded: 0,
+    skipped: 0,
     errors: []
   };
 
@@ -138,6 +139,14 @@ async function copyStorageFilesLocal(sourceBucket, localOutputDir, concurrency =
     return limit(async () => {
       try {
         const sourcePath = file.name;
+
+        // Skip directory marker files (zero-byte files ending with '/')
+        if (sourcePath.endsWith('/')) {
+          console.log(`Skipping directory marker: ${sourcePath}`);
+          stats.skipped++;
+          return;
+        }
+
         const destPath = path.join(storageDir, sourcePath);
 
         // Get file metadata for size
@@ -171,7 +180,7 @@ async function copyStorageFilesLocal(sourceBucket, localOutputDir, concurrency =
   await Promise.all(downloadTasks);
 
   // Log summary
-  console.log(`\nDownload complete: Downloaded ${stats.downloaded}/${stats.files} files, ${stats.errors.length} errors`);
+  console.log(`\nDownload complete: Downloaded ${stats.downloaded}/${stats.files} files, ${stats.skipped} skipped, ${stats.errors.length} errors`);
   if (stats.errors.length > 0) {
     console.log('Files with errors:');
     stats.errors.forEach(({ file, error }) => {

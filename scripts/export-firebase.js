@@ -139,7 +139,7 @@ async function exportFirebase() {
     const exportManifest = manifest.createManifest({
       projectId: options.project,
       timestamp: new Date().toISOString(),
-      collections: collectionsData,
+      collections: collectionsArray,
       storageFiles: storageFilesInfo,
     });
 

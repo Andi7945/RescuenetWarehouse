@@ -66,3 +66,4 @@ test/puppeteer/screenshots/*.png
 scripts/secrets/
 scripts/*.log
 scripts/node_modules/
+scripts/backups/
