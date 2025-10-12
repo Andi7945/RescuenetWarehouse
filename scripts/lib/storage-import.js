@@ -6,6 +6,8 @@
  */
 
 const pLimit = require('p-limit');
+const path = require('path');
+const { getAllFilesRecursive } = require('./local-client');
 
 /**
  * Strips export prefix from storage path
@@ -122,4 +124,106 @@ async function restoreStorageFiles(sourceBucket, sourcePrefix, targetBucket, con
   return stats;
 }
 
-module.exports = { restoreStorageFiles, stripExportPrefix };
+/**
+ * Restores storage files from local filesystem to Firebase Storage
+ *
+ * Uploads all files from a local directory to Firebase Storage,
+ * preserving the relative path structure.
+ *
+ * @param {string} localStorageDir - Local directory containing storage files
+ * @param {object} targetBucket - Firebase Storage Bucket object to restore files to
+ * @param {number} concurrency - Number of concurrent upload operations (default: 5)
+ * @returns {Promise<object>} Stats object { copied: number, skipped: number, errors: Array }
+ */
+async function restoreStorageFilesLocal(localStorageDir, targetBucket, concurrency = 5) {
+  console.log(`\nRestoring storage files from local filesystem: ${localStorageDir}...`);
+  console.log(`Concurrency: ${concurrency}`);
+
+  // Check if directory exists
+  const fs = require('fs').promises;
+  try {
+    await fs.access(localStorageDir);
+  } catch (error) {
+    console.warn(`Storage directory not found: ${localStorageDir}, skipping...`);
+    return { copied: 0, skipped: 0, errors: [] };
+  }
+
+  // Get all files recursively
+  let files;
+  try {
+    files = await getAllFilesRecursive(localStorageDir);
+  } catch (error) {
+    console.error(`Failed to read storage directory: ${error.message}`);
+    return { copied: 0, skipped: 0, errors: [{ file: localStorageDir, error: error.message }] };
+  }
+
+  if (files.length === 0) {
+    console.log('No storage files found to restore');
+    return { copied: 0, skipped: 0, errors: [] };
+  }
+
+  console.log(`Found ${files.length} files to restore`);
+
+  // Initialize stats
+  const stats = {
+    copied: 0,
+    skipped: 0,
+    errors: []
+  };
+
+  // Create concurrency limiter
+  const limit = pLimit(concurrency);
+
+  // Create upload tasks for each file
+  const uploadTasks = files.map((localFilePath, index) => {
+    return limit(async () => {
+      try {
+        // Get relative path from storage directory (this becomes the Firebase Storage path)
+        const relativePath = path.relative(localStorageDir, localFilePath);
+
+        // Upload to Firebase Storage
+        await targetBucket.upload(localFilePath, {
+          destination: relativePath,
+        });
+
+        stats.copied++;
+
+        // Log progress every 10 files
+        if ((index + 1) % 10 === 0 || index + 1 === files.length) {
+          console.log(`Progress: ${stats.copied} uploaded, ${stats.skipped} skipped, ${stats.errors.length} errors (${index + 1}/${files.length} processed)`);
+        }
+      } catch (error) {
+        console.error(`Error uploading file ${localFilePath}:`, error.message);
+        stats.errors.push({
+          file: localFilePath,
+          error: error.message
+        });
+
+        // Log progress on errors too
+        if ((index + 1) % 10 === 0 || index + 1 === files.length) {
+          console.log(`Progress: ${stats.copied} uploaded, ${stats.skipped} skipped, ${stats.errors.length} errors (${index + 1}/${files.length} processed)`);
+        }
+      }
+    });
+  });
+
+  // Execute all upload tasks
+  await Promise.all(uploadTasks);
+
+  // Log final summary
+  console.log(`\n✓ Storage restore complete:`);
+  console.log(`  Uploaded: ${stats.copied}`);
+  console.log(`  Skipped: ${stats.skipped}`);
+  console.log(`  Errors: ${stats.errors.length}`);
+
+  if (stats.errors.length > 0) {
+    console.log('\nFiles with errors:');
+    stats.errors.forEach(({ file, error }) => {
+      console.log(`  - ${file}: ${error}`);
+    });
+  }
+
+  return stats;
+}
+
+module.exports = { restoreStorageFiles, restoreStorageFilesLocal, stripExportPrefix };

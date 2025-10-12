@@ -14,12 +14,14 @@ const { program } = require('commander');
 const chalk = require('chalk');
 const { Storage } = require('@google-cloud/storage');
 const path = require('path');
-const { parseGcsUri, readJSON, getGcsUri } = require('./lib/gcs-client');
+const gcsClient = require('./lib/gcs-client');
+const localClient = require('./lib/local-client');
 const { initFirebaseReadOnly, getServiceAccountPath } = require('./lib/firebase-init');
-const { validateManifest, importAllCollections } = require('./lib/firestore-import');
-const { restoreStorageFiles } = require('./lib/storage-import');
+const { validateManifest: validateManifestOld, importAllCollections } = require('./lib/firestore-import');
+const { restoreStorageFiles, restoreStorageFilesLocal } = require('./lib/storage-import');
 const { displayManifest, confirmImport } = require('./lib/safety-prompts');
 const { detectStorageBucket } = require('./lib/storage-bucket-detector');
+const manifest = require('./lib/manifest');
 
 /**
  * Main import function
@@ -28,8 +30,9 @@ async function importFirebase() {
   // Parse CLI arguments
   program
     .name('import-firebase')
-    .description('Import Firestore and Storage data from GCS export to Firebase')
-    .requiredOption('--source <uri>', 'GCS URI of the manifest file (gs://bucket/path/manifest.json)')
+    .description('Import Firestore and Storage data from GCS or local export to Firebase')
+    .option('--source <uri>', 'GCS URI of the manifest file (gs://bucket/path/manifest.json)')
+    .option('--local-input <path>', 'Local directory containing export data (alternative to --source)')
     .requiredOption('--project <id>', 'Target Firebase project ID')
     .option('--skip-storage', 'Skip importing storage files', false)
     .option('--skip-clear', 'Skip clearing collections before import (may cause conflicts)', false)
@@ -40,29 +43,85 @@ async function importFirebase() {
 
   const options = program.opts();
 
+  // Validate that exactly one source is specified
+  if (!options.source && !options.localInput) {
+    console.error(chalk.red('\n✗ Error: Must specify either --source or --local-input'));
+    console.error('\nExamples:');
+    console.error(chalk.cyan('  node import-firebase.js --source gs://bucket/exports/manifest.json --project my-project --execute'));
+    console.error(chalk.cyan('  node import-firebase.js --local-input ./backups/2025-01-15 --project my-project --execute\n'));
+    process.exit(1);
+  }
+
+  if (options.source && options.localInput) {
+    console.error(chalk.red('\n✗ Error: Cannot use both --source and --local-input'));
+    console.error(chalk.red('Choose one import source.\n'));
+    process.exit(1);
+  }
+
+  // Detect mode
+  const isLocalMode = Boolean(options.localInput);
+
   console.log(chalk.cyan.bold('\n=== Firebase Import Tool ===\n'));
 
   try {
-    // Step 1: Parse source URI
-    console.log(chalk.white('Step 1: Parsing source URI...'));
-    const { bucketName, path: manifestPath } = parseGcsUri(options.source);
-    console.log(chalk.green(`✓ Parsed: gs://${bucketName}/${manifestPath}`));
+    // Step 1: Parse/validate source
+    let bucketName, manifestPath, basePath, sourceBucket;
 
-    // Step 2: Connect to GCS bucket using Storage SDK
-    console.log(chalk.white('\nStep 2: Connecting to GCS bucket...'));
+    if (isLocalMode) {
+      console.log(chalk.white('Step 1: Validating local input path...'));
+      const resolvedPath = path.resolve(options.localInput);
+
+      // Check if directory exists
+      if (!await localClient.fileExists(resolvedPath)) {
+        console.error(chalk.red(`\n✗ Directory not found: ${resolvedPath}`));
+        process.exit(1);
+      }
+
+      manifestPath = path.join(resolvedPath, 'manifest.json');
+      if (!await localClient.fileExists(manifestPath)) {
+        console.error(chalk.red(`\n✗ Manifest not found: ${manifestPath}`));
+        console.error(chalk.red('Ensure the directory contains a valid export with manifest.json'));
+        process.exit(1);
+      }
+
+      basePath = resolvedPath;
+      console.log(chalk.green(`✓ Validated: ${resolvedPath}`));
+    } else {
+      console.log(chalk.white('Step 1: Parsing source URI...'));
+      const parsed = gcsClient.parseGcsUri(options.source);
+      bucketName = parsed.bucketName;
+      manifestPath = parsed.path;
+      console.log(chalk.green(`✓ Parsed: gs://${bucketName}/${manifestPath}`));
+
+      // Get base path for GCS (directory containing manifest)
+      basePath = manifestPath.substring(0, manifestPath.lastIndexOf('/'));
+    }
+
+    // Step 2: Connect to GCS (if needed for source or target storage)
+    console.log(chalk.white('\nStep 2: Initializing storage SDK...'));
     const serviceAccountPath = getServiceAccountPath(options.project);
     const storage = new Storage({ keyFilename: path.resolve(serviceAccountPath) });
-    const sourceBucket = storage.bucket(bucketName);
-    console.log(chalk.green(`✓ Connected to bucket: ${bucketName}`));
 
-    // Step 3: Read manifest from GCS
+    if (!isLocalMode) {
+      sourceBucket = storage.bucket(bucketName);
+      console.log(chalk.green(`✓ Connected to source bucket: ${bucketName}`));
+    } else {
+      console.log(chalk.green(`✓ Storage SDK initialized (for target storage)`));
+    }
+
+    // Step 3: Read manifest
     console.log(chalk.white('\nStep 3: Reading export manifest...'));
-    const manifest = await readJSON(sourceBucket, manifestPath);
+    let importManifest;
+    if (isLocalMode) {
+      importManifest = await localClient.readJSON(manifestPath);
+    } else {
+      importManifest = await gcsClient.readJSON(sourceBucket, manifestPath);
+    }
     console.log(chalk.green(`✓ Manifest loaded`));
 
     // Step 4: Validate manifest
     console.log(chalk.white('\nStep 4: Validating manifest...'));
-    const validation = validateManifest(manifest);
+    const validation = manifest.validateManifest(importManifest);
     if (!validation.valid) {
       console.error(chalk.red('\n❌ Invalid manifest:'));
       validation.errors.forEach(error => console.error(chalk.red(`  - ${error}`)));
@@ -70,14 +129,17 @@ async function importFirebase() {
     }
     console.log(chalk.green('✓ Manifest is valid'));
 
+    // Normalize collections format (handle both old and new manifest formats)
+    const normalizedCollections = manifest.normalizeCollections(importManifest.collections);
+
     // Step 5: Display what will be imported
     console.log(chalk.white('\nStep 5: Preview of import operation...'));
-    displayManifest(manifest);
+    displayManifest(importManifest);
 
     // Filter collections if specified
     const collectionsToImport = options.collections
       ? options.collections.split(',').map(c => c.trim())
-      : Object.keys(manifest.collections || {});
+      : Object.keys(normalizedCollections);
 
     console.log(chalk.cyan('Target Project:'), chalk.yellow.bold(options.project));
     console.log(chalk.cyan('Collections to import:'), collectionsToImport.join(', '));
@@ -120,25 +182,29 @@ async function importFirebase() {
     const targetStorageBucket = storage.bucket(targetBucketName);
     console.log(chalk.green(`✓ Target storage: ${targetBucketName}\n`));
 
-    // Step 9: Read collection data from GCS
-    console.log(chalk.white('\nStep 8: Loading collection data from GCS...'));
+    // Step 9: Read collection data
+    console.log(chalk.white(`\nStep 8: Loading collection data from ${isLocalMode ? 'local filesystem' : 'GCS'}...`));
     const collectionsData = {};
 
-    // Get the base path (directory containing manifest)
-    const basePath = manifestPath.substring(0, manifestPath.lastIndexOf('/'));
-
     for (const collectionName of collectionsToImport) {
-      const collectionInfo = manifest.collections[collectionName];
+      const collectionInfo = normalizedCollections[collectionName];
       if (!collectionInfo) {
         console.log(chalk.yellow(`  ⚠️  Collection "${collectionName}" not found in manifest, skipping`));
         continue;
       }
 
-      const collectionPath = `${basePath}/${collectionInfo.file}`;
       console.log(chalk.white(`  Loading ${collectionName} from ${collectionInfo.file}...`));
 
       try {
-        const collectionData = await readJSON(sourceBucket, collectionPath);
+        let collectionData;
+        if (isLocalMode) {
+          const collectionPath = path.join(basePath, collectionInfo.file);
+          collectionData = await localClient.readJSON(collectionPath);
+        } else {
+          const collectionPath = `${basePath}/${collectionInfo.file}`;
+          collectionData = await gcsClient.readJSON(sourceBucket, collectionPath);
+        }
+
         collectionsData[collectionName] = collectionData;
         console.log(chalk.green(`  ✓ Loaded ${collectionName}: ${collectionData.docs?.length || 0} documents`));
       } catch (error) {
@@ -158,14 +224,23 @@ async function importFirebase() {
 
     // Step 11: Import storage files (if not skipped)
     let storageResults = null;
-    if (!options.skipStorage && manifest.storage && manifest.storage.fileCount > 0) {
+    if (!options.skipStorage && importManifest.storage && importManifest.storage.fileCount > 0) {
       console.log(chalk.white('\nStep 10: Importing storage files...'));
-      const storagePrefix = `${basePath}/storage`;
-      storageResults = await restoreStorageFiles(
-        sourceBucket,
-        storagePrefix,
-        targetStorageBucket
-      );
+
+      if (isLocalMode) {
+        const storageDir = path.join(basePath, 'storage');
+        storageResults = await restoreStorageFilesLocal(
+          storageDir,
+          targetStorageBucket
+        );
+      } else {
+        const storagePrefix = `${basePath}/storage`;
+        storageResults = await restoreStorageFiles(
+          sourceBucket,
+          storagePrefix,
+          targetStorageBucket
+        );
+      }
     } else if (options.skipStorage) {
       console.log(chalk.yellow('\nSkipping storage import (--skip-storage flag)'));
     } else {

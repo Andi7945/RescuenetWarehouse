@@ -2,9 +2,10 @@
 
 ## Overview
 
-A Node.js command-line tool for exporting Firebase data to timestamped backups in Google Cloud Storage.
+A Node.js command-line tool for exporting Firebase data to Google Cloud Storage (GCS) or local filesystem.
 
 **Key Features:**
+- **Two export modes**: GCS buckets (cloud) or local filesystem (disk)
 - **Read-only operation**: Cannot modify your Firebase project (safe to run)
 - **Exports Firestore collections**: All or selected collections as JSON
 - **Exports Storage files**: Copies all files from Firebase Storage
@@ -13,9 +14,44 @@ A Node.js command-line tool for exporting Firebase data to timestamped backups i
 - **Dry-run mode**: Preview export plan before executing
 
 **What it does NOT do:**
-- Does not import/restore data (see import tool plan for future implementation)
+- Does not import/restore data (see [README-import.md](README-import.md) for import tool)
 - Does not delete or modify source data
 - Does not overwrite existing exports (always creates new timestamped directories)
+
+## Export Modes
+
+### GCS Mode (Cloud Storage)
+Export to Google Cloud Storage buckets for production backups and long-term archival.
+
+```bash
+node export-firebase.js \
+  --project my-project \
+  --bucket my-backup-bucket
+```
+
+**Best for:**
+- Production disaster recovery
+- Long-term archival storage
+- Automated scheduled backups
+- Team collaboration on backups
+
+### Local Mode (Filesystem)
+Export to local filesystem for development, testing, and quick backups.
+
+```bash
+node export-firebase.js \
+  --project my-project \
+  --local-output ./backups/2025-01-15
+```
+
+**Best for:**
+- Quick development backups
+- Local testing workflows
+- Avoiding GCS costs
+- Air-gapped environments
+- CI/CD test fixtures
+
+**📖 See [README-local-backups.md](README-local-backups.md) for complete local backup guide.**
 
 ---
 
