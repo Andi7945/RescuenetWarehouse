@@ -1,3 +1,5 @@
+// DEPRECATED: Use lib/features/printing/generators/packing_list_generator.dart instead. This file will be removed in a future version.
+
 import 'package:pdf/pdf.dart';
 import 'package:rescuenet_warehouse/pdf/packing_item.dart';
 import 'package:rescuenet_warehouse/pdf/packing_list.dart';
@@ -8,6 +10,7 @@ import 'pdf_utils.dart';
 
 import 'package:intl/intl.dart';
 
+@Deprecated('Use PackingListGenerator from lib/features/printing/generators/packing_list_generator.dart')
 Future<pw.Document> Function(PdfPageFormat) createPackingListPdf(
         PackingList list) =>
     (format) async {

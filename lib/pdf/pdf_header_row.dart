@@ -1,9 +1,12 @@
+// DEPRECATED: Use lib/features/printing/generators/common/pdf_header_builder.dart instead. This file will be removed in a future version.
+
 import 'package:pdf/widgets.dart' as pw;
 
 import 'package:intl/intl.dart';
 
 import 'pdf_utils.dart';
 
+@Deprecated('Use PdfHeaderBuilder from lib/features/printing/generators/common/pdf_header_builder.dart')
 Future<pw.Widget> headerRow(pw.Widget leftCorner,
     [pw.Widget? rightSide, String? userName]) async {
   return pw.Padding(

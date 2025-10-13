@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rescuenet_warehouse/services/export_service.dart';
+import 'package:rescuenet_warehouse/features/printing/ui/export_actions.dart';
 import 'package:rescuenet_warehouse/models/item.dart';
 import 'package:rescuenet_warehouse/models/rescue_container.dart';
 
 import 'export_page_table.dart';
 
-class ExportPageBody extends StatefulWidget {
+class ExportPageBody extends ConsumerStatefulWidget {
   final Map<RescueContainer, Map<Item, int>> containerWithItems;
 
-  ExportPageBody(this.containerWithItems);
+  const ExportPageBody(this.containerWithItems, {super.key});
 
   @override
-  State createState() => _ExportPageBodyState();
+  ConsumerState<ExportPageBody> createState() => _ExportPageBodyState();
 }
 
-class _ExportPageBodyState extends State<ExportPageBody> {
+class _ExportPageBodyState extends ConsumerState<ExportPageBody> {
   final List<ContainerPrintingOptions> options = [];
 
   @override
@@ -47,22 +49,24 @@ class _ExportPageBodyState extends State<ExportPageBody> {
     });
   }
 
-  _sharePackingListPdf() {
-    var toPrint = options
+  Future<void> _sharePackingListPdf() async {
+    final toPrint = options
         .where((ele) => ele.printPackingList)
         .map((e) => e.container)
         .toList();
-    var withItems = Map.fromEntries(widget.containerWithItems.entries
+    final withItems = Map.fromEntries(widget.containerWithItems.entries
         .where((ele) => toPrint.contains(ele.key)));
-    sharePackingListPdf(withItems, context);
+
+    await ExportActions.handlePackingLists(context, ref, withItems);
   }
 
-  _shareLabelPdf() {
-    var toPrint =
+  Future<void> _shareLabelPdf() async {
+    final toPrint =
         options.where((ele) => ele.printLabel).map((e) => e.container).toList();
-    var withItems = Map.fromEntries(widget.containerWithItems.entries
+    final withItems = Map.fromEntries(widget.containerWithItems.entries
         .where((ele) => toPrint.contains(ele.key)));
-    shareLabelPdf(withItems, context);
+
+    await ExportActions.handleLabels(context, ref, withItems);
   }
 
   _shareSafetyDatasheets() {

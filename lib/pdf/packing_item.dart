@@ -1,13 +1,17 @@
-class PackingItem {
-  String name;
-  String description;
-  double amount;
-  double piecePrice;
-  double weightTotal;
-  DateTime? expirationDate;
-  String dangerousGoods;
-  String remarks;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  PackingItem(this.name, this.description, this.amount, this.piecePrice,
-      this.weightTotal, this.expirationDate, this.dangerousGoods, this.remarks);
+part 'packing_item.freezed.dart';
+
+@freezed
+abstract class PackingItem with _$PackingItem {
+  const factory PackingItem({
+    required String name,
+    required String description,
+    required double amount,
+    required double piecePrice,
+    required double weightTotal,
+    required DateTime? expirationDate,
+    required String dangerousGoods,
+    required String remarks,
+  }) = _PackingItem;
 }

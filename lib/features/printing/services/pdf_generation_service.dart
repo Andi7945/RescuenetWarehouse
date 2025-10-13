@@ -1,0 +1,149 @@
+/// PDF Generation Service
+///
+/// This service orchestrates the conversion of domain models (containers, items)
+/// into PDF documents. It serves as the main entry point for PDF generation in
+/// the application, coordinating between:
+/// - Data mappers (DTO conversion)
+/// - PDF generators (pure functions)
+/// - Result packaging (PdfDocument objects)
+///
+/// All methods are static and pure - they have no side effects and don't
+/// depend on UI state. This makes them:
+/// - Easy to test without a Flutter environment
+/// - Safe to call from anywhere (UI, background tasks, tests)
+/// - Predictable and maintainable
+///
+/// The service requires a [PrintContext] to provide user and organization
+/// information for proper PDF branding and attribution.
+import 'dart:typed_data';
+import 'package:rescuenet_warehouse/features/printing/domain/print_context.dart';
+import 'package:rescuenet_warehouse/models/item.dart';
+import 'package:rescuenet_warehouse/models/rescue_container.dart';
+import 'package:rescuenet_warehouse/pdf/packing_list_mapper.dart';
+import 'package:rescuenet_warehouse/pdf/summary_mapper.dart';
+import '../generators/packing_list_generator.dart';
+import '../generators/label_generator.dart';
+import '../generators/summary_generator.dart';
+
+/// Pure business logic for PDF generation.
+///
+/// Provides static methods for generating various types of PDFs from
+/// container and item data. All methods are pure functions that:
+/// - Take domain models and PrintContext as input
+/// - Return PdfDocument objects with raw bytes
+/// - Have no side effects (no file I/O, no UI interactions)
+///
+/// For actual printing or saving, use [PrintService] and [FileService].
+class PdfGenerationService {
+  /// Generate packing list PDFs for containers.
+  ///
+  /// Creates one PDF per container with:
+  /// - Container identification and metadata
+  /// - Complete item listing with quantities
+  /// - Dangerous goods information
+  /// - Organization branding and user attribution
+  ///
+  /// Parameters:
+  /// - [containers]: Map of containers to their items with quantities
+  /// - [context]: Print context for user/org info
+  ///
+  /// Returns a list of [PdfDocument] objects, one per container.
+  static Future<List<PdfDocument>> generatePackingLists(
+    Map<RescueContainer, Map<Item, int>> containers,
+    PrintContext context,
+  ) async {
+    final packingLists = mapPackingList(containers);
+    final results = <PdfDocument>[];
+
+    for (final list in packingLists) {
+      final doc = await generatePackingListPdf(list, context);
+      final bytes = await doc.save();
+      results.add(PdfDocument(
+        fileName: 'packing_list_${list.containerNo}.pdf',
+        bytes: bytes,
+      ));
+    }
+
+    return results;
+  }
+
+  /// Generate label PDFs for containers.
+  ///
+  /// Creates container labels (typically for physical attachment to containers)
+  /// with:
+  /// - Container number and identification
+  /// - Dangerous goods warning labels
+  /// - Destination information
+  /// - Organization branding and user attribution
+  ///
+  /// Labels are formatted for printing on physical label sheets.
+  ///
+  /// Parameters:
+  /// - [containers]: Map of containers to their items with quantities
+  /// - [context]: Print context for user/org info
+  ///
+  /// Returns a list of [PdfDocument] objects, one per container.
+  static Future<List<PdfDocument>> generateLabels(
+    Map<RescueContainer, Map<Item, int>> containers,
+    PrintContext context,
+  ) async {
+    final packingLists = mapPackingList(containers);
+    final results = <PdfDocument>[];
+
+    for (final list in packingLists) {
+      final doc = await generateLabelPdf(list, context);
+      final bytes = await doc.save();
+      results.add(PdfDocument(
+        fileName: 'label_${list.containerNo}.pdf',
+        bytes: bytes,
+      ));
+    }
+
+    return results;
+  }
+
+  /// Generate summary PDF.
+  ///
+  /// Creates a comprehensive summary document for deployment that includes:
+  /// - Overview of all containers being deployed
+  /// - Aggregated item counts across all containers
+  /// - Summary statistics and metadata
+  /// - Organization branding and user attribution
+  ///
+  /// This is typically used for final verification before deployment.
+  ///
+  /// Parameters:
+  /// - [containers]: Map of containers to their items with quantities
+  /// - [context]: Print context for user/org info
+  ///
+  /// Returns a single [PdfDocument] with the summary report.
+  static Future<PdfDocument> generateSummary(
+    Map<RescueContainer, Map<Item, int>> containers,
+    PrintContext context,
+  ) async {
+    final summary = mapForPdf(containers);
+    final doc = await generateSummaryPdf(summary, context);
+    final bytes = await doc.save();
+
+    return PdfDocument(
+      fileName: 'summary.pdf',
+      bytes: bytes,
+    );
+  }
+}
+
+/// Data transfer object for a generated PDF document.
+///
+/// Contains the raw PDF bytes and suggested filename. This simple DTO
+/// allows the generation service to remain pure while providing enough
+/// information for downstream services (PrintService, FileService) to
+/// handle the document appropriately.
+class PdfDocument {
+  final String fileName;
+  final Uint8List bytes;
+
+  const PdfDocument({
+    required this.fileName,
+    required this.bytes,
+  });
+}

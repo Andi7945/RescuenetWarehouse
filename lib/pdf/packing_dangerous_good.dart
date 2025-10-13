@@ -1,12 +1,16 @@
-class PackingDangerousGood {
-  String dangerType;
-  String iataId;
-  String properShippingName;
-  double maxWeightPAX;
-  double maxWeightCargo;
-  String remarks;
-  String imagePath;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  PackingDangerousGood(this.dangerType, this.iataId, this.properShippingName,
-      this.maxWeightPAX, this.maxWeightCargo, this.remarks, this.imagePath);
+part 'packing_dangerous_good.freezed.dart';
+
+@freezed
+abstract class PackingDangerousGood with _$PackingDangerousGood {
+  const factory PackingDangerousGood({
+    required String dangerType,
+    required String iataId,
+    required String properShippingName,
+    required double maxWeightPAX,
+    required double maxWeightCargo,
+    required String remarks,
+    required String imagePath,
+  }) = _PackingDangerousGood;
 }

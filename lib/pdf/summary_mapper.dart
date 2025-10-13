@@ -10,7 +10,7 @@ import 'summary_container.dart';
 
 SummaryPdf mapForPdf(Map<RescueContainer, Map<Item, int>> containerWithItems) {
   var containers = containerWithItems.entries.map(_mapSingle).toList();
-  return SummaryPdf(_list(containers), containers);
+  return SummaryPdf(list: _list(containers), containers: containers);
 }
 
 SummaryList _list(List<SummaryContainer> containers) {
@@ -19,22 +19,25 @@ SummaryList _list(List<SummaryContainer> containers) {
   var amountPerType =
       containers.groupBy((c) => c.type).mapValues((p0) => "${p0.length}");
   return SummaryList(
-      "${containers.length}", amountPerType, totalValue, totalWeight);
+      count: "${containers.length}",
+      amountPerType: amountPerType,
+      totalValue: totalValue,
+      totalWeight: totalWeight);
 }
 
 SummaryContainer _mapSingle(MapEntry<RescueContainer, Map<Item, int>> entry) =>
     SummaryContainer(
-        entry.key.number,
-        entry.key.printName,
-        entry.key.description ?? "",
-        entry.key.type?.name ?? "",
-        calcValue(entry.value),
-        _calcWeight(entry),
-        nextExpirationDateFormatted(entry.value),
-        _dangerousGoods(entry.value),
-        _hasColdChainItem(entry.value),
-        entry.key.moduleDestination?.name ?? "",
-        entry.key.sequentialBuild);
+        containerNr: entry.key.number,
+        name: entry.key.printName,
+        description: entry.key.description ?? "",
+        type: entry.key.type?.name ?? "",
+        value: calcValue(entry.value),
+        weight: _calcWeight(entry),
+        expirationDate: nextExpirationDateFormatted(entry.value),
+        dangerousGoods: _dangerousGoods(entry.value),
+        coldChain: _hasColdChainItem(entry.value),
+        moduleDestination: entry.key.moduleDestination?.name ?? "",
+        sequentialBuild: entry.key.sequentialBuild);
 
 _dangerousGoods(Map<Item, int> items) => items.keys
     .expand((e) => e.signs)

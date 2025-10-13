@@ -1,3 +1,5 @@
+// DEPRECATED: Use lib/features/printing/generators/label_generator.dart instead. This file will be removed in a future version.
+
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -6,6 +8,7 @@ import 'packing_list.dart';
 import 'pdf_header_row.dart';
 import 'pdf_utils.dart';
 
+@Deprecated('Use LabelGenerator from lib/features/printing/generators/label_generator.dart')
 Future<pw.Document> Function(PdfPageFormat) createLabelPdf(PackingList list, [String? userName]) {
   return (format) async {
     var goods = await dangerousGoodsLabels(list.dangerousGoods);

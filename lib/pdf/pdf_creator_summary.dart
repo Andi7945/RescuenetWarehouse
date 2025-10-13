@@ -1,3 +1,5 @@
+// DEPRECATED: Use lib/features/printing/generators/summary_generator.dart instead. This file will be removed in a future version.
+
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:rescuenet_warehouse/pdf/summary_container.dart';
@@ -7,6 +9,7 @@ import 'package:rescuenet_warehouse/pdf/summary_pdf.dart';
 import 'pdf_header_row.dart';
 import 'pdf_utils.dart';
 
+@Deprecated('Use SummaryGenerator from lib/features/printing/generators/summary_generator.dart')
 Future<pw.Document> Function(PdfPageFormat) createSummaryPdf(
         SummaryPdf summary) =>
     (PdfPageFormat format) async {

@@ -1,3 +1,5 @@
+// DEPRECATED: Use lib/features/printing/generators/common/pdf_header_builder.dart instead. This file will be removed in a future version.
+
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'packing_list.dart';
@@ -10,6 +12,7 @@ import 'pdf_utils.dart';
  * For the packing list we want one pdf but start the page counter for each one separately.
  * So we create a provider per new document and save what index is the first one.
  */
+@Deprecated('Use PdfHeaderBuilder from lib/features/printing/generators/common/pdf_header_builder.dart')
 class HeaderProvider {
   int smallestPage = 0;
 

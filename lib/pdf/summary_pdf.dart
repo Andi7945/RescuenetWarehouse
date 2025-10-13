@@ -1,10 +1,13 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:rescuenet_warehouse/pdf/summary_list.dart';
+import 'package:rescuenet_warehouse/pdf/summary_container.dart';
 
-import 'summary_container.dart';
+part 'summary_pdf.freezed.dart';
 
-class SummaryPdf {
-  final SummaryList list;
-  final List<SummaryContainer> containers;
-
-  SummaryPdf(this.list, this.containers);
+@freezed
+abstract class SummaryPdf with _$SummaryPdf {
+  const factory SummaryPdf({
+    required SummaryList list,
+    required List<SummaryContainer> containers,
+  }) = _SummaryPdf;
 }

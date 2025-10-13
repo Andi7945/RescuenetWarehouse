@@ -1,3 +1,8 @@
+// DEPRECATED: Use lib/features/printing/ instead. This file will be removed in a future version.
+// Replaced by:
+// - ExportActions from lib/features/printing/ui/export_actions.dart for UI export actions
+// - PrintingService from lib/features/printing/services/printing_service.dart for core functionality
+
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -19,6 +24,7 @@ import '../pdf/pdf_creator_packing_list.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:firebase_storage/firebase_storage.dart';
 
+@Deprecated('Use ExportActions from lib/features/printing/ui/export_actions.dart')
 shareSummaryPdf(Map<RescueContainer, Map<Item, int>> forContainers,
     BuildContext context) async {
   var formattedDate = _formattedPrintingDate();
@@ -27,6 +33,7 @@ shareSummaryPdf(Map<RescueContainer, Map<Item, int>> forContainers,
       pageFormatLandscape, fileName, context);
 }
 
+@Deprecated('Use ExportActions from lib/features/printing/ui/export_actions.dart')
 void sharePackingListPdf(Map<RescueContainer, Map<Item, int>> withItems,
     BuildContext context) async {
   var formattedDate = _formattedPrintingDate();
@@ -37,6 +44,7 @@ void sharePackingListPdf(Map<RescueContainer, Map<Item, int>> withItems,
   }
 }
 
+@Deprecated('Use ExportActions from lib/features/printing/ui/export_actions.dart')
 void shareLabelPdf(Map<RescueContainer, Map<Item, int>> withItems,
     BuildContext context) async {
   var formattedDate = _formattedPrintingDate();
@@ -47,6 +55,7 @@ void shareLabelPdf(Map<RescueContainer, Map<Item, int>> withItems,
   }
 }
 
+// Note: Safety datasheet functionality is NOT deprecated - it has no replacement yet
 void shareSafetyDatasheets(Map<RescueContainer, Map<Item, int>> withItems,
     BuildContext context) async {
   var safetySheets = withItems
