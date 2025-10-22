@@ -11,19 +11,19 @@ String _$containerWithItemsNotifierHash() =>
 
 /// See also [ContainerWithItemsNotifier].
 @ProviderFor(ContainerWithItemsNotifier)
-final containerWithItemsNotifierProvider = AutoDisposeNotifierProvider<
-  ContainerWithItemsNotifier,
-  Map<RescueContainer, Map<Item, int>>
->.internal(
-  ContainerWithItemsNotifier.new,
-  name: r'containerWithItemsNotifierProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
+final containerWithItemsNotifierProvider =
+    AutoDisposeNotifierProvider<
+      ContainerWithItemsNotifier,
+      Map<RescueContainer, Map<Item, int>>
+    >.internal(
+      ContainerWithItemsNotifier.new,
+      name: r'containerWithItemsNotifierProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
           : _$containerWithItemsNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$ContainerWithItemsNotifier =
     AutoDisposeNotifier<Map<RescueContainer, Map<Item, int>>>;

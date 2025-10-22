@@ -11,19 +11,19 @@ String _$moduleDestinationsNotifierHash() =>
 
 /// See also [ModuleDestinationsNotifier].
 @ProviderFor(ModuleDestinationsNotifier)
-final moduleDestinationsNotifierProvider = AutoDisposeNotifierProvider<
-  ModuleDestinationsNotifier,
-  List<ModuleDestination>
->.internal(
-  ModuleDestinationsNotifier.new,
-  name: r'moduleDestinationsNotifierProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
+final moduleDestinationsNotifierProvider =
+    AutoDisposeNotifierProvider<
+      ModuleDestinationsNotifier,
+      List<ModuleDestination>
+    >.internal(
+      ModuleDestinationsNotifier.new,
+      name: r'moduleDestinationsNotifierProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
           : _$moduleDestinationsNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$ModuleDestinationsNotifier =
     AutoDisposeNotifier<List<ModuleDestination>>;
@@ -32,19 +32,19 @@ String _$moduleDestinationsAsyncHash() =>
 
 /// See also [ModuleDestinationsAsync].
 @ProviderFor(ModuleDestinationsAsync)
-final moduleDestinationsAsyncProvider = AutoDisposeStreamNotifierProvider<
-  ModuleDestinationsAsync,
-  List<ModuleDestination>
->.internal(
-  ModuleDestinationsAsync.new,
-  name: r'moduleDestinationsAsyncProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
+final moduleDestinationsAsyncProvider =
+    AutoDisposeStreamNotifierProvider<
+      ModuleDestinationsAsync,
+      List<ModuleDestination>
+    >.internal(
+      ModuleDestinationsAsync.new,
+      name: r'moduleDestinationsAsyncProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
           : _$moduleDestinationsAsyncHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$ModuleDestinationsAsync =
     AutoDisposeStreamNotifier<List<ModuleDestination>>;

@@ -11,19 +11,19 @@ String _$containerHiddenBySelectionNotifierHash() =>
 
 /// See also [ContainerHiddenBySelectionNotifier].
 @ProviderFor(ContainerHiddenBySelectionNotifier)
-final containerHiddenBySelectionNotifierProvider = AutoDisposeNotifierProvider<
-  ContainerHiddenBySelectionNotifier,
-  List<RescueContainer>
->.internal(
-  ContainerHiddenBySelectionNotifier.new,
-  name: r'containerHiddenBySelectionNotifierProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
+final containerHiddenBySelectionNotifierProvider =
+    AutoDisposeNotifierProvider<
+      ContainerHiddenBySelectionNotifier,
+      List<RescueContainer>
+    >.internal(
+      ContainerHiddenBySelectionNotifier.new,
+      name: r'containerHiddenBySelectionNotifierProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
           : _$containerHiddenBySelectionNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$ContainerHiddenBySelectionNotifier =
     AutoDisposeNotifier<List<RescueContainer>>;

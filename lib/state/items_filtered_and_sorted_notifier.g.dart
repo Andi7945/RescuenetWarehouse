@@ -17,10 +17,9 @@ final itemsFilteredAndSortedCompatProvider =
     AutoDisposeProvider<List<Item>>.internal(
       itemsFilteredAndSortedCompat,
       name: r'itemsFilteredAndSortedCompatProvider',
-      debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$itemsFilteredAndSortedCompatHash,
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$itemsFilteredAndSortedCompatHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
@@ -47,19 +46,19 @@ String _$itemsFilteredAndSortedAsyncHash() =>
 ///
 /// Copied from [ItemsFilteredAndSortedAsync].
 @ProviderFor(ItemsFilteredAndSortedAsync)
-final itemsFilteredAndSortedAsyncProvider = AutoDisposeNotifierProvider<
-  ItemsFilteredAndSortedAsync,
-  AsyncValue<List<Item>>
->.internal(
-  ItemsFilteredAndSortedAsync.new,
-  name: r'itemsFilteredAndSortedAsyncProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
+final itemsFilteredAndSortedAsyncProvider =
+    AutoDisposeNotifierProvider<
+      ItemsFilteredAndSortedAsync,
+      AsyncValue<List<Item>>
+    >.internal(
+      ItemsFilteredAndSortedAsync.new,
+      name: r'itemsFilteredAndSortedAsyncProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
           : _$itemsFilteredAndSortedAsyncHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$ItemsFilteredAndSortedAsync =
     AutoDisposeNotifier<AsyncValue<List<Item>>>;

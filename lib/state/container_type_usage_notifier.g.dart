@@ -11,19 +11,19 @@ String _$containerTypeUsageNotifierHash() =>
 
 /// See also [ContainerTypeUsageNotifier].
 @ProviderFor(ContainerTypeUsageNotifier)
-final containerTypeUsageNotifierProvider = AutoDisposeNotifierProvider<
-  ContainerTypeUsageNotifier,
-  AsyncValue<Map<ContainerType, Set<String>>>
->.internal(
-  ContainerTypeUsageNotifier.new,
-  name: r'containerTypeUsageNotifierProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
+final containerTypeUsageNotifierProvider =
+    AutoDisposeNotifierProvider<
+      ContainerTypeUsageNotifier,
+      AsyncValue<Map<ContainerType, Set<String>>>
+    >.internal(
+      ContainerTypeUsageNotifier.new,
+      name: r'containerTypeUsageNotifierProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
           : _$containerTypeUsageNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$ContainerTypeUsageNotifier =
     AutoDisposeNotifier<AsyncValue<Map<ContainerType, Set<String>>>>;

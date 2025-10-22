@@ -11,19 +11,19 @@ String _$workLogSinceNotifierHash() =>
 
 /// See also [WorkLogSinceNotifier].
 @ProviderFor(WorkLogSinceNotifier)
-final workLogSinceNotifierProvider = AutoDisposeNotifierProvider<
-  WorkLogSinceNotifier,
-  Map<String, List<LogEntrySummed>>
->.internal(
-  WorkLogSinceNotifier.new,
-  name: r'workLogSinceNotifierProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
+final workLogSinceNotifierProvider =
+    AutoDisposeNotifierProvider<
+      WorkLogSinceNotifier,
+      Map<String, List<LogEntrySummed>>
+    >.internal(
+      WorkLogSinceNotifier.new,
+      name: r'workLogSinceNotifierProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
           : _$workLogSinceNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$WorkLogSinceNotifier =
     AutoDisposeNotifier<Map<String, List<LogEntrySummed>>>;

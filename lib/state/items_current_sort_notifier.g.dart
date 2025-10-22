@@ -11,19 +11,19 @@ String _$itemsCurrentSortNotifierHash() =>
 
 /// See also [ItemsCurrentSortNotifier].
 @ProviderFor(ItemsCurrentSortNotifier)
-final itemsCurrentSortNotifierProvider = AutoDisposeNotifierProvider<
-  ItemsCurrentSortNotifier,
-  ItemSortingOption
->.internal(
-  ItemsCurrentSortNotifier.new,
-  name: r'itemsCurrentSortNotifierProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
+final itemsCurrentSortNotifierProvider =
+    AutoDisposeNotifierProvider<
+      ItemsCurrentSortNotifier,
+      ItemSortingOption
+    >.internal(
+      ItemsCurrentSortNotifier.new,
+      name: r'itemsCurrentSortNotifierProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
           : _$itemsCurrentSortNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$ItemsCurrentSortNotifier = AutoDisposeNotifier<ItemSortingOption>;
 // ignore_for_file: type=lint

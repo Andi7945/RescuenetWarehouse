@@ -16,10 +16,9 @@ String _$authRepositoryHash() => r'447c1954c986cc5c99a07c96f3b04bdbd931ab91';
 final authRepositoryProvider = AutoDisposeProvider<AuthRepository>.internal(
   authRepository,
   name: r'authRepositoryProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$authRepositoryHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$authRepositoryHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
@@ -37,10 +36,9 @@ String _$itemRepositoryHash() => r'1aaf71e451da55e0fc1f050e29a2770331ec8176';
 final itemRepositoryProvider = AutoDisposeProvider<ItemRepository>.internal(
   itemRepository,
   name: r'itemRepositoryProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$itemRepositoryHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$itemRepositoryHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
@@ -60,10 +58,9 @@ final containerRepositoryProvider =
     AutoDisposeProvider<ContainerRepository>.internal(
       containerRepository,
       name: r'containerRepositoryProvider',
-      debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$containerRepositoryHash,
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$containerRepositoryHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
@@ -83,10 +80,9 @@ final assignmentRepositoryProvider =
     AutoDisposeProvider<AssignmentRepository>.internal(
       assignmentRepository,
       name: r'assignmentRepositoryProvider',
-      debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$assignmentRepositoryHash,
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$assignmentRepositoryHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
@@ -105,10 +101,9 @@ final workLogRepositoryProvider =
     AutoDisposeProvider<WorkLogRepository>.internal(
       workLogRepository,
       name: r'workLogRepositoryProvider',
-      debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$workLogRepositoryHash,
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$workLogRepositoryHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
@@ -128,10 +123,9 @@ final containerTypeRepositoryProvider =
     AutoDisposeProvider<ContainerTypeRepository>.internal(
       containerTypeRepository,
       name: r'containerTypeRepositoryProvider',
-      debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$containerTypeRepositoryHash,
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$containerTypeRepositoryHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
@@ -152,10 +146,9 @@ final currentLocationRepositoryProvider =
     AutoDisposeProvider<CurrentLocationRepository>.internal(
       currentLocationRepository,
       name: r'currentLocationRepositoryProvider',
-      debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$currentLocationRepositoryHash,
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$currentLocationRepositoryHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
@@ -176,10 +169,9 @@ final moduleDestinationRepositoryProvider =
     AutoDisposeProvider<ModuleDestinationRepository>.internal(
       moduleDestinationRepository,
       name: r'moduleDestinationRepositoryProvider',
-      debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$moduleDestinationRepositoryHash,
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$moduleDestinationRepositoryHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
@@ -198,8 +190,9 @@ String _$isMockModeHash() => r'379ec087716577d1ce9204c3dcec62b925df5d47';
 final isMockModeProvider = AutoDisposeProvider<bool>.internal(
   isMockMode,
   name: r'isMockModeProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$isMockModeHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$isMockModeHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );

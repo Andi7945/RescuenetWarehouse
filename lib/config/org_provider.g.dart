@@ -25,8 +25,9 @@ String _$currentOrgHash() => r'0b9b289068e8cfe6a29b35db9bdd97bb7d192e1d';
 final currentOrgProvider = AutoDisposeProvider<OrgConfig>.internal(
   currentOrg,
   name: r'currentOrgProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$currentOrgHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$currentOrgHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
@@ -54,10 +55,9 @@ String _$currentEnvironmentHash() =>
 final currentEnvironmentProvider = AutoDisposeProvider<String>.internal(
   currentEnvironment,
   name: r'currentEnvironmentProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$currentEnvironmentHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$currentEnvironmentHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );

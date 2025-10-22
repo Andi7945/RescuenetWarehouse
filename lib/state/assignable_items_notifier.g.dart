@@ -25,19 +25,19 @@ String _$assignableItemsAsyncHash() =>
 ///
 /// Copied from [AssignableItemsAsync].
 @ProviderFor(AssignableItemsAsync)
-final assignableItemsAsyncProvider = AutoDisposeStreamNotifierProvider<
-  AssignableItemsAsync,
-  Map<Item, int>
->.internal(
-  AssignableItemsAsync.new,
-  name: r'assignableItemsAsyncProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
+final assignableItemsAsyncProvider =
+    AutoDisposeStreamNotifierProvider<
+      AssignableItemsAsync,
+      Map<Item, int>
+    >.internal(
+      AssignableItemsAsync.new,
+      name: r'assignableItemsAsyncProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
           : _$assignableItemsAsyncHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$AssignableItemsAsync = AutoDisposeStreamNotifier<Map<Item, int>>;
 // ignore_for_file: type=lint

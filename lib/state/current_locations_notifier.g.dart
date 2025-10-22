@@ -11,19 +11,19 @@ String _$currentLocationsNotifierHash() =>
 
 /// See also [CurrentLocationsNotifier].
 @ProviderFor(CurrentLocationsNotifier)
-final currentLocationsNotifierProvider = AutoDisposeNotifierProvider<
-  CurrentLocationsNotifier,
-  List<CurrentLocation>
->.internal(
-  CurrentLocationsNotifier.new,
-  name: r'currentLocationsNotifierProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
+final currentLocationsNotifierProvider =
+    AutoDisposeNotifierProvider<
+      CurrentLocationsNotifier,
+      List<CurrentLocation>
+    >.internal(
+      CurrentLocationsNotifier.new,
+      name: r'currentLocationsNotifierProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
           : _$currentLocationsNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$CurrentLocationsNotifier = AutoDisposeNotifier<List<CurrentLocation>>;
 String _$currentLocationsAsyncHash() =>
@@ -31,19 +31,19 @@ String _$currentLocationsAsyncHash() =>
 
 /// See also [CurrentLocationsAsync].
 @ProviderFor(CurrentLocationsAsync)
-final currentLocationsAsyncProvider = AutoDisposeStreamNotifierProvider<
-  CurrentLocationsAsync,
-  List<CurrentLocation>
->.internal(
-  CurrentLocationsAsync.new,
-  name: r'currentLocationsAsyncProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
+final currentLocationsAsyncProvider =
+    AutoDisposeStreamNotifierProvider<
+      CurrentLocationsAsync,
+      List<CurrentLocation>
+    >.internal(
+      CurrentLocationsAsync.new,
+      name: r'currentLocationsAsyncProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
           : _$currentLocationsAsyncHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$CurrentLocationsAsync =
     AutoDisposeStreamNotifier<List<CurrentLocation>>;

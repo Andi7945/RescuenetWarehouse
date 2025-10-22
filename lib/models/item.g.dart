@@ -50,8 +50,9 @@ Map<String, dynamic> _$ItemToJson(_Item instance) => <String, dynamic>{
   'weight': instance.weight,
   'totalAmount': instance.totalAmount,
   'description': instance.description,
-  'expiringDates':
-      instance.expiringDates.map(const TimestampConverter().toJson).toList(),
+  'expiringDates': instance.expiringDates
+      .map(const TimestampConverter().toJson)
+      .toList(),
   'operationalStatus': _$OperationalStatusEnumMap[instance.operationalStatus]!,
   'manufacturer': const StringConverter().toJson(instance.manufacturer),
   'brand': const StringConverter().toJson(instance.brand),

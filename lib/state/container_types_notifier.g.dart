@@ -11,19 +11,19 @@ String _$containerTypesNotifierHash() =>
 
 /// See also [ContainerTypesNotifier].
 @ProviderFor(ContainerTypesNotifier)
-final containerTypesNotifierProvider = AutoDisposeNotifierProvider<
-  ContainerTypesNotifier,
-  List<ContainerType>
->.internal(
-  ContainerTypesNotifier.new,
-  name: r'containerTypesNotifierProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
+final containerTypesNotifierProvider =
+    AutoDisposeNotifierProvider<
+      ContainerTypesNotifier,
+      List<ContainerType>
+    >.internal(
+      ContainerTypesNotifier.new,
+      name: r'containerTypesNotifierProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
           : _$containerTypesNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$ContainerTypesNotifier = AutoDisposeNotifier<List<ContainerType>>;
 String _$containerTypesAsyncHash() =>
@@ -31,19 +31,19 @@ String _$containerTypesAsyncHash() =>
 
 /// See also [ContainerTypesAsync].
 @ProviderFor(ContainerTypesAsync)
-final containerTypesAsyncProvider = AutoDisposeStreamNotifierProvider<
-  ContainerTypesAsync,
-  List<ContainerType>
->.internal(
-  ContainerTypesAsync.new,
-  name: r'containerTypesAsyncProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
+final containerTypesAsyncProvider =
+    AutoDisposeStreamNotifierProvider<
+      ContainerTypesAsync,
+      List<ContainerType>
+    >.internal(
+      ContainerTypesAsync.new,
+      name: r'containerTypesAsyncProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
           : _$containerTypesAsyncHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$ContainerTypesAsync = AutoDisposeStreamNotifier<List<ContainerType>>;
 // ignore_for_file: type=lint

@@ -86,10 +86,9 @@ class AssignmentByContainerStateProvider
         () => AssignmentByContainerState()..containerId = containerId,
         from: assignmentByContainerStateProvider,
         name: r'assignmentByContainerStateProvider',
-        debugGetCreateSourceHash:
-            const bool.fromEnvironment('dart.vm.product')
-                ? null
-                : _$assignmentByContainerStateHash,
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$assignmentByContainerStateHash,
         dependencies: AssignmentByContainerStateFamily._dependencies,
         allTransitiveDependencies:
             AssignmentByContainerStateFamily._allTransitiveDependencies,
@@ -315,10 +314,9 @@ class AssignmentByContainerAsyncProvider
         () => AssignmentByContainerAsync()..containerId = containerId,
         from: assignmentByContainerAsyncProvider,
         name: r'assignmentByContainerAsyncProvider',
-        debugGetCreateSourceHash:
-            const bool.fromEnvironment('dart.vm.product')
-                ? null
-                : _$assignmentByContainerAsyncHash,
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$assignmentByContainerAsyncHash,
         dependencies: AssignmentByContainerAsyncFamily._dependencies,
         allTransitiveDependencies:
             AssignmentByContainerAsyncFamily._allTransitiveDependencies,

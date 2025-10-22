@@ -15,10 +15,9 @@ final allWorkLogsNotifierProvider =
     AutoDisposeNotifierProvider<AllWorkLogsNotifier, List<LogEntry>>.internal(
       AllWorkLogsNotifier.new,
       name: r'allWorkLogsNotifierProvider',
-      debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$allWorkLogsNotifierHash,
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$allWorkLogsNotifierHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
@@ -28,19 +27,19 @@ String _$allWorkLogsAsyncHash() => r'9ffb7f1ee1e6d47315b2121f66b164831aa44663';
 
 /// See also [AllWorkLogsAsync].
 @ProviderFor(AllWorkLogsAsync)
-final allWorkLogsAsyncProvider = AutoDisposeStreamNotifierProvider<
-  AllWorkLogsAsync,
-  List<LogEntry>
->.internal(
-  AllWorkLogsAsync.new,
-  name: r'allWorkLogsAsyncProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
+final allWorkLogsAsyncProvider =
+    AutoDisposeStreamNotifierProvider<
+      AllWorkLogsAsync,
+      List<LogEntry>
+    >.internal(
+      AllWorkLogsAsync.new,
+      name: r'allWorkLogsAsyncProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
           : _$allWorkLogsAsyncHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$AllWorkLogsAsync = AutoDisposeStreamNotifier<List<LogEntry>>;
 // ignore_for_file: type=lint

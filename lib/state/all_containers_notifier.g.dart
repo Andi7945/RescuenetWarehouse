@@ -19,10 +19,9 @@ final allContainersStreamProvider =
     AutoDisposeStreamProvider<List<RescueContainer>>.internal(
       allContainersStream,
       name: r'allContainersStreamProvider',
-      debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$allContainersStreamHash,
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$allContainersStreamHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
@@ -51,19 +50,19 @@ String _$allContainersAsyncHash() =>
 ///
 /// Copied from [AllContainersAsync].
 @ProviderFor(AllContainersAsync)
-final allContainersAsyncProvider = AutoDisposeStreamNotifierProvider<
-  AllContainersAsync,
-  List<RescueContainer>
->.internal(
-  AllContainersAsync.new,
-  name: r'allContainersAsyncProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
+final allContainersAsyncProvider =
+    AutoDisposeStreamNotifierProvider<
+      AllContainersAsync,
+      List<RescueContainer>
+    >.internal(
+      AllContainersAsync.new,
+      name: r'allContainersAsyncProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
           : _$allContainersAsyncHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$AllContainersAsync = AutoDisposeStreamNotifier<List<RescueContainer>>;
 // ignore_for_file: type=lint

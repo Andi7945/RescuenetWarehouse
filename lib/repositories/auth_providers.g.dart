@@ -16,10 +16,9 @@ String _$authStateChangesHash() => r'843eb1a621041def446e0ef856583a025a5a8e47';
 final authStateChangesProvider = AutoDisposeStreamProvider<User?>.internal(
   authStateChanges,
   name: r'authStateChangesProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$authStateChangesHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$authStateChangesHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
@@ -37,8 +36,9 @@ String _$currentUserHash() => r'9f3f123bba0ef9892f0c09fd400b20dd1f23c8dd';
 final currentUserProvider = AutoDisposeProvider<User?>.internal(
   currentUser,
   name: r'currentUserProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$currentUserHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$currentUserHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
@@ -56,10 +56,9 @@ String _$currentUserNameHash() => r'f3aa1bf78c5c16762cb7d8c4d9766e2f14673ca2';
 final currentUserNameProvider = AutoDisposeProvider<String?>.internal(
   currentUserName,
   name: r'currentUserNameProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$currentUserNameHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$currentUserNameHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
@@ -76,10 +75,9 @@ String _$isAuthenticatedHash() => r'fe6f954f2d7938a820a402d3f97973c87930d8b5';
 final isAuthenticatedProvider = AutoDisposeProvider<bool>.internal(
   isAuthenticated,
   name: r'isAuthenticatedProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$isAuthenticatedHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$isAuthenticatedHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
@@ -98,10 +96,9 @@ final authNotifierProvider =
     AutoDisposeNotifierProvider<AuthNotifier, AsyncValue<void>>.internal(
       AuthNotifier.new,
       name: r'authNotifierProvider',
-      debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$authNotifierHash,
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$authNotifierHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );

@@ -15,10 +15,9 @@ final currentItemNotifierProvider =
     AutoDisposeNotifierProvider<CurrentItemNotifier, Item?>.internal(
       CurrentItemNotifier.new,
       name: r'currentItemNotifierProvider',
-      debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$currentItemNotifierHash,
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$currentItemNotifierHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );

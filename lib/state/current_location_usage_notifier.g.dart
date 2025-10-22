@@ -11,19 +11,19 @@ String _$currentLocationUsageNotifierHash() =>
 
 /// See also [CurrentLocationUsageNotifier].
 @ProviderFor(CurrentLocationUsageNotifier)
-final currentLocationUsageNotifierProvider = AutoDisposeNotifierProvider<
-  CurrentLocationUsageNotifier,
-  AsyncValue<Map<CurrentLocation, Set<String>>>
->.internal(
-  CurrentLocationUsageNotifier.new,
-  name: r'currentLocationUsageNotifierProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
+final currentLocationUsageNotifierProvider =
+    AutoDisposeNotifierProvider<
+      CurrentLocationUsageNotifier,
+      AsyncValue<Map<CurrentLocation, Set<String>>>
+    >.internal(
+      CurrentLocationUsageNotifier.new,
+      name: r'currentLocationUsageNotifierProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
           : _$currentLocationUsageNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$CurrentLocationUsageNotifier =
     AutoDisposeNotifier<AsyncValue<Map<CurrentLocation, Set<String>>>>;

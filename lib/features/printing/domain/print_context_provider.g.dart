@@ -21,8 +21,9 @@ String _$printContextHash() => r'0d3a1c750d9c9c0c3d40dc234ffeb2ee242ce9e6';
 final printContextProvider = AutoDisposeProvider<PrintContext>.internal(
   printContext,
   name: r'printContextProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$printContextHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$printContextHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );

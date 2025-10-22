@@ -17,10 +17,9 @@ String _$allItemsStreamHash() => r'eb2b6ac5724fc707bf62cc33808cba986f36b3a3';
 final allItemsStreamProvider = AutoDisposeStreamProvider<List<Item>>.internal(
   allItemsStream,
   name: r'allItemsStreamProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$allItemsStreamHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$allItemsStreamHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
@@ -36,10 +35,9 @@ final allItemsNotifierProvider =
     AutoDisposeNotifierProvider<AllItemsNotifier, List<Item>>.internal(
       AllItemsNotifier.new,
       name: r'allItemsNotifierProvider',
-      debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$allItemsNotifierHash,
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$allItemsNotifierHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
@@ -68,10 +66,9 @@ final allItemsAsyncProvider =
     AutoDisposeStreamNotifierProvider<AllItemsAsync, List<Item>>.internal(
       AllItemsAsync.new,
       name: r'allItemsAsyncProvider',
-      debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$allItemsAsyncHash,
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$allItemsAsyncHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );

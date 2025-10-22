@@ -13,6 +13,7 @@ on:
         type: choice
         options:
           - rescuenet
+          - humedica
           - all
       environment:
         description: 'Environment'
@@ -27,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        org: [rescuenet]  # Add more orgs here as needed
+        org: [rescuenet, humedica]  # Add more orgs here as needed
 
     steps:
       - name: Checkout code

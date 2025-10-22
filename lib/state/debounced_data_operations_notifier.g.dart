@@ -17,10 +17,9 @@ final isAnyDebouncedOperationLoadingProvider =
     AutoDisposeProvider<bool>.internal(
       isAnyDebouncedOperationLoading,
       name: r'isAnyDebouncedOperationLoadingProvider',
-      debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$isAnyDebouncedOperationLoadingHash,
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$isAnyDebouncedOperationLoadingHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
@@ -111,10 +110,9 @@ class IsDebouncedOperationLoadingProvider extends AutoDisposeProvider<bool> {
         ),
         from: isDebouncedOperationLoadingProvider,
         name: r'isDebouncedOperationLoadingProvider',
-        debugGetCreateSourceHash:
-            const bool.fromEnvironment('dart.vm.product')
-                ? null
-                : _$isDebouncedOperationLoadingHash,
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$isDebouncedOperationLoadingHash,
         dependencies: IsDebouncedOperationLoadingFamily._dependencies,
         allTransitiveDependencies:
             IsDebouncedOperationLoadingFamily._allTransitiveDependencies,
@@ -250,10 +248,9 @@ class GetDebouncedOperationErrorProvider extends AutoDisposeProvider<Object?> {
         ),
         from: getDebouncedOperationErrorProvider,
         name: r'getDebouncedOperationErrorProvider',
-        debugGetCreateSourceHash:
-            const bool.fromEnvironment('dart.vm.product')
-                ? null
-                : _$getDebouncedOperationErrorHash,
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$getDebouncedOperationErrorHash,
         dependencies: GetDebouncedOperationErrorFamily._dependencies,
         allTransitiveDependencies:
             GetDebouncedOperationErrorFamily._allTransitiveDependencies,
@@ -389,10 +386,9 @@ class HasDebouncedOperationErrorProvider extends AutoDisposeProvider<bool> {
         ),
         from: hasDebouncedOperationErrorProvider,
         name: r'hasDebouncedOperationErrorProvider',
-        debugGetCreateSourceHash:
-            const bool.fromEnvironment('dart.vm.product')
-                ? null
-                : _$hasDebouncedOperationErrorHash,
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$hasDebouncedOperationErrorHash,
         dependencies: HasDebouncedOperationErrorFamily._dependencies,
         allTransitiveDependencies:
             HasDebouncedOperationErrorFamily._allTransitiveDependencies,
@@ -477,19 +473,19 @@ String _$debouncedDataOperationsNotifierHash() =>
 ///
 /// Copied from [DebouncedDataOperationsNotifier].
 @ProviderFor(DebouncedDataOperationsNotifier)
-final debouncedDataOperationsNotifierProvider = AutoDisposeNotifierProvider<
-  DebouncedDataOperationsNotifier,
-  DataOperationsState
->.internal(
-  DebouncedDataOperationsNotifier.new,
-  name: r'debouncedDataOperationsNotifierProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
+final debouncedDataOperationsNotifierProvider =
+    AutoDisposeNotifierProvider<
+      DebouncedDataOperationsNotifier,
+      DataOperationsState
+    >.internal(
+      DebouncedDataOperationsNotifier.new,
+      name: r'debouncedDataOperationsNotifierProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
           : _$debouncedDataOperationsNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$DebouncedDataOperationsNotifier =
     AutoDisposeNotifier<DataOperationsState>;

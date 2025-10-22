@@ -16,10 +16,9 @@ String _$isAnyOperationLoadingHash() =>
 final isAnyOperationLoadingProvider = AutoDisposeProvider<bool>.internal(
   isAnyOperationLoading,
   name: r'isAnyOperationLoadingProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$isAnyOperationLoadingHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$isAnyOperationLoadingHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
@@ -107,10 +106,9 @@ class IsOperationLoadingProvider extends AutoDisposeProvider<bool> {
         (ref) => isOperationLoading(ref as IsOperationLoadingRef, operation),
         from: isOperationLoadingProvider,
         name: r'isOperationLoadingProvider',
-        debugGetCreateSourceHash:
-            const bool.fromEnvironment('dart.vm.product')
-                ? null
-                : _$isOperationLoadingHash,
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$isOperationLoadingHash,
         dependencies: IsOperationLoadingFamily._dependencies,
         allTransitiveDependencies:
             IsOperationLoadingFamily._allTransitiveDependencies,
@@ -239,10 +237,9 @@ class GetOperationErrorProvider extends AutoDisposeProvider<Object?> {
         (ref) => getOperationError(ref as GetOperationErrorRef, operation),
         from: getOperationErrorProvider,
         name: r'getOperationErrorProvider',
-        debugGetCreateSourceHash:
-            const bool.fromEnvironment('dart.vm.product')
-                ? null
-                : _$getOperationErrorHash,
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$getOperationErrorHash,
         dependencies: GetOperationErrorFamily._dependencies,
         allTransitiveDependencies:
             GetOperationErrorFamily._allTransitiveDependencies,
@@ -373,10 +370,9 @@ class HasOperationErrorProvider extends AutoDisposeProvider<bool> {
         (ref) => hasOperationError(ref as HasOperationErrorRef, operation),
         from: hasOperationErrorProvider,
         name: r'hasOperationErrorProvider',
-        debugGetCreateSourceHash:
-            const bool.fromEnvironment('dart.vm.product')
-                ? null
-                : _$hasOperationErrorHash,
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$hasOperationErrorHash,
         dependencies: HasOperationErrorFamily._dependencies,
         allTransitiveDependencies:
             HasOperationErrorFamily._allTransitiveDependencies,
@@ -469,19 +465,19 @@ String _$dataOperationsNotifierHash() =>
 ///
 /// Copied from [DataOperationsNotifier].
 @ProviderFor(DataOperationsNotifier)
-final dataOperationsNotifierProvider = AutoDisposeNotifierProvider<
-  DataOperationsNotifier,
-  DataOperationsState
->.internal(
-  DataOperationsNotifier.new,
-  name: r'dataOperationsNotifierProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
+final dataOperationsNotifierProvider =
+    AutoDisposeNotifierProvider<
+      DataOperationsNotifier,
+      DataOperationsState
+    >.internal(
+      DataOperationsNotifier.new,
+      name: r'dataOperationsNotifierProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
           : _$dataOperationsNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$DataOperationsNotifier = AutoDisposeNotifier<DataOperationsState>;
 // ignore_for_file: type=lint

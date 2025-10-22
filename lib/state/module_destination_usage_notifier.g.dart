@@ -11,19 +11,19 @@ String _$moduleDestinationUsageNotifierHash() =>
 
 /// See also [ModuleDestinationUsageNotifier].
 @ProviderFor(ModuleDestinationUsageNotifier)
-final moduleDestinationUsageNotifierProvider = AutoDisposeNotifierProvider<
-  ModuleDestinationUsageNotifier,
-  AsyncValue<Map<ModuleDestination, Set<String>>>
->.internal(
-  ModuleDestinationUsageNotifier.new,
-  name: r'moduleDestinationUsageNotifierProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
+final moduleDestinationUsageNotifierProvider =
+    AutoDisposeNotifierProvider<
+      ModuleDestinationUsageNotifier,
+      AsyncValue<Map<ModuleDestination, Set<String>>>
+    >.internal(
+      ModuleDestinationUsageNotifier.new,
+      name: r'moduleDestinationUsageNotifierProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
           : _$moduleDestinationUsageNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$ModuleDestinationUsageNotifier =
     AutoDisposeNotifier<AsyncValue<Map<ModuleDestination, Set<String>>>>;

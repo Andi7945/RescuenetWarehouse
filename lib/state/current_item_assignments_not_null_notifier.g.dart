@@ -18,10 +18,9 @@ final currentItemAssignmentsNotNullNotifierProvider =
     >.internal(
       CurrentItemAssignmentsNotNullNotifier.new,
       name: r'currentItemAssignmentsNotNullNotifierProvider',
-      debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$currentItemAssignmentsNotNullNotifierHash,
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$currentItemAssignmentsNotNullNotifierHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );

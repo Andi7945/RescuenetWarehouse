@@ -11,19 +11,19 @@ String _$currentItemAssignmentsNotifierHash() =>
 
 /// See also [CurrentItemAssignmentsNotifier].
 @ProviderFor(CurrentItemAssignmentsNotifier)
-final currentItemAssignmentsNotifierProvider = AutoDisposeNotifierProvider<
-  CurrentItemAssignmentsNotifier,
-  Map<RescueContainer, int>
->.internal(
-  CurrentItemAssignmentsNotifier.new,
-  name: r'currentItemAssignmentsNotifierProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
+final currentItemAssignmentsNotifierProvider =
+    AutoDisposeNotifierProvider<
+      CurrentItemAssignmentsNotifier,
+      Map<RescueContainer, int>
+    >.internal(
+      CurrentItemAssignmentsNotifier.new,
+      name: r'currentItemAssignmentsNotifierProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
           : _$currentItemAssignmentsNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$CurrentItemAssignmentsNotifier =
     AutoDisposeNotifier<Map<RescueContainer, int>>;

@@ -16,19 +16,19 @@ String _$containerVisibilityAsyncHash() =>
 ///
 /// Copied from [ContainerVisibilityAsync].
 @ProviderFor(ContainerVisibilityAsync)
-final containerVisibilityAsyncProvider = AutoDisposeStreamNotifierProvider<
-  ContainerVisibilityAsync,
-  Map<RescueContainer, bool>
->.internal(
-  ContainerVisibilityAsync.new,
-  name: r'containerVisibilityAsyncProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
+final containerVisibilityAsyncProvider =
+    AutoDisposeStreamNotifierProvider<
+      ContainerVisibilityAsync,
+      Map<RescueContainer, bool>
+    >.internal(
+      ContainerVisibilityAsync.new,
+      name: r'containerVisibilityAsyncProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
           : _$containerVisibilityAsyncHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$ContainerVisibilityAsync =
     AutoDisposeStreamNotifier<Map<RescueContainer, bool>>;

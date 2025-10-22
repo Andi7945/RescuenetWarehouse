@@ -19,10 +19,9 @@ final allAssignmentsStreamProvider =
     AutoDisposeStreamProvider<List<Assignment>>.internal(
       allAssignmentsStream,
       name: r'allAssignmentsStreamProvider',
-      debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$allAssignmentsStreamHash,
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$allAssignmentsStreamHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
@@ -51,19 +50,19 @@ String _$allAssignmentsAsyncHash() =>
 ///
 /// Copied from [AllAssignmentsAsync].
 @ProviderFor(AllAssignmentsAsync)
-final allAssignmentsAsyncProvider = AutoDisposeStreamNotifierProvider<
-  AllAssignmentsAsync,
-  List<Assignment>
->.internal(
-  AllAssignmentsAsync.new,
-  name: r'allAssignmentsAsyncProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
+final allAssignmentsAsyncProvider =
+    AutoDisposeStreamNotifierProvider<
+      AllAssignmentsAsync,
+      List<Assignment>
+    >.internal(
+      AllAssignmentsAsync.new,
+      name: r'allAssignmentsAsyncProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
           : _$allAssignmentsAsyncHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$AllAssignmentsAsync = AutoDisposeStreamNotifier<List<Assignment>>;
 // ignore_for_file: type=lint

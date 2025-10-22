@@ -10,19 +10,19 @@ String _$workLogNotifierHash() => r'5275f54a770452777594611f506463302a257e79';
 
 /// See also [WorkLogNotifier].
 @ProviderFor(WorkLogNotifier)
-final workLogNotifierProvider = AutoDisposeNotifierProvider<
-  WorkLogNotifier,
-  List<MapEntry<DateTime, List<MapEntry<String, List<LogEntrySummed>>>>>
->.internal(
-  WorkLogNotifier.new,
-  name: r'workLogNotifierProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
+final workLogNotifierProvider =
+    AutoDisposeNotifierProvider<
+      WorkLogNotifier,
+      List<MapEntry<DateTime, List<MapEntry<String, List<LogEntrySummed>>>>>
+    >.internal(
+      WorkLogNotifier.new,
+      name: r'workLogNotifierProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
           : _$workLogNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$WorkLogNotifier =
     AutoDisposeNotifier<

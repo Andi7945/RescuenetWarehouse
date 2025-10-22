@@ -15,10 +15,9 @@ final workLogDateFilterNotifierProvider =
     AutoDisposeNotifierProvider<WorkLogDateFilterNotifier, DateTime?>.internal(
       WorkLogDateFilterNotifier.new,
       name: r'workLogDateFilterNotifierProvider',
-      debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$workLogDateFilterNotifierHash,
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$workLogDateFilterNotifierHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
