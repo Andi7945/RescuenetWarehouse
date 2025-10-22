@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'org_config.dart';
 import 'firebase_options_rescuenet_production.dart' as rescuenet_prod;
 import 'firebase_options_rescuenet_testing.dart' as rescuenet_staging;
+import 'firebase_options_humedica_prod.dart' as humedica_prod;
 
 /// Registry of all available organizations in the multi-tenant system.
 ///
@@ -17,6 +18,14 @@ final Map<String, OrgConfig> _orgConfigs = {
     stagingFirebase: rescuenet_staging.RescuenetStagingFirebaseOptions.currentPlatform,
     features: {},
   ),
+  'humedica': OrgConfig(
+      id: 'humedica',
+      name: 'Humedica',
+      logoAssetPath: 'assets/images/logo_humedica.png',
+      productionFirebase: humedica_prod.HumedicaFirebaseOptions.currentPlatform,
+      stagingFirebase: humedica_prod.HumedicaFirebaseOptions.currentPlatform,
+      features: {},
+  )
 };
 
 /// Get organization config by ID.

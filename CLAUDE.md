@@ -158,6 +158,29 @@ flutter run -d chrome --dart-define=ORG=rescuenet --dart-define=ENV=staging
 
 **Important:** Production deployments require manual confirmation. Scripts default to staging to prevent accidents.
 
+### Deployment Workflows
+
+**Two GitHub Actions workflows exist:**
+
+1. **Multi-Tenant Workflow** (`.github/workflows/deploy-multi-tenant.yml`)
+   - **Status:** Inactive (no matching branches)
+   - **Purpose:** Automated deployments for develop→staging, main→production
+   - **Usage:** Manual dispatch or push to configured branches
+   - **Features:** Supports multiple orgs, environment-specific builds
+
+2. **Legacy Workflow** (`.github/workflows/firebase-hosting-merge.yml`)
+   - **Status:** Active (triggers on micha-1 branch)
+   - **Purpose:** Quick production deployments during development
+   - **Target:** rescuenet-7733b (production)
+   - **Environment:** Production builds with proper configuration
+
+**Current Deployment Method:**
+- Production: Push to `micha-1` branch (legacy workflow)
+- Staging: Manual deployment via scripts
+
+**To Activate Multi-Tenant Workflow:**
+Update branch triggers in `deploy-multi-tenant.yml` to match your branch strategy.
+
 ### Adding New Organization
 
 See `ONBOARDING_ORG.md` for comprehensive step-by-step guide.
