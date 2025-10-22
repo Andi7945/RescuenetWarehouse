@@ -5,13 +5,14 @@ import 'package:flutter/material.dart';
 ///
 /// Each organization has:
 /// - Unique identifier and display name
-/// - Optional branding (logo, primary color)
+/// - Required branding (small and large logos, optional primary color)
 /// - Separate Firebase projects for production and staging
 /// - Optional feature flags
 class OrgConfig {
   final String id;
   final String name;
-  final String? logoAssetPath;
+  final String smallLogoAssetPath;
+  final String largeLogoAssetPath;
   final Color? primaryColor;
   final FirebaseOptions productionFirebase;
   final FirebaseOptions stagingFirebase;
@@ -20,7 +21,8 @@ class OrgConfig {
   const OrgConfig({
     required this.id,
     required this.name,
-    this.logoAssetPath,
+    required this.smallLogoAssetPath,
+    required this.largeLogoAssetPath,
     this.primaryColor,
     required this.productionFirebase,
     required this.stagingFirebase,

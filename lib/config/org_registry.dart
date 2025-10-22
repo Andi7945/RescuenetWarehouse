@@ -14,6 +14,8 @@ final Map<String, OrgConfig> _orgConfigs = {
   'rescuenet': OrgConfig(
     id: 'rescuenet',
     name: 'RescueNet',
+    smallLogoAssetPath: 'assets/images/LogoRN.png',
+    largeLogoAssetPath: 'assets/images/rn_logo_big.png',
     productionFirebase: rescuenet_prod.RescuenetProductionFirebaseOptions.currentPlatform,
     stagingFirebase: rescuenet_staging.RescuenetStagingFirebaseOptions.currentPlatform,
     features: {},
@@ -21,7 +23,8 @@ final Map<String, OrgConfig> _orgConfigs = {
   'humedica': OrgConfig(
       id: 'humedica',
       name: 'Humedica',
-      logoAssetPath: 'assets/images/logo_humedica.png',
+      smallLogoAssetPath: 'assets/images/humedica_logo.svg',
+      largeLogoAssetPath: 'assets/images/humedica_logo.svg',
       productionFirebase: humedica_prod.HumedicaFirebaseOptions.currentPlatform,
       stagingFirebase: humedica_prod.HumedicaFirebaseOptions.currentPlatform,
       features: {},

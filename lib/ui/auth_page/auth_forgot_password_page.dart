@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rescuenet_warehouse/repositories/auth_providers.dart';
 import 'package:rescuenet_warehouse/repositories/auth_repository.dart';
+import 'package:rescuenet_warehouse/widgets/org_logo.dart';
 
 class AuthForgotPasswordPage extends ConsumerStatefulWidget {
   @override
@@ -38,9 +39,7 @@ class _AuthForgotPasswordPageState extends ConsumerState<AuthForgotPasswordPage>
   Widget _logo() {
     //return the logo from the assets
     return const DrawerHeader(
-      child: Image(
-        image: AssetImage('assets/images/LogoRN.png'),
-      ),
+      child: OrgLogo.small(),
     );
   }
 

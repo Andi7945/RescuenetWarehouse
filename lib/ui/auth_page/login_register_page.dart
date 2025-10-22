@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../routes.dart';
 import '../../repositories/auth_providers.dart';
 import '../../repositories/auth_repository.dart';
+import '../../widgets/org_logo.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -70,7 +71,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   Widget _logo() {
     //return the logo from the assets
     return const DrawerHeader(
-      child: Image(image: AssetImage('assets/images/rn_logo_big.png')),
+      child: OrgLogo.large(),
     );
   }
 

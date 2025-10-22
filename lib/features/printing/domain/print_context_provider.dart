@@ -39,7 +39,7 @@ PrintContext printContext(PrintContextRef ref) {
     organizationName: org.name,
     organizationEmail: 'backoffice@rescuenet.net',
     organizationPhone: '+31-6-14419988',
-    logoAssetPath: org.logoAssetPath ?? 'rn_logo_big.png',
+    logoAssetPath: org.largeLogoAssetPath,
     printDate: DateTime.now(),
   );
 }

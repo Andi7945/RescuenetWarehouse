@@ -210,7 +210,7 @@ See `ONBOARDING_ORG.md` for comprehensive step-by-step guide.
 
 Organizations can have custom:
 - Display name
-- Logo asset path
+- Small and large logo variants (both required)
 - Primary brand color
 - Feature flags (for org-specific functionality)
 
@@ -218,7 +218,26 @@ Access in UI via Riverpod:
 ```dart
 final org = ref.watch(currentOrgProvider);
 Text('Welcome to ${org.name}');
-if (org.logoAssetPath != null) {
-  Image.asset(org.logoAssetPath!);
-}
 ```
+
+### Logo Configuration
+
+Each organization MUST provide two logo variants:
+- **smallLogoAssetPath**: Compact logo for navigation drawer, headers (recommended: 80px height)
+- **largeLogoAssetPath**: Full logo for login screens, PDFs, prominent display
+
+Both fields are required (non-nullable) in `OrgConfig`. No fallbacks exist - missing assets will cause immediate failures in development.
+
+**Usage in UI:**
+```dart
+// Small logo (navigation, headers)
+const OrgLogo.small()
+
+// Large logo (login, splash, prominent display)
+const OrgLogo.large()
+```
+
+**Logo widget automatically:**
+- Reads current org from `currentOrgProvider`
+- Selects appropriate size variant
+- No fallback logic - fails fast if misconfigured

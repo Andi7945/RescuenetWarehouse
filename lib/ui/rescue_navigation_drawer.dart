@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../routes.dart';
 import '../repositories/auth_providers.dart';
+import '../widgets/org_logo.dart';
 
 class RescueNavigationDrawer extends ConsumerWidget {
   RescueNavigationDrawer({super.key});
@@ -17,8 +18,7 @@ class RescueNavigationDrawer extends ConsumerWidget {
           const SizedBox(
             height: 80,
             child: DrawerHeader(
-              child: Image(
-                image: AssetImage('assets/images/LogoRN.png'),
+              child: OrgLogo.small(
                 alignment: Alignment.centerLeft,
               ),
             ),
