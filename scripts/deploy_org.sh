@@ -48,8 +48,14 @@ fi
 
 cp "$RC_FILE" .firebaserc
 
-echo "🚀 Deploying $ORG to $ENV..."
-firebase deploy --only hosting
+# Clear Firebase CLI cache to prevent wrong project deployment
+rm -rf .firebase/
+
+# Extract project ID from .firebaserc to override any active project setting
+PROJECT_ID=$(jq -r '.projects.default' .firebaserc)
+
+echo "🚀 Deploying $ORG to $ENV (project: $PROJECT_ID)..."
+firebase deploy --only hosting --project "$PROJECT_ID"
 
 echo "✅ Deploy complete!"
 echo "🌍 URL: https://$(jq -r '.projects.default' .firebaserc).web.app"
