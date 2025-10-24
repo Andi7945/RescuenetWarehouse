@@ -17,12 +17,48 @@ import 'print_service.dart';
 /// Note: Unlike packing lists/labels/summary, safety datasheets are NOT generated.
 /// They are existing PDF files that we simply fetch and display.
 class SafetyDatasheetService {
+  /// Fetch all safety datasheet PDFs as bytes with filenames.
+  ///
+  /// Extracts all unique safety datasheet references from dangerous goods signs,
+  /// fetches them from Firebase Storage, and returns them with suggested filenames.
+  ///
+  /// Returns a list of tuples containing PDF bytes and suggested filenames.
+  /// Returns empty list if no safety datasheets are found.
+  ///
+  /// Throws [FirebaseException] if any fetch fails.
+  static Future<List<(Uint8List bytes, String fileName)>> fetchSafetyDatasheetBytes(
+    Map<RescueContainer, Map<Item, int>> containers,
+  ) async {
+    // Extract all safety datasheet references from items
+    final safetySheets = containers
+        .flatMapValues((item) => item.signs)
+        .expand((sign) => sign.sdsPath)
+        .toSet() // Remove duplicates
+        .toList();
+
+    // If no safety datasheets, return empty list
+    if (safetySheets.isEmpty) return [];
+
+    // Fetch each safety datasheet with filename
+    final results = <(Uint8List bytes, String fileName)>[];
+    for (final document in safetySheets) {
+      final bytes = await _fetchFromStorage(document);
+      final fileName = _getFileName(document);
+      results.add((bytes, fileName));
+    }
+
+    return results;
+  }
+
   /// Print all safety datasheets for items in the selected containers.
   ///
   /// Extracts all unique safety datasheet references from dangerous goods signs,
   /// fetches them from Firebase Storage, and shows print dialog for each.
   ///
   /// Throws [FirebaseException] if any fetch fails.
+  ///
+  /// @deprecated Consider using [fetchSafetyDatasheetBytes] with a modal dialog
+  /// for better UX consistency with other export actions.
   static Future<void> printSafetyDatasheets(
     Map<RescueContainer, Map<Item, int>> containers,
   ) async {
@@ -41,6 +77,30 @@ class SafetyDatasheetService {
       final bytes = await _fetchFromStorage(document);
       await PrintService.showPrintDialog(bytes);
     }
+  }
+
+  /// Extract filename from Firebase document.
+  ///
+  /// Uses document.name if available, otherwise derives from document.url.
+  /// Ensures .pdf extension is present.
+  static String _getFileName(FirebaseDocument document) {
+    String fileName;
+
+    if (document.name.isNotEmpty) {
+      fileName = document.name;
+    } else {
+      // Extract filename from URL path
+      final urlPath = document.url;
+      final segments = urlPath.split('/');
+      fileName = segments.isNotEmpty ? segments.last : 'safety_datasheet';
+    }
+
+    // Ensure .pdf extension
+    if (!fileName.toLowerCase().endsWith('.pdf')) {
+      fileName = '$fileName.pdf';
+    }
+
+    return fileName;
   }
 
   /// Fetch PDF bytes from Firebase Storage.

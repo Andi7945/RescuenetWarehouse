@@ -187,29 +187,60 @@ class ExportActions {
     );
   }
 
-  /// Show print dialogs for all safety datasheets in selected containers
+  /// Handle safety datasheet export for selected containers.
+  ///
+  /// Fetches pre-existing safety datasheet PDFs from Firebase Storage for all
+  /// dangerous goods items in the selected containers, then shows a modal
+  /// allowing the user to either print or save the documents.
+  ///
+  /// Safety datasheets are PDF files already stored in Firebase Storage,
+  /// unlike other exports which are generated on-the-fly. This method:
+  /// 1. Extracts unique safety datasheet references from item signs
+  /// 2. Fetches each PDF from Firebase Storage
+  /// 3. Shows modal with Print/Save/Cancel options
+  ///
+  /// Parameters:
+  /// - [context]: BuildContext for showing modals
+  /// - [ref]: WidgetRef for accessing providers (kept for consistency with other methods)
+  /// - [containers]: Map of containers to their items with quantities
   static Future<void> handleSafetyDatasheets(
     BuildContext context,
     WidgetRef ref,
     Map<RescueContainer, Map<Item, int>> containers,
   ) async {
-    try {
-      await SafetyDatasheetService.printSafetyDatasheets(containers);
+    // Fetch all safety datasheet PDFs from Firebase Storage
+    final documents = await SafetyDatasheetService.fetchSafetyDatasheetBytes(
+      containers,
+    );
 
+    // If no safety datasheets found, show info message and return
+    if (documents.isEmpty) {
       if (!context.mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Safety datasheets sent to printer')),
-      );
-    } catch (e) {
-      if (!context.mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error printing safety datasheets: $e'),
-          backgroundColor: Colors.red,
+        const SnackBar(
+          content: Text('No safety datasheets found in selected containers'),
         ),
       );
+      return;
     }
+
+    if (!context.mounted) return;
+
+    // Show modal with Print/Save/Cancel options (consistent with other exports)
+    await showExportOptionsModal(
+      context: context,
+      onPrint: () async {
+        for (final (bytes, _) in documents) {
+          await PrintService.showPrintDialog(bytes);
+        }
+      },
+      onSave: () async {
+        for (final (bytes, fileName) in documents) {
+          await FileService.saveToLocalFile(bytes, fileName);
+        }
+      },
+      documentName: 'Safety Datasheets',
+    );
   }
 }
