@@ -23,8 +23,8 @@ final Map<String, OrgConfig> _orgConfigs = {
   'humedica': OrgConfig(
       id: 'humedica',
       name: 'Humedica',
-      smallLogoAssetPath: 'assets/images/humedica_logo.svg',
-      largeLogoAssetPath: 'assets/images/humedica_logo.svg',
+      smallLogoAssetPath: 'assets/images/humedica_logo_small.png',
+      largeLogoAssetPath: 'assets/images/humedica_logo_big.png',
       productionFirebase: humedica_prod.HumedicaFirebaseOptions.currentPlatform,
       stagingFirebase: humedica_prod.HumedicaFirebaseOptions.currentPlatform,
       features: {},
