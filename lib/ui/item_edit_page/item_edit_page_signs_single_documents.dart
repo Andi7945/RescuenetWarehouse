@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:rescuenet_warehouse/models/firebase_document.dart';
 import 'package:rescuenet_warehouse/firebase_utils.dart';
@@ -40,20 +41,49 @@ class ItemEditPageSignsSingleDocuments extends StatelessWidget {
 
   void _addNew([String? prevId]) async {
     var id = prevId ?? uuid.v4();
-    var result = await FilePicker.platform.pickFiles();
-    var path = result?.files.single.path;
-    if (path != null) {
-      File file = File(path);
-      var lastSeparator = path.lastIndexOf(Platform.pathSeparator);
-      var name = path.substring(lastSeparator + 1);
-      await uploadFile("safety_datasheets/$name", file);
-      _changePaths(id,
-          FirebaseDocument(id: id, url: "safety_datasheets/$name", name: name));
+    var result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
+
+    if (result == null) return;
+
+    var platformFile = result.files.single;
+    var name = platformFile.name;
+    var destination = "safety_datasheets/$name";
+
+    try {
+      if (kIsWeb) {
+        // Web: Use bytes
+        var bytes = platformFile.bytes;
+        if (bytes == null) {
+          // Handle error - show snackbar or dialog
+          return;
+        }
+        await uploadData(destination, bytes, 'application/pdf');
+      } else {
+        // Native: Use file path
+        var path = platformFile.path;
+        if (path == null) {
+          // Handle error - show snackbar or dialog
+          return;
+        }
+        var file = File(path);
+        await uploadFile(destination, file);
+      }
+
+      _changePaths(
+        id,
+        FirebaseDocument(id: id, url: destination, name: name),
+      );
+    } catch (e) {
+      // Handle upload error - show snackbar or dialog
+      debugPrint('Failed to upload safety datasheet: $e');
     }
   }
 
   _changePaths(String id, FirebaseDocument? doc) {
-    var newPaths = docs;
+    var newPaths = List<FirebaseDocument>.from(docs);
     newPaths.removeWhere((element) => element.id == id);
     if (doc != null) newPaths.add(doc);
     updatedDocs(newPaths);

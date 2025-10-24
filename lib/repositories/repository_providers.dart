@@ -40,11 +40,11 @@ bool _isRuntimeMockMode() {
     // Only return true if MOCK_FIREBASE_MODE is explicitly set to true
     final mockModeValue = js.context['MOCK_FIREBASE_MODE'];
     final mockMode = mockModeValue == true;
-    print('🔍 _isRuntimeMockMode() - MOCK_FIREBASE_MODE: $mockModeValue, result: $mockMode');
-    
+    //print('🔍 _isRuntimeMockMode() - MOCK_FIREBASE_MODE: $mockModeValue, result: $mockMode');
+
     // Also log to JavaScript console for debugging
-    html.window.console.log('🔍 FLUTTER: _isRuntimeMockMode() - MOCK_FIREBASE_MODE: $mockModeValue, result: $mockMode');
-    
+    //html.window.console.log('🔍 FLUTTER: _isRuntimeMockMode() - MOCK_FIREBASE_MODE: $mockModeValue, result: $mockMode');
+
     return mockMode;
   } catch (e) {
     // If we can't access window properties, assume normal Firebase mode
@@ -60,8 +60,8 @@ bool _shouldUseMockRepositories() {
   final envMockMode = _repositoryMode == 'mock';
   final runtimeMockMode = _isRuntimeMockMode();
   final result = envMockMode || runtimeMockMode;
-  print('🎯 _shouldUseMockRepositories() - env: $_repositoryMode, envMock: $envMockMode, runtimeMock: $runtimeMockMode, RESULT: $result');
-  html.window.console.log('🎯 FLUTTER: _shouldUseMockRepositories() - env: $_repositoryMode, envMock: $envMockMode, runtimeMock: $runtimeMockMode, RESULT: $result');
+  //print('🎯 _shouldUseMockRepositories() - env: $_repositoryMode, envMock: $envMockMode, runtimeMock: $runtimeMockMode, RESULT: $result');
+  //html.window.console.log('🎯 FLUTTER: _shouldUseMockRepositories() - env: $_repositoryMode, envMock: $envMockMode, runtimeMock: $runtimeMockMode, RESULT: $result');
   return result;
 }
 

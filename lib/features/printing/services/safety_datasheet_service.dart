@@ -106,16 +106,68 @@ class SafetyDatasheetService {
   /// Fetch PDF bytes from Firebase Storage.
   ///
   /// Uses the document's URL path to fetch the file from Firebase Storage.
-  /// Throws [FirebaseException] if fetch fails (file not found, permission denied, etc.)
+  /// Throws [FirebaseException] with descriptive message if fetch fails.
+  ///
+  /// Common failures:
+  /// - File not found (404)
+  /// - Permission denied (403) - check Firebase Storage security rules
+  /// - CORS configuration missing (web only) - check Firebase Storage CORS settings
+  /// - Network errors
   static Future<Uint8List> _fetchFromStorage(FirebaseDocument document) async {
-    final bytes = await FirebaseStorage.instance
-        .ref(document.url)
-        .getData();
+    try {
+      final bytes = await FirebaseStorage.instance
+          .ref(document.url)
+          .getData();
 
-    if (bytes == null) {
-      throw Exception('Failed to fetch safety datasheet: ${document.url}');
+      if (bytes == null) {
+        throw FirebaseException(
+          plugin: 'firebase_storage',
+          code: 'download-failed',
+          message: 'Failed to download safety datasheet from storage path: ${document.url}',
+        );
+      }
+
+      return bytes;
+    } on FirebaseException {
+      // Firebase exceptions already have good error messages, let them through
+      rethrow;
+    } catch (e, stackTrace) {
+      // Catch any other errors (like ClientException from http package)
+      // and wrap them in a FirebaseException with context
+      throw FirebaseException(
+        plugin: 'firebase_storage',
+        code: 'download-error',
+        message: 'Error downloading safety datasheet from "${document.url}": ${_formatErrorMessage(e)}',
+        stackTrace: stackTrace,
+      );
+    }
+  }
+
+  /// Format error message for better debugging.
+  ///
+  /// Extracts useful information from various error types.
+  static String _formatErrorMessage(Object error) {
+    final errorStr = error.toString();
+
+    // Common error patterns and their likely causes
+    if (errorStr.contains('CORS') || errorStr.contains('Cross-Origin')) {
+      return 'CORS error - Firebase Storage CORS configuration may be missing. '
+          'Configure CORS rules using: gsutil cors set cors.json gs://[bucket-name]';
     }
 
-    return bytes;
+    if (errorStr.contains('403') || errorStr.contains('permission')) {
+      return 'Permission denied - check Firebase Storage security rules and user authentication';
+    }
+
+    if (errorStr.contains('404') || errorStr.contains('not found')) {
+      return 'File not found - the safety datasheet may have been deleted or moved';
+    }
+
+    if (errorStr.contains('NetworkError') || errorStr.contains('Failed to fetch')) {
+      return 'Network error - check internet connection and Firebase Storage availability';
+    }
+
+    // Return original error for unknown cases
+    return errorStr;
   }
 }
