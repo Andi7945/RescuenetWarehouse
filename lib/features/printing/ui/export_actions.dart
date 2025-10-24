@@ -38,6 +38,7 @@ import 'package:rescuenet_warehouse/features/printing/domain/print_context_provi
 import 'package:rescuenet_warehouse/features/printing/services/pdf_generation_service.dart';
 import 'package:rescuenet_warehouse/features/printing/services/print_service.dart';
 import 'package:rescuenet_warehouse/features/printing/services/file_service.dart';
+import 'package:rescuenet_warehouse/features/printing/services/safety_datasheet_service.dart';
 import 'package:rescuenet_warehouse/features/printing/generators/common/pdf_base_widgets.dart';
 import 'package:rescuenet_warehouse/models/item.dart';
 import 'package:rescuenet_warehouse/models/rescue_container.dart';
@@ -184,5 +185,31 @@ class ExportActions {
       },
       documentName: 'Summary',
     );
+  }
+
+  /// Show print dialogs for all safety datasheets in selected containers
+  static Future<void> handleSafetyDatasheets(
+    BuildContext context,
+    WidgetRef ref,
+    Map<RescueContainer, Map<Item, int>> containers,
+  ) async {
+    try {
+      await SafetyDatasheetService.printSafetyDatasheets(containers);
+
+      if (!context.mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Safety datasheets sent to printer')),
+      );
+    } catch (e) {
+      if (!context.mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error printing safety datasheets: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 }

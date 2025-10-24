@@ -63,7 +63,7 @@ Located in `lib/features/printing/` with clean separation of concerns.
 **Architecture:**
 - **domain/** - PrintContext model and providers for user/org info
 - **generators/** - Pure functions that convert DTOs to PDF Documents
-- **services/** - Orchestration (PdfGenerationService) and file operations (FileService, PrintService)
+- **services/** - Orchestration (PdfGenerationService, SafetyDatasheetService, FileService, PrintService)
 - **ui/** - UI components and action handlers (ExportActions)
 
 **Key Principles:**
@@ -72,28 +72,15 @@ Located in `lib/features/printing/` with clean separation of concerns.
 - Username and organization info provided via Riverpod providers
 - All DTOs are Freezed immutable models
 
-**Legacy Files (Deprecated):**
-- `lib/pdf/` - Contains old implementations marked as deprecated
-- New code should use `lib/features/printing/` instead
-
-**Usage Example:**
-```dart
-// In a ConsumerWidget or ConsumerStatefulWidget
-// Get print context from provider
-final context = ref.read(printContextProvider);
-
-// Generate PDF
-final doc = await PdfGenerationService.generateSummary(containers, context);
-
-// Print or save
-await PrintService.showPrintDialog(doc.bytes, format: pageFormatLandscape);
-await FileService.saveToLocalFile(doc.bytes, doc.fileName);
-```
-
-**Common Operations:**
+**Features:**
 - Packing lists: `ExportActions.handlePackingLists(context, ref, containers)`
 - Labels: `ExportActions.handleLabels(context, ref, containers)`
 - Summary: `ExportActions.handleSummary(context, ref, containers)`
+- Safety datasheets: `ExportActions.handleSafetyDatasheets(context, ref, containers)`
+
+**Legacy:**
+- `lib/pdf/` folder contains DTO models and mappers (still used)
+- Old PDF generation files have been removed (fully migrated to `lib/features/printing/`)
 
 ## Domain Model
 

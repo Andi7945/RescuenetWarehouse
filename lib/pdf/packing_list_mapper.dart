@@ -29,6 +29,17 @@ PackingList _single(MapEntry<RescueContainer, Map<Item, int>> entry) =>
 List<PackingDangerousGood> _dangerousGoods(Iterable<Sign> signs) =>
     signs.map(_singleGood).toList();
 
+/// Build image path for dangerous goods signs.
+///
+/// Handles two cases:
+/// - HTTP URLs (Firebase Storage): return as-is
+/// - Local assets (filenames): prepend 'assets/images/'
+String _buildImagePath(String? path) {
+  if (path == null || path.isEmpty) return "";
+  if (path.startsWith("http")) return path;  // HTTP URL - return as-is
+  return 'assets/images/$path';  // Local asset - prepend directory
+}
+
 PackingDangerousGood _singleGood(Sign sign) => PackingDangerousGood(
     dangerType: sign.dangerType ?? "",
     iataId: sign.unNumber ?? "",
@@ -36,7 +47,7 @@ PackingDangerousGood _singleGood(Sign sign) => PackingDangerousGood(
     maxWeightPAX: sign.maxWeightPAX,
     maxWeightCargo: sign.maxWeightCargo,
     remarks: sign.remarks ?? "",
-    imagePath: sign.imagePath ?? "");
+    imagePath: _buildImagePath(sign.imagePath));
 
 List<PackingItem> _items(Map<Item, int> items) =>
     items.entries.map(_singleItem).toList();

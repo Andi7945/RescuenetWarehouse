@@ -139,7 +139,7 @@ var packingDangerousGood = PackingDangerousGood(
     maxWeightPAX: 0.5,
     maxWeightCargo: 2.0,
     remarks: "Limited quantities LQ2",
-    imagePath: "DGcompressedgasses.png");
+    imagePath: "assets/images/DGcompressedgasses.png");
 
 var packingItem1 = PackingItem(
     name: "Folding chair",

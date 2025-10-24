@@ -112,7 +112,7 @@ Future<pw.Widget> loadImage(String path,
 Future<pw.ImageProvider> _loadWebImage(String path) async => networkImage(path);
 
 Future<pw.ImageProvider> _loadImageFromAssets(String path) async =>
-    await imageFromAssetBundle('assets/images/$path');
+    await imageFromAssetBundle(path);
 
 Future<pw.ImageProvider> _loadImageFromFile(String path) async {
   Uint8List x = File(path).readAsBytesSync();

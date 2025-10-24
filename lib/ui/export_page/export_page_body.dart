@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rescuenet_warehouse/services/export_service.dart';
 import 'package:rescuenet_warehouse/features/printing/ui/export_actions.dart';
 import 'package:rescuenet_warehouse/models/item.dart';
 import 'package:rescuenet_warehouse/models/rescue_container.dart';
@@ -69,13 +68,15 @@ class _ExportPageBodyState extends ConsumerState<ExportPageBody> {
     await ExportActions.handleLabels(context, ref, withItems);
   }
 
-  _shareSafetyDatasheets() {
-    var toPrint = options
+  Future<void> _shareSafetyDatasheets() async {
+    final toPrint = options
         .where((ele) => ele.printSafetyDatasheet)
         .map((e) => e.container)
         .toList();
-    var withItems = Map.fromEntries(widget.containerWithItems.entries
-        .where((ele) => toPrint.contains(ele.key)));
-    shareSafetyDatasheets(withItems, context);
+    final withItems = Map.fromEntries(
+      widget.containerWithItems.entries.where((ele) => toPrint.contains(ele.key)),
+    );
+
+    await ExportActions.handleSafetyDatasheets(context, ref, withItems);
   }
 }
