@@ -6,6 +6,8 @@ import '../../routes.dart';
 import '../../repositories/auth_providers.dart';
 import '../../repositories/auth_repository.dart';
 import '../../widgets/org_logo.dart';
+import '../../utils/email_validator.dart';
+import '../../config/org_provider.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -40,21 +42,33 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   Future<void> createUserWithEmailAndPassword() async {
     print('pressed Register');
     try {
-      if (_controllerEmail.text != "Michael.Wandtke@hey.com" && _controllerEmail.text.split("@")[1].toLowerCase() !=
-          "rescuenet.net") {
+      // Get current organization configuration
+      final orgConfig = ref.read(currentOrgProvider);
+
+      // Validate email domain using organization's configuration
+      final domainError = EmailDomainValidator.validate(
+        _controllerEmail.text,
+        allowedDomains: orgConfig.allowedEmailDomains,
+        whitelistedEmails: orgConfig.whitelistedEmails,
+      );
+
+      if (domainError != null) {
         setState(() {
-          errorMessage = "Please use a rescuenet email address to register.";
+          errorMessage = domainError;
         });
-      } else {
-        final authNotifier = ref.read(authNotifierProvider.notifier);
-        await authNotifier.createUserWithEmailAndPassword(
-          email: _controllerEmail.text,
-          password: _controllerPassword.text,
-          name: _controllerEmail.text.split('@').first, // Use email prefix as name
-        );
-        // Registration successful, navigate to main app
-        Navigator.pushNamed(context, routeContainerWithContent);
+        return;
       }
+
+      // Proceed with registration
+      final authNotifier = ref.read(authNotifierProvider.notifier);
+      await authNotifier.createUserWithEmailAndPassword(
+        email: _controllerEmail.text,
+        password: _controllerPassword.text,
+        name: _controllerEmail.text.split('@').first, // Use email prefix as name
+      );
+
+      // Registration successful, navigate to main app
+      Navigator.pushNamed(context, routeContainerWithContent);
     } on AuthException catch (e) {
       setState(() {
         errorMessage = e.message;

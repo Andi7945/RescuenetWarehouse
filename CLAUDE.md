@@ -228,3 +228,29 @@ const OrgLogo.large()
 - Reads current org from `currentOrgProvider`
 - Selects appropriate size variant
 - No fallback logic - fails fast if misconfigured
+
+### Email Domain Restrictions
+
+Each organization can restrict user registration by email domain.
+
+**Configuration in `lib/config/org_registry.dart`:**
+```dart
+OrgConfig(
+  id: 'rescuenet',
+  name: 'RescueNet',
+  allowedEmailDomains: ['rescuenet.net'],  // Restrict to these domains
+  whitelistedEmails: ['dev@gmail.com'],     // Individual exceptions
+  // ...
+)
+```
+
+**Behavior:**
+- Empty `allowedEmailDomains` = no restrictions
+- `whitelistedEmails` bypass domain restrictions
+- Case-insensitive matching
+- Validation happens client-side during registration
+
+**Implementation:**
+- Validator: `lib/utils/email_validator.dart` (pure function)
+- UI integration: `lib/ui/auth_page/login_register_page.dart`
+- Config model: `lib/config/org_config.dart`

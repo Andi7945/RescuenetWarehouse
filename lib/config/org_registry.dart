@@ -19,6 +19,8 @@ final Map<String, OrgConfig> _orgConfigs = {
     productionFirebase: rescuenet_prod.RescuenetProductionFirebaseOptions.currentPlatform,
     stagingFirebase: rescuenet_staging.RescuenetStagingFirebaseOptions.currentPlatform,
     features: {},
+    allowedEmailDomains: ['rescuenet.net'],
+    whitelistedEmails: ['Michael.Wandtke@hey.com'],
   ),
   'humedica': OrgConfig(
       id: 'humedica',
@@ -28,6 +30,8 @@ final Map<String, OrgConfig> _orgConfigs = {
       productionFirebase: humedica_prod.HumedicaFirebaseOptions.currentPlatform,
       stagingFirebase: humedica_prod.HumedicaFirebaseOptions.currentPlatform,
       features: {},
+      allowedEmailDomains: ['humedica.org', 'rescuenet.net'],
+      whitelistedEmails: ['Michael.Wandtke@hey.com'],
   )
 };
 
