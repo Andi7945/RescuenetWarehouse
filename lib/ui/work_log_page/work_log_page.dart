@@ -6,6 +6,7 @@ import 'package:rescuenet_warehouse/ui/work_log_page/work_log_page_body_from_dat
 
 import '../../state/work_log_date_filter_notifier.dart';
 import '../rescue_navigation_drawer.dart';
+import '../../widgets/rescue_app_bar.dart';
 import 'work_log_page_body_all.dart';
 
 class WorkLogPage extends river.ConsumerStatefulWidget {
@@ -17,7 +18,7 @@ class _WorkLogPageState extends river.ConsumerState<WorkLogPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("Work log"), actions: [
+        appBar: RescueAppBar(title: "Work log", actions: [
           _allChangesButton(),
           _dateChooser(),
           ContainerChooserAction()

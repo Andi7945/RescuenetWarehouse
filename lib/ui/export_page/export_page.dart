@@ -7,6 +7,7 @@ import '../../models/item.dart';
 import '../../models/rescue_container.dart';
 import '../rescue_text.dart';
 import '../rescue_navigation_drawer.dart';
+import '../../widgets/rescue_app_bar.dart';
 import 'export_page_body.dart';
 
 class ExportPage extends river.ConsumerStatefulWidget {
@@ -21,8 +22,8 @@ class _ExportPageState extends river.ConsumerState<ExportPage> {
   Widget build(BuildContext context) {
     var allContainersWithItems = ref.watch(containerWithItemsNotifierProvider);
     return Scaffold(
-        appBar: AppBar(
-            title: const Text("Ready containers"),
+        appBar: RescueAppBar(
+            title: "Ready containers",
             actions: [_summaryButton(allContainersWithItems)]),
         drawer: RescueNavigationDrawer(),
         body: ExportPageBody(allContainersWithItems));

@@ -12,6 +12,7 @@ import 'package:rescuenet_warehouse/widgets/items/item_grid.dart';
 import 'package:rescuenet_warehouse/widgets/loading/async_value_builder.dart';
 import 'package:rescuenet_warehouse/widgets/loading/data_loading_indicator.dart';
 import 'package:rescuenet_warehouse/widgets/loading/error_retry_widget.dart';
+import 'package:rescuenet_warehouse/widgets/rescue_app_bar.dart';
 
 class ItemOverviewPage extends ConsumerWidget {
   @override
@@ -19,8 +20,8 @@ class ItemOverviewPage extends ConsumerWidget {
     final itemsAsync = ref.watch(itemsFilteredAndSortedAsyncProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Item overview"),
+      appBar: RescueAppBar(
+        title: "Item overview",
         actions: [
           const Padding(
             padding: EdgeInsets.only(right: 8, left: 8),

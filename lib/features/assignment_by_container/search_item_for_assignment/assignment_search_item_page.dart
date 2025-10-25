@@ -8,17 +8,14 @@ import 'package:rescuenet_warehouse/item_filter.dart';
 import 'package:rescuenet_warehouse/models/item.dart';
 import 'package:rescuenet_warehouse/models/item_sorting_options.dart';
 import 'package:rescuenet_warehouse/state/items_current_filter_notifier.dart';
-import 'package:rescuenet_warehouse/state/assignable_items_notifier.dart';
 import 'package:rescuenet_warehouse/state/data_operations_notifier.dart';
 import 'package:rescuenet_warehouse/ui/rescue_navigation_drawer.dart';
 import 'package:rescuenet_warehouse/ui/rescue_text.dart';
-import 'package:rescuenet_warehouse/widgets/loading/async_value_builder.dart';
-import 'package:rescuenet_warehouse/widgets/loading/data_loading_indicator.dart';
-import 'package:rescuenet_warehouse/widgets/loading/error_retry_widget.dart';
 import 'package:rescuenet_warehouse/widgets/loading/loading_widgets.dart';
 
 import 'assignment_search_item_card.dart';
 import 'assignment_search_service.dart';
+import '../../../widgets/rescue_app_bar.dart';
 
 class AssignmentSearchItemPage extends ConsumerStatefulWidget {
   @override
@@ -42,7 +39,7 @@ class _AssignmentSearchItemPageState
         final isCreatingAssignment = ref.watch(isOperationLoadingProvider(DataOperation.assignmentCreate));
         
         return Scaffold(
-          appBar: AppBar(
+          appBar: RescueAppBar(
             title: Row(
               children: [
                 RescueText(36, "Add Assignment"),

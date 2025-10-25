@@ -6,6 +6,7 @@ import 'package:rescuenet_warehouse/models/item.dart';
 import 'package:rescuenet_warehouse/features/item_csv_import/services/csv_to_model_importer.dart';
 import 'package:rescuenet_warehouse/state/all_items_notifier.dart';
 import 'package:rescuenet_warehouse/ui/rescue_navigation_drawer.dart';
+import 'package:rescuenet_warehouse/widgets/rescue_app_bar.dart';
 
 import '../diff_viewer/split_diff_view.dart';
 
@@ -24,7 +25,7 @@ class _ItemImportOverviewPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Item import overview")),
+      appBar: RescueAppBar(title: "Item import overview"),
       drawer: RescueNavigationDrawer(),
       body: _body(),
     );

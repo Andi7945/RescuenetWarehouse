@@ -8,6 +8,7 @@ import 'package:rescuenet_warehouse/ui/delete_button_with_usages.dart';
 import 'package:rescuenet_warehouse/ui/item_edit_page/item_edit_page.dart';
 import 'package:rescuenet_warehouse/ui/rescue_navigation_drawer.dart';
 import 'package:rescuenet_warehouse/widgets/loading/loading_widgets.dart';
+import 'package:rescuenet_warehouse/widgets/rescue_app_bar.dart';
 
 class ItemEditPageArgumentExtractor extends river.ConsumerWidget {
   @override
@@ -19,7 +20,7 @@ class ItemEditPageArgumentExtractor extends river.ConsumerWidget {
     final deleteError = ref.watch(getOperationErrorProvider(DataOperation.itemDelete));
     
     return Scaffold(
-      appBar: AppBar(
+      appBar: RescueAppBar(
         title: Row(
           children: [
             const Text("Item page"),

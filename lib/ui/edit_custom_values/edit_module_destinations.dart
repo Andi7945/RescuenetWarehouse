@@ -9,6 +9,7 @@ import 'package:rescuenet_warehouse/models/module_destination.dart';
 import 'package:rescuenet_warehouse/ui/rescue_table.dart';
 
 import '../rescue_navigation_drawer.dart';
+import '../../widgets/rescue_app_bar.dart';
 
 class EditModuleDestinations extends river.ConsumerStatefulWidget {
   @override
@@ -22,7 +23,7 @@ class _EditModuleDestinationsState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("Module destinations")),
+        appBar: RescueAppBar(title: "Module destinations"),
         drawer: RescueNavigationDrawer(),
         body: _body());
   }

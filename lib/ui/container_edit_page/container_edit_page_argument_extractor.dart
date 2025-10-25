@@ -12,6 +12,7 @@ import 'package:rescuenet_warehouse/ui/rescue_navigation_drawer.dart';
 import 'package:rescuenet_warehouse/state/data_operations_notifier.dart';
 import 'package:rescuenet_warehouse/widgets/loading/loading_widgets.dart';
 import 'package:rescuenet_warehouse/widgets/loading/async_value_builder.dart';
+import 'package:rescuenet_warehouse/widgets/rescue_app_bar.dart';
 
 class ContainerEditPageArgumentExtractor extends river.ConsumerWidget {
   @override
@@ -26,14 +27,14 @@ class ContainerEditPageArgumentExtractor extends river.ConsumerWidget {
     return AsyncValueBuilder<List<RescueContainer>>(
       value: ref.watch(allContainersAsyncProvider),
       loading: () => Scaffold(
-        appBar: AppBar(title: const Text("Loading...")),
+        appBar: RescueAppBar(title: "Loading..."),
         drawer: RescueNavigationDrawer(),
         body: const DataLoadingIndicator(
           message: 'Loading container information...',
         ),
       ),
       error: (error, stackTrace) => Scaffold(
-        appBar: AppBar(title: const Text("Error")),
+        appBar: RescueAppBar(title: "Error"),
         drawer: RescueNavigationDrawer(),
         body: ErrorRetryWidget(
           error: error,
@@ -46,16 +47,16 @@ class ContainerEditPageArgumentExtractor extends river.ConsumerWidget {
         
         if (container == null) {
           return Scaffold(
-            appBar: AppBar(title: const Text("Container not found")),
+            appBar: RescueAppBar(title: "Container not found"),
             drawer: RescueNavigationDrawer(),
             body: const Center(
               child: Text("Container not found"),
             ),
           );
         }
-        
+
         return Scaffold(
-            appBar: AppBar(
+            appBar: RescueAppBar(
               title: Row(
                 children: [
                   Text("Edit container ${container.number}"),

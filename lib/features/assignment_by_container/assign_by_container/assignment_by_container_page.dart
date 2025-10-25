@@ -13,6 +13,7 @@ import 'package:rescuenet_warehouse/widgets/loading/loading_widgets.dart';
 import 'package:rescuenet_warehouse/widgets/loading/async_value_builder.dart';
 
 import '../../../models/rescue_container.dart';
+import '../../../widgets/rescue_app_bar.dart';
 
 class AssignmentByContainerPage extends river.ConsumerWidget {
   @override
@@ -25,14 +26,14 @@ class AssignmentByContainerPage extends river.ConsumerWidget {
     return AsyncValueBuilder<List<RescueContainer>>(
       value: ref.watch(allContainersAsyncProvider),
       loading: () => Scaffold(
-        appBar: AppBar(title: const Text("Loading...")),
+        appBar: RescueAppBar(title: "Loading..."),
         drawer: RescueNavigationDrawer(),
         body: const DataLoadingIndicator(
           message: 'Loading container information...',
         ),
       ),
       error: (error, stackTrace) => Scaffold(
-        appBar: AppBar(title: const Text("Error")),
+        appBar: RescueAppBar(title: "Error"),
         drawer: RescueNavigationDrawer(),
         body: ErrorRetryWidget(
           error: error,
@@ -42,19 +43,19 @@ class AssignmentByContainerPage extends river.ConsumerWidget {
       ),
       data: (containers) {
         var container = containers.where((c) => c.id == containerId).firstOrNull;
-        
+
         if (container == null) {
           return Scaffold(
-            appBar: AppBar(title: const Text("Container not found")),
+            appBar: RescueAppBar(title: "Container not found"),
             drawer: RescueNavigationDrawer(),
             body: const Center(
               child: Text("Container not found"),
             ),
           );
         }
-        
+
         return Scaffold(
-          appBar: AppBar(title: Text("Assign items to ${container.printName}")),
+          appBar: RescueAppBar(title: "Assign items to ${container.printName}"),
           drawer: RescueNavigationDrawer(),
           body: _page(context, container, ref, isCreatingAssignment),
         );

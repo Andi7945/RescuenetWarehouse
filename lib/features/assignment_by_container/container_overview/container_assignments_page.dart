@@ -10,13 +10,14 @@ import 'package:rescuenet_warehouse/ui/rescue_navigation_drawer.dart';
 import 'package:rescuenet_warehouse/widgets/loading/async_value_builder.dart';
 import 'package:rescuenet_warehouse/widgets/loading/data_loading_indicator.dart';
 import 'package:rescuenet_warehouse/widgets/loading/error_retry_widget.dart';
+import 'package:rescuenet_warehouse/widgets/rescue_app_bar.dart';
 
 class ContainerAssignmentsPage extends river.ConsumerWidget {
   @override
   Widget build(BuildContext context, river.WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Choose container to assign items to"),
+      appBar: RescueAppBar(
+        title: "Choose container to assign items to",
         actions: [ContainerChooserAction()],
       ),
       drawer: RescueNavigationDrawer(),

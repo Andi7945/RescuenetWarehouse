@@ -11,6 +11,7 @@ import 'package:rescuenet_warehouse/ui/rescue_navigation_drawer.dart';
 import 'package:rescuenet_warehouse/widgets/items/item_grid.dart';
 
 import 'package:rescuenet_warehouse/features/item_csv_import/services/json_to_csv_exporter.dart';
+import 'package:rescuenet_warehouse/widgets/rescue_app_bar.dart';
 import 'item_export_buttons.dart';
 
 class ItemExportPage extends ConsumerStatefulWidget {
@@ -27,8 +28,8 @@ class _ItemExportPageState extends ConsumerState<ItemExportPage> {
     final itemsAsync = ref.watch(itemsFilteredAndSortedAsyncProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Item export"),
+      appBar: RescueAppBar(
+        title: "Item export",
         actions: [
           itemsAsync.when(
             loading: () => ItemExportButtons(

@@ -7,14 +7,15 @@ import 'package:rescuenet_warehouse/widgets/loading/async_value_builder.dart';
 import '../container_chooser_action.dart';
 import '../../models/rescue_container.dart';
 import '../rescue_navigation_drawer.dart';
+import '../../widgets/rescue_app_bar.dart';
 import 'container_with_content_unassigned.dart';
 
 class ContainerWithContentPage extends river.ConsumerWidget {
   @override
   Widget build(BuildContext context, river.WidgetRef ref) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("Container with content"),
+        appBar: RescueAppBar(
+          title: "Container with content",
           actions: [ContainerChooserAction()],
         ),
         drawer: RescueNavigationDrawer(),

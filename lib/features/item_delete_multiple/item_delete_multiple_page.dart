@@ -14,6 +14,7 @@ import 'package:rescuenet_warehouse/widgets/items/item_grid.dart';
 import 'package:rescuenet_warehouse/widgets/loading/loading_widgets.dart';
 
 import '../../repositories/repository_providers.dart';
+import '../../widgets/rescue_app_bar.dart';
 
 class ItemDeleteMultiplePage extends ConsumerStatefulWidget {
   @override
@@ -34,7 +35,7 @@ class _ItemDeleteMultiplePageState
     final isDeletingItems = ref.watch(isOperationLoadingProvider(DataOperation.itemBatchUpdate));
 
     return Scaffold(
-      appBar: AppBar(
+      appBar: RescueAppBar(
         title: Row(
           children: [
             const Text("Delete multiple items"),
@@ -56,7 +57,7 @@ class _ItemDeleteMultiplePageState
         actions: [
           _action(
             ItemDeleteButtons(
-              selected: itemsInList, 
+              selected: itemsInList,
               triggerDeletion: isDeletingItems ? null : () => _delete(context),
             ),
           ),

@@ -9,6 +9,7 @@ import '../../models/container_type.dart';
 import '../rescue_pickable_image.dart';
 import '../rescue_table.dart';
 import '../rescue_navigation_drawer.dart';
+import '../../widgets/rescue_app_bar.dart';
 import 'edit_custom_value_text_field.dart';
 
 class EditContainerTypes extends river.ConsumerStatefulWidget {
@@ -27,7 +28,7 @@ class _EditContainerTypesState extends river.ConsumerState<EditContainerTypes> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("Container types")),
+        appBar: RescueAppBar(title: "Container types"),
         drawer: RescueNavigationDrawer(),
         body: _body());
   }

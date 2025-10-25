@@ -8,6 +8,7 @@ import 'package:rescuenet_warehouse/ui/delete_button_with_usages.dart';
 
 import '../rescue_table.dart';
 import '../rescue_navigation_drawer.dart';
+import '../../widgets/rescue_app_bar.dart';
 import 'edit_custom_value_text_field.dart';
 
 class EditCurrentLocations extends river.ConsumerStatefulWidget {
@@ -22,7 +23,7 @@ class _EditCurrentLocationsState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("Current locations")),
+        appBar: RescueAppBar(title: "Current locations"),
         drawer: RescueNavigationDrawer(),
         body: _body());
   }

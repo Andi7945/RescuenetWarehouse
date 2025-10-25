@@ -13,6 +13,7 @@ import 'package:rescuenet_warehouse/widgets/loading/operation_loading_overlay.da
 
 import '../rescue_navigation_drawer.dart';
 import '../../models/rescue_container.dart';
+import '../../widgets/rescue_app_bar.dart';
 
 class ContainerOverviewPage extends river.ConsumerStatefulWidget {
   @override
@@ -23,8 +24,8 @@ class _ContainerOverviewPageState extends river.ConsumerState<ContainerOverviewP
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("Container overview"),
+        appBar: RescueAppBar(
+          title: "Container overview",
           actions: [
             _createContainerButton(context, ref),
             ContainerChooserAction(),
