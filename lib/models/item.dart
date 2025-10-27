@@ -43,10 +43,9 @@ abstract class Item with _$Item {
   factory Item.fromJsonWithDateString(Map<String, dynamic> jsonObject) {
     jsonObject["sku"] = jsonObject["sku"].toString();
 
-    jsonObject["expiringDates"] =
-        jsonObject["expiringDates"]
-            .map((s) => Timestamp.fromDate(DateTime.parse(s)))
-            .toList();
+    jsonObject["expiringDates"] = jsonObject["expiringDates"]
+        .map((s) => Timestamp.fromDate(DateTime.parse(s)))
+        .toList();
 
     var parsedItemWithoutDates = Item.fromJson(jsonObject);
     return parsedItemWithoutDates;
@@ -58,13 +57,12 @@ abstract class Item with _$Item {
     List<String> dateStrings = cleanInput.split(",");
 
     // Parse each string into a DateTime object
-    List<DateTime> dateList =
-        dateStrings.map((dateString) {
-          // Trim any whitespace
-          String trimmed = dateString.trim();
-          // Parse the ISO 8601 format string to DateTime
-          return DateTime.parse(trimmed);
-        }).toList();
+    List<DateTime> dateList = dateStrings.map((dateString) {
+      // Trim any whitespace
+      String trimmed = dateString.trim();
+      // Parse the ISO 8601 format string to DateTime
+      return DateTime.parse(trimmed);
+    }).toList();
 
     return dateList;
   }

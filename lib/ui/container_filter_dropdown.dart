@@ -9,24 +9,28 @@ import '../state/container_current_filter_notifier.dart';
 class ContainerFilterDropdown extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) => Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [_textInput(ref), _dropdown(context, ref)]);
+    crossAxisAlignment: CrossAxisAlignment.end,
+    children: [_textInput(ref), _dropdown(context, ref)],
+  );
 
   Widget _textInput(WidgetRef ref) => SizedBox(
-      width: 300,
-      child: RescueInputText(
-        initial: ref.watch(containerCurrentFilterNotifierProvider).value,
-        onChange: ref
-            .read(containerCurrentFilterNotifierProvider.notifier)
-            .setCurrentFilterValue,
-      ));
+    width: 300,
+    child: RescueInputText(
+      initial: ref.watch(containerCurrentFilterNotifierProvider).value,
+      onChange: ref
+          .read(containerCurrentFilterNotifierProvider.notifier)
+          .setCurrentFilterValue,
+    ),
+  );
 
   Widget _dropdown(BuildContext context, WidgetRef ref) =>
       RescueDropdownButtonDirect<FilterField>(
-          _filterOptions,
-          ref.watch(containerCurrentFilterNotifierProvider).field,
-          ref.read(containerCurrentFilterNotifierProvider.notifier).setField);
+        _filterOptions,
+        ref.watch(containerCurrentFilterNotifierProvider).field,
+        ref.read(containerCurrentFilterNotifierProvider.notifier).setField,
+      );
 
   Map<FilterField, String> get _filterOptions => Map.fromEntries(
-      FilterField.values.map((e) => MapEntry(e, e.displayName)));
+    FilterField.values.map((e) => MapEntry(e, e.displayName)),
+  );
 }

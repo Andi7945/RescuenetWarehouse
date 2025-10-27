@@ -6,7 +6,10 @@ class RescueDropdownButtonDirect<T> extends StatelessWidget {
   Function(T?) onChange;
 
   RescueDropdownButtonDirect(
-      this.optionToDisplayName, this.currentOption, this.onChange);
+    this.optionToDisplayName,
+    this.currentOption,
+    this.onChange,
+  );
 
   @override
   Widget build(BuildContext context) {

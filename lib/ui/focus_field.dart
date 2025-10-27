@@ -5,11 +5,12 @@ class FocusField extends StatefulWidget {
   final String? initial;
   final Widget child;
 
-  const FocusField(
-      {super.key,
-      required this.onLostFocus,
-      this.initial,
-      required this.child});
+  const FocusField({
+    super.key,
+    required this.onLostFocus,
+    this.initial,
+    required this.child,
+  });
 
   @override
   State createState() => _FocusFieldState();
@@ -28,14 +29,15 @@ class _FocusFieldState extends State<FocusField> {
   @override
   Widget build(BuildContext context) {
     return Focus(
-        focusNode: myFocusNode,
-        onFocusChange: (focused) {
-          if (!focused ) {
-            print("Lost focus in field.");
-            widget.onLostFocus();
-          }
-        },
-        child: widget.child);
+      focusNode: myFocusNode,
+      onFocusChange: (focused) {
+        if (!focused) {
+          print("Lost focus in field.");
+          widget.onLostFocus();
+        }
+      },
+      child: widget.child,
+    );
   }
 
   @override

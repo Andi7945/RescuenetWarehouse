@@ -4,7 +4,6 @@ import 'package:rescuenet_warehouse/models/rescue_container.dart';
 import 'package:rescuenet_warehouse/ui/container_overview/container_overview_page_card_content.dart';
 
 class AssignmentByContainerHeader extends ConsumerWidget {
-
   final RescueContainer container;
 
   AssignmentByContainerHeader(this.container);

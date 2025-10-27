@@ -1,7 +1,7 @@
 import 'package:rescuenet_warehouse/models/module_destination.dart';
 
 /// Repository interface for managing module destinations.
-/// 
+///
 /// Module destinations represent target locations where equipment modules
 /// will be deployed or sent for operations.
 abstract class ModuleDestinationRepository {

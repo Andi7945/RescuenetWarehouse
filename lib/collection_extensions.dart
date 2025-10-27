@@ -26,11 +26,10 @@ extension MapValues<E, F> on Map<E, F> {
 }
 
 extension FlatMapValues<E, F, X> on Map<E, Map<F, X>> {
-  List<Z> flatMapValues<Z>(List<Z> Function(F) valueFunction) =>
-      entries
-          .expand((e) => e.value.entries.map((e) => e.key))
-          .expand(valueFunction)
-          .toList();
+  List<Z> flatMapValues<Z>(List<Z> Function(F) valueFunction) => entries
+      .expand((e) => e.value.entries.map((e) => e.key))
+      .expand(valueFunction)
+      .toList();
 }
 
 extension ListToggle<T> on List<T> {

@@ -58,10 +58,12 @@ class PdfGenerationService {
     for (final list in packingLists) {
       final doc = await generatePackingListPdf(list, context);
       final bytes = await doc.save();
-      results.add(PdfDocument(
-        fileName: 'packing_list_${list.containerNo}.pdf',
-        bytes: bytes,
-      ));
+      results.add(
+        PdfDocument(
+          fileName: 'packing_list_${list.containerNo}.pdf',
+          bytes: bytes,
+        ),
+      );
     }
 
     return results;
@@ -93,10 +95,9 @@ class PdfGenerationService {
     for (final list in packingLists) {
       final doc = await generateLabelPdf(list, context);
       final bytes = await doc.save();
-      results.add(PdfDocument(
-        fileName: 'label_${list.containerNo}.pdf',
-        bytes: bytes,
-      ));
+      results.add(
+        PdfDocument(fileName: 'label_${list.containerNo}.pdf', bytes: bytes),
+      );
     }
 
     return results;
@@ -125,10 +126,7 @@ class PdfGenerationService {
     final doc = await generateSummaryPdf(summary, context);
     final bytes = await doc.save();
 
-    return PdfDocument(
-      fileName: 'summary.pdf',
-      bytes: bytes,
-    );
+    return PdfDocument(fileName: 'summary.pdf', bytes: bytes);
   }
 }
 
@@ -142,8 +140,5 @@ class PdfDocument {
   final String fileName;
   final Uint8List bytes;
 
-  const PdfDocument({
-    required this.fileName,
-    required this.bytes,
-  });
+  const PdfDocument({required this.fileName, required this.bytes});
 }

@@ -25,50 +25,54 @@ class _ItemEditPageAmountsAddContainerState
 
   @override
   Widget build(BuildContext context) {
-    return ref.watch(allContainersAsyncProvider).when(
-      loading: () => const Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Center(
-          child: SizedBox(
-            width: 20,
-            height: 20,
-            child: CircularProgressIndicator(strokeWidth: 2),
+    return ref
+        .watch(allContainersAsyncProvider)
+        .when(
+          loading: () => const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Center(
+              child: SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+            ),
           ),
-        ),
-      ),
-      error: (error, stackTrace) => Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.error_outline, color: Colors.red, size: 24),
-            const SizedBox(height: 8),
-            Text(
-              'Failed to load containers',
-              style: Theme.of(context).textTheme.bodySmall,
+          error: (error, stackTrace) => Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.error_outline, color: Colors.red, size: 24),
+                const SizedBox(height: 8),
+                Text(
+                  'Failed to load containers',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: () => ref.refresh(allContainersAsyncProvider),
+                  child: const Text('Retry'),
+                ),
+              ],
             ),
-            const SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: () => ref.refresh(allContainersAsyncProvider),
-              child: const Text('Retry'),
-            ),
-          ],
-        ),
-      ),
-      data: (containers) {
-        var availableOptions =
-            containers.where((c) => !widget.haveBeenUsed.contains(c)).toList();
-        return _body(_options(availableOptions));
-      },
-    );
+          ),
+          data: (containers) {
+            var availableOptions = containers
+                .where((c) => !widget.haveBeenUsed.contains(c))
+                .toList();
+            return _body(_options(availableOptions));
+          },
+        );
   }
 
   Map<String, String> _options(List<RescueContainer> availableOptions) {
-    return SplayTreeMap<RescueContainer, String>.fromIterable(availableOptions,
-            key: (e) => e,
-            value: (e) => e.printName,
-            compare: (a, b) => a.number.compareTo(b.number))
-        .map((key, value) => MapEntry(key.id, value));
+    return SplayTreeMap<RescueContainer, String>.fromIterable(
+      availableOptions,
+      key: (e) => e,
+      value: (e) => e.printName,
+      compare: (a, b) => a.number.compareTo(b.number),
+    ).map((key, value) => MapEntry(key.id, value));
   }
 
   @override
@@ -94,12 +98,16 @@ class _ItemEditPageAmountsAddContainerState
       valueNotifier = _newListener(options.key);
     }
 
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      RescueDropdownButton(otherContainerOptions, valueNotifier),
-      IconButton(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        RescueDropdownButton(otherContainerOptions, valueNotifier),
+        IconButton(
           onPressed: () => _addNewContainer(valueNotifier.value),
-          icon: const Icon(Icons.add))
-    ]);
+          icon: const Icon(Icons.add),
+        ),
+      ],
+    );
   }
 
   _addNewContainer(String containerIdToAdd) => ref

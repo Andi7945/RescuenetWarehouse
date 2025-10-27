@@ -19,9 +19,11 @@ class ItemDeleteButtons extends StatelessWidget {
       spacing: 4.0,
       children: [
         OutlinedButton(
-          onPressed: triggerDeletion != null ? () {
-            triggerDeletion!();
-          } : null,
+          onPressed: triggerDeletion != null
+              ? () {
+                  triggerDeletion!();
+                }
+              : null,
           child: Text("Delete ($selected)"),
         ),
       ],

@@ -25,10 +25,7 @@ Future<pw.Document> generatePackingListPdf(
 }
 
 /// Build the complete page with header, body, and footer
-Future<pw.Page> _buildPage(
-  PackingList list,
-  PrintContext context,
-) async {
+Future<pw.Page> _buildPage(PackingList list, PrintContext context) async {
   final header = await _buildHeader(list, context);
   final body = _buildBody(list);
   final footer = buildFooter('Packing list');
@@ -55,10 +52,7 @@ Future<pw.Page> _buildPage(
 }
 
 /// Build the header with summary and dangerous goods
-Future<pw.Widget> _buildHeader(
-  PackingList list,
-  PrintContext context,
-) async {
+Future<pw.Widget> _buildHeader(PackingList list, PrintContext context) async {
   final leftColumn = _buildLeftColumn(list);
   final dangerousGoods = await dangerousGoodsPackingList(list.dangerousGoods);
   final rightSide = dangerousGoods.isNotEmpty ? dangerousGoods.first : null;
@@ -67,7 +61,6 @@ Future<pw.Widget> _buildHeader(
 
 /// Build grid from dangerous goods widgets
 pw.Widget _buildDangerousGoodsGrid(List<pw.Widget> additionalGoods) {
-
   List<pw.Widget> rows = [];
   for (var i = 0; i < additionalGoods.length; i += 2) {
     rows.add(_buildGridRow(additionalGoods, i));
@@ -89,94 +82,112 @@ pw.Widget _buildGridRow(List<pw.Widget> goods, int idx) {
 /// Build the left column with summary table and value boxes
 pw.Widget _buildLeftColumn(PackingList list) {
   final DateFormat formatter = DateFormat("MMMM '' yy");
-  return pw.Column(mainAxisSize: pw.MainAxisSize.min, children: [
-    summaryTable(_summaryRows(list)),
-    pw.Row(children: [
-      valueBox("Destination:", list.destination),
-      valueBox("Seq. build prio:", list.sequentialBuild.displayName, 12.0,
-          PdfColor.fromHex(_colorToHex(list.sequentialBuild.color.value))),
-      valueBox(
-          "Expiration:",
-          list.expirationDate != null
-              ? formatter.format(list.expirationDate!)
-              : ""),
-    ])
-  ]);
+  return pw.Column(
+    mainAxisSize: pw.MainAxisSize.min,
+    children: [
+      summaryTable(_summaryRows(list)),
+      pw.Row(
+        children: [
+          valueBox("Destination:", list.destination),
+          valueBox(
+            "Seq. build prio:",
+            list.sequentialBuild.displayName,
+            12.0,
+            PdfColor.fromHex(_colorToHex(list.sequentialBuild.color.value)),
+          ),
+          valueBox(
+            "Expiration:",
+            list.expirationDate != null
+                ? formatter.format(list.expirationDate!)
+                : "",
+          ),
+        ],
+      ),
+    ],
+  );
 }
 
 /// Build summary rows for the packing list
 List<pw.TableRow> _summaryRows(PackingList list) => [
-      pw.TableRow(children: [bigger("Packing list"), pw.Container()]),
-      ...summaryRows(list)
-    ];
+  pw.TableRow(children: [bigger("Packing list"), pw.Container()]),
+  ...summaryRows(list),
+];
 
 /// Build the main table body with items
 pw.Widget _buildBody(PackingList list) {
   return pw.Table(
-      border: pw.TableBorder.all(width: 0.5),
-      columnWidths: {
-        0: const pw.FixedColumnWidth(128),
-        1: const pw.FixedColumnWidth(200),
-        2: const pw.FixedColumnWidth(112),
-        3: const pw.FixedColumnWidth(104),
-        4: const pw.FixedColumnWidth(104),
-        5: const pw.FixedColumnWidth(112),
-        6: const pw.FixedColumnWidth(136),
-        7: const pw.FixedColumnWidth(184),
-        8: const pw.FixedColumnWidth(416),
-      },
-      children: [
-        _headlines(),
-        ...list.items.map(_line),
-        _sumRow(list.items)
-      ]);
+    border: pw.TableBorder.all(width: 0.5),
+    columnWidths: {
+      0: const pw.FixedColumnWidth(128),
+      1: const pw.FixedColumnWidth(200),
+      2: const pw.FixedColumnWidth(112),
+      3: const pw.FixedColumnWidth(104),
+      4: const pw.FixedColumnWidth(104),
+      5: const pw.FixedColumnWidth(112),
+      6: const pw.FixedColumnWidth(136),
+      7: const pw.FixedColumnWidth(184),
+      8: const pw.FixedColumnWidth(416),
+    },
+    children: [_headlines(), ...list.items.map(_line), _sumRow(list.items)],
+  );
 }
 
 /// Build the table header row
-pw.TableRow _headlines() => pw.TableRow(repeat: true, children: [
-      tableHeadline("Item"),
-      tableHeadline("Description"),
-      tableHeadline("Amount"),
-      tableHeadline("Price each"),
-      tableHeadline("Price total"),
-      tableHeadline("Weight total"),
-      tableHeadline("Expiration date"),
-      tableHeadline("Dangerous goods"),
-      tableHeadline("Remarks"),
-    ]);
+pw.TableRow _headlines() => pw.TableRow(
+  repeat: true,
+  children: [
+    tableHeadline("Item"),
+    tableHeadline("Description"),
+    tableHeadline("Amount"),
+    tableHeadline("Price each"),
+    tableHeadline("Price total"),
+    tableHeadline("Weight total"),
+    tableHeadline("Expiration date"),
+    tableHeadline("Dangerous goods"),
+    tableHeadline("Remarks"),
+  ],
+);
 
 final DateFormat _dateFormatter = DateFormat('MMM d, yyyy');
 
 /// Build a single item row
-pw.TableRow _line(PackingItem item) => pw.TableRow(children: [
-      tableCell(item.name),
-      tableCell(item.description),
-      tableCell(item.amount.toStringAsFixed(0)),
-      tableCell("€${item.piecePrice.toStringAsFixed(0)},-"),
-      tableCell("€${(item.piecePrice * item.amount).toStringAsFixed(0)},-"),
-      tableCell("${item.weightTotal} kg"),
-      tableCell(item.expirationDate != null
+pw.TableRow _line(PackingItem item) => pw.TableRow(
+  children: [
+    tableCell(item.name),
+    tableCell(item.description),
+    tableCell(item.amount.toStringAsFixed(0)),
+    tableCell("€${item.piecePrice.toStringAsFixed(0)},-"),
+    tableCell("€${(item.piecePrice * item.amount).toStringAsFixed(0)},-"),
+    tableCell("${item.weightTotal} kg"),
+    tableCell(
+      item.expirationDate != null
           ? _dateFormatter.format(item.expirationDate!)
-          : ""),
-      tableCell(item.dangerousGoods),
-      tableCell(item.remarks),
-    ]);
+          : "",
+    ),
+    tableCell(item.dangerousGoods),
+    tableCell(item.remarks),
+  ],
+);
 
 /// Build the summary row with total price
 pw.TableRow _sumRow(List<PackingItem> items) {
   var summed = items
-      .fold(0.0,
-          (previousValue, itm) => previousValue + (itm.amount * itm.piecePrice))
+      .fold(
+        0.0,
+        (previousValue, itm) => previousValue + (itm.amount * itm.piecePrice),
+      )
       .toStringAsFixed(0);
-  return pw.TableRow(children: [
-    tableCell("Combined:"),
-    tableCell(""),
-    tableCell(""),
-    tableCell(""),
-    tableCell("€$summed,-"),
-    tableCell(""),
-    tableCell(""),
-    tableCell(""),
-    tableCell(""),
-  ]);
+  return pw.TableRow(
+    children: [
+      tableCell("Combined:"),
+      tableCell(""),
+      tableCell(""),
+      tableCell(""),
+      tableCell("€$summed,-"),
+      tableCell(""),
+      tableCell(""),
+      tableCell(""),
+      tableCell(""),
+    ],
+  );
 }

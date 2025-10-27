@@ -52,7 +52,8 @@ class SplitDiffView<T> extends StatefulWidget {
   _SplitDiffViewState<T> createState() => _SplitDiffViewState<T>();
 }
 
-class _SplitDiffViewState<T> extends State<SplitDiffView<T>> with SingleTickerProviderStateMixin {
+class _SplitDiffViewState<T> extends State<SplitDiffView<T>>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   List<T> _changedObjects = [];
   List<T> _unchangedObjects = [];
@@ -100,9 +101,9 @@ class _SplitDiffViewState<T> extends State<SplitDiffView<T>> with SingleTickerPr
       } else {
         // Check for differences between imported and existing object
         final differences = DiffService.getDifferences(
-            importedObj,
-            existingObj,
-            excludeFields: widget.excludeFields
+          importedObj,
+          existingObj,
+          excludeFields: widget.excludeFields,
         );
         hasChanges = differences.isNotEmpty;
       }
@@ -129,12 +130,16 @@ class _SplitDiffViewState<T> extends State<SplitDiffView<T>> with SingleTickerPr
         // Top controls
         if (widget.onApplyChanges != null && _changedObjects.isNotEmpty)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 8.0,
+            ),
             child: Row(
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () => widget.onApplyChanges?.call(_changedObjects),
+                    onPressed: () =>
+                        widget.onApplyChanges?.call(_changedObjects),
                     child: Text(widget.applyButtonLabel),
                   ),
                 ),
@@ -150,7 +155,8 @@ class _SplitDiffViewState<T> extends State<SplitDiffView<T>> with SingleTickerPr
               text: '${widget.changedSectionTitle} (${_changedObjects.length})',
             ),
             Tab(
-              text: '${widget.unchangedSectionTitle} (${_unchangedObjects.length})',
+              text:
+                  '${widget.unchangedSectionTitle} (${_unchangedObjects.length})',
             ),
           ],
           labelColor: Theme.of(context).primaryColor,

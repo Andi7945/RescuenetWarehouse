@@ -46,10 +46,19 @@ Future<List<pw.Page>> _buildAllPages(
 
   for (var i = 0; i < additional.length; i += 2) {
     var left = additional[i];
-    var right =
-        additional.length > (i + 1) ? additional[i + 1] : pw.Container();
-    additionalLabels.add(await _buildSubsequentLabel(
-        left, right, (i / 2).floor() + 2, totalPages, list.containerNo, context));
+    var right = additional.length > (i + 1)
+        ? additional[i + 1]
+        : pw.Container();
+    additionalLabels.add(
+      await _buildSubsequentLabel(
+        left,
+        right,
+        (i / 2).floor() + 2,
+        totalPages,
+        list.containerNo,
+        context,
+      ),
+    );
   }
 
   // Build physical pages (two labels per page)
@@ -74,15 +83,16 @@ Future<List<pw.Page>> _buildAllPages(
 
 /// Create a physical page with two labels
 pw.Page _labelPage(pw.Widget w, pw.Widget? w2) => pw.MultiPage(
-      build: (pw.Context context) => [
-        _withMeasurements(w),
-        _withMeasurements(w2 ?? pw.Container())
-      ],
-    );
+  build: (pw.Context context) => [
+    _withMeasurements(w),
+    _withMeasurements(w2 ?? pw.Container()),
+  ],
+);
 
 /// Wrap label with correct measurements
 pw.Widget _withMeasurements(pw.Widget label) => pw.Container(
-      child: pw.SizedBox(width: 14.8 * cm, height: 10.51 * cm, child: label));
+  child: pw.SizedBox(width: 14.8 * cm, height: 10.51 * cm, child: label),
+);
 
 /// Build the first label with summary information
 Future<pw.Column> _buildFirstLabel(
@@ -92,16 +102,25 @@ Future<pw.Column> _buildFirstLabel(
   int numberOfPages,
   PrintContext context,
 ) async {
-  final top = await _buildHeaderForFirstLabel(currentPage, numberOfPages, context);
-  return pw.Column(children: [
-    top,
-    pw.SizedBox(height: 8),
-    pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
-      pw.Expanded(child: _buildSummarySection(list)),
-      pw.SizedBox(width: 16),
-      pw.Expanded(child: good)
-    ])
-  ]);
+  final top = await _buildHeaderForFirstLabel(
+    currentPage,
+    numberOfPages,
+    context,
+  );
+  return pw.Column(
+    children: [
+      top,
+      pw.SizedBox(height: 8),
+      pw.Row(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Expanded(child: _buildSummarySection(list)),
+          pw.SizedBox(width: 16),
+          pw.Expanded(child: good),
+        ],
+      ),
+    ],
+  );
 }
 
 /// Build header for the first label
@@ -110,30 +129,42 @@ Future<pw.Widget> _buildHeaderForFirstLabel(
   int numberOfPages,
   PrintContext context,
 ) async {
-  return pw.Row(children: [
-    pw.Expanded(
+  return pw.Row(
+    children: [
+      pw.Expanded(
         child: pw.Padding(
-            padding: const pw.EdgeInsets.only(right: 8.0),
-            child: _buildInfoBox(context)),
-        flex: 2),
-    pw.Expanded(
+          padding: const pw.EdgeInsets.only(right: 8.0),
+          child: _buildInfoBox(context),
+        ),
+        flex: 2,
+      ),
+      pw.Expanded(
         child: _buildBox(smallText("Label $currentPage / $numberOfPages")),
-        flex: 2)
-  ]);
+        flex: 2,
+      ),
+    ],
+  );
 }
 
 /// Build summary section for first label
 pw.Widget _buildSummarySection(PackingList list) {
   return pw.Column(
-      crossAxisAlignment: pw.CrossAxisAlignment.start,
-      children: [
-        summaryTable(summaryRows(list)),
-        pw.Row(children: [
+    crossAxisAlignment: pw.CrossAxisAlignment.start,
+    children: [
+      summaryTable(summaryRows(list)),
+      pw.Row(
+        children: [
           valueBox("Destination:", list.destination),
-          valueBox("Seq. build prio:", list.sequentialBuild.displayName, 0.0,
-              PdfColor.fromHex(_colorToHex(list.sequentialBuild.color.value)))
-        ])
-      ]);
+          valueBox(
+            "Seq. build prio:",
+            list.sequentialBuild.displayName,
+            0.0,
+            PdfColor.fromHex(_colorToHex(list.sequentialBuild.color.value)),
+          ),
+        ],
+      ),
+    ],
+  );
 }
 
 /// Build subsequent labels (pages 2+)
@@ -146,16 +177,25 @@ Future<pw.Column> _buildSubsequentLabel(
   PrintContext context,
 ) async {
   final top = await _buildHeaderForSubsequentLabel(
-      currentPage, numberOfPages, containerNo, context);
-  return pw.Column(children: [
-    top,
-    pw.SizedBox(height: 8),
-    pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
-      pw.Expanded(child: good),
-      pw.SizedBox(width: 16),
-      pw.Expanded(child: good2 ?? pw.Container())
-    ])
-  ]);
+    currentPage,
+    numberOfPages,
+    containerNo,
+    context,
+  );
+  return pw.Column(
+    children: [
+      top,
+      pw.SizedBox(height: 8),
+      pw.Row(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Expanded(child: good),
+          pw.SizedBox(width: 16),
+          pw.Expanded(child: good2 ?? pw.Container()),
+        ],
+      ),
+    ],
+  );
 }
 
 /// Build header for subsequent labels
@@ -165,45 +205,60 @@ Future<pw.Widget> _buildHeaderForSubsequentLabel(
   int containerNo,
   PrintContext context,
 ) async {
-  return pw.Row(children: [
-    pw.Expanded(
+  return pw.Row(
+    children: [
+      pw.Expanded(
         child: pw.Padding(
-            padding: const pw.EdgeInsets.only(right: 8.0),
-            child: _buildInfoBox(context)),
-        flex: 2),
-    pw.Expanded(
-        child: _buildBox(pw.Row(
+          padding: const pw.EdgeInsets.only(right: 8.0),
+          child: _buildInfoBox(context),
+        ),
+        flex: 2,
+      ),
+      pw.Expanded(
+        child: _buildBox(
+          pw.Row(
             crossAxisAlignment: pw.CrossAxisAlignment.end,
             children: [
               pw.Column(
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  children: [
-                    smallText("Label $currentPage / $numberOfPages"),
-                    pw.SizedBox(height: 4),
-                    pw.Row(children: [
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                children: [
+                  smallText("Label $currentPage / $numberOfPages"),
+                  pw.SizedBox(height: 4),
+                  pw.Row(
+                    children: [
                       smallText("Container no:"),
                       pw.SizedBox(width: 16),
-                      biggerAndFat("$containerNo")
-                    ]),
-                  ])
-            ])),
-        flex: 2)
-  ]);
+                      biggerAndFat("$containerNo"),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        flex: 2,
+      ),
+    ],
+  );
 }
 
 /// Build info box with user and org context
 pw.Widget _buildInfoBox(PrintContext context) {
-  return _buildBox(pw.Column(
+  return _buildBox(
+    pw.Column(
       mainAxisSize: pw.MainAxisSize.min,
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
         smallText("Printed by: ${context.userName}"),
         smallText("Date: ${context.formattedDate}"),
-      ]));
+      ],
+    ),
+  );
 }
 
 /// Build a bordered box
 pw.Widget _buildBox(pw.Widget w) => pw.Container(
-    padding: const pw.EdgeInsets.all(4.0),
-    decoration: pw.BoxDecoration(border: pw.Border.all(width: 0.5)),
-    child: w);
+  padding: const pw.EdgeInsets.all(4.0),
+  decoration: pw.BoxDecoration(border: pw.Border.all(width: 0.5)),
+  child: w,
+);

@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rescuenet_warehouse/config/org_provider.dart';
 
 enum LogoSize {
-  small,  // Navigation drawer, compact spaces
-  large,  // Login screen, prominent display
+  small, // Navigation drawer, compact spaces
+  large, // Login screen, prominent display
 }
 
 /// Displays the current organization's logo with automatic size selection.

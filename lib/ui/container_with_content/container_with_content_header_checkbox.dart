@@ -11,7 +11,10 @@ class ContainerWithContentHeaderCheckbox extends ConsumerWidget {
   final RescueContainer Function(bool) provideChanged;
 
   ContainerWithContentHeaderCheckbox(
-      this.label, this.value, this.provideChanged);
+    this.label,
+    this.value,
+    this.provideChanged,
+  );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

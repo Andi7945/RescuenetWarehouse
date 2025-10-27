@@ -18,9 +18,7 @@ class RescueNavigationDrawer extends ConsumerWidget {
           const SizedBox(
             height: 80,
             child: DrawerHeader(
-              child: OrgLogo.small(
-                alignment: Alignment.centerLeft,
-              ),
+              child: OrgLogo.small(alignment: Alignment.centerLeft),
             ),
           ),
           ListTile(

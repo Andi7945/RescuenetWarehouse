@@ -3,24 +3,24 @@ import 'package:flutter/semantics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 /// A widget that displays error messages with retry functionality.
-/// 
+///
 /// This widget provides consistent error handling UI across the application,
 /// following the patterns established in the authentication system and
 /// providing accessibility support.
-/// 
+///
 /// Usage:
 /// ```dart
 /// ErrorRetryWidget(
 ///   error: error,
 ///   onRetry: () => ref.refresh(dataProvider),
 /// )
-/// 
+///
 /// // With custom message
 /// ErrorRetryWidget.withMessage(
 ///   message: 'Failed to load items',
 ///   onRetry: () => ref.refresh(itemsProvider),
 /// )
-/// 
+///
 /// // For specific error types
 /// ErrorRetryWidget.forFirebaseError(
 ///   error: firebaseError,
@@ -30,19 +30,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 class ErrorRetryWidget extends StatelessWidget {
   /// The error object to display
   final Object? error;
-  
+
   /// Custom error message to override default error display
   final String? message;
-  
+
   /// Callback function to retry the failed operation
   final VoidCallback? onRetry;
-  
+
   /// Whether to show detailed error information (useful for debugging)
   final bool showDetails;
-  
+
   /// Custom retry button text
   final String? retryText;
-  
+
   /// Whether to show the error in compact mode (smaller layout)
   final bool isCompact;
 
@@ -63,7 +63,8 @@ class ErrorRetryWidget extends StatelessWidget {
     this.onRetry,
     this.retryText,
     this.isCompact = false,
-  }) : error = null, showDetails = false;
+  }) : error = null,
+       showDetails = false;
 
   /// Creates an error widget specifically for Firebase errors
   const ErrorRetryWidget.forFirebaseError({
@@ -89,7 +90,7 @@ class ErrorRetryWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final displayMessage = message ?? _getErrorMessage(error);
     final errorAnnouncement = 'Error occurred: $displayMessage';
-    
+
     // Announce error to screen readers
     WidgetsBinding.instance.addPostFrameCallback((_) {
       SemanticsService.announce(
@@ -98,7 +99,7 @@ class ErrorRetryWidget extends StatelessWidget {
         assertiveness: Assertiveness.assertive,
       );
     });
-    
+
     return Semantics(
       liveRegion: true,
       label: errorAnnouncement,
@@ -140,20 +141,20 @@ class ErrorRetryWidget extends StatelessWidget {
   Widget _buildErrorMessage(BuildContext context) {
     final theme = Theme.of(context);
     final displayMessage = message ?? _getErrorMessage(error);
-    
+
     return Semantics(
       label: 'Error message: $displayMessage',
       child: Text(
         displayMessage,
-        style: isCompact 
-          ? theme.textTheme.titleSmall?.copyWith(
-              color: theme.colorScheme.error,
-              fontWeight: FontWeight.w500,
-            )
-          : theme.textTheme.titleMedium?.copyWith(
-              color: theme.colorScheme.error,
-              fontWeight: FontWeight.w500,
-            ),
+        style: isCompact
+            ? theme.textTheme.titleSmall?.copyWith(
+                color: theme.colorScheme.error,
+                fontWeight: FontWeight.w500,
+              )
+            : theme.textTheme.titleMedium?.copyWith(
+                color: theme.colorScheme.error,
+                fontWeight: FontWeight.w500,
+              ),
         textAlign: TextAlign.center,
       ),
     );
@@ -162,7 +163,7 @@ class ErrorRetryWidget extends StatelessWidget {
   Widget _buildErrorDetails(BuildContext context) {
     final theme = Theme.of(context);
     final errorDetails = error.toString();
-    
+
     return Semantics(
       label: 'Technical error details: $errorDetails',
       hint: 'Detailed error information for troubleshooting',
@@ -178,15 +179,15 @@ class ErrorRetryWidget extends StatelessWidget {
         ),
         child: Text(
           errorDetails,
-          style: isCompact 
-            ? theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onErrorContainer,
-                fontFamily: 'monospace',
-              )
-            : theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onErrorContainer,
-                fontFamily: 'monospace',
-              ),
+          style: isCompact
+              ? theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onErrorContainer,
+                  fontFamily: 'monospace',
+                )
+              : theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onErrorContainer,
+                  fontFamily: 'monospace',
+                ),
           textAlign: TextAlign.center,
         ),
       ),
@@ -196,7 +197,7 @@ class ErrorRetryWidget extends StatelessWidget {
   Widget _buildRetryButton(BuildContext context) {
     final theme = Theme.of(context);
     final buttonText = retryText ?? 'Try Again';
-    
+
     if (isCompact) {
       return Semantics(
         button: true,
@@ -213,7 +214,7 @@ class ErrorRetryWidget extends StatelessWidget {
         ),
       );
     }
-    
+
     return Semantics(
       button: true,
       label: '$buttonText button',
@@ -248,7 +249,7 @@ class ErrorRetryWidget extends StatelessWidget {
     }
 
     // Handle network errors
-    if (error.toString().contains('SocketException') || 
+    if (error.toString().contains('SocketException') ||
         error.toString().contains('NetworkException')) {
       return 'Network connection error. Please check your internet connection.';
     }
@@ -319,13 +320,13 @@ class ErrorRetryWidget extends StatelessWidget {
 class ErrorBanner extends StatelessWidget {
   /// Error message to display
   final String message;
-  
+
   /// Callback to retry the operation
   final VoidCallback? onRetry;
-  
+
   /// Callback to dismiss the banner
   final VoidCallback? onDismiss;
-  
+
   /// Icon to show with the error
   final IconData? icon;
 
@@ -340,7 +341,7 @@ class ErrorBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     // Announce banner message
     WidgetsBinding.instance.addPostFrameCallback((_) {
       SemanticsService.announce(
@@ -349,7 +350,7 @@ class ErrorBanner extends StatelessWidget {
         assertiveness: Assertiveness.polite,
       );
     });
-    
+
     return Semantics(
       liveRegion: true,
       label: 'Error banner: $message',
@@ -360,10 +361,7 @@ class ErrorBanner extends StatelessWidget {
         decoration: BoxDecoration(
           color: theme.colorScheme.errorContainer,
           border: Border(
-            left: BorderSide(
-              color: theme.colorScheme.error,
-              width: 4,
-            ),
+            left: BorderSide(color: theme.colorScheme.error, width: 4),
           ),
         ),
         child: Row(

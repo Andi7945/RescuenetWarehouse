@@ -28,9 +28,8 @@ class ContainerAssignmentsPage extends river.ConsumerWidget {
   Widget _body(river.WidgetRef ref, BuildContext context) {
     return AsyncValueBuilder<List<RescueContainer>>(
       value: ref.watch(allContainersAsyncProvider),
-      loading: () => const DataLoadingIndicator(
-        message: 'Loading containers...',
-      ),
+      loading: () =>
+          const DataLoadingIndicator(message: 'Loading containers...'),
       error: (error, stackTrace) => ErrorRetryWidget(
         error: error,
         message: 'Failed to load containers',
@@ -40,33 +39,28 @@ class ContainerAssignmentsPage extends river.ConsumerWidget {
     );
   }
 
-  Widget _buildContainerSelection(river.WidgetRef ref, BuildContext context, List<RescueContainer> containers) {
+  Widget _buildContainerSelection(
+    river.WidgetRef ref,
+    BuildContext context,
+    List<RescueContainer> containers,
+  ) {
     final visibleContainers = _getVisibleContainers(ref, containers);
-    
+
     if (visibleContainers.isEmpty) {
       return const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.inventory_2_outlined,
-              size: 64,
-              color: Colors.grey,
-            ),
+            Icon(Icons.inventory_2_outlined, size: 64, color: Colors.grey),
             SizedBox(height: 16),
             Text(
               'No containers available',
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.grey,
-              ),
+              style: TextStyle(fontSize: 18, color: Colors.grey),
             ),
             SizedBox(height: 8),
             Text(
               'Create a container first to assign items',
-              style: TextStyle(
-                color: Colors.grey,
-              ),
+              style: TextStyle(color: Colors.grey),
             ),
           ],
         ),
@@ -78,22 +72,27 @@ class ContainerAssignmentsPage extends river.ConsumerWidget {
       child: Wrap(
         spacing: 4.0,
         runSpacing: 4.0,
-        children: visibleContainers.map<Widget>((c) => _containerCard(c, context)).toList(),
+        children: visibleContainers
+            .map<Widget>((c) => _containerCard(c, context))
+            .toList(),
       ),
     );
   }
 
-  List<RescueContainer> _getVisibleContainers(river.WidgetRef ref, List<RescueContainer> allContainers) {
+  List<RescueContainer> _getVisibleContainers(
+    river.WidgetRef ref,
+    List<RescueContainer> allContainers,
+  ) {
     // Try to use async visibility provider for proper filtering
     final visibilityAsync = ref.watch(containerVisibilityAsyncProvider);
-    
+
     return visibilityAsync.when(
       data: (visibilityMap) {
         // Filter containers based on visibility map
         final visibleContainers = allContainers
             .where((container) => visibilityMap[container] == true)
             .toList();
-        
+
         // Sort by container number
         visibleContainers.sort((a, b) => a.number.compareTo(b.number));
         return visibleContainers;

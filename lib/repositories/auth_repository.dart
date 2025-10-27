@@ -19,7 +19,11 @@ abstract class AuthRepository {
   /// Create a new user account with email, password and display name.
   /// Returns the created user or null if registration failed.
   /// Throws AuthException on errors.
-  Future<User?> createUserWithEmailAndPassword(String email, String password, String name);
+  Future<User?> createUserWithEmailAndPassword(
+    String email,
+    String password,
+    String name,
+  );
 
   /// Sign out the current user.
   /// Throws AuthException on errors.
@@ -39,5 +43,6 @@ class AuthException implements Exception {
   const AuthException(this.message, {this.code, this.originalException});
 
   @override
-  String toString() => 'AuthException: $message${code != null ? ' (code: $code)' : ''}';
+  String toString() =>
+      'AuthException: $message${code != null ? ' (code: $code)' : ''}';
 }

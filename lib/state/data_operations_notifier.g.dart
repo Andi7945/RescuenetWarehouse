@@ -443,7 +443,7 @@ class _HasOperationErrorProviderElement extends AutoDisposeProviderElement<bool>
 }
 
 String _$dataOperationsNotifierHash() =>
-    r'f5de43b3d8fc145959d6245f5425a62db877ff31';
+    r'a174cbbc1094ed57cd3a1f577abebdcbd1565b62';
 
 /// Notifier for managing CRUD operation loading states.
 ///

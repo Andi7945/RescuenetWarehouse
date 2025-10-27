@@ -3,12 +3,12 @@ import 'package:rescuenet_warehouse/models/assignment.dart';
 import 'package:rescuenet_warehouse/repositories/assignment_repository.dart';
 
 /// Mock implementation of AssignmentRepository for testing
-/// 
+///
 /// Provides predictable test data and simulates real-time updates
 /// without Firebase dependencies.
 class MockAssignmentRepository implements AssignmentRepository {
   final Map<String, Assignment> _assignments = {};
-  final StreamController<List<Assignment>> _streamController = 
+  final StreamController<List<Assignment>> _streamController =
       StreamController<List<Assignment>>.broadcast();
 
   MockAssignmentRepository() {
@@ -47,7 +47,7 @@ class MockAssignmentRepository implements AssignmentRepository {
     for (final assignment in sampleAssignments) {
       _assignments[assignment.id] = assignment;
     }
-    
+
     _notifyListeners();
   }
 
@@ -59,8 +59,13 @@ class MockAssignmentRepository implements AssignmentRepository {
   Stream<List<Assignment>> watchAssignments() {
     final controller = StreamController<List<Assignment>>.broadcast();
     controller.add(_assignments.values.toList());
-    final subscription = _streamController.stream.listen((items) => controller.add(items));
-    controller.onCancel = () { subscription.cancel(); controller.close(); };
+    final subscription = _streamController.stream.listen(
+      (items) => controller.add(items),
+    );
+    controller.onCancel = () {
+      subscription.cancel();
+      controller.close();
+    };
     return controller.stream;
   }
 
@@ -72,7 +77,9 @@ class MockAssignmentRepository implements AssignmentRepository {
   }
 
   @override
-  Future<List<Assignment>> getAssignmentsForContainer(String containerId) async {
+  Future<List<Assignment>> getAssignmentsForContainer(
+    String containerId,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 10));
     return _assignments.values
         .where((assignment) => assignment.containerId == containerId)
@@ -88,13 +95,16 @@ class MockAssignmentRepository implements AssignmentRepository {
   }
 
   @override
-  Future<Assignment?> getAssignmentByIds(String itemId, String containerId) async {
+  Future<Assignment?> getAssignmentByIds(
+    String itemId,
+    String containerId,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 10));
-    
+
     try {
       return _assignments.values.firstWhere(
-        (assignment) => 
-            assignment.itemId == itemId && 
+        (assignment) =>
+            assignment.itemId == itemId &&
             assignment.containerId == containerId,
       );
     } catch (e) {
@@ -119,38 +129,27 @@ class MockAssignmentRepository implements AssignmentRepository {
   @override
   Future<void> batchUpdateAssignments(List<Assignment> assignments) async {
     await Future.delayed(const Duration(milliseconds: 20));
-    
+
     for (final assignment in assignments) {
       _assignments[assignment.id] = assignment;
     }
-    
+
     _notifyListeners();
   }
 
   @override
   Future<void> batchDeleteAssignments(List<String> assignmentIds) async {
     await Future.delayed(const Duration(milliseconds: 20));
-    
+
     for (final id in assignmentIds) {
       _assignments.remove(id);
     }
-    
+
     _notifyListeners();
   }
 
-  @override
-  Future<void> upsertOrDeleteAssignment(Assignment assignment) async {
-    await Future.delayed(const Duration(milliseconds: 10));
-    
-    if (assignment.count == 0) {
-      await deleteAssignment(assignment.id);
-    } else {
-      await upsertAssignment(assignment);
-    }
-  }
-
   /// Test helper methods
-  
+
   /// Clear all assignments (useful for test setup)
   void clearAll() {
     _assignments.clear();

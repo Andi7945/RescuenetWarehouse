@@ -27,12 +27,14 @@ class ItemEditLoadingExample extends ConsumerStatefulWidget {
   const ItemEditLoadingExample({super.key});
 
   @override
-  ConsumerState<ItemEditLoadingExample> createState() => _ItemEditLoadingExampleState();
+  ConsumerState<ItemEditLoadingExample> createState() =>
+      _ItemEditLoadingExampleState();
 }
 
-class _ItemEditLoadingExampleState extends ConsumerState<ItemEditLoadingExample> {
+class _ItemEditLoadingExampleState
+    extends ConsumerState<ItemEditLoadingExample> {
   final TextEditingController _nameController = TextEditingController();
-  
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -43,13 +45,25 @@ class _ItemEditLoadingExampleState extends ConsumerState<ItemEditLoadingExample>
   Widget build(BuildContext context) {
     // Watch the current item and operation states
     final currentItem = ref.watch(currentItemNotifierProvider);
-    final isCreating = ref.watch(isOperationLoadingProvider(DataOperation.itemCreate));
-    final isUpdating = ref.watch(isOperationLoadingProvider(DataOperation.itemUpdate));
-    final isDeleting = ref.watch(isOperationLoadingProvider(DataOperation.itemDelete));
-    
-    final createError = ref.watch(getOperationErrorProvider(DataOperation.itemCreate));
-    final updateError = ref.watch(getOperationErrorProvider(DataOperation.itemUpdate));
-    final deleteError = ref.watch(getOperationErrorProvider(DataOperation.itemDelete));
+    final isCreating = ref.watch(
+      isOperationLoadingProvider(DataOperation.itemCreate),
+    );
+    final isUpdating = ref.watch(
+      isOperationLoadingProvider(DataOperation.itemUpdate),
+    );
+    final isDeleting = ref.watch(
+      isOperationLoadingProvider(DataOperation.itemDelete),
+    );
+
+    final createError = ref.watch(
+      getOperationErrorProvider(DataOperation.itemCreate),
+    );
+    final updateError = ref.watch(
+      getOperationErrorProvider(DataOperation.itemUpdate),
+    );
+    final deleteError = ref.watch(
+      getOperationErrorProvider(DataOperation.itemDelete),
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -79,23 +93,26 @@ class _ItemEditLoadingExampleState extends ConsumerState<ItemEditLoadingExample>
               ErrorBanner(
                 message: 'Failed to create item: ${createError.toString()}',
                 onRetry: () => _retryCreateItem(),
-                onDismiss: () => ref.read(dataOperationsNotifierProvider.notifier)
+                onDismiss: () => ref
+                    .read(dataOperationsNotifierProvider.notifier)
                     .clearOperation(DataOperation.itemCreate),
               ),
-            
+
             if (updateError != null)
               ErrorBanner(
                 message: 'Failed to update item: ${updateError.toString()}',
                 onRetry: () => _retryUpdateItem(),
-                onDismiss: () => ref.read(dataOperationsNotifierProvider.notifier)
+                onDismiss: () => ref
+                    .read(dataOperationsNotifierProvider.notifier)
                     .clearOperation(DataOperation.itemUpdate),
               ),
-            
+
             if (deleteError != null)
               ErrorBanner(
                 message: 'Failed to delete item: ${deleteError.toString()}',
                 onRetry: () => _retryDeleteItem(),
-                onDismiss: () => ref.read(dataOperationsNotifierProvider.notifier)
+                onDismiss: () => ref
+                    .read(dataOperationsNotifierProvider.notifier)
                     .clearOperation(DataOperation.itemDelete),
               ),
 
@@ -122,7 +139,9 @@ class _ItemEditLoadingExampleState extends ConsumerState<ItemEditLoadingExample>
                                 SizedBox(
                                   width: 16,
                                   height: 16,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
                                 ),
                                 SizedBox(width: 8),
                                 Text('Creating...'),
@@ -153,12 +172,13 @@ class _ItemEditLoadingExampleState extends ConsumerState<ItemEditLoadingExample>
                       Text('ID: ${currentItem.id}'),
                       Text('RescueNet ID: ${currentItem.rescueNetId.toInt()}'),
                       const SizedBox(height: 12),
-                      
+
                       // Name editing with loading state
                       Stack(
                         children: [
                           TextField(
-                            controller: _nameController..text = currentItem.name ?? '',
+                            controller: _nameController
+                              ..text = currentItem.name ?? '',
                             decoration: const InputDecoration(
                               labelText: 'Item Name',
                               border: OutlineInputBorder(),
@@ -174,13 +194,17 @@ class _ItemEditLoadingExampleState extends ConsumerState<ItemEditLoadingExample>
                                 child: Container(
                                   padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
-                                    color: Theme.of(context).colorScheme.surface,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.surface,
                                     borderRadius: BorderRadius.circular(16),
                                   ),
                                   child: const SizedBox(
                                     width: 16,
                                     height: 16,
-                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -188,7 +212,9 @@ class _ItemEditLoadingExampleState extends ConsumerState<ItemEditLoadingExample>
                           if (isUpdating)
                             Positioned.fill(
                               child: Container(
-                                color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.7),
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.surface.withValues(alpha: 0.7),
                               ),
                             ),
                         ],
@@ -201,7 +227,9 @@ class _ItemEditLoadingExampleState extends ConsumerState<ItemEditLoadingExample>
                         onPressed: isDeleting ? null : _deleteItem,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Theme.of(context).colorScheme.error,
-                          foregroundColor: Theme.of(context).colorScheme.onError,
+                          foregroundColor: Theme.of(
+                            context,
+                          ).colorScheme.onError,
                         ),
                         child: isDeleting
                             ? const Row(
@@ -210,7 +238,9 @@ class _ItemEditLoadingExampleState extends ConsumerState<ItemEditLoadingExample>
                                   SizedBox(
                                     width: 16,
                                     height: 16,
-                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
                                   ),
                                   SizedBox(width: 8),
                                   Text('Deleting...'),
@@ -254,9 +284,10 @@ class _ItemEditLoadingExampleState extends ConsumerState<ItemEditLoadingExample>
   Future<void> _createNewItem() async {
     try {
       // Clear any previous errors
-      ref.read(dataOperationsNotifierProvider.notifier)
+      ref
+          .read(dataOperationsNotifierProvider.notifier)
           .clearOperation(DataOperation.itemCreate);
-      
+
       // Use loading overlay for item creation
       await context.performWithLoading<void>(
         operation: 'Creating new item...',
@@ -290,11 +321,13 @@ class _ItemEditLoadingExampleState extends ConsumerState<ItemEditLoadingExample>
     final currentItem = ref.read(currentItemNotifierProvider);
     if (currentItem != null && currentItem.name != newName) {
       // Clear any previous errors
-      ref.read(dataOperationsNotifierProvider.notifier)
+      ref
+          .read(dataOperationsNotifierProvider.notifier)
           .clearOperation(DataOperation.itemUpdate);
-      
+
       try {
-        await ref.read(currentItemNotifierProvider.notifier)
+        await ref
+            .read(currentItemNotifierProvider.notifier)
             .update(currentItem.copyWith(name: newName));
       } catch (error) {
         // Error will be handled by DataOperationsNotifier and shown in banner
@@ -305,9 +338,10 @@ class _ItemEditLoadingExampleState extends ConsumerState<ItemEditLoadingExample>
   Future<void> _deleteItem() async {
     try {
       // Clear any previous errors
-      ref.read(dataOperationsNotifierProvider.notifier)
+      ref
+          .read(dataOperationsNotifierProvider.notifier)
           .clearOperation(DataOperation.itemDelete);
-      
+
       // Use loading overlay for item deletion
       await context.performWithLoading<void>(
         operation: 'Deleting item...',
@@ -338,7 +372,8 @@ class _ItemEditLoadingExampleState extends ConsumerState<ItemEditLoadingExample>
   }
 
   void _retryCreateItem() {
-    ref.read(dataOperationsNotifierProvider.notifier)
+    ref
+        .read(dataOperationsNotifierProvider.notifier)
         .clearOperation(DataOperation.itemCreate);
     _createNewItem();
   }
@@ -346,14 +381,16 @@ class _ItemEditLoadingExampleState extends ConsumerState<ItemEditLoadingExample>
   void _retryUpdateItem() {
     final currentItem = ref.read(currentItemNotifierProvider);
     if (currentItem != null) {
-      ref.read(dataOperationsNotifierProvider.notifier)
+      ref
+          .read(dataOperationsNotifierProvider.notifier)
           .clearOperation(DataOperation.itemUpdate);
       _updateItemName(_nameController.text);
     }
   }
 
   void _retryDeleteItem() {
-    ref.read(dataOperationsNotifierProvider.notifier)
+    ref
+        .read(dataOperationsNotifierProvider.notifier)
         .clearOperation(DataOperation.itemDelete);
     _deleteItem();
   }

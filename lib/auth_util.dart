@@ -16,8 +16,10 @@ class Auth {
     return _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
-  Future<AuthState> signInWithEmailAndPassword(
-      {required String email, required String password}) async {
+  Future<AuthState> signInWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
     try {
       UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
@@ -36,9 +38,10 @@ class Auth {
         return AuthState(errorCode: e.code, errorMessage: e.message);
       } else {
         return const AuthState(
-            errorCode: "UNDEFINED",
-            errorMessage:
-                "The error is not defined yet. Please contact the app developer to implement how to handle the error. In the mean time, please try again later.");
+          errorCode: "UNDEFINED",
+          errorMessage:
+              "The error is not defined yet. Please contact the app developer to implement how to handle the error. In the mean time, please try again later.",
+        );
       }
     }
   }

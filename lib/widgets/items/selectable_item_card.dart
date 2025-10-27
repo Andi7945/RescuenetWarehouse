@@ -25,9 +25,9 @@ class SelectableItemCard extends StatelessWidget {
   );
 
   Widget _selectedIndicator() => SizedBox(
-      width: 370,
-      child:
-      isSelected
-          ? Card(elevation: 12, child: Center(child: Text('Selected')))
-          : Container());
+    width: 370,
+    child: isSelected
+        ? Card(elevation: 12, child: Center(child: Text('Selected')))
+        : Container(),
+  );
 }

@@ -16,28 +16,31 @@ SummaryPdf mapForPdf(Map<RescueContainer, Map<Item, int>> containerWithItems) {
 SummaryList _list(List<SummaryContainer> containers) {
   var totalValue = containers.fold(0, (prev, c) => prev + c.value);
   var totalWeight = containers.fold(0.0, (prev, c) => prev + c.weight);
-  var amountPerType =
-      containers.groupBy((c) => c.type).mapValues((p0) => "${p0.length}");
+  var amountPerType = containers
+      .groupBy((c) => c.type)
+      .mapValues((p0) => "${p0.length}");
   return SummaryList(
-      count: "${containers.length}",
-      amountPerType: amountPerType,
-      totalValue: totalValue,
-      totalWeight: totalWeight);
+    count: "${containers.length}",
+    amountPerType: amountPerType,
+    totalValue: totalValue,
+    totalWeight: totalWeight,
+  );
 }
 
 SummaryContainer _mapSingle(MapEntry<RescueContainer, Map<Item, int>> entry) =>
     SummaryContainer(
-        containerNr: entry.key.number,
-        name: entry.key.printName,
-        description: entry.key.description ?? "",
-        type: entry.key.type?.name ?? "",
-        value: calcValue(entry.value),
-        weight: _calcWeight(entry),
-        expirationDate: nextExpirationDateFormatted(entry.value),
-        dangerousGoods: _dangerousGoods(entry.value),
-        coldChain: _hasColdChainItem(entry.value),
-        moduleDestination: entry.key.moduleDestination?.name ?? "",
-        sequentialBuild: entry.key.sequentialBuild);
+      containerNr: entry.key.number,
+      name: entry.key.printName,
+      description: entry.key.description ?? "",
+      type: entry.key.type?.name ?? "",
+      value: calcValue(entry.value),
+      weight: _calcWeight(entry),
+      expirationDate: nextExpirationDateFormatted(entry.value),
+      dangerousGoods: _dangerousGoods(entry.value),
+      coldChain: _hasColdChainItem(entry.value),
+      moduleDestination: entry.key.moduleDestination?.name ?? "",
+      sequentialBuild: entry.key.sequentialBuild,
+    );
 
 _dangerousGoods(Map<Item, int> items) => items.keys
     .expand((e) => e.signs)

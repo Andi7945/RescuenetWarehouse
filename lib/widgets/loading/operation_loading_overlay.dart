@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 
 /// A modal loading overlay for operations like create, update, delete.
-/// 
+///
 /// This widget shows a modal overlay that prevents user interaction while
 /// an operation is in progress, following the existing pattern established
 /// in confirm_dialog.dart and other modal widgets.
-/// 
+///
 /// Usage:
 /// ```dart
 /// // Show overlay for operation
@@ -17,7 +17,7 @@ import 'package:flutter/semantics.dart';
 ///     operation: 'Saving item...',
 ///   ),
 /// );
-/// 
+///
 /// // Using with helper method
 /// OperationLoadingOverlay.show(
 ///   context: context,
@@ -27,13 +27,13 @@ import 'package:flutter/semantics.dart';
 class OperationLoadingOverlay extends StatelessWidget {
   /// Description of the operation being performed
   final String operation;
-  
+
   /// Whether the overlay can be dismissed by tapping outside
   final bool canDismiss;
-  
+
   /// Custom progress value for determinate operations (0.0 to 1.0)
   final double? progress;
-  
+
   /// Additional details about the operation
   final String? details;
 
@@ -73,21 +73,17 @@ class OperationLoadingOverlay extends StatelessWidget {
     String? details,
   }) async {
     // Show overlay
-    show<void>(
-      context: context,
-      operation: operation,
-      details: details,
-    );
+    show<void>(context: context, operation: operation, details: details);
 
     try {
       // Perform the operation
       final result = await task();
-      
+
       // Close overlay
       if (context.mounted) {
         Navigator.of(context).pop();
       }
-      
+
       return result;
     } catch (error) {
       // Close overlay on error
@@ -101,7 +97,7 @@ class OperationLoadingOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loadingMessage = details != null ? '$operation $details' : operation;
-    
+
     // Announce operation start to screen readers
     WidgetsBinding.instance.addPostFrameCallback((_) {
       SemanticsService.announce(
@@ -110,23 +106,22 @@ class OperationLoadingOverlay extends StatelessWidget {
         assertiveness: Assertiveness.polite,
       );
     });
-    
+
     return PopScope(
       canPop: canDismiss,
       child: Semantics(
         liveRegion: true,
         label: loadingMessage,
-        hint: canDismiss ? 'Operation in progress, tap outside to dismiss' : 'Operation in progress, please wait',
+        hint: canDismiss
+            ? 'Operation in progress, tap outside to dismiss'
+            : 'Operation in progress, please wait',
         child: Dialog(
           backgroundColor: Colors.transparent,
           elevation: 0,
           child: Center(
             child: Container(
               padding: const EdgeInsets.all(24),
-              constraints: const BoxConstraints(
-                minWidth: 280,
-                maxWidth: 400,
-              ),
+              constraints: const BoxConstraints(minWidth: 280, maxWidth: 400),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(12),
@@ -176,7 +171,7 @@ class OperationLoadingOverlay extends StatelessWidget {
         ),
       );
     }
-    
+
     // Indeterminate progress indicator
     return Semantics(
       label: 'Operation in progress',
@@ -224,16 +219,10 @@ class SimpleLoadingOverlay extends StatelessWidget {
   /// Message to display (optional)
   final String? message;
 
-  const SimpleLoadingOverlay({
-    super.key,
-    this.message,
-  });
+  const SimpleLoadingOverlay({super.key, this.message});
 
   /// Helper method to show simple loading overlay
-  static Future<T?> show<T>({
-    required BuildContext context,
-    String? message,
-  }) {
+  static Future<T?> show<T>({required BuildContext context, String? message}) {
     return showDialog<T>(
       context: context,
       barrierDismissible: false,
@@ -244,7 +233,7 @@ class SimpleLoadingOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loadingMessage = message ?? 'Loading';
-    
+
     // Announce loading to screen readers
     WidgetsBinding.instance.addPostFrameCallback((_) {
       SemanticsService.announce(
@@ -253,7 +242,7 @@ class SimpleLoadingOverlay extends StatelessWidget {
         assertiveness: Assertiveness.polite,
       );
     });
-    
+
     return PopScope(
       canPop: false,
       child: Semantics(
@@ -328,10 +317,7 @@ extension LoadingOverlayContext on BuildContext {
 
   /// Show a simple loading overlay
   Future<T?> showSimpleLoading<T>({String? message}) {
-    return SimpleLoadingOverlay.show<T>(
-      context: this,
-      message: message,
-    );
+    return SimpleLoadingOverlay.show<T>(context: this, message: message);
   }
 
   /// Perform an operation with loading overlay

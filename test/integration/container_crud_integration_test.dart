@@ -48,79 +48,94 @@ void main() {
         expect(retrieved?.typeId, isNull);
       });
 
-      test('should create container with all optional fields populated', () async {
-        // Arrange
-        final fullContainer = ContainerDao(
-          id: 'full-container-001',
-          number: 2,
-          name: 'Medical Equipment Container',
-          description: 'Complete medical supplies and equipment',
-          typeId: 'euro-box',
-          moduleDestinationId: 'module-alpha',
-          currentLocationId: 'warehouse-berlin',
-          sequentialBuild: SequentialBuild.preBuild,
-          isReady: true,
-          toDeploy: true,
-        );
+      test(
+        'should create container with all optional fields populated',
+        () async {
+          // Arrange
+          final fullContainer = ContainerDao(
+            id: 'full-container-001',
+            number: 2,
+            name: 'Medical Equipment Container',
+            description: 'Complete medical supplies and equipment',
+            typeId: 'euro-box',
+            moduleDestinationId: 'module-alpha',
+            currentLocationId: 'warehouse-berlin',
+            sequentialBuild: SequentialBuild.preBuild,
+            isReady: true,
+            toDeploy: true,
+          );
 
-        // Act
-        await mockRepo.upsertContainer(fullContainer);
-        final retrieved = await mockRepo.getContainer('full-container-001');
+          // Act
+          await mockRepo.upsertContainer(fullContainer);
+          final retrieved = await mockRepo.getContainer('full-container-001');
 
-        // Assert
-        expect(retrieved, isNotNull);
-        expect(retrieved?.description, equals('Complete medical supplies and equipment'));
-        expect(retrieved?.typeId, equals('euro-box'));
-        expect(retrieved?.moduleDestinationId, equals('module-alpha'));
-        expect(retrieved?.currentLocationId, equals('warehouse-berlin'));
-        expect(retrieved?.sequentialBuild, equals(SequentialBuild.preBuild));
-        expect(retrieved?.isReady, isTrue);
-        expect(retrieved?.toDeploy, isTrue);
-      });
+          // Assert
+          expect(retrieved, isNotNull);
+          expect(
+            retrieved?.description,
+            equals('Complete medical supplies and equipment'),
+          );
+          expect(retrieved?.typeId, equals('euro-box'));
+          expect(retrieved?.moduleDestinationId, equals('module-alpha'));
+          expect(retrieved?.currentLocationId, equals('warehouse-berlin'));
+          expect(retrieved?.sequentialBuild, equals(SequentialBuild.preBuild));
+          expect(retrieved?.isReady, isTrue);
+          expect(retrieved?.toDeploy, isTrue);
+        },
+      );
     });
 
     group('Update Container', () {
-      test('should update ALL modifiable container fields comprehensively', () async {
-        // Arrange - Create initial container with minimal data
-        final original = ContainerDao(
-          id: 'update-test-001',
-          number: 1,
-          name: 'Original Name',
-          sequentialBuild: SequentialBuild.firstBuild,
-          isReady: false,
-          toDeploy: false,
-        );
-        await mockRepo.upsertContainer(original);
+      test(
+        'should update ALL modifiable container fields comprehensively',
+        () async {
+          // Arrange - Create initial container with minimal data
+          final original = ContainerDao(
+            id: 'update-test-001',
+            number: 1,
+            name: 'Original Name',
+            sequentialBuild: SequentialBuild.firstBuild,
+            isReady: false,
+            toDeploy: false,
+          );
+          await mockRepo.upsertContainer(original);
 
-        // Prepare update with ALL modifiable fields changed
-        final updated = original.copyWith(
-          number: 99,
-          name: 'Updated Container Name',
-          description: 'Updated comprehensive description',
-          typeId: 'pallet',
-          moduleDestinationId: 'module-beta',
-          currentLocationId: 'warehouse-munich',
-          sequentialBuild: SequentialBuild.laterBuild,
-          isReady: true,
-          toDeploy: true,
-        );
+          // Prepare update with ALL modifiable fields changed
+          final updated = original.copyWith(
+            number: 99,
+            name: 'Updated Container Name',
+            description: 'Updated comprehensive description',
+            typeId: 'pallet',
+            moduleDestinationId: 'module-beta',
+            currentLocationId: 'warehouse-munich',
+            sequentialBuild: SequentialBuild.laterBuild,
+            isReady: true,
+            toDeploy: true,
+          );
 
-        // Act
-        await mockRepo.upsertContainer(updated);
-        final retrieved = await mockRepo.getContainer('update-test-001');
+          // Act
+          await mockRepo.upsertContainer(updated);
+          final retrieved = await mockRepo.getContainer('update-test-001');
 
-        // Assert - Verify ALL fields updated
-        expect(retrieved, isNotNull);
-        expect(retrieved?.number, equals(99));
-        expect(retrieved?.name, equals('Updated Container Name'));
-        expect(retrieved?.description, equals('Updated comprehensive description'));
-        expect(retrieved?.typeId, equals('pallet'));
-        expect(retrieved?.moduleDestinationId, equals('module-beta'));
-        expect(retrieved?.currentLocationId, equals('warehouse-munich'));
-        expect(retrieved?.sequentialBuild, equals(SequentialBuild.laterBuild));
-        expect(retrieved?.isReady, isTrue);
-        expect(retrieved?.toDeploy, isTrue);
-      });
+          // Assert - Verify ALL fields updated
+          expect(retrieved, isNotNull);
+          expect(retrieved?.number, equals(99));
+          expect(retrieved?.name, equals('Updated Container Name'));
+          expect(
+            retrieved?.description,
+            equals('Updated comprehensive description'),
+          );
+          expect(retrieved?.typeId, equals('pallet'));
+          expect(retrieved?.moduleDestinationId, equals('module-beta'));
+          expect(retrieved?.currentLocationId, equals('warehouse-munich'));
+          expect(
+            retrieved?.sequentialBuild,
+            equals(SequentialBuild.laterBuild),
+          );
+          expect(retrieved?.isReady, isTrue);
+          expect(retrieved?.toDeploy, isTrue);
+        },
+      );
 
       test('should update sequential build progression correctly', () async {
         // Arrange
@@ -209,35 +224,41 @@ void main() {
     group('Query Operations', () {
       test('should get containers filtered by type', () async {
         // Arrange - Create 3 containers with different types
-        await mockRepo.upsertContainer(ContainerDao(
-          id: 'type-test-001',
-          number: 1,
-          name: 'Euro Box 1',
-          typeId: 'euro-box',
-          sequentialBuild: SequentialBuild.firstBuild,
-          isReady: false,
-          toDeploy: false,
-        ));
+        await mockRepo.upsertContainer(
+          ContainerDao(
+            id: 'type-test-001',
+            number: 1,
+            name: 'Euro Box 1',
+            typeId: 'euro-box',
+            sequentialBuild: SequentialBuild.firstBuild,
+            isReady: false,
+            toDeploy: false,
+          ),
+        );
 
-        await mockRepo.upsertContainer(ContainerDao(
-          id: 'type-test-002',
-          number: 2,
-          name: 'Euro Box 2',
-          typeId: 'euro-box',
-          sequentialBuild: SequentialBuild.firstBuild,
-          isReady: false,
-          toDeploy: false,
-        ));
+        await mockRepo.upsertContainer(
+          ContainerDao(
+            id: 'type-test-002',
+            number: 2,
+            name: 'Euro Box 2',
+            typeId: 'euro-box',
+            sequentialBuild: SequentialBuild.firstBuild,
+            isReady: false,
+            toDeploy: false,
+          ),
+        );
 
-        await mockRepo.upsertContainer(ContainerDao(
-          id: 'type-test-003',
-          number: 3,
-          name: 'Pallet Container',
-          typeId: 'pallet',
-          sequentialBuild: SequentialBuild.firstBuild,
-          isReady: false,
-          toDeploy: false,
-        ));
+        await mockRepo.upsertContainer(
+          ContainerDao(
+            id: 'type-test-003',
+            number: 3,
+            name: 'Pallet Container',
+            typeId: 'pallet',
+            sequentialBuild: SequentialBuild.firstBuild,
+            isReady: false,
+            toDeploy: false,
+          ),
+        );
 
         // Act & Assert
         final euroBoxes = await mockRepo.getContainersByType('euro-box');
@@ -254,55 +275,71 @@ void main() {
 
       test('should get containers filtered by location', () async {
         // Arrange - Create 3 containers at different locations
-        await mockRepo.upsertContainer(ContainerDao(
-          id: 'location-test-001',
-          number: 1,
-          name: 'Warehouse A Container 1',
-          currentLocationId: 'warehouse-a',
-          sequentialBuild: SequentialBuild.firstBuild,
-          isReady: false,
-          toDeploy: false,
-        ));
+        await mockRepo.upsertContainer(
+          ContainerDao(
+            id: 'location-test-001',
+            number: 1,
+            name: 'Warehouse A Container 1',
+            currentLocationId: 'warehouse-a',
+            sequentialBuild: SequentialBuild.firstBuild,
+            isReady: false,
+            toDeploy: false,
+          ),
+        );
 
-        await mockRepo.upsertContainer(ContainerDao(
-          id: 'location-test-002',
-          number: 2,
-          name: 'Warehouse A Container 2',
-          currentLocationId: 'warehouse-a',
-          sequentialBuild: SequentialBuild.firstBuild,
-          isReady: false,
-          toDeploy: false,
-        ));
+        await mockRepo.upsertContainer(
+          ContainerDao(
+            id: 'location-test-002',
+            number: 2,
+            name: 'Warehouse A Container 2',
+            currentLocationId: 'warehouse-a',
+            sequentialBuild: SequentialBuild.firstBuild,
+            isReady: false,
+            toDeploy: false,
+          ),
+        );
 
-        await mockRepo.upsertContainer(ContainerDao(
-          id: 'location-test-003',
-          number: 3,
-          name: 'Warehouse B Container',
-          currentLocationId: 'warehouse-b',
-          sequentialBuild: SequentialBuild.firstBuild,
-          isReady: false,
-          toDeploy: false,
-        ));
+        await mockRepo.upsertContainer(
+          ContainerDao(
+            id: 'location-test-003',
+            number: 3,
+            name: 'Warehouse B Container',
+            currentLocationId: 'warehouse-b',
+            sequentialBuild: SequentialBuild.firstBuild,
+            isReady: false,
+            toDeploy: false,
+          ),
+        );
 
         // Act & Assert
-        final warehouseA = await mockRepo.getContainersByLocation('warehouse-a');
+        final warehouseA = await mockRepo.getContainersByLocation(
+          'warehouse-a',
+        );
         expect(warehouseA, hasLength(2));
-        expect(warehouseA.every((c) => c.currentLocationId == 'warehouse-a'), isTrue);
+        expect(
+          warehouseA.every((c) => c.currentLocationId == 'warehouse-a'),
+          isTrue,
+        );
 
-        final warehouseB = await mockRepo.getContainersByLocation('warehouse-b');
+        final warehouseB = await mockRepo.getContainersByLocation(
+          'warehouse-b',
+        );
         expect(warehouseB, hasLength(1));
         expect(warehouseB.first.currentLocationId, equals('warehouse-b'));
       });
     });
 
     group('Error Scenarios', () {
-      test('should throw ContainerException when deleting non-existent container', () async {
-        // Act & Assert
-        expect(
-          () => mockRepo.deleteContainer('non-existent-container'),
-          throwsA(isA<ContainerException>()),
-        );
-      });
+      test(
+        'should throw ContainerException when deleting non-existent container',
+        () async {
+          // Act & Assert
+          expect(
+            () => mockRepo.deleteContainer('non-existent-container'),
+            throwsA(isA<ContainerException>()),
+          );
+        },
+      );
 
       test('should handle multiple rapid updates correctly', () async {
         // Arrange

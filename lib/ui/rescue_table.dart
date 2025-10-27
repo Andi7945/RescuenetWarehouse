@@ -12,7 +12,10 @@ class RescueTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const BorderSide side = BorderSide(
-        color: Color(0xFF000000), width: 1.0, style: BorderStyle.solid);
+      color: Color(0xFF000000),
+      width: 1.0,
+      style: BorderStyle.solid,
+    );
 
     var headline = _buildHeadline();
     var rows = _rows.map((e) => _addPaddingBoxes(e)).toList();
@@ -20,14 +23,18 @@ class RescueTable extends StatelessWidget {
     var expandedColumnWidths = _columnWidthsWithPaddingBoxes();
 
     return SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Table(
-          border: const TableBorder(
-              top: side, bottom: side, horizontalInside: side),
-          columnWidths: expandedColumnWidths,
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          children: [headline, ...rows],
-        ));
+      scrollDirection: Axis.vertical,
+      child: Table(
+        border: const TableBorder(
+          top: side,
+          bottom: side,
+          horizontalInside: side,
+        ),
+        columnWidths: expandedColumnWidths,
+        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+        children: [headline, ...rows],
+      ),
+    );
   }
 
   TableRow _buildHeadline() {
@@ -36,12 +43,14 @@ class RescueTable extends StatelessWidget {
   }
 
   Widget headlineCell(e) => Padding(
-      padding: const EdgeInsets.only(top: 4, bottom: 4),
-      child: RescueText.slightslim(e));
+    padding: const EdgeInsets.only(top: 4, bottom: 4),
+    child: RescueText.slightslim(e),
+  );
 
   TableRow _addPaddingBoxes(TableRow row) {
-    var children =
-        row.children.expand((element) => [element, _sizedBox()]).toList();
+    var children = row.children
+        .expand((element) => [element, _sizedBox()])
+        .toList();
     children.removeLast();
     return TableRow(children: children);
   }

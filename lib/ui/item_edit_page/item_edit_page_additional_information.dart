@@ -19,62 +19,76 @@ class ItemEditPageAdditionalInformation extends ConsumerWidget {
     if (item == null) {
       return CircularProgressIndicator();
     }
-    return Column(children: [
-      RescueInputText(
+    return Column(
+      children: [
+        RescueInputText(
           label: 'Description',
           initial: item.description,
-          onChange: update((s) => item.copyWith(description: s))),
-      const SizedBox(height: 10),
-      ItemEditPageAdditionalInformationExpDates(item),
-      const SizedBox(height: 10),
-      _operationalStatusEntry(ref, item),
-      RescueInputText(
+          onChange: update((s) => item.copyWith(description: s)),
+        ),
+        const SizedBox(height: 10),
+        ItemEditPageAdditionalInformationExpDates(item),
+        const SizedBox(height: 10),
+        _operationalStatusEntry(ref, item),
+        RescueInputText(
           label: 'Manufacturer',
           initial: item.manufacturer,
-          onChange: update((s) => item.copyWith(manufacturer: s))),
-      RescueInputText(
+          onChange: update((s) => item.copyWith(manufacturer: s)),
+        ),
+        RescueInputText(
           label: 'Remarks',
           initial: item.remarks,
-          onChange: update((s) => item.copyWith(remarks: s))),
-      RescueInputText(
+          onChange: update((s) => item.copyWith(remarks: s)),
+        ),
+        RescueInputText(
           label: 'Brand',
           initial: item.brand,
-          onChange: update((s) => item.copyWith(brand: s))),
-      RescueInputText(
+          onChange: update((s) => item.copyWith(brand: s)),
+        ),
+        RescueInputText(
           label: 'Type',
           initial: item.type,
-          onChange: update((s) => item.copyWith(type: s))),
-      RescueInputText(
+          onChange: update((s) => item.copyWith(type: s)),
+        ),
+        RescueInputText(
           label: 'Supplier',
           initial: item.supplier,
-          onChange: update((s) => item.copyWith(supplier: s))),
-      RescueInputText(
+          onChange: update((s) => item.copyWith(supplier: s)),
+        ),
+        RescueInputText(
           label: 'SKU',
           initial: item.sku,
-          onChange: update((s) => item.copyWith(sku: s))),
-      RescueInputText(
+          onChange: update((s) => item.copyWith(sku: s)),
+        ),
+        RescueInputText(
           label: 'Website',
           initial: item.website,
-          onChange: update((s) => item.copyWith(website: s))),
-      RescueInputText(
+          onChange: update((s) => item.copyWith(website: s)),
+        ),
+        RescueInputText(
           label: 'Value in €:',
           onChange: update((s) => item.copyWith(value: int.parse(s))),
-          initial: "${item.value}"),
-      RescueInputText(
+          initial: "${item.value}",
+        ),
+        RescueInputText(
           label: 'Weight in kg:',
           onChange: update((s) => item.copyWith(weight: double.parse(s))),
-          initial: "${item.weight}"),
-      Container(
+          initial: "${item.weight}",
+        ),
+        Container(
           alignment: Alignment.centerLeft,
           width: double.infinity,
           child: Container(
-              constraints: const BoxConstraints(maxWidth: 400),
-              child: CheckboxListTile(
-                  value: item.isColdChain,
-                  onChanged:
-                      update((b) => item.copyWith(isColdChain: b ?? false)),
-                  title: const Text("Cold chain"))))
-    ]);
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: CheckboxListTile(
+              value: item.isColdChain,
+              onChanged: update((b) => item.copyWith(isColdChain: b ?? false)),
+              title: const Text("Cold chain"),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   Function(T) _updateItem<T>(WidgetRef ref, Item Function(T) updateFn) =>
@@ -82,22 +96,22 @@ class ItemEditPageAdditionalInformation extends ConsumerWidget {
 
   Widget _operationalStatusEntry(WidgetRef ref, Item item) {
     return DropdownMenu(
-        initialSelection: item.operationalStatus.name,
-        onSelected: (String? value) {
-          var v = value;
-          if (v != null) {
-            var changedItem = item.copyWith(
-                operationalStatus: OperationalStatus.values
-                    .firstWhere((element) => element.name == v));
-            ref.read(currentItemNotifierProvider.notifier).update(changedItem);
-          }
-        },
-        label: const Text(
-          "operational status",
-          overflow: TextOverflow.ellipsis,
-        ),
-        dropdownMenuEntries: OperationalStatus.values
-            .map((e) => DropdownMenuEntry(value: e.name, label: e.displayName))
-            .toList());
+      initialSelection: item.operationalStatus.name,
+      onSelected: (String? value) {
+        var v = value;
+        if (v != null) {
+          var changedItem = item.copyWith(
+            operationalStatus: OperationalStatus.values.firstWhere(
+              (element) => element.name == v,
+            ),
+          );
+          ref.read(currentItemNotifierProvider.notifier).update(changedItem);
+        }
+      },
+      label: const Text("operational status", overflow: TextOverflow.ellipsis),
+      dropdownMenuEntries: OperationalStatus.values
+          .map((e) => DropdownMenuEntry(value: e.name, label: e.displayName))
+          .toList(),
+    );
   }
 }

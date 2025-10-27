@@ -3,9 +3,10 @@ import 'package:rescuenet_warehouse/repositories/module_destination_repository.d
 import 'package:rescuenet_warehouse/db/firebase.dart';
 
 /// Firebase implementation of ModuleDestinationRepository
-/// 
+///
 /// Provides real-time synchronization with Firestore for module destination data.
-class FirebaseModuleDestinationRepository implements ModuleDestinationRepository {
+class FirebaseModuleDestinationRepository
+    implements ModuleDestinationRepository {
   @override
   Stream<List<ModuleDestination>> watchModuleDestinations() {
     return moduleDestinationsCollection.snapshots().map(
@@ -34,21 +35,29 @@ class FirebaseModuleDestinationRepository implements ModuleDestinationRepository
   }
 
   @override
-  Future<void> upsertModuleDestination(ModuleDestination moduleDestination) async {
+  Future<void> upsertModuleDestination(
+    ModuleDestination moduleDestination,
+  ) async {
     try {
-      await moduleDestinationsCollection.doc(moduleDestination.id).set(moduleDestination);
+      await moduleDestinationsCollection
+          .doc(moduleDestination.id)
+          .set(moduleDestination);
     } catch (e) {
       throw Exception('Failed to upsert module destination: $e');
     }
   }
 
   @override
-  Future<void> createModuleDestination(ModuleDestination moduleDestination) async {
+  Future<void> createModuleDestination(
+    ModuleDestination moduleDestination,
+  ) async {
     return upsertModuleDestination(moduleDestination);
   }
 
   @override
-  Future<void> updateModuleDestination(ModuleDestination moduleDestination) async {
+  Future<void> updateModuleDestination(
+    ModuleDestination moduleDestination,
+  ) async {
     return upsertModuleDestination(moduleDestination);
   }
 

@@ -22,7 +22,9 @@ class RescueBoxModuleDestination extends StatelessWidget {
           RescueText.slim('Module Destination'),
           const SizedBox(height: 4),
           RescueText.normal(
-              _container.moduleDestination?.name ?? "", FontWeight.w700),
+            _container.moduleDestination?.name ?? "",
+            FontWeight.w700,
+          ),
         ],
       ),
     );

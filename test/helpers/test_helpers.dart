@@ -30,17 +30,25 @@ ProviderContainer createTestProviderContainer({
     // Override all repositories with mock implementations
     authRepositoryProvider.overrideWith((ref) => MockAuthRepository()),
     itemRepositoryProvider.overrideWith((ref) => MockItemRepository()),
-    containerRepositoryProvider.overrideWith((ref) => MockContainerRepository()),
-    assignmentRepositoryProvider.overrideWith((ref) => MockAssignmentRepository()),
+    containerRepositoryProvider.overrideWith(
+      (ref) => MockContainerRepository(),
+    ),
+    assignmentRepositoryProvider.overrideWith(
+      (ref) => MockAssignmentRepository(),
+    ),
     workLogRepositoryProvider.overrideWith((ref) => MockWorkLogRepository()),
-    containerTypeRepositoryProvider.overrideWith((ref) => MockContainerTypeRepository()),
-    currentLocationRepositoryProvider.overrideWith((ref) => MockCurrentLocationRepository()),
-    moduleDestinationRepositoryProvider.overrideWith((ref) => MockModuleDestinationRepository()),
+    containerTypeRepositoryProvider.overrideWith(
+      (ref) => MockContainerTypeRepository(),
+    ),
+    currentLocationRepositoryProvider.overrideWith(
+      (ref) => MockCurrentLocationRepository(),
+    ),
+    moduleDestinationRepositoryProvider.overrideWith(
+      (ref) => MockModuleDestinationRepository(),
+    ),
   ];
 
-  return ProviderContainer(
-    overrides: [...defaultOverrides, ...overrides],
-  );
+  return ProviderContainer(overrides: [...defaultOverrides, ...overrides]);
 }
 
 /// Creates a test Item instance
@@ -108,28 +116,37 @@ Assignment createTestAssignment({
 
 /// Creates multiple test items for testing lists
 List<Item> createTestItems({int count = 3}) {
-  return List.generate(count, (index) => createTestItem(
-    id: 'test-item-$index',
-    name: 'Test Item $index',
-    rescueNetId: 1001.0 + index,
-  ));
+  return List.generate(
+    count,
+    (index) => createTestItem(
+      id: 'test-item-$index',
+      name: 'Test Item $index',
+      rescueNetId: 1001.0 + index,
+    ),
+  );
 }
 
 /// Creates multiple test containers for testing lists
 List<ContainerDao> createTestContainers({int count = 3}) {
-  return List.generate(count, (index) => createTestContainer(
-    id: 'test-container-$index',
-    name: 'Test Container $index',
-  ));
+  return List.generate(
+    count,
+    (index) => createTestContainer(
+      id: 'test-container-$index',
+      name: 'Test Container $index',
+    ),
+  );
 }
 
 /// Creates multiple test assignments for testing lists
 List<Assignment> createTestAssignments({int count = 3}) {
-  return List.generate(count, (index) => createTestAssignment(
-    id: 'test-assignment-$index',
-    itemId: 'test-item-$index',
-    containerId: 'test-container-$index',
-  ));
+  return List.generate(
+    count,
+    (index) => createTestAssignment(
+      id: 'test-assignment-$index',
+      itemId: 'test-item-$index',
+      containerId: 'test-container-$index',
+    ),
+  );
 }
 
 /// Mock repository that throws errors for testing error scenarios
@@ -247,12 +264,6 @@ class ThrowingMockAssignmentRepository implements AssignmentRepository {
   }
 
   @override
-  Future<void> upsertOrDeleteAssignment(Assignment assignment) async {
-    await Future.delayed(const Duration(milliseconds: 10));
-    throw Exception('Mock assignment upsert or delete error');
-  }
-
-  @override
   Future<void> batchUpdateAssignments(List<Assignment> assignments) async {
     await Future.delayed(const Duration(milliseconds: 10));
     throw Exception('Mock assignment batch update error');
@@ -271,13 +282,18 @@ class ThrowingMockAssignmentRepository implements AssignmentRepository {
   }
 
   @override
-  Future<Assignment?> getAssignmentByIds(String itemId, String containerId) async {
+  Future<Assignment?> getAssignmentByIds(
+    String itemId,
+    String containerId,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 10));
     throw Exception('Mock get assignment by ids error');
   }
 
   @override
-  Future<List<Assignment>> getAssignmentsForContainer(String containerId) async {
+  Future<List<Assignment>> getAssignmentsForContainer(
+    String containerId,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 10));
     throw Exception('Mock get assignments for container error');
   }
@@ -300,7 +316,9 @@ class ThrowingMockAssignmentRepository implements AssignmentRepository {
   }
 
   @override
-  Future<List<Assignment>> getAssignmentsByContainerId(String containerId) async {
+  Future<List<Assignment>> getAssignmentsByContainerId(
+    String containerId,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 10));
     throw Exception('Mock get assignments by container error');
   }
@@ -325,12 +343,16 @@ class AsyncValueTestHelper {
   }
 
   /// Creates a list of containers wrapped in AsyncValue.data
-  static AsyncValue<List<ContainerDao>> containersData(List<ContainerDao> containers) {
+  static AsyncValue<List<ContainerDao>> containersData(
+    List<ContainerDao> containers,
+  ) {
     return AsyncValue.data(containers);
   }
 
   /// Creates a list of assignments wrapped in AsyncValue.data
-  static AsyncValue<List<Assignment>> assignmentsData(List<Assignment> assignments) {
+  static AsyncValue<List<Assignment>> assignmentsData(
+    List<Assignment> assignments,
+  ) {
     return AsyncValue.data(assignments);
   }
 
@@ -343,7 +365,8 @@ class AsyncValueTestHelper {
   }
 
   /// Creates a loading state for container lists
-  static AsyncValue<List<ContainerDao>> containersLoading() => const AsyncValue.loading();
+  static AsyncValue<List<ContainerDao>> containersLoading() =>
+      const AsyncValue.loading();
 
   /// Creates an error state for container lists
   static AsyncValue<List<ContainerDao>> containersError(Object error) {

@@ -5,8 +5,11 @@ class RescueDropdownButton<T> extends StatelessWidget {
   ValueNotifier<T?> valueNotifier;
   TextStyle? style;
 
-  RescueDropdownButton(this.optionToDisplayName, this.valueNotifier,
-      [this.style]);
+  RescueDropdownButton(
+    this.optionToDisplayName,
+    this.valueNotifier, [
+    this.style,
+  ]);
 
   @override
   Widget build(BuildContext context) {

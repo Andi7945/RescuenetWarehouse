@@ -19,31 +19,29 @@ Future<bool> confirm(
 }) async {
   final bool? isConfirm = await showDialog<bool>(
     context: context,
-    builder:
-        (BuildContext context) => PopScope(
-          canPop: canPop,
-          onPopInvokedWithResult: onPopInvokedWithResult,
-          child: AlertDialog(
-            title: title,
-            content: SingleChildScrollView(
-              child: content ?? const Text('Are you sure continue?'),
-            ),
-            actions: <Widget>[
-              TextButton(
-                child:
-                    textCancel ??
-                    Text(MaterialLocalizations.of(context).cancelButtonLabel),
-                onPressed: () => Navigator.pop(context, false),
-              ),
-              TextButton(
-                child:
-                    textOK ??
-                    Text(MaterialLocalizations.of(context).okButtonLabel),
-                onPressed: () => Navigator.pop(context, true),
-              ),
-            ],
-          ),
+    builder: (BuildContext context) => PopScope(
+      canPop: canPop,
+      onPopInvokedWithResult: onPopInvokedWithResult,
+      child: AlertDialog(
+        title: title,
+        content: SingleChildScrollView(
+          child: content ?? const Text('Are you sure continue?'),
         ),
+        actions: <Widget>[
+          TextButton(
+            child:
+                textCancel ??
+                Text(MaterialLocalizations.of(context).cancelButtonLabel),
+            onPressed: () => Navigator.pop(context, false),
+          ),
+          TextButton(
+            child:
+                textOK ?? Text(MaterialLocalizations.of(context).okButtonLabel),
+            onPressed: () => Navigator.pop(context, true),
+          ),
+        ],
+      ),
+    ),
   );
   return isConfirm ?? false;
 }

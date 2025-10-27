@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Environment types for the application.
-enum Environment {
-  staging,
-  production,
-}
+enum Environment { staging, production }
 
 /// Configuration for environment indicator chip.
 class EnvironmentChipConfig {

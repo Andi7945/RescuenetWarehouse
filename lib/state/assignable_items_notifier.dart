@@ -9,11 +9,11 @@ import '../models/assignment.dart';
 part 'assignable_items_notifier.g.dart';
 
 /// AsyncValue-based assignable items provider for loading states support.
-/// 
+///
 /// This provider wraps both items and assignments in AsyncValue to provide proper
 /// loading, error, and data states for UI components. It calculates assignable item
 /// quantities based on existing assignments while supporting loading states.
-/// 
+///
 /// Usage:
 /// ```dart
 /// AsyncValueBuilder<Map<Item, int>>(
@@ -28,24 +28,26 @@ class AssignableItemsAsync extends _$AssignableItemsAsync {
     // Watch both items and assignments as streams
     final itemsStream = ref.watch(allItemsAsyncProvider.future);
     final assignmentsStream = ref.watch(allAssignmentsAsyncProvider.future);
-    
+
     return Stream.fromFuture(
       Future.wait([itemsStream, assignmentsStream]).then((results) {
         final items = results[0] as List<Item>;
         final assignments = results[1] as List<Assignment>;
-        
+
         var alreadyAssigned = assignments
             .groupBy((a) => a.itemId)
             .mapValues((a) => a.fold(0, (p, e) => p + e.count));
-            
-        return Map.fromEntries(items.map((i) {
-          if (alreadyAssigned[i.id] == null ||
-              i.totalAmount > (alreadyAssigned[i.id] ?? 0)) {
-            return MapEntry(i, i.totalAmount - (alreadyAssigned[i.id] ?? 0));
-          }
-          return null; // Filter out items with no assignable quantity
-        }).nonNulls);
-      })
+
+        return Map.fromEntries(
+          items.map((i) {
+            if (alreadyAssigned[i.id] == null ||
+                i.totalAmount > (alreadyAssigned[i.id] ?? 0)) {
+              return MapEntry(i, i.totalAmount - (alreadyAssigned[i.id] ?? 0));
+            }
+            return null; // Filter out items with no assignable quantity
+          }).nonNulls,
+        );
+      }),
     );
   }
 

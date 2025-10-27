@@ -4,10 +4,10 @@ import '../widgets/loading/debounced_loading_system.dart';
 import '../widgets/loading/debounced_loading_widgets.dart';
 
 /// Example page demonstrating the debounced loading system
-/// 
+///
 /// This example shows:
 /// - Quick operations that prevent loading flashes (< 200ms delay)
-/// - Medium operations with balanced delay (< 100ms delay)  
+/// - Medium operations with balanced delay (< 100ms delay)
 /// - Slow operations with minimal delay (< 50ms delay)
 /// - Immediate operations with no debouncing
 /// - Various widget types: buttons, icon buttons, overlays
@@ -17,9 +17,7 @@ class DebouncedLoadingExamplePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Debounced Loading Examples'),
-      ),
+      appBar: AppBar(title: const Text('Debounced Loading Examples')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -28,27 +26,27 @@ class DebouncedLoadingExamplePage extends ConsumerWidget {
             _buildSectionHeader('Quick Operations (200ms delay)'),
             const SizedBox(height: 8),
             _buildQuickOperationsSection(context),
-            
+
             const SizedBox(height: 24),
             _buildSectionHeader('Medium Operations (100ms delay)'),
             const SizedBox(height: 8),
             _buildMediumOperationsSection(context),
-            
+
             const SizedBox(height: 24),
             _buildSectionHeader('Slow Operations (50ms delay)'),
             const SizedBox(height: 8),
             _buildSlowOperationsSection(context),
-            
+
             const SizedBox(height: 24),
             _buildSectionHeader('Immediate Operations (no delay)'),
             const SizedBox(height: 8),
             _buildImmediateOperationsSection(context),
-            
+
             const SizedBox(height: 24),
             _buildSectionHeader('Comparison: Traditional vs Debounced'),
             const SizedBox(height: 8),
             _buildComparisonSection(context, ref),
-            
+
             const SizedBox(height: 24),
             _buildSectionHeader('Overlay Examples'),
             const SizedBox(height: 8),
@@ -62,10 +60,7 @@ class DebouncedLoadingExamplePage extends ConsumerWidget {
   Widget _buildSectionHeader(String title) {
     return Text(
       title,
-      style: const TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-      ),
+      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
     );
   }
 
@@ -363,9 +358,14 @@ class DebouncedLoadingExamplePage extends ConsumerWidget {
         operationKey: operationKey,
         config: config,
         operation: operation,
-        details: 'Testing ${config == DebouncedLoadingConfig.quick ? 'quick' : 
-                             config == DebouncedLoadingConfig.medium ? 'medium' : 
-                             config == DebouncedLoadingConfig.slow ? 'slow' : 'immediate'} debouncing...',
+        details:
+            'Testing ${config == DebouncedLoadingConfig.quick
+                ? 'quick'
+                : config == DebouncedLoadingConfig.medium
+                ? 'medium'
+                : config == DebouncedLoadingConfig.slow
+                ? 'slow'
+                : 'immediate'} debouncing...',
         child: Container(), // Empty child since we're in a dialog
       ),
     );
@@ -379,10 +379,8 @@ class DebouncedLoadingExamplePage extends ConsumerWidget {
     });
   }
 
-  StateNotifierProvider<DebouncedLoadingNotifier, DebouncedLoadingState> _getDebouncedProvider(
-    String operationKey,
-    DebouncedLoadingConfig config,
-  ) {
+  StateNotifierProvider<DebouncedLoadingNotifier, DebouncedLoadingState>
+  _getDebouncedProvider(String operationKey, DebouncedLoadingConfig config) {
     if (config == DebouncedLoadingConfig.quick) {
       return quickOperationLoadingProvider(operationKey);
     } else if (config == DebouncedLoadingConfig.medium) {

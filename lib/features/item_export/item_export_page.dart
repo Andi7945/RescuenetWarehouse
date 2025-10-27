@@ -75,7 +75,8 @@ class _ItemExportPageState extends ConsumerState<ItemExportPage> {
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: () => ref.refresh(itemsFilteredAndSortedAsyncProvider),
+                onPressed: () =>
+                    ref.refresh(itemsFilteredAndSortedAsyncProvider),
                 child: const Text('Retry'),
               ),
             ],

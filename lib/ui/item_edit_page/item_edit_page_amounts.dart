@@ -68,14 +68,13 @@ class _ItemEditPageAmountsState extends ConsumerState<ItemEditPageAmounts> {
   }
 
   _itemEditPageAmountsRow(RescueContainer cont, int previousAmount) {
-    var fnChange =
-        previousAmount == 0
-            ? (a) => ref
-                .read(currentItemAssignmentsNotifierProvider.notifier)
-                .addContainerAssignment(cont.id, a)
-            : (a) => ref
-                .read(currentItemAssignmentsNotifierProvider.notifier)
-                .setAmount(cont.id, a);
+    var fnChange = previousAmount == 0
+        ? (a) => ref
+              .read(currentItemAssignmentsNotifierProvider.notifier)
+              .addContainerAssignment(cont.id, a)
+        : (a) => ref
+              .read(currentItemAssignmentsNotifierProvider.notifier)
+              .setAmount(cont.id, a);
     return ItemEditPageAmountsRow(cont.printName, previousAmount, fnChange);
   }
 

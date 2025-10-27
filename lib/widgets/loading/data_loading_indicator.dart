@@ -1,34 +1,34 @@
 import 'package:flutter/material.dart';
 
 /// A standardized loading indicator for data loading states.
-/// 
+///
 /// This widget provides consistent loading UI across the application,
 /// following Material Design patterns with proper accessibility support.
-/// 
+///
 /// Usage:
 /// ```dart
 /// // Basic usage
 /// DataLoadingIndicator()
-/// 
+///
 /// // With custom message
 /// DataLoadingIndicator(message: 'Loading items...')
-/// 
+///
 /// // As overlay
 /// DataLoadingIndicator.overlay()
-/// 
+///
 /// // Compact for cards
 /// DataLoadingIndicator.compact()
 /// ```
 class DataLoadingIndicator extends StatelessWidget {
   /// Optional loading message to display
   final String? message;
-  
+
   /// Whether to show as an overlay covering the content
   final bool isOverlay;
-  
+
   /// Whether to use a compact layout (smaller size)
   final bool isCompact;
-  
+
   /// Custom semantic label for accessibility
   final String? semanticsLabel;
 
@@ -45,31 +45,34 @@ class DataLoadingIndicator extends StatelessWidget {
     super.key,
     this.message,
     this.semanticsLabel,
-  }) : isOverlay = true, isCompact = false;
+  }) : isOverlay = true,
+       isCompact = false;
 
   /// Creates a compact loading indicator for smaller spaces
   const DataLoadingIndicator.compact({
     super.key,
     this.message,
     this.semanticsLabel,
-  }) : isOverlay = false, isCompact = true;
+  }) : isOverlay = false,
+       isCompact = true;
 
   @override
   Widget build(BuildContext context) {
     final content = _buildContent(context);
-    
+
     if (isOverlay) {
       return _buildOverlay(context, content);
     }
-    
+
     return content;
   }
 
   /// Builds the main content with loading indicator and optional message
   Widget _buildContent(BuildContext context) {
     final theme = Theme.of(context);
-    final loadingLabel = semanticsLabel ?? (message != null ? 'Loading: $message' : 'Loading');
-    
+    final loadingLabel =
+        semanticsLabel ?? (message != null ? 'Loading: $message' : 'Loading');
+
     return Semantics(
       liveRegion: true,
       label: loadingLabel,
@@ -94,13 +97,13 @@ class DataLoadingIndicator extends StatelessWidget {
                 label: 'Loading message: $message',
                 child: Text(
                   message!,
-                  style: isCompact 
-                    ? theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      )
-                    : theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
+                  style: isCompact
+                      ? theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        )
+                      : theme.textTheme.bodyMedium?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -126,15 +129,15 @@ class DataLoadingIndicator extends StatelessWidget {
 }
 
 /// A specialized loading indicator for lists and grids.
-/// 
+///
 /// Shows placeholder items while data is loading to maintain layout structure.
 class DataListLoadingIndicator extends StatelessWidget {
   /// Number of placeholder items to show
   final int itemCount;
-  
+
   /// Height of each placeholder item
   final double itemHeight;
-  
+
   /// Whether to show as cards
   final bool showAsCards;
 
@@ -164,7 +167,7 @@ class DataListLoadingIndicator extends StatelessWidget {
   Widget _buildPlaceholderItem(BuildContext context, int index) {
     final theme = Theme.of(context);
     final shimmerColor = theme.colorScheme.surfaceContainerHighest;
-    
+
     Widget content = Semantics(
       label: 'Loading placeholder item ${index + 1} of $itemCount',
       child: Container(
@@ -218,10 +221,7 @@ class DataListLoadingIndicator extends StatelessWidget {
     );
 
     if (showAsCards) {
-      return Card(
-        margin: EdgeInsets.zero,
-        child: content,
-      );
+      return Card(margin: EdgeInsets.zero, child: content);
     }
 
     return content;
@@ -232,10 +232,10 @@ class DataListLoadingIndicator extends StatelessWidget {
 class DataGridLoadingIndicator extends StatelessWidget {
   /// Number of columns in the grid
   final int crossAxisCount;
-  
+
   /// Number of placeholder items to show
   final int itemCount;
-  
+
   /// Aspect ratio of each grid item
   final double childAspectRatio;
 
@@ -250,7 +250,8 @@ class DataGridLoadingIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       label: 'Loading grid items',
-      hint: 'Displaying $itemCount placeholder items in $crossAxisCount columns while content loads',
+      hint:
+          'Displaying $itemCount placeholder items in $crossAxisCount columns while content loads',
       liveRegion: true,
       child: GridView.builder(
         shrinkWrap: true,
@@ -272,7 +273,7 @@ class DataGridLoadingIndicator extends StatelessWidget {
     final shimmerColor = theme.colorScheme.surfaceContainerHighest;
     final row = (index ~/ crossAxisCount) + 1;
     final col = (index % crossAxisCount) + 1;
-    
+
     return Semantics(
       label: 'Loading placeholder item at row $row, column $col',
       child: Card(

@@ -3,11 +3,11 @@ import 'package:rescuenet_warehouse/models/module_destination.dart';
 import 'package:rescuenet_warehouse/repositories/module_destination_repository.dart';
 
 /// Mock implementation of ModuleDestinationRepository for testing
-/// 
+///
 /// Provides predictable destination data without Firebase dependencies.
 class MockModuleDestinationRepository implements ModuleDestinationRepository {
   final Map<String, ModuleDestination> _moduleDestinations = {};
-  final StreamController<List<ModuleDestination>> _streamController = 
+  final StreamController<List<ModuleDestination>> _streamController =
       StreamController<List<ModuleDestination>>.broadcast();
 
   MockModuleDestinationRepository() {
@@ -21,10 +21,7 @@ class MockModuleDestinationRepository implements ModuleDestinationRepository {
         id: 'disaster_zone_1',
         name: 'Disaster Zone Alpha',
       ),
-      const ModuleDestination(
-        id: 'refugee_camp_a',
-        name: 'Refugee Camp A',
-      ),
+      const ModuleDestination(id: 'refugee_camp_a', name: 'Refugee Camp A'),
       const ModuleDestination(
         id: 'medical_station_1',
         name: 'Field Medical Station',
@@ -42,7 +39,7 @@ class MockModuleDestinationRepository implements ModuleDestinationRepository {
     for (final destination in sampleDestinations) {
       _moduleDestinations[destination.id] = destination;
     }
-    
+
     _notifyListeners();
   }
 
@@ -54,8 +51,13 @@ class MockModuleDestinationRepository implements ModuleDestinationRepository {
   Stream<List<ModuleDestination>> watchModuleDestinations() {
     final controller = StreamController<List<ModuleDestination>>.broadcast();
     controller.add(_moduleDestinations.values.toList());
-    final subscription = _streamController.stream.listen((items) => controller.add(items));
-    controller.onCancel = () { subscription.cancel(); controller.close(); };
+    final subscription = _streamController.stream.listen(
+      (items) => controller.add(items),
+    );
+    controller.onCancel = () {
+      subscription.cancel();
+      controller.close();
+    };
     return controller.stream;
   }
 
@@ -72,7 +74,9 @@ class MockModuleDestinationRepository implements ModuleDestinationRepository {
   }
 
   @override
-  Future<void> upsertModuleDestination(ModuleDestination moduleDestination) async {
+  Future<void> upsertModuleDestination(
+    ModuleDestination moduleDestination,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 10));
     _moduleDestinations[moduleDestination.id] = moduleDestination;
     _notifyListeners();
@@ -86,7 +90,7 @@ class MockModuleDestinationRepository implements ModuleDestinationRepository {
   }
 
   /// Test helper methods
-  
+
   /// Clear all module destinations (useful for test setup)
   void clearAll() {
     _moduleDestinations.clear();
@@ -102,12 +106,16 @@ class MockModuleDestinationRepository implements ModuleDestinationRepository {
   }
 
   @override
-  Future<void> createModuleDestination(ModuleDestination moduleDestination) async {
+  Future<void> createModuleDestination(
+    ModuleDestination moduleDestination,
+  ) async {
     return upsertModuleDestination(moduleDestination);
   }
 
   @override
-  Future<void> updateModuleDestination(ModuleDestination moduleDestination) async {
+  Future<void> updateModuleDestination(
+    ModuleDestination moduleDestination,
+  ) async {
     return upsertModuleDestination(moduleDestination);
   }
 

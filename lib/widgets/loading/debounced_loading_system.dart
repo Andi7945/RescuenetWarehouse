@@ -7,10 +7,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class DebouncedLoadingConfig {
   /// Minimum delay before showing loading indicator (in milliseconds)
   final int minimumDelay;
-  
+
   /// Maximum time to wait before forcing loading display for long operations (in milliseconds)
   final int? forceLoadingAfter;
-  
+
   /// Whether to disable debouncing entirely (useful for debugging)
   final bool disableDebouncing;
 
@@ -88,7 +88,7 @@ class DebouncedLoadingState {
 
 /// Notifier for managing debounced loading state
 class DebouncedLoadingNotifier extends StateNotifier<DebouncedLoadingState> {
-  DebouncedLoadingNotifier(DebouncedLoadingConfig config) 
+  DebouncedLoadingNotifier(DebouncedLoadingConfig config)
     : super(DebouncedLoadingState.initial(config));
 
   /// Start an operation with debounced loading
@@ -103,7 +103,7 @@ class DebouncedLoadingNotifier extends StateNotifier<DebouncedLoadingState> {
         shouldShowLoading: true,
         operationStartTime: DateTime.now(),
       );
-      
+
       // Announce operation start for immediate loading
       _announceOperationStart(operationDescription);
       return;
@@ -117,44 +117,38 @@ class DebouncedLoadingNotifier extends StateNotifier<DebouncedLoadingState> {
     );
 
     // Set timer to show loading after delay
-    final timer = Timer(
-      Duration(milliseconds: state.config.minimumDelay),
-      () {
-        // Only show loading if operation is still active
-        if (state.isOperationActive) {
-          state = state.copyWith(
-            shouldShowLoading: true,
-            debounceTimer: null,
-          );
-          
-          // Announce loading state after debounce delay
-          _announceLoadingStart(operationDescription);
-        }
-      },
-    );
+    final timer = Timer(Duration(milliseconds: state.config.minimumDelay), () {
+      // Only show loading if operation is still active
+      if (state.isOperationActive) {
+        state = state.copyWith(shouldShowLoading: true, debounceTimer: null);
+
+        // Announce loading state after debounce delay
+        _announceLoadingStart(operationDescription);
+      }
+    });
 
     state = state.copyWith(debounceTimer: timer);
   }
-  
+
   /// Announce operation start to screen readers
   void _announceOperationStart(String? operationDescription) {
-    final message = operationDescription != null 
+    final message = operationDescription != null
         ? 'Starting: $operationDescription'
         : 'Operation starting';
-    
+
     SemanticsService.announce(
       message,
       TextDirection.ltr,
       assertiveness: Assertiveness.polite,
     );
   }
-  
+
   /// Announce loading state to screen readers
   void _announceLoadingStart(String? operationDescription) {
-    final message = operationDescription != null 
+    final message = operationDescription != null
         ? 'Loading: $operationDescription'
         : 'Loading in progress';
-    
+
     SemanticsService.announce(
       message,
       TextDirection.ltr,
@@ -163,10 +157,13 @@ class DebouncedLoadingNotifier extends StateNotifier<DebouncedLoadingState> {
   }
 
   /// Complete the operation and hide loading
-  void completeOperation([String? operationDescription, bool announceCompletion = false]) {
+  void completeOperation([
+    String? operationDescription,
+    bool announceCompletion = false,
+  ]) {
     // Cancel any pending timer
     state.debounceTimer?.cancel();
-    
+
     // Announce completion if requested and loading was shown
     if (announceCompletion && state.shouldShowLoading) {
       _announceOperationComplete(operationDescription);
@@ -179,13 +176,13 @@ class DebouncedLoadingNotifier extends StateNotifier<DebouncedLoadingState> {
       debounceTimer: null,
     );
   }
-  
+
   /// Announce operation completion to screen readers
   void _announceOperationComplete(String? operationDescription) {
-    final message = operationDescription != null 
+    final message = operationDescription != null
         ? 'Completed: $operationDescription'
         : 'Operation completed';
-    
+
     SemanticsService.announce(
       message,
       TextDirection.ltr,
@@ -205,7 +202,7 @@ class DebouncedLoadingNotifier extends StateNotifier<DebouncedLoadingState> {
     state.debounceTimer?.cancel();
     super.dispose();
   }
-  
+
   /// Force complete any pending operation (useful for cleanup)
   void forceComplete() {
     state.debounceTimer?.cancel();
@@ -219,35 +216,63 @@ class DebouncedLoadingNotifier extends StateNotifier<DebouncedLoadingState> {
 }
 
 /// Provider factory for creating debounced loading notifiers with specific configurations
-final debouncedLoadingProvider = StateNotifierProvider.family<DebouncedLoadingNotifier, DebouncedLoadingState, String>(
-  (ref, operationKey) {
-    // Default configuration - can be overridden
-    return DebouncedLoadingNotifier(DebouncedLoadingConfig.medium);
-  },
-);
+final debouncedLoadingProvider =
+    StateNotifierProvider.family<
+      DebouncedLoadingNotifier,
+      DebouncedLoadingState,
+      String
+    >((ref, operationKey) {
+      // Default configuration - can be overridden
+      return DebouncedLoadingNotifier(DebouncedLoadingConfig.medium);
+    });
 
 /// Provider for quick operations (assignment changes, simple saves)
-final quickOperationLoadingProvider = StateNotifierProvider.family<DebouncedLoadingNotifier, DebouncedLoadingState, String>(
-  (ref, operationKey) => DebouncedLoadingNotifier(DebouncedLoadingConfig.quick),
-);
+final quickOperationLoadingProvider =
+    StateNotifierProvider.family<
+      DebouncedLoadingNotifier,
+      DebouncedLoadingState,
+      String
+    >(
+      (ref, operationKey) =>
+          DebouncedLoadingNotifier(DebouncedLoadingConfig.quick),
+    );
 
 /// Provider for medium operations (form submissions, updates)
-final mediumOperationLoadingProvider = StateNotifierProvider.family<DebouncedLoadingNotifier, DebouncedLoadingState, String>(
-  (ref, operationKey) => DebouncedLoadingNotifier(DebouncedLoadingConfig.medium),
-);
+final mediumOperationLoadingProvider =
+    StateNotifierProvider.family<
+      DebouncedLoadingNotifier,
+      DebouncedLoadingState,
+      String
+    >(
+      (ref, operationKey) =>
+          DebouncedLoadingNotifier(DebouncedLoadingConfig.medium),
+    );
 
 /// Provider for slow operations (bulk operations, file uploads)
-final slowOperationLoadingProvider = StateNotifierProvider.family<DebouncedLoadingNotifier, DebouncedLoadingState, String>(
-  (ref, operationKey) => DebouncedLoadingNotifier(DebouncedLoadingConfig.slow),
-);
+final slowOperationLoadingProvider =
+    StateNotifierProvider.family<
+      DebouncedLoadingNotifier,
+      DebouncedLoadingState,
+      String
+    >(
+      (ref, operationKey) =>
+          DebouncedLoadingNotifier(DebouncedLoadingConfig.slow),
+    );
 
 /// Provider for immediate operations (critical operations that must show loading)
-final immediateOperationLoadingProvider = StateNotifierProvider.family<DebouncedLoadingNotifier, DebouncedLoadingState, String>(
-  (ref, operationKey) => DebouncedLoadingNotifier(DebouncedLoadingConfig.immediate),
-);
+final immediateOperationLoadingProvider =
+    StateNotifierProvider.family<
+      DebouncedLoadingNotifier,
+      DebouncedLoadingState,
+      String
+    >(
+      (ref, operationKey) =>
+          DebouncedLoadingNotifier(DebouncedLoadingConfig.immediate),
+    );
 
 /// Mixin to simplify debounced loading operations in widgets
-mixin DebouncedLoadingMixin<T extends ConsumerStatefulWidget> on ConsumerState<T> {
+mixin DebouncedLoadingMixin<T extends ConsumerStatefulWidget>
+    on ConsumerState<T> {
   /// Execute an operation with debounced loading
   Future<R> executeWithDebouncedLoading<R>({
     required String operationKey,
@@ -263,13 +288,13 @@ mixin DebouncedLoadingMixin<T extends ConsumerStatefulWidget> on ConsumerState<T
     try {
       // Start the debounced loading
       notifier.startOperation(operationDescription);
-      
+
       // Execute the operation
       final result = await operation();
-      
+
       // Complete the loading (this will hide indicators)
       notifier.completeOperation(operationDescription, announceCompletion);
-      
+
       return result;
     } catch (error) {
       // Make sure to complete loading even on error
@@ -279,12 +304,10 @@ mixin DebouncedLoadingMixin<T extends ConsumerStatefulWidget> on ConsumerState<T
   }
 
   /// Get the appropriate provider based on configuration
-  StateNotifierProvider<DebouncedLoadingNotifier, DebouncedLoadingState> _getProviderForConfig(
-    String operationKey,
-    DebouncedLoadingConfig? config,
-  ) {
+  StateNotifierProvider<DebouncedLoadingNotifier, DebouncedLoadingState>
+  _getProviderForConfig(String operationKey, DebouncedLoadingConfig? config) {
     if (config == null) return debouncedLoadingProvider(operationKey);
-    
+
     if (config == DebouncedLoadingConfig.quick) {
       return quickOperationLoadingProvider(operationKey);
     } else if (config == DebouncedLoadingConfig.medium) {
@@ -294,19 +317,25 @@ mixin DebouncedLoadingMixin<T extends ConsumerStatefulWidget> on ConsumerState<T
     } else if (config == DebouncedLoadingConfig.immediate) {
       return immediateOperationLoadingProvider(operationKey);
     }
-    
+
     return debouncedLoadingProvider(operationKey);
   }
 
   /// Watch if an operation should show loading
-  bool watchShouldShowLoading(String operationKey, {DebouncedLoadingConfig? config}) {
+  bool watchShouldShowLoading(
+    String operationKey, {
+    DebouncedLoadingConfig? config,
+  }) {
     final provider = _getProviderForConfig(operationKey, config);
     final state = ref.watch(provider);
     return state.shouldShowLoading;
   }
 
   /// Watch if an operation is active (regardless of loading display)
-  bool watchIsOperationActive(String operationKey, {DebouncedLoadingConfig? config}) {
+  bool watchIsOperationActive(
+    String operationKey, {
+    DebouncedLoadingConfig? config,
+  }) {
     final provider = _getProviderForConfig(operationKey, config);
     final state = ref.watch(provider);
     return state.isOperationActive;
@@ -338,21 +367,25 @@ extension DebouncedLoadingRef on WidgetRef {
   }
 
   /// Check if operation should show loading
-  bool shouldShowLoading(String operationKey, {DebouncedLoadingConfig config = DebouncedLoadingConfig.medium}) {
+  bool shouldShowLoading(
+    String operationKey, {
+    DebouncedLoadingConfig config = DebouncedLoadingConfig.medium,
+  }) {
     final provider = _getProviderForConfig(operationKey, config);
     return watch(provider).shouldShowLoading;
   }
 
   /// Check if operation is active
-  bool isOperationActive(String operationKey, {DebouncedLoadingConfig config = DebouncedLoadingConfig.medium}) {
+  bool isOperationActive(
+    String operationKey, {
+    DebouncedLoadingConfig config = DebouncedLoadingConfig.medium,
+  }) {
     final provider = _getProviderForConfig(operationKey, config);
     return watch(provider).isOperationActive;
   }
 
-  StateNotifierProvider<DebouncedLoadingNotifier, DebouncedLoadingState> _getProviderForConfig(
-    String operationKey,
-    DebouncedLoadingConfig config,
-  ) {
+  StateNotifierProvider<DebouncedLoadingNotifier, DebouncedLoadingState>
+  _getProviderForConfig(String operationKey, DebouncedLoadingConfig config) {
     if (config == DebouncedLoadingConfig.quick) {
       return quickOperationLoadingProvider(operationKey);
     } else if (config == DebouncedLoadingConfig.medium) {

@@ -10,14 +10,15 @@ class ContainerWithContentUnassigned extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final assignableItemsAsync = ref.watch(assignableItemsAsyncProvider);
-    
+
     return assignableItemsAsync.when(
       data: (assignableItems) => ListView(
         shrinkWrap: true,
         children: [
           _header(),
-          ..._sortedEntries(assignableItems)
-              .map((e) => ItemCard(e.key, e.value, true))
+          ..._sortedEntries(
+            assignableItems,
+          ).map((e) => ItemCard(e.key, e.value, true)),
         ],
       ),
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -36,14 +37,15 @@ class ContainerWithContentUnassigned extends ConsumerWidget {
 
   _header() {
     return Container(
-        decoration: const ShapeDecoration(
-          color: Colors.white,
-          shape: RoundedRectangleBorder(side: BorderSide(width: 1)),
-        ),
-        child: Padding(
-            padding: const EdgeInsets.only(top: 4, bottom: 4),
-            child: Center(
-                child: RescueText.normal("Unassigned", FontWeight.w700))));
+      decoration: const ShapeDecoration(
+        color: Colors.white,
+        shape: RoundedRectangleBorder(side: BorderSide(width: 1)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 4, bottom: 4),
+        child: Center(child: RescueText.normal("Unassigned", FontWeight.w700)),
+      ),
+    );
   }
 
   List<MapEntry<Item, int>> _sortedEntries(Map<Item, int> assignable) {

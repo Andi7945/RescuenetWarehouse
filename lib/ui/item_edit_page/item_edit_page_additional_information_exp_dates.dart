@@ -25,28 +25,34 @@ class ItemEditPageAdditionalInformationExpDates extends ConsumerWidget {
     var entries = dates.map((e) => _expDateRow(e, ref, context)).toList();
 
     return LabelWithMultipleEntries(
-        "Expiring dates:", () => _chooseDate(ref, context, null), entries, 562);
+      "Expiring dates:",
+      () => _chooseDate(ref, context, null),
+      entries,
+      562,
+    );
   }
 
   Widget _expDateRow(DateTime date, WidgetRef ref, BuildContext context) => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      RescueText.slim(formatter.format(date)),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          RescueText.slim(formatter.format(date)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              IconButton(
-                  onPressed: () => _removeDate(context, ref, date),
-                  icon: const Icon(Icons.remove)),
-              IconButton(
-                  onPressed: () => _chooseDate(ref, context, date),
-                  icon: const Icon(Icons.edit))
-            ],
+          IconButton(
+            onPressed: () => _removeDate(context, ref, date),
+            icon: const Icon(Icons.remove),
+          ),
+          IconButton(
+            onPressed: () => _chooseDate(ref, context, date),
+            icon: const Icon(Icons.edit),
           ),
         ],
-      );
+      ),
+    ],
+  );
 
   _removeDate(BuildContext context, WidgetRef ref, DateTime date) {
     var expDates = [...item.expiringDates];
@@ -55,7 +61,10 @@ class ItemEditPageAdditionalInformationExpDates extends ConsumerWidget {
   }
 
   _chooseDate(
-      WidgetRef ref, BuildContext context, DateTime? initialDate) async {
+    WidgetRef ref,
+    BuildContext context,
+    DateTime? initialDate,
+  ) async {
     var choosen = await _dialogBuilder(context, initialDate);
     if (choosen != null && context.mounted) {
       var expDates = [...item.expiringDates];

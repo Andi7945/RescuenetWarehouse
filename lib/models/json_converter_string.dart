@@ -15,5 +15,5 @@ class StringConverter implements JsonConverter<String?, dynamic> {
   }
 
   @override
-   String? toJson(String? fromModel) => fromModel;
+  String? toJson(String? fromModel) => fromModel;
 }

@@ -27,7 +27,9 @@ class RescueBoxSequentialBuild extends StatelessWidget {
         children: [
           const RescueText(12, 'Sequential Build'),
           RescueText.slim(
-              _container.sequentialBuild.displayName, FontWeight.w700)
+            _container.sequentialBuild.displayName,
+            FontWeight.w700,
+          ),
         ],
       ),
     );

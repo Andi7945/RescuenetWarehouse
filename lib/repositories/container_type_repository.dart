@@ -1,7 +1,7 @@
 import 'package:rescuenet_warehouse/models/container_type.dart';
 
 /// Repository interface for managing container types.
-/// 
+///
 /// Container types define the physical specifications and properties of containers
 /// including weight, measurements, and visual identification.
 abstract class ContainerTypeRepository {

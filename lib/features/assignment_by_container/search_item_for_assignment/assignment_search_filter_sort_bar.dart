@@ -64,8 +64,8 @@ class AssignmentSearchFilterSortBar extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 4),
       child: PopupMenuButton(
-        itemBuilder:
-            (ctx) => itemSortingOptions.map((o) => _createOption(o)).toList(),
+        itemBuilder: (ctx) =>
+            itemSortingOptions.map((o) => _createOption(o)).toList(),
         child: Row(
           children: [
             const Icon(Icons.sort),
@@ -87,8 +87,9 @@ class AssignmentSearchFilterSortBar extends StatelessWidget {
   );
 
   _changeSorting(ItemSortingOption so) {
-    var asc =
-        currentSort.displayName == so.displayName ? !currentSort.asc : true;
+    var asc = currentSort.displayName == so.displayName
+        ? !currentSort.asc
+        : true;
     changeSort(so.copyWith(asc: asc));
   }
 }

@@ -26,12 +26,13 @@ class ItemEditPageNotes extends ConsumerWidget {
         children: [
           SizedBox(
             child: RescueInputText(
-                fontSize: 24,
-                maxLines: 20,
-                initial: item.notes,
-                onChange: (s) => ref
-                    .read(currentItemNotifierProvider.notifier)
-                    .update(item.copyWith(notes: s))),
+              fontSize: 24,
+              maxLines: 20,
+              initial: item.notes,
+              onChange: (s) => ref
+                  .read(currentItemNotifierProvider.notifier)
+                  .update(item.copyWith(notes: s)),
+            ),
           ),
         ],
       ),

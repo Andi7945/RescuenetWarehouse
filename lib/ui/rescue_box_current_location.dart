@@ -21,7 +21,9 @@ class RescueBoxCurrentLocation extends StatelessWidget {
           RescueText.slim('Current location'),
           const SizedBox(height: 4),
           RescueText.normal(
-              _container.currentLocation?.name ?? "", FontWeight.w700),
+            _container.currentLocation?.name ?? "",
+            FontWeight.w700,
+          ),
         ],
       ),
     );

@@ -38,6 +38,6 @@ abstract class PrintContext with _$PrintContext {
   String get formattedDate {
     // Use intl package formatting
     return '${printDate.year}-${printDate.month.toString().padLeft(2, '0')}-${printDate.day.toString().padLeft(2, '0')} '
-           '${printDate.hour.toString().padLeft(2, '0')}:${printDate.minute.toString().padLeft(2, '0')}';
+        '${printDate.hour.toString().padLeft(2, '0')}:${printDate.minute.toString().padLeft(2, '0')}';
   }
 }

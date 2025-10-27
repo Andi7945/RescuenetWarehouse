@@ -24,16 +24,28 @@ class ItemOperationsExample extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Watch the overall operations state
     final operationsState = ref.watch(dataOperationsNotifierProvider);
-    
+
     // Watch specific operation loading states using convenience providers
-    final isCreatingItem = ref.watch(isOperationLoadingProvider(DataOperation.itemCreate));
-    final isUpdatingItem = ref.watch(isOperationLoadingProvider(DataOperation.itemUpdate));
-    final isDeletingItem = ref.watch(isOperationLoadingProvider(DataOperation.itemDelete));
-    
+    final isCreatingItem = ref.watch(
+      isOperationLoadingProvider(DataOperation.itemCreate),
+    );
+    final isUpdatingItem = ref.watch(
+      isOperationLoadingProvider(DataOperation.itemUpdate),
+    );
+    final isDeletingItem = ref.watch(
+      isOperationLoadingProvider(DataOperation.itemDelete),
+    );
+
     // Get operation errors if any
-    final createError = ref.watch(getOperationErrorProvider(DataOperation.itemCreate));
-    final updateError = ref.watch(getOperationErrorProvider(DataOperation.itemUpdate));
-    final deleteError = ref.watch(getOperationErrorProvider(DataOperation.itemDelete));
+    final createError = ref.watch(
+      getOperationErrorProvider(DataOperation.itemCreate),
+    );
+    final updateError = ref.watch(
+      getOperationErrorProvider(DataOperation.itemUpdate),
+    );
+    final deleteError = ref.watch(
+      getOperationErrorProvider(DataOperation.itemDelete),
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -78,7 +90,9 @@ class ItemOperationsExample extends ConsumerWidget {
                         child: Text(
                           'Error: $createError',
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.onErrorContainer,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onErrorContainer,
                           ),
                         ),
                       ),
@@ -95,7 +109,9 @@ class ItemOperationsExample extends ConsumerWidget {
                                 SizedBox(
                                   width: 16,
                                   height: 16,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
                                 ),
                                 SizedBox(width: 8),
                                 Text('Creating...'),
@@ -107,9 +123,9 @@ class ItemOperationsExample extends ConsumerWidget {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Update Item Section
             Card(
               child: Padding(
@@ -132,7 +148,9 @@ class ItemOperationsExample extends ConsumerWidget {
                         child: Text(
                           'Error: $updateError',
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.onErrorContainer,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onErrorContainer,
                           ),
                         ),
                       ),
@@ -149,7 +167,9 @@ class ItemOperationsExample extends ConsumerWidget {
                                 SizedBox(
                                   width: 16,
                                   height: 16,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
                                 ),
                                 SizedBox(width: 8),
                                 Text('Updating...'),
@@ -161,9 +181,9 @@ class ItemOperationsExample extends ConsumerWidget {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Delete Item Section
             Card(
               child: Padding(
@@ -186,7 +206,9 @@ class ItemOperationsExample extends ConsumerWidget {
                         child: Text(
                           'Error: $deleteError',
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.onErrorContainer,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onErrorContainer,
                           ),
                         ),
                       ),
@@ -207,7 +229,9 @@ class ItemOperationsExample extends ConsumerWidget {
                                 SizedBox(
                                   width: 16,
                                   height: 16,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
                                 ),
                                 SizedBox(width: 8),
                                 Text('Deleting...'),
@@ -235,17 +259,25 @@ class ItemOperationsExample extends ConsumerWidget {
                     ),
                     const SizedBox(height: 12),
                     ElevatedButton(
-                      onPressed: operationsState.isLoading(DataOperation.itemBatchUpdate)
+                      onPressed:
+                          operationsState.isLoading(
+                            DataOperation.itemBatchUpdate,
+                          )
                           ? null
                           : () => _batchUpdateItemsExample(context, ref),
-                      child: operationsState.isLoading(DataOperation.itemBatchUpdate)
+                      child:
+                          operationsState.isLoading(
+                            DataOperation.itemBatchUpdate,
+                          )
                           ? const Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 SizedBox(
                                   width: 16,
                                   height: 16,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
                                 ),
                                 SizedBox(width: 8),
                                 Text('Batch Updating...'),
@@ -266,7 +298,9 @@ class ItemOperationsExample extends ConsumerWidget {
   /// Example of creating an item with loading state management
   Future<void> _createItemExample(BuildContext context, WidgetRef ref) async {
     // Clear any previous errors
-    ref.read(dataOperationsNotifierProvider.notifier).clearOperation(DataOperation.itemCreate);
+    ref
+        .read(dataOperationsNotifierProvider.notifier)
+        .clearOperation(DataOperation.itemCreate);
 
     // Create example item
     final newItem = Item(
@@ -279,8 +313,10 @@ class ItemOperationsExample extends ConsumerWidget {
 
     try {
       // The notifier will handle loading states automatically
-      await ref.read(dataOperationsNotifierProvider.notifier).createItem(newItem);
-      
+      await ref
+          .read(dataOperationsNotifierProvider.notifier)
+          .createItem(newItem);
+
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -304,7 +340,9 @@ class ItemOperationsExample extends ConsumerWidget {
   /// Example of updating an item with loading state management
   Future<void> _updateItemExample(BuildContext context, WidgetRef ref) async {
     // Clear any previous errors
-    ref.read(dataOperationsNotifierProvider.notifier).clearOperation(DataOperation.itemUpdate);
+    ref
+        .read(dataOperationsNotifierProvider.notifier)
+        .clearOperation(DataOperation.itemUpdate);
 
     // Update example item
     final updatedItem = Item(
@@ -316,8 +354,10 @@ class ItemOperationsExample extends ConsumerWidget {
     );
 
     try {
-      await ref.read(dataOperationsNotifierProvider.notifier).updateItem(updatedItem);
-      
+      await ref
+          .read(dataOperationsNotifierProvider.notifier)
+          .updateItem(updatedItem);
+
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -341,7 +381,9 @@ class ItemOperationsExample extends ConsumerWidget {
   /// Example of deleting an item with loading state management
   Future<void> _deleteItemExample(BuildContext context, WidgetRef ref) async {
     // Clear any previous errors
-    ref.read(dataOperationsNotifierProvider.notifier).clearOperation(DataOperation.itemDelete);
+    ref
+        .read(dataOperationsNotifierProvider.notifier)
+        .clearOperation(DataOperation.itemDelete);
 
     // Show confirmation dialog first
     final confirmed = await showDialog<bool>(
@@ -368,8 +410,10 @@ class ItemOperationsExample extends ConsumerWidget {
     if (confirmed != true) return;
 
     try {
-      await ref.read(dataOperationsNotifierProvider.notifier).deleteItem('example-delete-id');
-      
+      await ref
+          .read(dataOperationsNotifierProvider.notifier)
+          .deleteItem('example-delete-id');
+
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -391,22 +435,32 @@ class ItemOperationsExample extends ConsumerWidget {
   }
 
   /// Example of batch updating items with loading state management
-  Future<void> _batchUpdateItemsExample(BuildContext context, WidgetRef ref) async {
+  Future<void> _batchUpdateItemsExample(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
     // Clear any previous errors
-    ref.read(dataOperationsNotifierProvider.notifier).clearOperation(DataOperation.itemBatchUpdate);
+    ref
+        .read(dataOperationsNotifierProvider.notifier)
+        .clearOperation(DataOperation.itemBatchUpdate);
 
     // Create batch of items
-    final items = List.generate(5, (index) => Item(
-      id: 'batch-item-$index',
-      name: 'Batch Item $index',
-      rescueNetId: (10000 + index).toDouble(),
-      totalAmount: (index + 1) * 5,
-      description: 'Batch created item $index',
-    ));
+    final items = List.generate(
+      5,
+      (index) => Item(
+        id: 'batch-item-$index',
+        name: 'Batch Item $index',
+        rescueNetId: (10000 + index).toDouble(),
+        totalAmount: (index + 1) * 5,
+        description: 'Batch created item $index',
+      ),
+    );
 
     try {
-      await ref.read(dataOperationsNotifierProvider.notifier).batchUpdateItems(items);
-      
+      await ref
+          .read(dataOperationsNotifierProvider.notifier)
+          .batchUpdateItems(items);
+
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -435,9 +489,7 @@ class OverlayOperationsExample extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Overlay Operations Example'),
-      ),
+      appBar: AppBar(title: const Text('Overlay Operations Example')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -464,7 +516,10 @@ class OverlayOperationsExample extends ConsumerWidget {
   }
 
   /// Example using the performWithLoading extension method
-  Future<void> _createItemWithOverlay(BuildContext context, WidgetRef ref) async {
+  Future<void> _createItemWithOverlay(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
     try {
       await context.performWithLoading<void>(
         operation: 'Creating new item...',
@@ -478,8 +533,10 @@ class OverlayOperationsExample extends ConsumerWidget {
             description: 'Created with loading overlay',
           );
 
-          await ref.read(dataOperationsNotifierProvider.notifier).createItem(newItem);
-          
+          await ref
+              .read(dataOperationsNotifierProvider.notifier)
+              .createItem(newItem);
+
           // Simulate some additional processing time
           await Future.delayed(const Duration(seconds: 1));
         },
@@ -506,21 +563,29 @@ class OverlayOperationsExample extends ConsumerWidget {
   }
 
   /// Example of batch operation with overlay
-  Future<void> _batchOperationWithOverlay(BuildContext context, WidgetRef ref) async {
+  Future<void> _batchOperationWithOverlay(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
     try {
       await context.performWithLoading<void>(
         operation: 'Processing batch operation...',
         details: 'Updating multiple items at once',
         task: () async {
-          final items = List.generate(3, (index) => Item(
-            id: 'batch-overlay-$index',
-            name: 'Batch Overlay Item $index',
-            rescueNetId: (20000 + index).toDouble(),
-            totalAmount: (index + 1) * 3,
-            description: 'Batch processed with overlay',
-          ));
+          final items = List.generate(
+            3,
+            (index) => Item(
+              id: 'batch-overlay-$index',
+              name: 'Batch Overlay Item $index',
+              rescueNetId: (20000 + index).toDouble(),
+              totalAmount: (index + 1) * 3,
+              description: 'Batch processed with overlay',
+            ),
+          );
 
-          await ref.read(dataOperationsNotifierProvider.notifier).batchUpdateItems(items);
+          await ref
+              .read(dataOperationsNotifierProvider.notifier)
+              .batchUpdateItems(items);
         },
       );
 
@@ -545,7 +610,10 @@ class OverlayOperationsExample extends ConsumerWidget {
   }
 
   /// Example of assignment operation with overlay
-  Future<void> _assignmentOperationWithOverlay(BuildContext context, WidgetRef ref) async {
+  Future<void> _assignmentOperationWithOverlay(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
     try {
       await context.performWithLoading<void>(
         operation: 'Creating assignment...',
@@ -558,7 +626,9 @@ class OverlayOperationsExample extends ConsumerWidget {
             count: 5,
           );
 
-          await ref.read(dataOperationsNotifierProvider.notifier).createAssignment(assignment);
+          await ref
+              .read(dataOperationsNotifierProvider.notifier)
+              .createAssignment(assignment);
         },
       );
 
@@ -591,15 +661,21 @@ class MultiOperationExample extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Watch multiple operations
     final isAnyLoading = ref.watch(isAnyOperationLoadingProvider);
-    final itemCreateLoading = ref.watch(isOperationLoadingProvider(DataOperation.itemCreate));
-    final containerCreateLoading = ref.watch(isOperationLoadingProvider(DataOperation.containerCreate));
-    final assignmentCreateLoading = ref.watch(isOperationLoadingProvider(DataOperation.assignmentCreate));
+    final itemCreateLoading = ref.watch(
+      isOperationLoadingProvider(DataOperation.itemCreate),
+    );
+    final containerCreateLoading = ref.watch(
+      isOperationLoadingProvider(DataOperation.containerCreate),
+    );
+    final assignmentCreateLoading = ref.watch(
+      isOperationLoadingProvider(DataOperation.assignmentCreate),
+    );
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Multi-Operation Example'),
         // Show overall loading state
-        backgroundColor: isAnyLoading 
+        backgroundColor: isAnyLoading
             ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.8)
             : null,
       ),
@@ -620,14 +696,20 @@ class MultiOperationExample extends ConsumerWidget {
                     ),
                     const SizedBox(height: 8),
                     _buildStatusRow('Item Creation', itemCreateLoading),
-                    _buildStatusRow('Container Creation', containerCreateLoading),
-                    _buildStatusRow('Assignment Creation', assignmentCreateLoading),
+                    _buildStatusRow(
+                      'Container Creation',
+                      containerCreateLoading,
+                    ),
+                    _buildStatusRow(
+                      'Assignment Creation',
+                      assignmentCreateLoading,
+                    ),
                     const SizedBox(height: 8),
                     Text(
                       'Any Loading: ${isAnyLoading ? "Yes" : "No"}',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: isAnyLoading 
+                        color: isAnyLoading
                             ? Theme.of(context).colorScheme.primary
                             : Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
@@ -641,17 +723,23 @@ class MultiOperationExample extends ConsumerWidget {
 
             // Action buttons
             ElevatedButton(
-              onPressed: itemCreateLoading ? null : () => _triggerItemOperation(ref),
+              onPressed: itemCreateLoading
+                  ? null
+                  : () => _triggerItemOperation(ref),
               child: const Text('Trigger Item Operation'),
             ),
             const SizedBox(height: 8),
             ElevatedButton(
-              onPressed: containerCreateLoading ? null : () => _triggerContainerOperation(ref),
+              onPressed: containerCreateLoading
+                  ? null
+                  : () => _triggerContainerOperation(ref),
               child: const Text('Trigger Container Operation'),
             ),
             const SizedBox(height: 8),
             ElevatedButton(
-              onPressed: assignmentCreateLoading ? null : () => _triggerAssignmentOperation(ref),
+              onPressed: assignmentCreateLoading
+                  ? null
+                  : () => _triggerAssignmentOperation(ref),
               child: const Text('Trigger Assignment Operation'),
             ),
 
@@ -660,7 +748,9 @@ class MultiOperationExample extends ConsumerWidget {
             // Clear all operations button
             if (isAnyLoading)
               ElevatedButton(
-                onPressed: () => ref.read(dataOperationsNotifierProvider.notifier).clearAll(),
+                onPressed: () => ref
+                    .read(dataOperationsNotifierProvider.notifier)
+                    .clearAll(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.error,
                   foregroundColor: Theme.of(context).colorScheme.onError,
@@ -683,11 +773,7 @@ class MultiOperationExample extends ConsumerWidget {
             height: 16,
             child: isLoading
                 ? const CircularProgressIndicator(strokeWidth: 2)
-                : Icon(
-                    Icons.check_circle,
-                    size: 16,
-                    color: Colors.green,
-                  ),
+                : Icon(Icons.check_circle, size: 16, color: Colors.green),
           ),
           const SizedBox(width: 8),
           Text(operation),
@@ -706,7 +792,7 @@ class MultiOperationExample extends ConsumerWidget {
       );
 
       await ref.read(dataOperationsNotifierProvider.notifier).createItem(item);
-      
+
       // Simulate some work
       await Future.delayed(const Duration(seconds: 2));
     } catch (error) {
@@ -718,7 +804,7 @@ class MultiOperationExample extends ConsumerWidget {
     try {
       // Note: This would need a real ContainerDao object in practice
       // await ref.read(dataOperationsNotifierProvider.notifier).createContainer(container);
-      
+
       // Simulate container creation for demo
       await Future.delayed(const Duration(seconds: 3));
     } catch (error) {
@@ -735,8 +821,10 @@ class MultiOperationExample extends ConsumerWidget {
         count: 2,
       );
 
-      await ref.read(dataOperationsNotifierProvider.notifier).createAssignment(assignment);
-      
+      await ref
+          .read(dataOperationsNotifierProvider.notifier)
+          .createAssignment(assignment);
+
       // Simulate some work
       await Future.delayed(const Duration(seconds: 1));
     } catch (error) {

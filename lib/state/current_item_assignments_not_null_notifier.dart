@@ -10,10 +10,12 @@ class CurrentItemAssignmentsNotNullNotifier
     extends _$CurrentItemAssignmentsNotNullNotifier {
   @override
   Map<RescueContainer, int> build() {
-    var used = Map.fromEntries(ref
-        .watch(currentItemAssignmentsNotifierProvider)
-        .entries
-        .where((e) => e.value != 0));
+    var used = Map.fromEntries(
+      ref
+          .watch(currentItemAssignmentsNotifierProvider)
+          .entries
+          .where((e) => e.value != 0),
+    );
     return used;
   }
 }

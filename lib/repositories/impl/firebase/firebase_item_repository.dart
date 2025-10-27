@@ -11,13 +11,12 @@ class FirebaseItemRepository implements ItemRepository {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
   StreamSubscription<QuerySnapshot<Item>>? _itemsSubscription;
-  final StreamController<List<Item>> _itemsController = StreamController<List<Item>>.broadcast();
+  final StreamController<List<Item>> _itemsController =
+      StreamController<List<Item>>.broadcast();
 
-  FirebaseItemRepository({
-    FirebaseFirestore? firestore,
-    FirebaseAuth? auth,
-  }) : _firestore = firestore ?? FirebaseFirestore.instance,
-       _auth = auth ?? FirebaseAuth.instance {
+  FirebaseItemRepository({FirebaseFirestore? firestore, FirebaseAuth? auth})
+    : _firestore = firestore ?? FirebaseFirestore.instance,
+      _auth = auth ?? FirebaseAuth.instance {
     _initializeAuthListener();
   }
 
@@ -102,7 +101,7 @@ class FirebaseItemRepository implements ItemRepository {
           .where('name', isGreaterThanOrEqualTo: query)
           .where('name', isLessThan: query + 'z')
           .get();
-      
+
       return snapshot.docs.map((doc) => doc.data()).toList();
     } catch (e) {
       throw _convertException(e);
@@ -115,7 +114,7 @@ class FirebaseItemRepository implements ItemRepository {
       final snapshot = await itemsCollection
           .where('operationalStatus', isEqualTo: operationalStatus)
           .get();
-      
+
       return snapshot.docs.map((doc) => doc.data()).toList();
     } catch (e) {
       throw _convertException(e);

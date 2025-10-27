@@ -6,10 +6,8 @@ part 'module_destination.g.dart';
 
 @freezed
 abstract class ModuleDestination with _$ModuleDestination {
-  const factory ModuleDestination({
-    required String id,
-    required String name,
-  }) = _ModuleDestination;
+  const factory ModuleDestination({required String id, required String name}) =
+      _ModuleDestination;
 
   factory ModuleDestination.fromJson(Map<String, dynamic> json) =>
       _$ModuleDestinationFromJson(json);

@@ -21,10 +21,11 @@ class ContainerTypeUsageNotifier extends _$ContainerTypeUsageNotifier {
             .where((element) => element.type != null)
             .groupBy((p0) => p0.type!)
             .mapValues(
-                (value) => value.map((e) => e.printName).whereNotNull().toSet());
+              (value) => value.map((e) => e.printName).whereNotNull().toSet(),
+            );
 
         Map<ContainerType, Set<String>> map = {
-          for (var e in types) e: grouped[e] ?? Set()
+          for (var e in types) e: grouped[e] ?? Set(),
         };
         return AsyncValue.data(map);
       },

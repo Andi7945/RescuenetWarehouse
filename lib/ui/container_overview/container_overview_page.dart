@@ -20,27 +20,28 @@ class ContainerOverviewPage extends river.ConsumerStatefulWidget {
   river.ConsumerState createState() => _ContainerOverviewPageState();
 }
 
-class _ContainerOverviewPageState extends river.ConsumerState<ContainerOverviewPage> {
+class _ContainerOverviewPageState
+    extends river.ConsumerState<ContainerOverviewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: RescueAppBar(
-          title: "Container overview",
-          actions: [
-            _createContainerButton(context, ref),
-            ContainerChooserAction(),
-          ],
-        ),
-        drawer: RescueNavigationDrawer(),
-        body: _body(ref));
+      appBar: RescueAppBar(
+        title: "Container overview",
+        actions: [
+          _createContainerButton(context, ref),
+          ContainerChooserAction(),
+        ],
+      ),
+      drawer: RescueNavigationDrawer(),
+      body: _body(ref),
+    );
   }
 
   Widget _body(river.WidgetRef ref) {
     return AsyncValueBuilder<List<RescueContainer>>(
       value: ref.watch(allContainersAsyncProvider),
-      loading: () => const DataLoadingIndicator(
-        message: 'Loading containers...',
-      ),
+      loading: () =>
+          const DataLoadingIndicator(message: 'Loading containers...'),
       error: (error, stackTrace) => ErrorRetryWidget(
         error: error,
         message: 'Failed to load containers',
@@ -50,34 +51,28 @@ class _ContainerOverviewPageState extends river.ConsumerState<ContainerOverviewP
     );
   }
 
-  Widget _buildContainerGrid(river.WidgetRef ref, List<RescueContainer> containers) {
+  Widget _buildContainerGrid(
+    river.WidgetRef ref,
+    List<RescueContainer> containers,
+  ) {
     // Filter and sort containers using the existing visibility logic
     final visibleContainers = _getVisibleContainers(ref, containers);
-    
+
     if (visibleContainers.isEmpty) {
       return const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.inventory_2_outlined,
-              size: 64,
-              color: Colors.grey,
-            ),
+            Icon(Icons.inventory_2_outlined, size: 64, color: Colors.grey),
             SizedBox(height: 16),
             Text(
               'No containers found',
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.grey,
-              ),
+              style: TextStyle(fontSize: 18, color: Colors.grey),
             ),
             SizedBox(height: 8),
             Text(
               'Create a new container to get started',
-              style: TextStyle(
-                color: Colors.grey,
-              ),
+              style: TextStyle(color: Colors.grey),
             ),
           ],
         ),
@@ -87,24 +82,29 @@ class _ContainerOverviewPageState extends river.ConsumerState<ContainerOverviewP
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Wrap(
-        spacing: 4.0, 
-        runSpacing: 4.0, 
-        children: visibleContainers.map((c) => ContainerOverviewPageCard(c)).toList(),
+        spacing: 4.0,
+        runSpacing: 4.0,
+        children: visibleContainers
+            .map((c) => ContainerOverviewPageCard(c))
+            .toList(),
       ),
     );
   }
 
-  List<RescueContainer> _getVisibleContainers(river.WidgetRef ref, List<RescueContainer> allContainers) {
+  List<RescueContainer> _getVisibleContainers(
+    river.WidgetRef ref,
+    List<RescueContainer> allContainers,
+  ) {
     // Try to use async visibility provider for proper filtering
     final visibilityAsync = ref.watch(containerVisibilityAsyncProvider);
-    
+
     return visibilityAsync.when(
       data: (visibilityMap) {
         // Filter containers based on visibility map
         final visibleContainers = allContainers
             .where((container) => visibilityMap[container] == true)
             .toList();
-        
+
         // Sort by container number
         visibleContainers.sort((a, b) => a.number.compareTo(b.number));
         return visibleContainers;
@@ -125,37 +125,53 @@ class _ContainerOverviewPageState extends river.ConsumerState<ContainerOverviewP
   }
 
   Widget _createContainerButton(BuildContext context, river.WidgetRef ref) {
-    final isCreatingContainer = ref.watch(isOperationLoadingProvider(DataOperation.containerCreate));
-    
+    final isCreatingContainer = ref.watch(
+      isOperationLoadingProvider(DataOperation.containerCreate),
+    );
+
     return IconButton(
-      onPressed: isCreatingContainer ? null : () => _createNewContainer(context, ref),
-      icon: isCreatingContainer 
+      onPressed: isCreatingContainer
+          ? null
+          : () => _createNewContainer(context, ref),
+      icon: isCreatingContainer
           ? const SizedBox(
               width: 20,
               height: 20,
               child: CircularProgressIndicator(strokeWidth: 2),
             )
           : const Icon(Icons.add),
-      tooltip: isCreatingContainer ? 'Creating container...' : 'Create new container',
+      tooltip: isCreatingContainer
+          ? 'Creating container...'
+          : 'Create new container',
     );
   }
 
-  Future<void> _createNewContainer(BuildContext context, river.WidgetRef ref) async {
+  Future<void> _createNewContainer(
+    BuildContext context,
+    river.WidgetRef ref,
+  ) async {
     try {
       // Clear any previous errors
-      ref.read(dataOperationsNotifierProvider.notifier).clearOperation(DataOperation.containerCreate);
-      
+      ref
+          .read(dataOperationsNotifierProvider.notifier)
+          .clearOperation(DataOperation.containerCreate);
+
       await context.performWithLoading<void>(
         operation: 'Creating container...',
         details: 'Setting up new container for editing',
         task: () async {
           // Create new container using async provider for proper number generation
-          var container = ref.read(allContainersAsyncProvider.notifier).newContainer();
-          
+          var container = ref
+              .read(allContainersAsyncProvider.notifier)
+              .newContainer();
+
           // Navigate to edit page with the new container ID
           if (context.mounted) {
-            Navigator.pushNamed(context, routeContainerEditPage,
-                arguments: container.id);
+            Navigator.pushNamed(
+              context,
+              routeContainerEditPage,
+              arguments: container.id,
+            );
           }
         },
       );

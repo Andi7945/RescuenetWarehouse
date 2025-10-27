@@ -4,7 +4,6 @@ part 'work_log_date_filter_notifier.g.dart';
 
 @riverpod
 class WorkLogDateFilterNotifier extends _$WorkLogDateFilterNotifier {
-
   @override
   DateTime? build() {
     return null;

@@ -11,13 +11,15 @@ class ItemEditPageSigns extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
-        padding: const EdgeInsets.only(top: 8),
-        child: Container(
-            width: 562,
-            decoration: const ShapeDecoration(
-              shape: RoundedRectangleBorder(side: BorderSide(width: 0.50)),
-            ),
-            child: _body(ref)));
+      padding: const EdgeInsets.only(top: 8),
+      child: Container(
+        width: 562,
+        decoration: const ShapeDecoration(
+          shape: RoundedRectangleBorder(side: BorderSide(width: 0.50)),
+        ),
+        child: _body(ref),
+      ),
+    );
   }
 
   Widget _body(WidgetRef ref) {
@@ -26,14 +28,13 @@ class ItemEditPageSigns extends ConsumerWidget {
 
   _addButton(WidgetRef ref) {
     return FilledButton(
-        onPressed: () => _changeItem(ref, "", Sign(id: uuid.v4())),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              RescueText.headline('+ '),
-              RescueText.slim("Add Sign")
-            ]));
+      onPressed: () => _changeItem(ref, "", Sign(id: uuid.v4())),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [RescueText.headline('+ '), RescueText.slim("Add Sign")],
+      ),
+    );
   }
 
   List<ItemEditPageSignsSingle> _signs(WidgetRef ref) {
@@ -42,8 +43,9 @@ class ItemEditPageSigns extends ConsumerWidget {
       return [];
     }
     return item.signs
-        .map((s) =>
-        ItemEditPageSignsSingle(s, (u) => _changeItem(ref, s.id, u)))
+        .map(
+          (s) => ItemEditPageSignsSingle(s, (u) => _changeItem(ref, s.id, u)),
+        )
         .toList();
   }
 
@@ -53,7 +55,7 @@ class ItemEditPageSigns extends ConsumerWidget {
       return [];
     }
     var updatedSigns = [
-      ...item.signs.where((element) => element.id != idToReplace)
+      ...item.signs.where((element) => element.id != idToReplace),
     ];
     if (updated != null) {
       updatedSigns.add(updated);

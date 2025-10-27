@@ -30,7 +30,10 @@ part 'repository_providers.g.dart';
 
 /// Environment variable to determine which repository implementation to use.
 /// Set to 'mock' for testing, 'firebase' for production.
-const String _repositoryMode = String.fromEnvironment('REPOSITORY_MODE', defaultValue: 'firebase');
+const String _repositoryMode = String.fromEnvironment(
+  'REPOSITORY_MODE',
+  defaultValue: 'firebase',
+);
 
 /// Runtime detection of mock mode for Playwright tests.
 /// Checks if the web environment has MOCK_FIREBASE_MODE flag set to true.
@@ -48,8 +51,12 @@ bool _isRuntimeMockMode() {
     return mockMode;
   } catch (e) {
     // If we can't access window properties, assume normal Firebase mode
-    print('🔍 _isRuntimeMockMode() - ERROR accessing window: $e, defaulting to false');
-    html.window.console.log('🔍 FLUTTER: _isRuntimeMockMode() - ERROR accessing window: $e, defaulting to false');
+    print(
+      '🔍 _isRuntimeMockMode() - ERROR accessing window: $e, defaulting to false',
+    );
+    html.window.console.log(
+      '🔍 FLUTTER: _isRuntimeMockMode() - ERROR accessing window: $e, defaulting to false',
+    );
     return false;
   }
 }
@@ -65,7 +72,6 @@ bool _shouldUseMockRepositories() {
   return result;
 }
 
-
 /// Provider for AuthRepository.
 /// Returns Firebase implementation in production, Mock implementation in tests.
 @riverpod
@@ -73,11 +79,15 @@ AuthRepository authRepository(AuthRepositoryRef ref) {
   final useMock = _shouldUseMockRepositories();
   if (useMock) {
     print('🚀 AUTH REPOSITORY: Creating MockAuthRepository');
-    html.window.console.log('🚀 FLUTTER: AUTH REPOSITORY Creating MockAuthRepository');
+    html.window.console.log(
+      '🚀 FLUTTER: AUTH REPOSITORY Creating MockAuthRepository',
+    );
     return MockAuthRepository();
   } else {
     print('🚀 AUTH REPOSITORY: Creating FirebaseAuthRepository');
-    html.window.console.log('🚀 FLUTTER: AUTH REPOSITORY Creating FirebaseAuthRepository');
+    html.window.console.log(
+      '🚀 FLUTTER: AUTH REPOSITORY Creating FirebaseAuthRepository',
+    );
     return FirebaseAuthRepository();
   }
 }
@@ -129,7 +139,9 @@ WorkLogRepository workLogRepository(WorkLogRepositoryRef ref) {
 /// Provider for ContainerTypeRepository.
 /// Returns Firebase implementation in production, Mock implementation in tests.
 @riverpod
-ContainerTypeRepository containerTypeRepository(ContainerTypeRepositoryRef ref) {
+ContainerTypeRepository containerTypeRepository(
+  ContainerTypeRepositoryRef ref,
+) {
   if (_shouldUseMockRepositories()) {
     return MockContainerTypeRepository();
   } else {
@@ -140,7 +152,9 @@ ContainerTypeRepository containerTypeRepository(ContainerTypeRepositoryRef ref) 
 /// Provider for CurrentLocationRepository.
 /// Returns Firebase implementation in production, Mock implementation in tests.
 @riverpod
-CurrentLocationRepository currentLocationRepository(CurrentLocationRepositoryRef ref) {
+CurrentLocationRepository currentLocationRepository(
+  CurrentLocationRepositoryRef ref,
+) {
   if (_shouldUseMockRepositories()) {
     return MockCurrentLocationRepository();
   } else {
@@ -151,7 +165,9 @@ CurrentLocationRepository currentLocationRepository(CurrentLocationRepositoryRef
 /// Provider for ModuleDestinationRepository.
 /// Returns Firebase implementation in production, Mock implementation in tests.
 @riverpod
-ModuleDestinationRepository moduleDestinationRepository(ModuleDestinationRepositoryRef ref) {
+ModuleDestinationRepository moduleDestinationRepository(
+  ModuleDestinationRepositoryRef ref,
+) {
   if (_shouldUseMockRepositories()) {
     return MockModuleDestinationRepository();
   } else {

@@ -3,7 +3,7 @@ import 'package:rescuenet_warehouse/repositories/container_type_repository.dart'
 import 'package:rescuenet_warehouse/db/firebase.dart';
 
 /// Firebase implementation of ContainerTypeRepository
-/// 
+///
 /// Provides real-time synchronization with Firestore for container type data.
 class FirebaseContainerTypeRepository implements ContainerTypeRepository {
   @override

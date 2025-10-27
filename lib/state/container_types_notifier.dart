@@ -10,17 +10,19 @@ class ContainerTypesNotifier extends _$ContainerTypesNotifier {
   @override
   List<ContainerType> build() {
     final repository = ref.watch(containerTypeRepositoryProvider);
-    
+
     // Use proper stream subscription management
-    final subscription = repository.watchContainerTypes().listen((containerTypes) {
+    final subscription = repository.watchContainerTypes().listen((
+      containerTypes,
+    ) {
       state = containerTypes;
     });
-    
+
     // Dispose subscription when notifier is disposed
     ref.onDispose(() {
       subscription.cancel();
     });
-    
+
     return [];
   }
 

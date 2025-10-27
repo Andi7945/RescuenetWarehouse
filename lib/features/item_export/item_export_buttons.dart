@@ -27,9 +27,11 @@ class ItemExportButtons extends StatelessWidget {
           child: Text("Export ($selectedToExport)"),
         ),
         OutlinedButton(
-          onPressed: triggerExportAll != null ? () {
-            triggerExportAll!();
-          } : null,
+          onPressed: triggerExportAll != null
+              ? () {
+                  triggerExportAll!();
+                }
+              : null,
           child: Text("Export All"),
         ),
       ],

@@ -10,17 +10,19 @@ class CurrentLocationsNotifier extends _$CurrentLocationsNotifier {
   @override
   List<CurrentLocation> build() {
     final repository = ref.watch(currentLocationRepositoryProvider);
-    
+
     // Use proper stream subscription management
-    final subscription = repository.watchCurrentLocations().listen((currentLocations) {
+    final subscription = repository.watchCurrentLocations().listen((
+      currentLocations,
+    ) {
       state = currentLocations;
     });
-    
+
     // Dispose subscription when notifier is disposed
     ref.onDispose(() {
       subscription.cancel();
     });
-    
+
     return [];
   }
 

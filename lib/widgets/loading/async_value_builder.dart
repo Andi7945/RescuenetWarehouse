@@ -3,10 +3,10 @@ import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// A generic widget that handles AsyncValue states from Riverpod providers.
-/// 
+///
 /// This widget follows the established pattern from auth providers and provides
 /// consistent loading, error, and data states across the application.
-/// 
+///
 /// Usage:
 /// ```dart
 /// AsyncValueBuilder<List<Item>>(
@@ -22,16 +22,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class AsyncValueBuilder<T> extends StatelessWidget {
   /// The AsyncValue to handle
   final AsyncValue<T> value;
-  
+
   /// Widget to show when data is available
   final Widget Function(T data) data;
-  
+
   /// Widget to show when loading (optional, shows CircularProgressIndicator by default)
   final Widget Function()? loading;
-  
+
   /// Widget to show when there's an error (optional, shows basic error message by default)
   final Widget Function(Object error, StackTrace? stackTrace)? error;
-  
+
   /// Whether to show loading state when data is available but refreshing
   /// Defaults to false to prevent flickering during refreshes
   final bool showLoadingOnRefresh;
@@ -50,7 +50,8 @@ class AsyncValueBuilder<T> extends StatelessWidget {
     return value.when(
       data: (data) => this.data(data),
       loading: () => loading?.call() ?? _defaultLoading(context),
-      error: (err, stackTrace) => error?.call(err, stackTrace) ?? _defaultError(context, err),
+      error: (err, stackTrace) =>
+          error?.call(err, stackTrace) ?? _defaultError(context, err),
     );
   }
 
@@ -60,9 +61,7 @@ class AsyncValueBuilder<T> extends StatelessWidget {
       liveRegion: true,
       label: 'Loading data',
       child: const Center(
-        child: CircularProgressIndicator(
-          semanticsLabel: 'Loading data',
-        ),
+        child: CircularProgressIndicator(semanticsLabel: 'Loading data'),
       ),
     );
   }
@@ -70,7 +69,7 @@ class AsyncValueBuilder<T> extends StatelessWidget {
   /// Default error widget when none provided
   Widget _defaultError(BuildContext context, Object error) {
     final errorMessage = 'Error occurred: ${error.toString()}';
-    
+
     // Announce error to screen readers
     WidgetsBinding.instance.addPostFrameCallback((_) {
       SemanticsService.announce(
@@ -79,7 +78,7 @@ class AsyncValueBuilder<T> extends StatelessWidget {
         assertiveness: Assertiveness.assertive,
       );
     });
-    
+
     return Semantics(
       liveRegion: true,
       label: errorMessage,
@@ -120,22 +119,22 @@ class AsyncValueBuilder<T> extends StatelessWidget {
 }
 
 /// Specialized version of AsyncValueBuilder for optional data types.
-/// 
+///
 /// Handles the common pattern where AsyncValue of nullable T might contain null data,
 /// which is different from loading state.
 class AsyncValueNullableBuilder<T> extends StatelessWidget {
   /// The AsyncValue to handle
   final AsyncValue<T?> value;
-  
+
   /// Widget to show when data is available and not null
   final Widget Function(T data) data;
-  
+
   /// Widget to show when data is null (optional, shows "No data" message by default)
   final Widget Function()? noData;
-  
+
   /// Widget to show when loading (optional, shows CircularProgressIndicator by default)
   final Widget Function()? loading;
-  
+
   /// Widget to show when there's an error (optional, shows basic error message by default)
   final Widget Function(Object error, StackTrace? stackTrace)? error;
 
@@ -158,14 +157,15 @@ class AsyncValueNullableBuilder<T> extends StatelessWidget {
         return this.data(data);
       },
       loading: () => loading?.call() ?? _defaultLoading(context),
-      error: (err, stackTrace) => error?.call(err, stackTrace) ?? _defaultError(context, err),
+      error: (err, stackTrace) =>
+          error?.call(err, stackTrace) ?? _defaultError(context, err),
     );
   }
 
   /// Default no data widget when none provided
   Widget _defaultNoData(BuildContext context) {
     const message = 'No data available';
-    
+
     return Semantics(
       liveRegion: true,
       label: message,
@@ -199,9 +199,7 @@ class AsyncValueNullableBuilder<T> extends StatelessWidget {
       liveRegion: true,
       label: 'Loading data',
       child: const Center(
-        child: CircularProgressIndicator(
-          semanticsLabel: 'Loading data',
-        ),
+        child: CircularProgressIndicator(semanticsLabel: 'Loading data'),
       ),
     );
   }
@@ -209,7 +207,7 @@ class AsyncValueNullableBuilder<T> extends StatelessWidget {
   /// Default error widget when none provided
   Widget _defaultError(BuildContext context, Object error) {
     final errorMessage = 'Error occurred: ${error.toString()}';
-    
+
     // Announce error to screen readers
     WidgetsBinding.instance.addPostFrameCallback((_) {
       SemanticsService.announce(
@@ -218,7 +216,7 @@ class AsyncValueNullableBuilder<T> extends StatelessWidget {
         assertiveness: Assertiveness.assertive,
       );
     });
-    
+
     return Semantics(
       liveRegion: true,
       label: errorMessage,

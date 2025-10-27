@@ -3,12 +3,12 @@ import 'package:rescuenet_warehouse/models/log_entry.dart';
 import 'package:rescuenet_warehouse/repositories/work_log_repository.dart';
 
 /// Mock implementation of WorkLogRepository for testing
-/// 
+///
 /// Provides predictable audit trail data and simulates real-time updates
 /// without Firebase dependencies.
 class MockWorkLogRepository implements WorkLogRepository {
   final Map<String, LogEntry> _workLogs = {};
-  final StreamController<List<LogEntry>> _streamController = 
+  final StreamController<List<LogEntry>> _streamController =
       StreamController<List<LogEntry>>.broadcast();
 
   MockWorkLogRepository() {
@@ -56,7 +56,7 @@ class MockWorkLogRepository implements WorkLogRepository {
     for (final workLog in sampleWorkLogs) {
       _workLogs[workLog.id] = workLog;
     }
-    
+
     _notifyListeners();
   }
 
@@ -70,10 +70,16 @@ class MockWorkLogRepository implements WorkLogRepository {
   @override
   Stream<List<LogEntry>> watchWorkLogs() {
     final controller = StreamController<List<LogEntry>>.broadcast();
-    final sortedWorkLogs = _workLogs.values.toList()..sort((a, b) => b.date.compareTo(a.date));
+    final sortedWorkLogs = _workLogs.values.toList()
+      ..sort((a, b) => b.date.compareTo(a.date));
     controller.add(sortedWorkLogs);
-    final subscription = _streamController.stream.listen((items) => controller.add(items));
-    controller.onCancel = () { subscription.cancel(); controller.close(); };
+    final subscription = _streamController.stream.listen(
+      (items) => controller.add(items),
+    );
+    controller.onCancel = () {
+      subscription.cancel();
+      controller.close();
+    };
     return controller.stream;
   }
 
@@ -107,19 +113,29 @@ class MockWorkLogRepository implements WorkLogRepository {
   Future<List<LogEntry>> getWorkLogsSince(DateTime date) async {
     await Future.delayed(const Duration(milliseconds: 10));
     final workLogs = _workLogs.values
-        .where((workLog) => workLog.date.isAfter(date) || workLog.date.isAtSameMomentAs(date))
+        .where(
+          (workLog) =>
+              workLog.date.isAfter(date) || workLog.date.isAtSameMomentAs(date),
+        )
         .toList();
     workLogs.sort((a, b) => b.date.compareTo(a.date));
     return workLogs;
   }
 
   @override
-  Future<List<LogEntry>> getWorkLogsBetween(DateTime startDate, DateTime endDate) async {
+  Future<List<LogEntry>> getWorkLogsBetween(
+    DateTime startDate,
+    DateTime endDate,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 10));
     final workLogs = _workLogs.values
-        .where((workLog) => 
-            (workLog.date.isAfter(startDate) || workLog.date.isAtSameMomentAs(startDate)) &&
-            (workLog.date.isBefore(endDate) || workLog.date.isAtSameMomentAs(endDate)))
+        .where(
+          (workLog) =>
+              (workLog.date.isAfter(startDate) ||
+                  workLog.date.isAtSameMomentAs(startDate)) &&
+              (workLog.date.isBefore(endDate) ||
+                  workLog.date.isAtSameMomentAs(endDate)),
+        )
         .toList();
     workLogs.sort((a, b) => b.date.compareTo(a.date));
     return workLogs;
@@ -140,11 +156,11 @@ class MockWorkLogRepository implements WorkLogRepository {
   @override
   Future<void> batchCreateWorkLogs(List<LogEntry> logEntries) async {
     await Future.delayed(const Duration(milliseconds: 20));
-    
+
     for (final logEntry in logEntries) {
       _workLogs[logEntry.id] = logEntry;
     }
-    
+
     _notifyListeners();
   }
 
@@ -156,7 +172,7 @@ class MockWorkLogRepository implements WorkLogRepository {
   }
 
   /// Test helper methods
-  
+
   /// Clear all work logs (useful for test setup)
   void clearAll() {
     _workLogs.clear();
@@ -178,11 +194,13 @@ class MockWorkLogRepository implements WorkLogRepository {
   List<LogEntry> getWorkLogsForDate(DateTime date) {
     final startOfDay = DateTime(date.year, date.month, date.day);
     final endOfDay = startOfDay.add(const Duration(days: 1));
-    
+
     return _workLogs.values
-        .where((workLog) => 
-            workLog.date.isAfter(startOfDay) && 
-            workLog.date.isBefore(endOfDay))
+        .where(
+          (workLog) =>
+              workLog.date.isAfter(startOfDay) &&
+              workLog.date.isBefore(endOfDay),
+        )
         .toList()
       ..sort((a, b) => b.date.compareTo(a.date));
   }

@@ -16,7 +16,7 @@ class ContainerWithItemsNotifier extends _$ContainerWithItemsNotifier {
   Map<RescueContainer, Map<Item, int>> build() {
     var assignmentsAsync = ref.watch(allAssignmentsAsyncProvider);
     var containersAsync = ref.watch(allContainersAsyncProvider);
-    
+
     return assignmentsAsync.when(
       data: (assignments) => containersAsync.when(
         data: (containers) => _container(assignments, containers),
@@ -29,9 +29,13 @@ class ContainerWithItemsNotifier extends _$ContainerWithItemsNotifier {
   }
 
   Map<RescueContainer, Map<Item, int>> _container(
-      List<Assignment> assignments, List<RescueContainer> containers) {
+    List<Assignment> assignments,
+    List<RescueContainer> containers,
+  ) {
     var entries = assignments.groupBy((a) => a.containerId).entries.map((e) {
-      var cont = containers.firstWhereOrNull((container) => container.id == e.key);
+      var cont = containers.firstWhereOrNull(
+        (container) => container.id == e.key,
+      );
       if (cont != null) {
         return MapEntry(cont, _items(e.value));
       }
@@ -44,12 +48,14 @@ class ContainerWithItemsNotifier extends _$ContainerWithItemsNotifier {
     var itemsAsync = ref.watch(allItemsAsyncProvider);
     return itemsAsync.when(
       data: (items) {
-        return Map.fromEntries(assignments.map((a) {
-          var item = items.firstWhereOrNull((item) => item.id == a.itemId);
-          if (item != null) {
-            return MapEntry(item, a.count);
-          }
-        }).nonNulls);
+        return Map.fromEntries(
+          assignments.map((a) {
+            var item = items.firstWhereOrNull((item) => item.id == a.itemId);
+            if (item != null) {
+              return MapEntry(item, a.count);
+            }
+          }).nonNulls,
+        );
       },
       loading: () => <Item, int>{},
       error: (_, __) => <Item, int>{},

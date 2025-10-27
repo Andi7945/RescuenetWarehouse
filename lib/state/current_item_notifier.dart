@@ -38,9 +38,11 @@ class CurrentItemNotifier extends _$CurrentItemNotifier {
     // Use DataOperationsNotifier for proper loading state management
     final dataOperations = ref.read(dataOperationsNotifierProvider.notifier);
     final itemsAsync = ref.read(allItemsAsyncProvider);
-    final isNewItem = state?.id != item.id ||
+    final isNewItem =
+        state?.id != item.id ||
         itemsAsync.when(
-          data: (items) => items.every((existingItem) => existingItem.id != item.id),
+          data: (items) =>
+              items.every((existingItem) => existingItem.id != item.id),
           loading: () => true, // Assume new if still loading
           error: (_, __) => true, // Assume new on error
         );

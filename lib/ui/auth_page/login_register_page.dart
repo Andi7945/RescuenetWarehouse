@@ -64,7 +64,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       await authNotifier.createUserWithEmailAndPassword(
         email: _controllerEmail.text,
         password: _controllerPassword.text,
-        name: _controllerEmail.text.split('@').first, // Use email prefix as name
+        name: _controllerEmail.text
+            .split('@')
+            .first, // Use email prefix as name
       );
 
       // Registration successful, navigate to main app
@@ -84,24 +86,28 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   Widget _logo() {
     //return the logo from the assets
-    return const DrawerHeader(
-      child: OrgLogo.large(),
-    );
+    return const DrawerHeader(child: OrgLogo.large());
   }
 
   Widget _entryField(String title, TextEditingController controller) {
-    return Semantics(label: title, child: TextField(
-      controller: controller,
-      decoration: InputDecoration(labelText: title, hint: Text(title)),
-    ));
+    return Semantics(
+      label: title,
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(labelText: title, hint: Text(title)),
+      ),
+    );
   }
 
   Widget _secureEntryField(String title, TextEditingController controller) {
-    return Semantics(label: title, child:TextField(
-      controller: controller,
-      obscureText: true,
-      decoration: InputDecoration(labelText: title),
-    ));
+    return Semantics(
+      label: title,
+      child: TextField(
+        controller: controller,
+        obscureText: true,
+        decoration: InputDecoration(labelText: title),
+      ),
+    );
   }
 
   Widget _errorMessage() {
@@ -152,8 +158,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   _loginOrRegisterButton(),
                   ElevatedButton(
                     child: Text("Forgot password"),
-                    onPressed:
-                        () => Navigator.pushNamed(context, routeForgotPassword),
+                    onPressed: () =>
+                        Navigator.pushNamed(context, routeForgotPassword),
                   ),
                 ],
               ),

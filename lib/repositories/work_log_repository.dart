@@ -1,7 +1,7 @@
 import 'package:rescuenet_warehouse/models/log_entry.dart';
 
 /// Repository interface for managing work log entries (audit trail).
-/// 
+///
 /// This repository handles the audit trail of all item-container assignment changes,
 /// providing real-time synchronization and historical data access.
 abstract class WorkLogRepository {
@@ -21,7 +21,10 @@ abstract class WorkLogRepository {
   Future<List<LogEntry>> getWorkLogsSince(DateTime date);
 
   /// Get work log entries within a date range
-  Future<List<LogEntry>> getWorkLogsBetween(DateTime startDate, DateTime endDate);
+  Future<List<LogEntry>> getWorkLogsBetween(
+    DateTime startDate,
+    DateTime endDate,
+  );
 
   /// Create a new work log entry
   Future<void> createWorkLog(LogEntry logEntry);

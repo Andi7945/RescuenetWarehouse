@@ -18,11 +18,15 @@ class ContainerWithContentHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        onTap: () {
-          Navigator.pushNamed(context, routeContainerEditPage,
-              arguments: _container.id);
-        },
-        child: _body(context));
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          routeContainerEditPage,
+          arguments: _container.id,
+        );
+      },
+      child: _body(context),
+    );
   }
 
   _body(BuildContext context) {
@@ -40,7 +44,9 @@ class ContainerWithContentHeader extends StatelessWidget {
           _nameAndCheckboxes(context),
           _basicInformation(),
           ContainerWithContentHeaderBottom(
-              container: _container, items: _items),
+            container: _container,
+            items: _items,
+          ),
         ],
       ),
     );
@@ -54,11 +60,17 @@ class ContainerWithContentHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          ContainerWithContentHeaderCheckbox("Deploy", _container.toDeploy,
-              (v) => _container.copyWith(toDeploy: v)),
+          ContainerWithContentHeaderCheckbox(
+            "Deploy",
+            _container.toDeploy,
+            (v) => _container.copyWith(toDeploy: v),
+          ),
           Flexible(child: RescueText.headline(_container.printName)),
-          ContainerWithContentHeaderCheckbox("Ready", _container.isReady,
-              (v) => _container.copyWith(isReady: v))
+          ContainerWithContentHeaderCheckbox(
+            "Ready",
+            _container.isReady,
+            (v) => _container.copyWith(isReady: v),
+          ),
         ],
       ),
     );
@@ -92,7 +104,7 @@ class ContainerWithContentHeader extends StatelessWidget {
             children: [
               RescueText.slim('Weight'),
               const SizedBox(height: 10),
-              RescueText(20, "${_sumWeight()} kg")
+              RescueText(20, "${_sumWeight()} kg"),
             ],
           ),
         ],

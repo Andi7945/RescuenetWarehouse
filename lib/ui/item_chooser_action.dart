@@ -14,37 +14,43 @@ class ItemChooserAction extends ConsumerWidget {
 
     return filteredItemsAsync.when(
       loading: () => ActionChip(
-        label: Row(children: [
-          Text("... / $allItems"),
-          const SizedBox(width: 8),
-          const SizedBox(
-            width: 12,
-            height: 12,
-            child: CircularProgressIndicator(strokeWidth: 2),
-          ),
-          const SizedBox(width: 8),
-          const Icon(Icons.filter_alt, color: Colors.blue)
-        ]),
+        label: Row(
+          children: [
+            Text("... / $allItems"),
+            const SizedBox(width: 8),
+            const SizedBox(
+              width: 12,
+              height: 12,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ),
+            const SizedBox(width: 8),
+            const Icon(Icons.filter_alt, color: Colors.blue),
+          ],
+        ),
         onPressed: () {
           showDialog(context: context, builder: (ctx) => ItemFilterModal());
         },
       ),
       error: (error, stackTrace) => ActionChip(
-        label: Row(children: [
-          Text("Error / $allItems"),
-          const Icon(Icons.error_outline, color: Colors.red, size: 16),
-          const SizedBox(width: 4),
-          const Icon(Icons.filter_alt, color: Colors.blue)
-        ]),
+        label: Row(
+          children: [
+            Text("Error / $allItems"),
+            const Icon(Icons.error_outline, color: Colors.red, size: 16),
+            const SizedBox(width: 4),
+            const Icon(Icons.filter_alt, color: Colors.blue),
+          ],
+        ),
         onPressed: () {
           showDialog(context: context, builder: (ctx) => ItemFilterModal());
         },
       ),
       data: (filteredItems) => ActionChip(
-        label: Row(children: [
-          Text("${filteredItems.length} / $allItems"),
-          const Icon(Icons.filter_alt, color: Colors.blue)
-        ]),
+        label: Row(
+          children: [
+            Text("${filteredItems.length} / $allItems"),
+            const Icon(Icons.filter_alt, color: Colors.blue),
+          ],
+        ),
         onPressed: () {
           showDialog(context: context, builder: (ctx) => ItemFilterModal());
         },

@@ -15,31 +15,32 @@ class _EditCustomValueTextFieldState extends State<EditCustomValueTextField> {
 
   @override
   Widget build(BuildContext context) => TextField(
-        style: const TextStyle(fontSize: 16),
-        decoration: const InputDecoration(
-            hintText: "Insert new value here",
-            hintStyle: TextStyle(fontSize: 16)),
-        controller: widget.controller,
-        onTap: () {
-          _focussed = true;
-        },
-        onTapOutside: (_) {
-          if (widget.onChange != null && _focussed) {
-            _focussed = false;
-            widget.onChange!(widget.controller.text);
-          }
-        },
-        onEditingComplete: () {
-          if (widget.onChange != null && _focussed) {
-            _focussed = false;
-            widget.onChange!(widget.controller.text);
-          }
-        },
-        onSubmitted: (value) {
-          if (widget.onChange != null) {
-            _focussed = false;
-            widget.onChange!(value);
-          }
-        },
-      );
+    style: const TextStyle(fontSize: 16),
+    decoration: const InputDecoration(
+      hintText: "Insert new value here",
+      hintStyle: TextStyle(fontSize: 16),
+    ),
+    controller: widget.controller,
+    onTap: () {
+      _focussed = true;
+    },
+    onTapOutside: (_) {
+      if (widget.onChange != null && _focussed) {
+        _focussed = false;
+        widget.onChange!(widget.controller.text);
+      }
+    },
+    onEditingComplete: () {
+      if (widget.onChange != null && _focussed) {
+        _focussed = false;
+        widget.onChange!(widget.controller.text);
+      }
+    },
+    onSubmitted: (value) {
+      if (widget.onChange != null) {
+        _focussed = false;
+        widget.onChange!(value);
+      }
+    },
+  );
 }

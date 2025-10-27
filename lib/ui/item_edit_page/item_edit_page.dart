@@ -21,21 +21,24 @@ class ItemEditPage extends river.ConsumerWidget {
 
   _body(Item item) {
     return SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Wrap(
-          children: [
-            _lane(Column(
+      scrollDirection: Axis.vertical,
+      child: Wrap(
+        children: [
+          _lane(
+            Column(
               children: [
                 ItemEditPageBaseInformation(),
                 const SizedBox(height: 8),
                 ItemEditPageAmounts(item: item),
                 const SizedBox(height: 8),
-                ItemEditPageAdditionalInformation()
+                ItemEditPageAdditionalInformation(),
               ],
-            )),
-            _lane(Column(children: [ItemEditPageNotes(), ItemEditPageSigns()])),
-          ],
-        ));
+            ),
+          ),
+          _lane(Column(children: [ItemEditPageNotes(), ItemEditPageSigns()])),
+        ],
+      ),
+    );
   }
 
   Widget _lane(Widget w) =>

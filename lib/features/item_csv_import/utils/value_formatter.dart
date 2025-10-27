@@ -20,8 +20,8 @@ class ValueFormatter {
 
     // Convert camelCase to space-separated words
     final result = fieldName.replaceAllMapped(
-        RegExp(r'([A-Z])'),
-            (match) => ' ${match.group(1)}'
+      RegExp(r'([A-Z])'),
+      (match) => ' ${match.group(1)}',
     );
 
     // Capitalize first letter and trim

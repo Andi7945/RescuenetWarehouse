@@ -22,20 +22,23 @@ class _ExportPageState extends river.ConsumerState<ExportPage> {
   Widget build(BuildContext context) {
     var allContainersWithItems = ref.watch(containerWithItemsNotifierProvider);
     return Scaffold(
-        appBar: RescueAppBar(
-            title: "Ready containers",
-            actions: [_summaryButton(allContainersWithItems)]),
-        drawer: RescueNavigationDrawer(),
-        body: ExportPageBody(allContainersWithItems));
+      appBar: RescueAppBar(
+        title: "Ready containers",
+        actions: [_summaryButton(allContainersWithItems)],
+      ),
+      drawer: RescueNavigationDrawer(),
+      body: ExportPageBody(allContainersWithItems),
+    );
   }
 
   Widget _summaryButton(
-          Map<RescueContainer, Map<Item, int>> allContainersWithItems) =>
-      ActionChip(
-          onPressed: () async {
-            await _shareSummaryPdf(allContainersWithItems);
-          },
-          label: RescueText.slim("Print final summary"));
+    Map<RescueContainer, Map<Item, int>> allContainersWithItems,
+  ) => ActionChip(
+    onPressed: () async {
+      await _shareSummaryPdf(allContainersWithItems);
+    },
+    label: RescueText.slim("Print final summary"),
+  );
 
   Future<void> _shareSummaryPdf(
     Map<RescueContainer, Map<Item, int>> withItems,

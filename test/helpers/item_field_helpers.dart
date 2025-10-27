@@ -60,18 +60,24 @@ Future<void> fillAdditionalFields(
     await _fillTextField(tester, label: 'Value in €:', value: value.toString());
   }
   if (weight != null) {
-    await _fillTextField(tester, label: 'Weight in kg:', value: weight.toString());
+    await _fillTextField(
+      tester,
+      label: 'Weight in kg:',
+      value: weight.toString(),
+    );
   }
 }
 
 /// Fill notes field
 Future<void> fillNotes(WidgetTester tester, String notes) async {
-  final notesField = find.widgetWithText(TextFormField, notes).or(
-    find.ancestor(
-      of: find.text(notes),
-      matching: find.byType(TextFormField),
-    ),
-  );
+  final notesField = find
+      .widgetWithText(TextFormField, notes)
+      .or(
+        find.ancestor(
+          of: find.text(notes),
+          matching: find.byType(TextFormField),
+        ),
+      );
 
   if (notesField.evaluate().isNotEmpty) {
     await tester.enterText(notesField.first, notes);
@@ -137,7 +143,8 @@ void verifyItemFields(
   if (sku != null) expect(item.sku, sku);
   if (value != null) expect(item.value, value);
   if (notes != null) expect(item.notes, notes);
-  if (operationalStatus != null) expect(item.operationalStatus, operationalStatus);
+  if (operationalStatus != null)
+    expect(item.operationalStatus, operationalStatus);
   if (isColdChain != null) expect(item.isColdChain, isColdChain);
 }
 
@@ -147,12 +154,14 @@ Future<void> _fillTextField(
   required String label,
   required String value,
 }) async {
-  final field = find.widgetWithText(TextFormField, label).or(
-    find.ancestor(
-      of: find.text(label),
-      matching: find.byType(TextFormField),
-    ),
-  );
+  final field = find
+      .widgetWithText(TextFormField, label)
+      .or(
+        find.ancestor(
+          of: find.text(label),
+          matching: find.byType(TextFormField),
+        ),
+      );
 
   if (field.evaluate().isEmpty) {
     // Try finding by label text in decoration

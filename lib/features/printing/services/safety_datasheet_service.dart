@@ -26,7 +26,8 @@ class SafetyDatasheetService {
   /// Returns empty list if no safety datasheets are found.
   ///
   /// Throws [FirebaseException] if any fetch fails.
-  static Future<List<(Uint8List bytes, String fileName)>> fetchSafetyDatasheetBytes(
+  static Future<List<(Uint8List bytes, String fileName)>>
+  fetchSafetyDatasheetBytes(
     Map<RescueContainer, Map<Item, int>> containers,
   ) async {
     // Extract all safety datasheet references from items
@@ -115,15 +116,14 @@ class SafetyDatasheetService {
   /// - Network errors
   static Future<Uint8List> _fetchFromStorage(FirebaseDocument document) async {
     try {
-      final bytes = await FirebaseStorage.instance
-          .ref(document.url)
-          .getData();
+      final bytes = await FirebaseStorage.instance.ref(document.url).getData();
 
       if (bytes == null) {
         throw FirebaseException(
           plugin: 'firebase_storage',
           code: 'download-failed',
-          message: 'Failed to download safety datasheet from storage path: ${document.url}',
+          message:
+              'Failed to download safety datasheet from storage path: ${document.url}',
         );
       }
 
@@ -137,7 +137,8 @@ class SafetyDatasheetService {
       throw FirebaseException(
         plugin: 'firebase_storage',
         code: 'download-error',
-        message: 'Error downloading safety datasheet from "${document.url}": ${_formatErrorMessage(e)}',
+        message:
+            'Error downloading safety datasheet from "${document.url}": ${_formatErrorMessage(e)}',
         stackTrace: stackTrace,
       );
     }
@@ -163,7 +164,8 @@ class SafetyDatasheetService {
       return 'File not found - the safety datasheet may have been deleted or moved';
     }
 
-    if (errorStr.contains('NetworkError') || errorStr.contains('Failed to fetch')) {
+    if (errorStr.contains('NetworkError') ||
+        errorStr.contains('Failed to fetch')) {
       return 'Network error - check internet connection and Firebase Storage availability';
     }
 

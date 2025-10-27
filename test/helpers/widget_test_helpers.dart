@@ -19,9 +19,7 @@ Future<void> pumpApp(
       container: container,
       child: MaterialApp(
         home: child,
-        routes: {
-          routeItemEditPage: (ctx) => child,
-        },
+        routes: {routeItemEditPage: (ctx) => child},
       ),
     ),
   );
@@ -40,9 +38,8 @@ Future<void> navigateToItemEdit(
     MaterialApp(
       initialRoute: routeItemEditPage,
       routes: {
-        routeItemEditPage: (ctx) => const Scaffold(
-          body: Text('Item Edit Page'),
-        ),
+        routeItemEditPage: (ctx) =>
+            const Scaffold(body: Text('Item Edit Page')),
       },
     ),
   );
@@ -50,29 +47,19 @@ Future<void> navigateToItemEdit(
 }
 
 /// Navigates to create new item page
-Future<void> navigateToNewItem(
-  WidgetTester tester,
-  WidgetRef ref,
-) async {
+Future<void> navigateToNewItem(WidgetTester tester, WidgetRef ref) async {
   await ref.read(currentItemNotifierProvider.notifier).addItem();
   await tester.pumpAndSettle();
 }
 
 /// Enters text in a field and pumps
-Future<void> enterText(
-  WidgetTester tester,
-  Finder finder,
-  String text,
-) async {
+Future<void> enterText(WidgetTester tester, Finder finder, String text) async {
   await tester.enterText(finder, text);
   await tester.pump();
 }
 
 /// Taps a button by finder or text
-Future<void> tapButton(
-  WidgetTester tester,
-  dynamic buttonIdentifier,
-) async {
+Future<void> tapButton(WidgetTester tester, dynamic buttonIdentifier) async {
   final Finder finder = buttonIdentifier is String
       ? find.text(buttonIdentifier)
       : buttonIdentifier as Finder;

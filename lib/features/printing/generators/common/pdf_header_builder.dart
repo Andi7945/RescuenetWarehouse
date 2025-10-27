@@ -17,10 +17,7 @@ Future<pw.Widget> buildHeaderRow(
       children: [
         pw.Expanded(child: leftCorner, flex: 5),
         pw.SizedBox(width: 8),
-        pw.Expanded(
-          child: await _buildRightSide(rightSide, context),
-          flex: 5,
-        ),
+        pw.Expanded(child: await _buildRightSide(rightSide, context), flex: 5),
       ],
     ),
   );
@@ -83,7 +80,7 @@ pw.Widget _buildInfoBox(PrintContext context) {
 /// Build footer with page numbers
 pw.Widget Function(int, int) buildFooter(String documentName) {
   return (int pageNum, int totalPages) => pw.Container(
-        alignment: pw.Alignment.centerRight,
-        child: pw.Text('$documentName - page $pageNum / $totalPages'),
-      );
+    alignment: pw.Alignment.centerRight,
+    child: pw.Text('$documentName - page $pageNum / $totalPages'),
+  );
 }

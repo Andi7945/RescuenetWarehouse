@@ -9,11 +9,13 @@ class ImagePickerDialog extends StatelessWidget {
     final ref = firebase_storage.FirebaseStorage.instance;
     var ref2 = ref.ref("images/thumbs").listAll();
     return SizedBox(
-        width: 1000,
-        height: 800,
-        child: FutureBuilder(
-            future: ref2,
-            builder: (ctxt, snap) => _grid(context, snap.data?.items ?? [])));
+      width: 1000,
+      height: 800,
+      child: FutureBuilder(
+        future: ref2,
+        builder: (ctxt, snap) => _grid(context, snap.data?.items ?? []),
+      ),
+    );
   }
 
   _grid(BuildContext context, List<Reference> imageRefs) {
@@ -27,11 +29,14 @@ class ImagePickerDialog extends StatelessWidget {
   }
 
   Widget _single(BuildContext context, Reference imageRef) => FutureBuilder(
-      future: imageRef.getDownloadURL(),
-      builder: (_, snap) => SizedBox(
-          height: 100,
-          width: 100,
-          child: InkWell(
-              onTap: () => Navigator.pop(context, snap.data),
-              child: Card(child: RescueImage(snap.data)))));
+    future: imageRef.getDownloadURL(),
+    builder: (_, snap) => SizedBox(
+      height: 100,
+      width: 100,
+      child: InkWell(
+        onTap: () => Navigator.pop(context, snap.data),
+        child: Card(child: RescueImage(snap.data)),
+      ),
+    ),
+  );
 }

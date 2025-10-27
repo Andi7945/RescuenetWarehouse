@@ -16,23 +16,25 @@ final Map<String, OrgConfig> _orgConfigs = {
     name: 'RescueNet',
     smallLogoAssetPath: 'assets/images/LogoRN.png',
     largeLogoAssetPath: 'assets/images/rn_logo_big.png',
-    productionFirebase: rescuenet_prod.RescuenetProductionFirebaseOptions.currentPlatform,
-    stagingFirebase: rescuenet_staging.RescuenetStagingFirebaseOptions.currentPlatform,
+    productionFirebase:
+        rescuenet_prod.RescuenetProductionFirebaseOptions.currentPlatform,
+    stagingFirebase:
+        rescuenet_staging.RescuenetStagingFirebaseOptions.currentPlatform,
     features: {},
     allowedEmailDomains: ['rescuenet.net'],
     whitelistedEmails: ['Michael.Wandtke@hey.com'],
   ),
   'humedica': OrgConfig(
-      id: 'humedica',
-      name: 'Humedica',
-      smallLogoAssetPath: 'assets/images/humedica_logo_small.png',
-      largeLogoAssetPath: 'assets/images/humedica_logo_big.png',
-      productionFirebase: humedica_prod.HumedicaFirebaseOptions.currentPlatform,
-      stagingFirebase: humedica_prod.HumedicaFirebaseOptions.currentPlatform,
-      features: {},
-      allowedEmailDomains: ['humedica.org', 'rescuenet.net'],
-      whitelistedEmails: ['Michael.Wandtke@hey.com'],
-  )
+    id: 'humedica',
+    name: 'Humedica',
+    smallLogoAssetPath: 'assets/images/humedica_logo_small.png',
+    largeLogoAssetPath: 'assets/images/humedica_logo_big.png',
+    productionFirebase: humedica_prod.HumedicaFirebaseOptions.currentPlatform,
+    stagingFirebase: humedica_prod.HumedicaFirebaseOptions.currentPlatform,
+    features: {},
+    allowedEmailDomains: ['humedica.org', 'rescuenet.net'],
+    whitelistedEmails: ['Michael.Wandtke@hey.com'],
+  ),
 };
 
 /// Get organization config by ID.

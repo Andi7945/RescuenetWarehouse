@@ -12,18 +12,29 @@ part 'work_log_notifier.g.dart';
 @riverpod
 class WorkLogNotifier extends _$WorkLogNotifier {
   @override
-  List<MapEntry<DateTime, List<MapEntry<String, List<LogEntrySummed>>>>> build() {
+  List<MapEntry<DateTime, List<MapEntry<String, List<LogEntrySummed>>>>>
+  build() {
     var logsAsync = ref.watch(allWorkLogsAsyncProvider);
-    
+
     return logsAsync.when(
       data: (logs) {
-        Map<DateTime, List<LogEntry>> byDate = logs.groupBy((y) => y.date.asDay());
-        var grouped = byDate.mapValues(sumDailyChanges).mapValues((x) =>
-            x.groupBySorted((p0) => p0.containerId, (a, b) => a.compareTo(b)));
+        Map<DateTime, List<LogEntry>> byDate = logs.groupBy(
+          (y) => y.date.asDay(),
+        );
+        var grouped = byDate
+            .mapValues(sumDailyChanges)
+            .mapValues(
+              (x) => x.groupBySorted(
+                (p0) => p0.containerId,
+                (a, b) => a.compareTo(b),
+              ),
+            );
 
         return grouped.entries
-            .sorted((a, b) =>
-                b.key.millisecondsSinceEpoch - a.key.millisecondsSinceEpoch)
+            .sorted(
+              (a, b) =>
+                  b.key.millisecondsSinceEpoch - a.key.millisecondsSinceEpoch,
+            )
             .toList();
       },
       loading: () => [],

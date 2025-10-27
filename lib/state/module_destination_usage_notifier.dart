@@ -21,10 +21,11 @@ class ModuleDestinationUsageNotifier extends _$ModuleDestinationUsageNotifier {
             .where((element) => element.type != null)
             .groupBy((p0) => p0.moduleDestination!)
             .mapValues(
-                (value) => value.map((e) => e.printName).whereNotNull().toSet());
+              (value) => value.map((e) => e.printName).whereNotNull().toSet(),
+            );
 
         Map<ModuleDestination, Set<String>> map = {
-          for (var e in dests) e: grouped[e] ?? Set()
+          for (var e in dests) e: grouped[e] ?? Set(),
         };
         return AsyncValue.data(map);
       },

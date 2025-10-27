@@ -10,7 +10,8 @@ class AuthForgotPasswordPage extends ConsumerStatefulWidget {
   ConsumerState createState() => _AuthForgotPasswordPageState();
 }
 
-class _AuthForgotPasswordPageState extends ConsumerState<AuthForgotPasswordPage> {
+class _AuthForgotPasswordPageState
+    extends ConsumerState<AuthForgotPasswordPage> {
   final TextEditingController _controllerEmail = TextEditingController();
   String? errorMessage = '';
 
@@ -28,7 +29,7 @@ class _AuthForgotPasswordPageState extends ConsumerState<AuthForgotPasswordPage>
               _logo(),
               _entryField('email', _controllerEmail),
               _errorMessage(),
-              _sendBtn()
+              _sendBtn(),
             ],
           ),
         ),
@@ -38,43 +39,37 @@ class _AuthForgotPasswordPageState extends ConsumerState<AuthForgotPasswordPage>
 
   Widget _logo() {
     //return the logo from the assets
-    return const DrawerHeader(
-      child: OrgLogo.small(),
-    );
+    return const DrawerHeader(child: OrgLogo.small());
   }
 
   Widget _errorMessage() {
     return Text(errorMessage == '' ? '' : 'Error : $errorMessage');
   }
 
-  Widget _entryField(
-    String title,
-    TextEditingController controller,
-  ) {
+  Widget _entryField(String title, TextEditingController controller) {
     return TextField(
       controller: controller,
-      decoration: InputDecoration(
-        labelText: title,
-      ),
+      decoration: InputDecoration(labelText: title),
     );
   }
 
   Widget _sendBtn() => Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        OutlinedButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text('Back'),
-        ),
-        FilledButton(
-          onPressed: () {
-            _sendMail();
-          },
-          child: const Text('Send mail'),
-        )
-      ]);
+    mainAxisAlignment: MainAxisAlignment.spaceAround,
+    children: [
+      OutlinedButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: const Text('Back'),
+      ),
+      FilledButton(
+        onPressed: () {
+          _sendMail();
+        },
+        child: const Text('Send mail'),
+      ),
+    ],
+  );
 
   Future<void> _sendMail() async {
     print('pressed send reset mail');

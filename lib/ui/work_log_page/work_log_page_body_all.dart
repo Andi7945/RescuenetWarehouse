@@ -14,34 +14,39 @@ class WorkLogPageBodyAll extends ConsumerWidget {
       _body(ref.watch(workLogNotifierProvider));
 
   _body(
-          List<MapEntry<DateTime, List<MapEntry<String, List<LogEntrySummed>>>>>
-              byDate) =>
-      ListView(
-        children: byDate.map(_createTableForDate).toList(),
-      );
+    List<MapEntry<DateTime, List<MapEntry<String, List<LogEntrySummed>>>>>
+    byDate,
+  ) => ListView(children: byDate.map(_createTableForDate).toList());
 
   Widget _createTableForDate(
-          MapEntry<DateTime, List<MapEntry<String, List<LogEntrySummed>>>>
-              date) =>
-      _bordered(Column(children: [
+    MapEntry<DateTime, List<MapEntry<String, List<LogEntrySummed>>>> date,
+  ) => _bordered(
+    Column(
+      children: [
         Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: RescueText.headline(formatter.format(date.key))),
-        _tablesPerDate(date.value)
-      ]));
+          padding: const EdgeInsets.only(top: 8),
+          child: RescueText.headline(formatter.format(date.key)),
+        ),
+        _tablesPerDate(date.value),
+      ],
+    ),
+  );
 
   Widget _bordered(Widget w) => Padding(
-      padding: const EdgeInsets.only(top: 8, bottom: 8),
-      child: Container(
-          decoration: const ShapeDecoration(
-            shape: RoundedRectangleBorder(side: BorderSide(width: 0.50)),
-          ),
-          child: w));
+    padding: const EdgeInsets.only(top: 8, bottom: 8),
+    child: Container(
+      decoration: const ShapeDecoration(
+        shape: RoundedRectangleBorder(side: BorderSide(width: 0.50)),
+      ),
+      child: w,
+    ),
+  );
 
   _tablesPerDate(List<MapEntry<String, List<LogEntrySummed>>> entriesPerDate) {
     return Column(
-        children: entriesPerDate
-            .map((v) => WorkLogPageAllSingleDate(entries: v.value))
-            .toList());
+      children: entriesPerDate
+          .map((v) => WorkLogPageAllSingleDate(entries: v.value))
+          .toList(),
+    );
   }
 }

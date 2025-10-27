@@ -24,20 +24,25 @@ class LabelWithMultipleEntries extends StatelessWidget {
         textBaseline: TextBaseline.alphabetic,
         children: [
           SizedBox(
-              width: 152,
-              child: Row(
-                children: [
-                  RescueText.slim(label),
-                  Expanded(
-                      child: IconButton(
-                          onPressed: onAdd, icon: const Icon(Icons.add))),
-                ],
-              )),
+            width: 152,
+            child: Row(
+              children: [
+                RescueText.slim(label),
+                Expanded(
+                  child: IconButton(
+                    onPressed: onAdd,
+                    icon: const Icon(Icons.add),
+                  ),
+                ),
+              ],
+            ),
+          ),
           Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: entries.map((e) => _withBorder(e)).toList()),
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: entries.map((e) => _withBorder(e)).toList(),
+          ),
         ],
       ),
     );

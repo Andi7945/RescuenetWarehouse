@@ -17,29 +17,35 @@ class ItemFilterModal extends river.ConsumerStatefulWidget {
 class _ItemFilterModalState extends river.ConsumerState<ItemFilterModal> {
   @override
   Widget build(BuildContext context) => SimpleDialog(
-      title: RescueText.headline("Filter items"), children: [_body()]);
+    title: RescueText.headline("Filter items"),
+    children: [_body()],
+  );
 
   Widget _body() {
     return FractionallySizedBox(
-        widthFactor: 0.5,
-        child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [_textInput(), _dropdown()]));
+      widthFactor: 0.5,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [_textInput(), _dropdown()],
+      ),
+    );
   }
 
   Widget _textInput() => SizedBox(
-      width: 300,
-      child: RescueInputText(
-        initial: ref.watch(itemsCurrentFilterNotifierProvider).value,
-        onChange: ref
-            .read(itemsCurrentFilterNotifierProvider.notifier)
-            .setCurrentFilterValue,
-      ));
+    width: 300,
+    child: RescueInputText(
+      initial: ref.watch(itemsCurrentFilterNotifierProvider).value,
+      onChange: ref
+          .read(itemsCurrentFilterNotifierProvider.notifier)
+          .setCurrentFilterValue,
+    ),
+  );
 
   Widget _dropdown() => RescueDropdownButtonDirect(
-      _filterOptions(),
-      ref.watch(itemsCurrentFilterNotifierProvider).filter,
-      ref.read(itemsCurrentFilterNotifierProvider.notifier).setField);
+    _filterOptions(),
+    ref.watch(itemsCurrentFilterNotifierProvider).filter,
+    ref.read(itemsCurrentFilterNotifierProvider.notifier).setField,
+  );
 
   Map<ItemFilter, String> _filterOptions() =>
       allItemFilter.map((key, value) => MapEntry(value, value.displayName));

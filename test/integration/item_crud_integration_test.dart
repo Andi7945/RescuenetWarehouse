@@ -66,8 +66,14 @@ void main() {
         expect(retrievedItem?.rescueNetId, equals(2001.0));
         expect(retrievedItem?.totalAmount, equals(25));
         expect(retrievedItem?.weight, equals(8.5));
-        expect(retrievedItem?.description, equals('Large emergency shelter tent'));
-        expect(retrievedItem?.operationalStatus, equals(OperationalStatus.deployable));
+        expect(
+          retrievedItem?.description,
+          equals('Large emergency shelter tent'),
+        );
+        expect(
+          retrievedItem?.operationalStatus,
+          equals(OperationalStatus.deployable),
+        );
       });
 
       test('should create item with all optional fields populated', () async {
@@ -124,119 +130,144 @@ void main() {
     });
 
     group('Update Item', () {
-      test('should update ALL modifiable item fields comprehensively', () async {
-        // Arrange - Create initial item with minimal data
-        final originalItem = createTestItem(
-          id: 'update-test-001',
-          name: 'Original Name',
-          description: 'Original description',
-          weight: 1.0,
-        );
-        await mockRepo.upsertItem(originalItem);
+      test(
+        'should update ALL modifiable item fields comprehensively',
+        () async {
+          // Arrange - Create initial item with minimal data
+          final originalItem = createTestItem(
+            id: 'update-test-001',
+            name: 'Original Name',
+            description: 'Original description',
+            weight: 1.0,
+          );
+          await mockRepo.upsertItem(originalItem);
 
-        // Prepare update with ALL modifiable fields changed
-        final originalExpiryDate = DateTime(2024, 6, 30);
-        final updatedExpiryDate = DateTime(2025, 12, 31);
-        final newExpiryDate = DateTime(2026, 6, 30);
+          // Prepare update with ALL modifiable fields changed
+          final originalExpiryDate = DateTime(2024, 6, 30);
+          final updatedExpiryDate = DateTime(2025, 12, 31);
+          final newExpiryDate = DateTime(2026, 6, 30);
 
-        final sign = Sign(
-          id: 'sign-002',
-          unNumber: 'UN5678',
-          dangerType: 'Toxic',
-          properShippingName: 'Hazardous Material',
-          instructions: 'Keep away from heat',
-          remarks: 'Danger sign',
-          maxWeightPAX: 5.0,
-          maxWeightCargo: 50.0,
-        );
+          final sign = Sign(
+            id: 'sign-002',
+            unNumber: 'UN5678',
+            dangerType: 'Toxic',
+            properShippingName: 'Hazardous Material',
+            instructions: 'Keep away from heat',
+            remarks: 'Danger sign',
+            maxWeightPAX: 5.0,
+            maxWeightCargo: 50.0,
+          );
 
-        final updatedItem = originalItem.copyWith(
-          // Update all string fields
-          name: 'Updated Item Name',
-          description: 'Updated comprehensive description',
-          manufacturer: 'Updated Manufacturer Corp',
-          brand: 'Updated Brand',
-          type: 'Updated Type Category',
-          supplier: 'Updated Supplier LLC',
-          website: 'https://updated-website.example.com',
-          remarks: 'Updated remarks and notes',
-          sku: 'UPDATED-SKU-2024',
-          notes: 'Updated detailed notes about this item',
+          final updatedItem = originalItem.copyWith(
+            // Update all string fields
+            name: 'Updated Item Name',
+            description: 'Updated comprehensive description',
+            manufacturer: 'Updated Manufacturer Corp',
+            brand: 'Updated Brand',
+            type: 'Updated Type Category',
+            supplier: 'Updated Supplier LLC',
+            website: 'https://updated-website.example.com',
+            remarks: 'Updated remarks and notes',
+            sku: 'UPDATED-SKU-2024',
+            notes: 'Updated detailed notes about this item',
 
-          // Update numeric fields
-          weight: 5.5,
-          value: 25000,
+            // Update numeric fields
+            weight: 5.5,
+            value: 25000,
 
-          // Update enum field
-          operationalStatus: OperationalStatus.needsRepair,
+            // Update enum field
+            operationalStatus: OperationalStatus.needsRepair,
 
-          // Update boolean field
-          isColdChain: true,
+            // Update boolean field
+            isColdChain: true,
 
-          // Update list fields
-          expiringDates: [originalExpiryDate, updatedExpiryDate, newExpiryDate],
-          signs: [sign],
-        );
+            // Update list fields
+            expiringDates: [
+              originalExpiryDate,
+              updatedExpiryDate,
+              newExpiryDate,
+            ],
+            signs: [sign],
+          );
 
-        // Act
-        await mockRepo.upsertItem(updatedItem);
-        final retrieved = await mockRepo.getItem('update-test-001');
+          // Act
+          await mockRepo.upsertItem(updatedItem);
+          final retrieved = await mockRepo.getItem('update-test-001');
 
-        // Assert - Verify ALL fields were updated correctly
-        expect(retrieved, isNotNull);
+          // Assert - Verify ALL fields were updated correctly
+          expect(retrieved, isNotNull);
 
-        // String fields
-        expect(retrieved?.name, equals('Updated Item Name'));
-        expect(retrieved?.description, equals('Updated comprehensive description'));
-        expect(retrieved?.manufacturer, equals('Updated Manufacturer Corp'));
-        expect(retrieved?.brand, equals('Updated Brand'));
-        expect(retrieved?.type, equals('Updated Type Category'));
-        expect(retrieved?.supplier, equals('Updated Supplier LLC'));
-        expect(retrieved?.website, equals('https://updated-website.example.com'));
-        expect(retrieved?.remarks, equals('Updated remarks and notes'));
-        expect(retrieved?.sku, equals('UPDATED-SKU-2024'));
-        expect(retrieved?.notes, equals('Updated detailed notes about this item'));
+          // String fields
+          expect(retrieved?.name, equals('Updated Item Name'));
+          expect(
+            retrieved?.description,
+            equals('Updated comprehensive description'),
+          );
+          expect(retrieved?.manufacturer, equals('Updated Manufacturer Corp'));
+          expect(retrieved?.brand, equals('Updated Brand'));
+          expect(retrieved?.type, equals('Updated Type Category'));
+          expect(retrieved?.supplier, equals('Updated Supplier LLC'));
+          expect(
+            retrieved?.website,
+            equals('https://updated-website.example.com'),
+          );
+          expect(retrieved?.remarks, equals('Updated remarks and notes'));
+          expect(retrieved?.sku, equals('UPDATED-SKU-2024'));
+          expect(
+            retrieved?.notes,
+            equals('Updated detailed notes about this item'),
+          );
 
-        // Numeric fields
-        expect(retrieved?.weight, equals(5.5));
-        expect(retrieved?.value, equals(25000));
+          // Numeric fields
+          expect(retrieved?.weight, equals(5.5));
+          expect(retrieved?.value, equals(25000));
 
-        // Enum field
-        expect(retrieved?.operationalStatus, equals(OperationalStatus.needsRepair));
+          // Enum field
+          expect(
+            retrieved?.operationalStatus,
+            equals(OperationalStatus.needsRepair),
+          );
 
-        // Boolean field
-        expect(retrieved?.isColdChain, isTrue);
+          // Boolean field
+          expect(retrieved?.isColdChain, isTrue);
 
-        // List fields
-        expect(retrieved?.expiringDates, hasLength(3));
-        expect(retrieved?.expiringDates[0], equals(originalExpiryDate));
-        expect(retrieved?.expiringDates[1], equals(updatedExpiryDate));
-        expect(retrieved?.expiringDates[2], equals(newExpiryDate));
+          // List fields
+          expect(retrieved?.expiringDates, hasLength(3));
+          expect(retrieved?.expiringDates[0], equals(originalExpiryDate));
+          expect(retrieved?.expiringDates[1], equals(updatedExpiryDate));
+          expect(retrieved?.expiringDates[2], equals(newExpiryDate));
 
-        expect(retrieved?.signs, hasLength(1));
-        expect(retrieved?.signs[0].id, equals('sign-002'));
-        expect(retrieved?.signs[0].unNumber, equals('UN5678'));
-        expect(retrieved?.signs[0].dangerType, equals('Toxic'));
-      });
+          expect(retrieved?.signs, hasLength(1));
+          expect(retrieved?.signs[0].id, equals('sign-002'));
+          expect(retrieved?.signs[0].unNumber, equals('UN5678'));
+          expect(retrieved?.signs[0].dangerType, equals('Toxic'));
+        },
+      );
 
-      test('should update operational status from deployable to toBeReplaced', () async {
-        // Arrange
-        final item = createTestItem(
-          id: 'status-test-001',
-          status: OperationalStatus.deployable,
-        );
-        await mockRepo.upsertItem(item);
+      test(
+        'should update operational status from deployable to toBeReplaced',
+        () async {
+          // Arrange
+          final item = createTestItem(
+            id: 'status-test-001',
+            status: OperationalStatus.deployable,
+          );
+          await mockRepo.upsertItem(item);
 
-        // Act
-        final updated = item.copyWith(
-          operationalStatus: OperationalStatus.toBeReplaced,
-        );
-        await mockRepo.upsertItem(updated);
-        final retrieved = await mockRepo.getItem('status-test-001');
+          // Act
+          final updated = item.copyWith(
+            operationalStatus: OperationalStatus.toBeReplaced,
+          );
+          await mockRepo.upsertItem(updated);
+          final retrieved = await mockRepo.getItem('status-test-001');
 
-        // Assert
-        expect(retrieved?.operationalStatus, equals(OperationalStatus.toBeReplaced));
-      });
+          // Assert
+          expect(
+            retrieved?.operationalStatus,
+            equals(OperationalStatus.toBeReplaced),
+          );
+        },
+      );
     });
 
     group('Delete Item', () {
@@ -268,19 +299,24 @@ void main() {
 
         // Assert - Verify stream doesn't contain deleted item
         final items = await mockRepo.watchItems().first;
-        final deletedItemInStream = items.where((i) => i.id == 'stream-delete-001');
+        final deletedItemInStream = items.where(
+          (i) => i.id == 'stream-delete-001',
+        );
         expect(deletedItemInStream, isEmpty);
       });
     });
 
     group('Error Scenarios', () {
-      test('should throw ItemException when deleting non-existent item', () async {
-        // Act & Assert
-        expect(
-          () => mockRepo.deleteItem('non-existent-item'),
-          throwsA(isA<ItemException>()),
-        );
-      });
+      test(
+        'should throw ItemException when deleting non-existent item',
+        () async {
+          // Act & Assert
+          expect(
+            () => mockRepo.deleteItem('non-existent-item'),
+            throwsA(isA<ItemException>()),
+          );
+        },
+      );
 
       test('should handle multiple rapid updates correctly', () async {
         // Arrange
@@ -290,9 +326,7 @@ void main() {
         // Act - Perform multiple rapid updates
         final futures = <Future>[];
         for (int i = 1; i <= 5; i++) {
-          futures.add(
-            mockRepo.upsertItem(item.copyWith(name: 'Update $i')),
-          );
+          futures.add(mockRepo.upsertItem(item.copyWith(name: 'Update $i')));
         }
         await Future.wait(futures);
 
@@ -329,7 +363,9 @@ void main() {
 
         // Assert
         final items = await streamFuture;
-        final updatedItem = items.firstWhere((i) => i.id == 'stream-update-001');
+        final updatedItem = items.firstWhere(
+          (i) => i.id == 'stream-update-001',
+        );
         expect(updatedItem.name, equals('Updated'));
       });
     });

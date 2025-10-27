@@ -29,37 +29,35 @@ class IndicatorExpiringDate extends StatelessWidget {
 
   _filled(String formatted, Color color) {
     return Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: color,
-          border: Border.all(),
-        ),
-        child: Center(
-          child: Text.rich(
-            TextSpan(
-              children: [
-                const TextSpan(
-                  text: 'Exp\n',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w400,
-                  ),
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(color: color, border: Border.all()),
+      child: Center(
+        child: Text.rich(
+          TextSpan(
+            children: [
+              const TextSpan(
+                text: 'Exp\n',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w400,
                 ),
-                TextSpan(
-                  text: formatted,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 10,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w400,
-                  ),
+              ),
+              TextSpan(
+                text: formatted,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 10,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w400,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

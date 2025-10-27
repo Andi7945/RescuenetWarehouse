@@ -9,7 +9,7 @@ class FirebaseAuthRepository implements AuthRepository {
   final FirebaseAuth _firebaseAuth;
 
   FirebaseAuthRepository({FirebaseAuth? firebaseAuth})
-      : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
+    : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
 
   @override
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
@@ -18,7 +18,10 @@ class FirebaseAuthRepository implements AuthRepository {
   User? get currentUser => _firebaseAuth.currentUser;
 
   @override
-  Future<User?> signInWithEmailAndPassword(String email, String password) async {
+  Future<User?> signInWithEmailAndPassword(
+    String email,
+    String password,
+  ) async {
     try {
       final result = await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
@@ -31,19 +34,23 @@ class FirebaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<User?> createUserWithEmailAndPassword(String email, String password, String name) async {
+  Future<User?> createUserWithEmailAndPassword(
+    String email,
+    String password,
+    String name,
+  ) async {
     try {
       final result = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      
+
       // Update display name
       if (result.user != null) {
         await result.user!.updateDisplayName(name);
         await result.user!.reload();
       }
-      
+
       return result.user;
     } catch (e) {
       throw _convertException(e);

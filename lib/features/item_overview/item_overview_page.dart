@@ -36,7 +36,11 @@ class ItemOverviewPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildBody(BuildContext context, WidgetRef ref, AsyncValue<List<Item>> itemsAsync) {
+  Widget _buildBody(
+    BuildContext context,
+    WidgetRef ref,
+    AsyncValue<List<Item>> itemsAsync,
+  ) {
     return AsyncValueBuilder<List<Item>>(
       value: itemsAsync,
       data: (items) => _buildItemsContent(items, context, ref),
@@ -45,11 +49,15 @@ class ItemOverviewPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildItemsContent(List<Item> items, BuildContext context, WidgetRef ref) {
+  Widget _buildItemsContent(
+    List<Item> items,
+    BuildContext context,
+    WidgetRef ref,
+  ) {
     if (items.isEmpty) {
       return _buildEmptyState();
     }
-    
+
     return ItemGrid(
       items: items,
       onSelect: (itm) => _navigateToItem(itm, ref, context),
@@ -78,11 +86,7 @@ class ItemOverviewPage extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.inventory_2_outlined,
-            size: 64,
-            color: Colors.grey[400],
-          ),
+          Icon(Icons.inventory_2_outlined, size: 64, color: Colors.grey[400]),
           const SizedBox(height: 16),
           Text(
             'No items found',
@@ -95,10 +99,7 @@ class ItemOverviewPage extends ConsumerWidget {
           const SizedBox(height: 8),
           Text(
             'Try adjusting your filters or add new items',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[500],
-            ),
+            style: TextStyle(fontSize: 14, color: Colors.grey[500]),
           ),
         ],
       ),

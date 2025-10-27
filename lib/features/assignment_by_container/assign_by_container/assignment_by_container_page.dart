@@ -10,7 +10,6 @@ import 'package:rescuenet_warehouse/state/data_operations_notifier.dart';
 import 'package:rescuenet_warehouse/ui/rescue_navigation_drawer.dart';
 import 'package:rescuenet_warehouse/ui/rescue_text.dart';
 import 'package:rescuenet_warehouse/widgets/loading/loading_widgets.dart';
-import 'package:rescuenet_warehouse/widgets/loading/async_value_builder.dart';
 
 import '../../../models/rescue_container.dart';
 import '../../../widgets/rescue_app_bar.dart';
@@ -19,10 +18,12 @@ class AssignmentByContainerPage extends river.ConsumerWidget {
   @override
   Widget build(BuildContext context, river.WidgetRef ref) {
     var containerId = ModalRoute.of(context)!.settings.arguments as String;
-    
+
     // Watch loading state for assignment creation
-    final isCreatingAssignment = ref.watch(isOperationLoadingProvider(DataOperation.assignmentCreate));
-    
+    final isCreatingAssignment = ref.watch(
+      isOperationLoadingProvider(DataOperation.assignmentCreate),
+    );
+
     return AsyncValueBuilder<List<RescueContainer>>(
       value: ref.watch(allContainersAsyncProvider),
       loading: () => Scaffold(
@@ -42,15 +43,15 @@ class AssignmentByContainerPage extends river.ConsumerWidget {
         ),
       ),
       data: (containers) {
-        var container = containers.where((c) => c.id == containerId).firstOrNull;
+        var container = containers
+            .where((c) => c.id == containerId)
+            .firstOrNull;
 
         if (container == null) {
           return Scaffold(
             appBar: RescueAppBar(title: "Container not found"),
             drawer: RescueNavigationDrawer(),
-            body: const Center(
-              child: Text("Container not found"),
-            ),
+            body: const Center(child: Text("Container not found")),
           );
         }
 
@@ -63,7 +64,12 @@ class AssignmentByContainerPage extends river.ConsumerWidget {
     );
   }
 
-  _page(BuildContext context, RescueContainer container, river.WidgetRef ref, bool isCreatingAssignment) {
+  _page(
+    BuildContext context,
+    RescueContainer container,
+    river.WidgetRef ref,
+    bool isCreatingAssignment,
+  ) {
     return ListView(
       shrinkWrap: true,
       children: [
@@ -80,7 +86,12 @@ class AssignmentByContainerPage extends river.ConsumerWidget {
     child: Center(child: RescueText(24, "Assignments")),
   );
 
-  _addButton(context, RescueContainer container, river.WidgetRef ref, bool isCreatingAssignment) => Padding(
+  _addButton(
+    context,
+    RescueContainer container,
+    river.WidgetRef ref,
+    bool isCreatingAssignment,
+  ) => Padding(
     padding: EdgeInsets.all(16.0),
     child: IconButton(
       color: Colors.white,
@@ -88,30 +99,44 @@ class AssignmentByContainerPage extends river.ConsumerWidget {
         backgroundColor: isCreatingAssignment ? Colors.grey : Colors.blue,
       ),
       iconSize: 72,
-      onPressed: isCreatingAssignment ? null : () => _navigateToSearchPage(context, container, ref),
+      onPressed: isCreatingAssignment
+          ? null
+          : () => _navigateToSearchPage(context, container, ref),
       icon: isCreatingAssignment
           ? const SizedBox(
               width: 36,
               height: 36,
-              child: CircularProgressIndicator(strokeWidth: 3, color: Colors.white),
+              child: CircularProgressIndicator(
+                strokeWidth: 3,
+                color: Colors.white,
+              ),
             )
           : const Icon(Icons.add),
     ),
   );
 
-  Future<void> _navigateToSearchPage(BuildContext context, RescueContainer container, river.WidgetRef ref) async {
+  Future<void> _navigateToSearchPage(
+    BuildContext context,
+    RescueContainer container,
+    river.WidgetRef ref,
+  ) async {
     var result = await Navigator.pushNamed(
       context,
       routeContainerAssignmentSearchItemPage,
       arguments: container.id,
     );
-    
+
     if (context.mounted) {
       await _addItem(context, container, result, ref);
     }
   }
 
-  Future<void> _addItem(BuildContext context, RescueContainer container, Object? item, river.WidgetRef ref) async {
+  Future<void> _addItem(
+    BuildContext context,
+    RescueContainer container,
+    Object? item,
+    river.WidgetRef ref,
+  ) async {
     if (item == null || item is! Item) {
       print("No item selected. Doing nothing.");
       return;
@@ -119,8 +144,10 @@ class AssignmentByContainerPage extends river.ConsumerWidget {
 
     try {
       // Clear any previous errors
-      ref.read(dataOperationsNotifierProvider.notifier).clearOperation(DataOperation.assignmentCreate);
-      
+      ref
+          .read(dataOperationsNotifierProvider.notifier)
+          .clearOperation(DataOperation.assignmentCreate);
+
       await context.performWithLoading<void>(
         operation: 'Adding item to container...',
         details: 'Creating assignment for ${item.name}',
@@ -130,16 +157,18 @@ class AssignmentByContainerPage extends river.ConsumerWidget {
               .addItem(container.id, item);
         },
       );
-      
+
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Successfully added ${item.name} to ${container.printName}'),
+            content: Text(
+              'Successfully added ${item.name} to ${container.printName}',
+            ),
             duration: const Duration(seconds: 3),
           ),
         );
       }
-      
+
       print("Added item ${item.name} to container ${container.name}");
     } catch (error) {
       if (context.mounted) {

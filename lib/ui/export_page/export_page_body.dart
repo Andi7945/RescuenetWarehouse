@@ -25,22 +25,31 @@ class _ExportPageBodyState extends ConsumerState<ExportPageBody> {
   void initState() {
     super.initState();
 
-    options.addAll(widget.containerWithItems.keys
-        .where((element) => element.isReady)
-        .map((e) => ContainerPrintingOptions(e))
-        .toList());
+    options.addAll(
+      widget.containerWithItems.keys
+          .where((element) => element.isReady)
+          .map((e) => ContainerPrintingOptions(e))
+          .toList(),
+    );
 
     options.sort((a, b) => a.container.number.compareTo(b.container.number));
   }
 
   _body() => Padding(
-      padding: const EdgeInsets.only(top: 24.0),
-      child: ExportPageTable(options, _adjustOption, _sharePackingListPdf,
-          _shareLabelPdf, _shareSafetyDatasheets));
+    padding: const EdgeInsets.only(top: 24.0),
+    child: ExportPageTable(
+      options,
+      _adjustOption,
+      _sharePackingListPdf,
+      _shareLabelPdf,
+      _shareSafetyDatasheets,
+    ),
+  );
 
   _adjustOption(ContainerPrintingOptions option) {
-    var toAdjust =
-        options.firstWhere((element) => element.container == option.container);
+    var toAdjust = options.firstWhere(
+      (element) => element.container == option.container,
+    );
     setState(() {
       toAdjust.printPackingList = option.printPackingList;
       toAdjust.printSafetyDatasheet = option.printSafetyDatasheet;
@@ -53,17 +62,25 @@ class _ExportPageBodyState extends ConsumerState<ExportPageBody> {
         .where((ele) => ele.printPackingList)
         .map((e) => e.container)
         .toList();
-    final withItems = Map.fromEntries(widget.containerWithItems.entries
-        .where((ele) => toPrint.contains(ele.key)));
+    final withItems = Map.fromEntries(
+      widget.containerWithItems.entries.where(
+        (ele) => toPrint.contains(ele.key),
+      ),
+    );
 
     await ExportActions.handlePackingLists(context, ref, withItems);
   }
 
   Future<void> _shareLabelPdf() async {
-    final toPrint =
-        options.where((ele) => ele.printLabel).map((e) => e.container).toList();
-    final withItems = Map.fromEntries(widget.containerWithItems.entries
-        .where((ele) => toPrint.contains(ele.key)));
+    final toPrint = options
+        .where((ele) => ele.printLabel)
+        .map((e) => e.container)
+        .toList();
+    final withItems = Map.fromEntries(
+      widget.containerWithItems.entries.where(
+        (ele) => toPrint.contains(ele.key),
+      ),
+    );
 
     await ExportActions.handleLabels(context, ref, withItems);
   }
@@ -74,7 +91,9 @@ class _ExportPageBodyState extends ConsumerState<ExportPageBody> {
         .map((e) => e.container)
         .toList();
     final withItems = Map.fromEntries(
-      widget.containerWithItems.entries.where((ele) => toPrint.contains(ele.key)),
+      widget.containerWithItems.entries.where(
+        (ele) => toPrint.contains(ele.key),
+      ),
     );
 
     await ExportActions.handleSafetyDatasheets(context, ref, withItems);

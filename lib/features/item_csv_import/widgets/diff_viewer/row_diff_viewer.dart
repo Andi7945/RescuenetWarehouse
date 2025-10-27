@@ -48,7 +48,11 @@ class RowDiffViewer<T> extends StatelessWidget {
 
     // Get differences if there's an existing object to compare with
     final differences = existingObject != null
-        ? DiffService.getDifferences(importedObject, existingObject!, excludeFields: excludeFields)
+        ? DiffService.getDifferences(
+            importedObject,
+            existingObject!,
+            excludeFields: excludeFields,
+          )
         : <String>[];
 
     // Build the diff card

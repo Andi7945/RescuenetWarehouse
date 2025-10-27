@@ -3,9 +3,10 @@ import '../models/item.dart';
 import 'package:intl/intl.dart';
 
 calcValue(Map<Item, int> items) => items.entries.fold(
-    0,
-    (previousValue, itmWithCount) =>
-        previousValue + itmWithCount.key.value * itmWithCount.value);
+  0,
+  (previousValue, itmWithCount) =>
+      previousValue + itmWithCount.key.value * itmWithCount.value,
+);
 
 final DateFormat formatter = DateFormat('MMM yy');
 

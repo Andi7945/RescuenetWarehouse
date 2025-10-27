@@ -15,21 +15,28 @@ class WorkLogPageBodyFromDate extends ConsumerWidget {
     var formattedDate = date != null ? "since ${formatter.format(date)}" : "";
     var logs = ref.watch(workLogSinceNotifierProvider);
 
-    return _bordered(ListView(children: [
-      Padding(
-          padding: const EdgeInsets.only(top: 8),
-          child: RescueText.headline("All changes $formattedDate")),
-      ...logs.entries
-          .map((e) => WorkLogPageAllSingleDate(entries: e.value))
-          .toList()
-    ]));
+    return _bordered(
+      ListView(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: RescueText.headline("All changes $formattedDate"),
+          ),
+          ...logs.entries
+              .map((e) => WorkLogPageAllSingleDate(entries: e.value))
+              .toList(),
+        ],
+      ),
+    );
   }
 
   Widget _bordered(Widget w) => Padding(
-      padding: const EdgeInsets.only(top: 32, bottom: 8),
-      child: Container(
-          decoration: const ShapeDecoration(
-            shape: RoundedRectangleBorder(side: BorderSide(width: 0.50)),
-          ),
-          child: w));
+    padding: const EdgeInsets.only(top: 32, bottom: 8),
+    child: Container(
+      decoration: const ShapeDecoration(
+        shape: RoundedRectangleBorder(side: BorderSide(width: 0.50)),
+      ),
+      child: w,
+    ),
+  );
 }

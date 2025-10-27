@@ -81,26 +81,29 @@ void main() {
     });
 
     group('Basic CRUD Operations', () {
-      test('should create new assignment with valid item and container IDs', () async {
-        // Arrange
-        final newAssignment = Assignment(
-          id: 'assignment-001',
-          itemId: testItem.id,
-          containerId: testContainer.id,
-          count: 25,
-        );
+      test(
+        'should create new assignment with valid item and container IDs',
+        () async {
+          // Arrange
+          final newAssignment = Assignment(
+            id: 'assignment-001',
+            itemId: testItem.id,
+            containerId: testContainer.id,
+            count: 25,
+          );
 
-        // Act
-        await mockRepo.upsertAssignment(newAssignment);
-        final retrieved = await mockRepo.getAssignment('assignment-001');
+          // Act
+          await mockRepo.upsertAssignment(newAssignment);
+          final retrieved = await mockRepo.getAssignment('assignment-001');
 
-        // Assert
-        expect(retrieved, isNotNull);
-        expect(retrieved?.id, equals('assignment-001'));
-        expect(retrieved?.itemId, equals(testItem.id));
-        expect(retrieved?.containerId, equals(testContainer.id));
-        expect(retrieved?.count, equals(25));
-      });
+          // Assert
+          expect(retrieved, isNotNull);
+          expect(retrieved?.id, equals('assignment-001'));
+          expect(retrieved?.itemId, equals(testItem.id));
+          expect(retrieved?.containerId, equals(testContainer.id));
+          expect(retrieved?.count, equals(25));
+        },
+      );
 
       test('should read assignment by ID', () async {
         // Arrange
@@ -191,12 +194,20 @@ void main() {
         }
 
         // Act
-        final containerAssignments = await mockRepo.getAssignmentsForContainer('container-alpha');
+        final containerAssignments = await mockRepo.getAssignmentsForContainer(
+          'container-alpha',
+        );
 
         // Assert
         expect(containerAssignments, hasLength(2));
-        expect(containerAssignments.every((a) => a.containerId == 'container-alpha'), isTrue);
-        expect(containerAssignments.map((a) => a.id), containsAll(['assign-1', 'assign-2']));
+        expect(
+          containerAssignments.every((a) => a.containerId == 'container-alpha'),
+          isTrue,
+        );
+        expect(
+          containerAssignments.map((a) => a.id),
+          containsAll(['assign-1', 'assign-2']),
+        );
       });
 
       test('should get all assignments for specific item', () async {
@@ -232,7 +243,10 @@ void main() {
         // Assert
         expect(assignments, hasLength(2));
         expect(assignments.every((a) => a.itemId == 'item-alpha'), isTrue);
-        expect(assignments.map((a) => a.id), containsAll(['assign-1', 'assign-2']));
+        expect(
+          assignments.map((a) => a.id),
+          containsAll(['assign-1', 'assign-2']),
+        );
       });
 
       test('should get assignment by itemId and containerId', () async {
@@ -263,7 +277,10 @@ void main() {
         }
 
         // Act
-        final found = await mockRepo.getAssignmentByIds('item-x', 'container-y');
+        final found = await mockRepo.getAssignmentByIds(
+          'item-x',
+          'container-y',
+        );
 
         // Assert
         expect(found, isNotNull);
@@ -285,7 +302,7 @@ void main() {
         );
 
         // Act
-        await mockRepo.upsertOrDeleteAssignment(assignment);
+        await mockRepo.upsertAssignment(assignment);
         final retrieved = await mockRepo.getAssignment('upsert-test-001');
 
         // Assert
@@ -293,7 +310,7 @@ void main() {
         expect(retrieved?.count, equals(20));
       });
 
-      test('should delete assignment when count = 0', () async {
+      test('should delete assignment', () async {
         // Arrange
         final assignment = createTestAssignment(
           id: 'delete-zero-001',
@@ -307,9 +324,8 @@ void main() {
         final before = await mockRepo.getAssignment('delete-zero-001');
         expect(before, isNotNull);
 
-        // Act - Set count to 0 triggers deletion
-        final zeroCount = assignment.copyWith(count: 0);
-        await mockRepo.upsertOrDeleteAssignment(zeroCount);
+        // Act - Delete assignment
+        await mockRepo.deleteAssignment('delete-zero-001');
 
         // Assert
         final after = await mockRepo.getAssignment('delete-zero-001');
@@ -372,7 +388,11 @@ void main() {
         expect(await mockRepo.getAssignment('batch-del-3'), isNotNull);
 
         // Act
-        await mockRepo.batchDeleteAssignments(['batch-del-1', 'batch-del-2', 'batch-del-3']);
+        await mockRepo.batchDeleteAssignments([
+          'batch-del-1',
+          'batch-del-2',
+          'batch-del-3',
+        ]);
 
         // Assert
         expect(await mockRepo.getAssignment('batch-del-1'), isNull);

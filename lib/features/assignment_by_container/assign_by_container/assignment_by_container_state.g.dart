@@ -7,7 +7,7 @@ part of 'assignment_by_container_state.dart';
 // **************************************************************************
 
 String _$assignmentByContainerStateHash() =>
-    r'ca3e08785d2bcc9450c1237c51525ecfa6b17bc1';
+    r'066f760b7ef193620bd5566c14703bcf3079fffa';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -177,7 +177,7 @@ class _AssignmentByContainerStateProviderElement
 }
 
 String _$assignmentByContainerAsyncHash() =>
-    r'5e9a0ebd4ff0bca8057ea2ac65715c2ca7f79393';
+    r'b152976272e224d4fcf4f2afdf6c20f1d6447779';
 
 abstract class _$AssignmentByContainerAsync
     extends BuildlessAutoDisposeStreamNotifier<Map<Item, Assignment>> {

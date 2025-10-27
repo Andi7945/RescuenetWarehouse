@@ -10,8 +10,13 @@ class ExportPageTable extends StatelessWidget {
   final Function() printPackingList;
   final Function() printSafetyDatasheets;
 
-  ExportPageTable(this.options, this.fnAdjustOption, this.printPackingList,
-      this.printLabels, this.printSafetyDatasheets);
+  ExportPageTable(
+    this.options,
+    this.fnAdjustOption,
+    this.printPackingList,
+    this.printLabels,
+    this.printSafetyDatasheets,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -23,45 +28,67 @@ class ExportPageTable extends StatelessWidget {
     "Deploy",
     "Print label",
     "Print packing list",
-    "Print safety datasheet"
+    "Print safety datasheet",
   ];
 
-  TableRow _printButtonRow() => TableRow(children: [
-        Container(),
-        Container(),
-        _printIcon(printLabels),
-        _printIcon(printPackingList),
-        _printIcon(printSafetyDatasheets)
-      ]);
+  TableRow _printButtonRow() => TableRow(
+    children: [
+      Container(),
+      Container(),
+      _printIcon(printLabels),
+      _printIcon(printPackingList),
+      _printIcon(printSafetyDatasheets),
+    ],
+  );
 
   Widget _printIcon(Function() onClick) => Align(
-      alignment: Alignment.centerLeft,
-      child: InkWell(
-          onTap: onClick, child: const Icon(Icons.print_outlined, size: 48.0)));
+    alignment: Alignment.centerLeft,
+    child: InkWell(
+      onTap: onClick,
+      child: const Icon(Icons.print_outlined, size: 48.0),
+    ),
+  );
 
   List<TableRow> _rows() => options.map(_single).toList();
 
-  TableRow _single(ContainerPrintingOptions option) => TableRow(children: [
-        RescueText.slim(option.container.printName),
-        _checkbox(option.container.toDeploy, null),
-        _checkbox(option.printLabel, (v) {
-          fnAdjustOption(ContainerPrintingOptions.from(
-              options: option, printLabel: v ?? false));
-        }),
-        _checkbox(option.printPackingList, (v) {
-          fnAdjustOption(ContainerPrintingOptions.from(
-              options: option, printPackingList: v ?? false));
-        }),
-        _checkbox(option.printSafetyDatasheet, (v) {
-          fnAdjustOption(ContainerPrintingOptions.from(
-              options: option, printSafetyDatasheet: v ?? false));
-        })
-      ]);
+  TableRow _single(ContainerPrintingOptions option) => TableRow(
+    children: [
+      RescueText.slim(option.container.printName),
+      _checkbox(option.container.toDeploy, null),
+      _checkbox(option.printLabel, (v) {
+        fnAdjustOption(
+          ContainerPrintingOptions.from(
+            options: option,
+            printLabel: v ?? false,
+          ),
+        );
+      }),
+      _checkbox(option.printPackingList, (v) {
+        fnAdjustOption(
+          ContainerPrintingOptions.from(
+            options: option,
+            printPackingList: v ?? false,
+          ),
+        );
+      }),
+      _checkbox(option.printSafetyDatasheet, (v) {
+        fnAdjustOption(
+          ContainerPrintingOptions.from(
+            options: option,
+            printSafetyDatasheet: v ?? false,
+          ),
+        );
+      }),
+    ],
+  );
 
   Widget _checkbox(bool value, ValueChanged<bool?>? onChanged) => Align(
-      alignment: Alignment.centerLeft,
-      child: Transform.scale(
-          scale: 2, child: Checkbox(value: value, onChanged: onChanged)));
+    alignment: Alignment.centerLeft,
+    child: Transform.scale(
+      scale: 2,
+      child: Checkbox(value: value, onChanged: onChanged),
+    ),
+  );
 }
 
 class ContainerPrintingOptions {
@@ -72,14 +99,14 @@ class ContainerPrintingOptions {
 
   ContainerPrintingOptions(this.container);
 
-  ContainerPrintingOptions.from(
-      {required ContainerPrintingOptions options,
-      bool? printLabel,
-      bool? printPackingList,
-      bool? printSafetyDatasheet})
-      : container = options.container,
-        printLabel = printLabel ?? options.printLabel,
-        printPackingList = printPackingList ?? options.printPackingList,
-        printSafetyDatasheet =
-            printSafetyDatasheet ?? options.printSafetyDatasheet;
+  ContainerPrintingOptions.from({
+    required ContainerPrintingOptions options,
+    bool? printLabel,
+    bool? printPackingList,
+    bool? printSafetyDatasheet,
+  }) : container = options.container,
+       printLabel = printLabel ?? options.printLabel,
+       printPackingList = printPackingList ?? options.printPackingList,
+       printSafetyDatasheet =
+           printSafetyDatasheet ?? options.printSafetyDatasheet;
 }

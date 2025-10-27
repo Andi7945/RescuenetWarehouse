@@ -41,7 +41,10 @@ import 'features/item_overview/item_overview_page.dart';
 
 // Read from --dart-define flags
 const String kOrgId = String.fromEnvironment('ORG', defaultValue: 'rescuenet');
-const String kEnvironment = String.fromEnvironment('ENV', defaultValue: 'staging');
+const String kEnvironment = String.fromEnvironment(
+  'ENV',
+  defaultValue: 'staging',
+);
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -86,12 +89,12 @@ class MyApp extends StatelessWidget {
           routeContainerOverview: (ctx) => ContainerOverviewPage(),
           routeContainerWithContent: (ctx) => ContainerWithContentPage(),
           routeContainerEditPage: (ctx) => ContainerEditPageArgumentExtractor(),
-          routeContainerAssignmentOverviewPage:
-              (ctx) => ContainerAssignmentsPage(),
-          routeContainerAssignmentSinglePage:
-              (ctx) => AssignmentByContainerPage(),
-          routeContainerAssignmentSearchItemPage:
-              (ctx) => AssignmentSearchItemPage(),
+          routeContainerAssignmentOverviewPage: (ctx) =>
+              ContainerAssignmentsPage(),
+          routeContainerAssignmentSinglePage: (ctx) =>
+              AssignmentByContainerPage(),
+          routeContainerAssignmentSearchItemPage: (ctx) =>
+              AssignmentSearchItemPage(),
           routeItemsOverview: (ctx) => ItemOverviewPage(),
           routeExportItemsOverview: (_) => ItemExportPage(),
           routeItemEditPage: (ctx) => ItemEditPageArgumentExtractor(),
@@ -152,12 +155,10 @@ class _AuthHome extends river.ConsumerWidget {
     final authState = ref.watch(authStateChangesProvider);
 
     return authState.when(
-      data: (user) => user == null
-          ? const LoginPage()
-          : ContainerWithContentPage(),
-      loading: () => const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      ),
+      data: (user) =>
+          user == null ? const LoginPage() : ContainerWithContentPage(),
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (error, stackTrace) => const LoginPage(),
     );
   }

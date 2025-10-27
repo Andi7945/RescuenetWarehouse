@@ -14,50 +14,53 @@ class ContainerWithContentPage extends river.ConsumerWidget {
   @override
   Widget build(BuildContext context, river.WidgetRef ref) {
     return Scaffold(
-        appBar: RescueAppBar(
-          title: "Container with content",
-          actions: [ContainerChooserAction()],
+      appBar: RescueAppBar(
+        title: "Container with content",
+        actions: [ContainerChooserAction()],
+      ),
+      drawer: RescueNavigationDrawer(),
+      body: AsyncValueBuilder<Map<RescueContainer, bool>>(
+        value: ref.watch(containerVisibilityAsyncProvider),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stackTrace) => Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline, size: 48, color: Colors.red),
+              const SizedBox(height: 16),
+              Text('Error loading containers: ${error.toString()}'),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () => ref.refresh(containerVisibilityAsyncProvider),
+                child: const Text('Retry'),
+              ),
+            ],
+          ),
         ),
-        drawer: RescueNavigationDrawer(),
-        body: AsyncValueBuilder<Map<RescueContainer, bool>>(
-          value: ref.watch(containerVisibilityAsyncProvider),
-          loading: () => const Center(
-            child: CircularProgressIndicator(),
-          ),
-          error: (error, stackTrace) => Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.error_outline, size: 48, color: Colors.red),
-                const SizedBox(height: 16),
-                Text('Error loading containers: ${error.toString()}'),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () => ref.refresh(containerVisibilityAsyncProvider),
-                  child: const Text('Retry'),
-                ),
-              ],
-            ),
-          ),
-          data: (visibilityMap) {
-            var visible = visibilityMap.entries
-                .where((entry) => entry.value)
-                .map((entry) => entry.key)
-                .toList();
-            visible.sort((a, b) => a.number.compareTo(b.number));
-            return _body(visible);
-          },
-        ));
+        data: (visibilityMap) {
+          var visible = visibilityMap.entries
+              .where((entry) => entry.value)
+              .map((entry) => entry.key)
+              .toList();
+          visible.sort((a, b) => a.number.compareTo(b.number));
+          return _body(visible);
+        },
+      ),
+    );
   }
 
   Widget _body(List<RescueContainer> containers) {
-    return ListView(scrollDirection: Axis.horizontal, children: [
-      _asBox(ContainerWithContentUnassigned()),
-      ...containers.map((e) => _asBox(ContainerWithContentColumn(e)))
-    ]);
+    return ListView(
+      scrollDirection: Axis.horizontal,
+      children: [
+        _asBox(ContainerWithContentUnassigned()),
+        ...containers.map((e) => _asBox(ContainerWithContentColumn(e))),
+      ],
+    );
   }
 
   Widget _asBox(Widget w) => Padding(
-      padding: const EdgeInsets.only(left: 4, right: 4),
-      child: SizedBox(width: 400, child: w));
+    padding: const EdgeInsets.only(left: 4, right: 4),
+    child: SizedBox(width: 400, child: w),
+  );
 }

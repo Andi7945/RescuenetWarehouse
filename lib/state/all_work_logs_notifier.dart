@@ -10,17 +10,17 @@ class AllWorkLogsNotifier extends _$AllWorkLogsNotifier {
   @override
   List<LogEntry> build() {
     final repository = ref.watch(workLogRepositoryProvider);
-    
+
     // Use proper stream subscription management
     final subscription = repository.watchWorkLogs().listen((workLogs) {
       state = workLogs;
     });
-    
+
     // Dispose subscription when notifier is disposed
     ref.onDispose(() {
       subscription.cancel();
     });
-    
+
     return [];
   }
 }

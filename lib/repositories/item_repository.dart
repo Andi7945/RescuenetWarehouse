@@ -41,5 +41,6 @@ class ItemException implements Exception {
   const ItemException(this.message, {this.code, this.originalException});
 
   @override
-  String toString() => 'ItemException: $message${code != null ? ' (code: $code)' : ''}';
+  String toString() =>
+      'ItemException: $message${code != null ? ' (code: $code)' : ''}';
 }

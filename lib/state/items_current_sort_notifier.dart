@@ -12,5 +12,6 @@ class ItemsCurrentSortNotifier extends _$ItemsCurrentSortNotifier {
   }
 
   set(ItemSortingOption option) => state = option.copyWith(
-      asc: state.displayName == option.displayName ? !state.asc : state.asc);
+    asc: state.displayName == option.displayName ? !state.asc : state.asc,
+  );
 }

@@ -1,7 +1,7 @@
 import 'package:rescuenet_warehouse/models/current_location.dart';
 
 /// Repository interface for managing current locations.
-/// 
+///
 /// Current locations represent physical locations where containers can be placed
 /// or where operations are being conducted.
 abstract class CurrentLocationRepository {

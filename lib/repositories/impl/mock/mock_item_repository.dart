@@ -7,7 +7,8 @@ import '../../../models/operational_status.dart';
 /// Simulates item storage behavior without Firebase dependencies.
 class MockItemRepository implements ItemRepository {
   final Map<String, Item> _items = {};
-  final StreamController<List<Item>> _itemsController = StreamController<List<Item>>.broadcast();
+  final StreamController<List<Item>> _itemsController =
+      StreamController<List<Item>>.broadcast();
 
   MockItemRepository() {
     _initializeWithTestData();
@@ -65,13 +66,11 @@ class MockItemRepository implements ItemRepository {
     });
 
     // Forward future updates
-    final subscription = _itemsController.stream.listen(
-      (items) {
-        if (!controller.isClosed) {
-          controller.add(items);
-        }
-      },
-    );
+    final subscription = _itemsController.stream.listen((items) {
+      if (!controller.isClosed) {
+        controller.add(items);
+      }
+    });
 
     // Handle cleanup
     controller.onCancel = () {
@@ -115,7 +114,7 @@ class MockItemRepository implements ItemRepository {
     final lowercaseQuery = query.toLowerCase();
     return _items.values.where((item) {
       return (item.name?.toLowerCase().contains(lowercaseQuery) ?? false) ||
-             (item.description?.toLowerCase().contains(lowercaseQuery) ?? false);
+          (item.description?.toLowerCase().contains(lowercaseQuery) ?? false);
     }).toList();
   }
 

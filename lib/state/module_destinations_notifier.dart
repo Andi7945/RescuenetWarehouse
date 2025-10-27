@@ -10,17 +10,19 @@ class ModuleDestinationsNotifier extends _$ModuleDestinationsNotifier {
   @override
   List<ModuleDestination> build() {
     final repository = ref.watch(moduleDestinationRepositoryProvider);
-    
+
     // Use proper stream subscription management
-    final subscription = repository.watchModuleDestinations().listen((moduleDestinations) {
+    final subscription = repository.watchModuleDestinations().listen((
+      moduleDestinations,
+    ) {
       state = moduleDestinations;
     });
-    
+
     // Dispose subscription when notifier is disposed
     ref.onDispose(() {
       subscription.cancel();
     });
-    
+
     return [];
   }
 

@@ -7,7 +7,6 @@ import 'package:collection/collection.dart';
 
 part 'all_assignments_notifier.g.dart';
 
-
 /// Stream-based provider for backward compatibility.
 /// This maintains the existing Stream<List<Assignment>> pattern that other
 /// parts of the app may depend on.
@@ -18,12 +17,12 @@ Stream<List<Assignment>> allAssignmentsStream(AllAssignmentsStreamRef ref) {
 }
 
 /// AsyncValue-based assignments provider for loading states support.
-/// 
+///
 /// This provider wraps the assignments stream in AsyncValue to provide proper
 /// loading, error, and data states for UI components. It follows the enhanced
 /// pattern from LOADING_INDICATORS_DESIGN.md while maintaining compatibility
 /// with the existing AllAssignmentsNotifier.
-/// 
+///
 /// Usage:
 /// ```dart
 /// AsyncValueBuilder<List<Assignment>>(
@@ -42,15 +41,21 @@ class AllAssignmentsAsync extends _$AllAssignmentsAsync {
   /// Get assignment by item and container IDs from the current async state
   Assignment? byIds(String itemId, String containerId) {
     return state.valueOrNull?.firstWhereOrNull(
-        (a) => a.containerId == containerId && a.itemId == itemId);
+      (a) => a.containerId == containerId && a.itemId == itemId,
+    );
   }
 
   /// Get assignments by item ID and multiple container IDs from the current async state
-  List<Assignment> byItemAndContainers(String itemId, List<String> containerIds) {
+  List<Assignment> byItemAndContainers(
+    String itemId,
+    List<String> containerIds,
+  ) {
     final assignments = state.valueOrNull;
     if (assignments == null) return [];
     return assignments
-        .where((a) => containerIds.contains(a.containerId) && a.itemId == itemId)
+        .where(
+          (a) => containerIds.contains(a.containerId) && a.itemId == itemId,
+        )
         .toList();
   }
 

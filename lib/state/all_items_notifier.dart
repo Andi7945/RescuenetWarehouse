@@ -44,12 +44,12 @@ Stream<List<Item>> allItemsStream(AllItemsStreamRef ref) {
 }
 
 /// AsyncValue-based items provider for loading states support.
-/// 
+///
 /// This provider wraps the items stream in AsyncValue to provide proper
 /// loading, error, and data states for UI components. It follows the enhanced
 /// pattern from LOADING_INDICATORS_DESIGN.md while maintaining compatibility
 /// with the existing AllItemsNotifier.
-/// 
+///
 /// Usage:
 /// ```dart
 /// AsyncValueBuilder<List<Item>>(

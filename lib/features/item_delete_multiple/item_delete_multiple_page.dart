@@ -30,9 +30,11 @@ class _ItemDeleteMultiplePageState
   @override
   Widget build(BuildContext context) {
     final itemsAsync = ref.watch(itemsFilteredAndSortedAsyncProvider);
-    
+
     // Watch loading states for batch operations
-    final isDeletingItems = ref.watch(isOperationLoadingProvider(DataOperation.itemBatchUpdate));
+    final isDeletingItems = ref.watch(
+      isOperationLoadingProvider(DataOperation.itemBatchUpdate),
+    );
 
     return Scaffold(
       appBar: RescueAppBar(
@@ -47,10 +49,7 @@ class _ItemDeleteMultiplePageState
                 child: CircularProgressIndicator(strokeWidth: 2),
               ),
               const SizedBox(width: 8),
-              Text(
-                'Deleting...',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
+              Text('Deleting...', style: Theme.of(context).textTheme.bodySmall),
             ],
           ],
         ),
@@ -89,7 +88,8 @@ class _ItemDeleteMultiplePageState
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: () => ref.refresh(itemsFilteredAndSortedAsyncProvider),
+                    onPressed: () =>
+                        ref.refresh(itemsFilteredAndSortedAsyncProvider),
                     child: const Text('Retry'),
                   ),
                 ],
@@ -114,7 +114,7 @@ class _ItemDeleteMultiplePageState
 
   _changeSelectionForItem(Item item) {
     final assignmentsAsync = ref.read(allAssignmentsAsyncProvider);
-    
+
     assignmentsAsync.when(
       loading: () {
         // While assignments are loading, prevent selection to be safe
@@ -131,7 +131,9 @@ class _ItemDeleteMultiplePageState
         );
       },
       data: (assignments) {
-        var itemAssignments = assignments.where((a) => a.itemId == item.id).toList();
+        var itemAssignments = assignments
+            .where((a) => a.itemId == item.id)
+            .toList();
         if (itemAssignments.isEmpty) {
           itemDeletionList.insertOrDelete(item);
           setState(() {
@@ -150,15 +152,22 @@ class _ItemDeleteMultiplePageState
 
   Future<void> _delete(BuildContext context) async {
     if (itemDeletionList.isEmpty) return;
-    
+
     final itemCount = itemsInList;
-    final itemNames = itemDeletionList.take(3).map((i) => i.name ?? i.id).join(', ');
-    final suffix = itemDeletionList.length > 3 ? ' and ${itemDeletionList.length - 3} more' : '';
-    
+    final itemNames = itemDeletionList
+        .take(3)
+        .map((i) => i.name ?? i.id)
+        .join(', ');
+    final suffix = itemDeletionList.length > 3
+        ? ' and ${itemDeletionList.length - 3} more'
+        : '';
+
     try {
       // Clear any previous errors
-      ref.read(dataOperationsNotifierProvider.notifier).clearOperation(DataOperation.itemBatchUpdate);
-      
+      ref
+          .read(dataOperationsNotifierProvider.notifier)
+          .clearOperation(DataOperation.itemBatchUpdate);
+
       await context.performWithLoading<void>(
         operation: 'Deleting items...',
         details: 'Removing $itemCount items: $itemNames$suffix',
@@ -170,7 +179,7 @@ class _ItemDeleteMultiplePageState
           }
         },
       );
-      
+
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -179,7 +188,7 @@ class _ItemDeleteMultiplePageState
           ),
         );
       }
-      
+
       setState(() {
         itemDeletionList = [];
         itemsInList = 0;

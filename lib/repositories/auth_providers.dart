@@ -32,16 +32,16 @@ User? currentUser(CurrentUserRef ref) {
 String? currentUserName(CurrentUserNameRef ref) {
   final user = ref.watch(currentUserProvider);
   if (user == null) return null;
-  
+
   // Prefer display name, fallback to email prefix
   if (user.displayName != null && user.displayName!.isNotEmpty) {
     return user.displayName;
   }
-  
+
   if (user.email != null) {
     return user.email!.split('@').first;
   }
-  
+
   return null;
 }
 
@@ -68,16 +68,16 @@ class AuthNotifier extends _$AuthNotifier {
     required String password,
   }) async {
     state = const AsyncValue.loading();
-    
+
     final authRepository = ref.read(authRepositoryProvider);
-    
+
     try {
       await authRepository.signInWithEmailAndPassword(email, password);
       state = const AsyncValue.data(null);
       return AuthState.success();
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
-      
+
       if (e is AuthException) {
         return AuthState(
           errorCode: e.code ?? 'UNKNOWN',
@@ -99,11 +99,15 @@ class AuthNotifier extends _$AuthNotifier {
     required String name,
   }) async {
     state = const AsyncValue.loading();
-    
+
     final authRepository = ref.read(authRepositoryProvider);
-    
+
     try {
-      await authRepository.createUserWithEmailAndPassword(email, password, name);
+      await authRepository.createUserWithEmailAndPassword(
+        email,
+        password,
+        name,
+      );
       state = const AsyncValue.data(null);
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
@@ -114,9 +118,9 @@ class AuthNotifier extends _$AuthNotifier {
   /// Sign out the current user.
   Future<void> signOut() async {
     state = const AsyncValue.loading();
-    
+
     final authRepository = ref.read(authRepositoryProvider);
-    
+
     try {
       await authRepository.signOut();
       state = const AsyncValue.data(null);
@@ -129,9 +133,9 @@ class AuthNotifier extends _$AuthNotifier {
   /// Send password reset email.
   Future<void> sendPasswordResetEmail(String email) async {
     state = const AsyncValue.loading();
-    
+
     final authRepository = ref.read(authRepositoryProvider);
-    
+
     try {
       await authRepository.sendPasswordResetEmail(email);
       state = const AsyncValue.data(null);

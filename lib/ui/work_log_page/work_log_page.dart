@@ -18,13 +18,17 @@ class _WorkLogPageState extends river.ConsumerState<WorkLogPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: RescueAppBar(title: "Work log", actions: [
+      appBar: RescueAppBar(
+        title: "Work log",
+        actions: [
           _allChangesButton(),
           _dateChooser(),
-          ContainerChooserAction()
-        ]),
-        drawer: RescueNavigationDrawer(),
-        body: _body());
+          ContainerChooserAction(),
+        ],
+      ),
+      drawer: RescueNavigationDrawer(),
+      body: _body(),
+    );
   }
 
   Widget _body() {
@@ -35,23 +39,27 @@ class _WorkLogPageState extends river.ConsumerState<WorkLogPage> {
   }
 
   Widget _allChangesButton() => Padding(
-      padding: const EdgeInsets.only(right: 4),
-      child: FilledButton(
-          onPressed: () => ref
-              .read(workLogDateFilterNotifierProvider.notifier)
-              .saveDate(null),
-          child: RescueText.slim("all")));
+    padding: const EdgeInsets.only(right: 4),
+    child: FilledButton(
+      onPressed: () =>
+          ref.read(workLogDateFilterNotifierProvider.notifier).saveDate(null),
+      child: RescueText.slim("all"),
+    ),
+  );
 
   Widget _dateChooser() => Padding(
-      padding: const EdgeInsets.only(right: 4),
-      child: FilledButton(
-          onPressed: () async {
-            await _chooseNewDate();
-          },
-          child: RescueText.slim("since")));
+    padding: const EdgeInsets.only(right: 4),
+    child: FilledButton(
+      onPressed: () async {
+        await _chooseNewDate();
+      },
+      child: RescueText.slim("since"),
+    ),
+  );
 
   Future<void> _chooseNewDate() async {
-    var initial = ref.read(workLogDateFilterNotifierProvider) ??
+    var initial =
+        ref.read(workLogDateFilterNotifierProvider) ??
         DateTime.now().subtract(const Duration(days: 7));
     var newDate = await _dialogBuilder(context, initial);
     if (newDate != null) {

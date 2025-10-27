@@ -4,7 +4,7 @@ import 'package:rescuenet_warehouse/repositories/assignment_repository.dart';
 import 'package:rescuenet_warehouse/db/firebase.dart';
 
 /// Firebase implementation of AssignmentRepository
-/// 
+///
 /// Provides real-time synchronization with Firestore and supports
 /// batch operations for maintaining data consistency.
 class FirebaseAssignmentRepository implements AssignmentRepository {
@@ -26,7 +26,9 @@ class FirebaseAssignmentRepository implements AssignmentRepository {
   }
 
   @override
-  Future<List<Assignment>> getAssignmentsForContainer(String containerId) async {
+  Future<List<Assignment>> getAssignmentsForContainer(
+    String containerId,
+  ) async {
     try {
       final querySnapshot = await assignmentCollection
           .where('containerId', isEqualTo: containerId)
@@ -50,18 +52,21 @@ class FirebaseAssignmentRepository implements AssignmentRepository {
   }
 
   @override
-  Future<Assignment?> getAssignmentByIds(String itemId, String containerId) async {
+  Future<Assignment?> getAssignmentByIds(
+    String itemId,
+    String containerId,
+  ) async {
     try {
       final querySnapshot = await assignmentCollection
           .where('itemId', isEqualTo: itemId)
           .where('containerId', isEqualTo: containerId)
           .limit(1)
           .get();
-      
+
       if (querySnapshot.docs.isEmpty) {
         return null;
       }
-      
+
       return querySnapshot.docs.first.data();
     } catch (e) {
       throw Exception('Failed to get assignment by IDs: $e');
@@ -92,12 +97,12 @@ class FirebaseAssignmentRepository implements AssignmentRepository {
 
     try {
       final batch = FirebaseFirestore.instance.batch();
-      
+
       for (final assignment in assignments) {
         final docRef = assignmentCollection.doc(assignment.id);
         batch.set(docRef, assignment);
       }
-      
+
       await batch.commit();
     } catch (e) {
       throw Exception('Failed to batch update assignments: $e');
@@ -110,28 +115,15 @@ class FirebaseAssignmentRepository implements AssignmentRepository {
 
     try {
       final batch = FirebaseFirestore.instance.batch();
-      
+
       for (final id in assignmentIds) {
         final docRef = assignmentCollection.doc(id);
         batch.delete(docRef);
       }
-      
+
       await batch.commit();
     } catch (e) {
       throw Exception('Failed to batch delete assignments: $e');
-    }
-  }
-
-  @override
-  Future<void> upsertOrDeleteAssignment(Assignment assignment) async {
-    try {
-      if (assignment.count == 0) {
-        await deleteAssignment(assignment.id);
-      } else {
-        await upsertAssignment(assignment);
-      }
-    } catch (e) {
-      throw Exception('Failed to upsert or delete assignment: $e');
     }
   }
 }

@@ -9,7 +9,6 @@ import 'items_current_sort_notifier.dart';
 
 part 'items_filtered_and_sorted_notifier.g.dart';
 
-
 /// Backward compatibility provider that returns the same as the original
 @riverpod
 List<Item> itemsFilteredAndSortedCompat(ItemsFilteredAndSortedCompatRef ref) {
@@ -35,11 +34,11 @@ List<Item> itemsFilteredAndSortedCompat(ItemsFilteredAndSortedCompatRef ref) {
 }
 
 /// AsyncValue-based filtered and sorted items provider for loading states support.
-/// 
+///
 /// This provider combines AsyncValue items data with filtering and sorting,
 /// providing proper loading, error, and data states while applying the same
 /// filtering and sorting logic as the original provider.
-/// 
+///
 /// Usage:
 /// ```dart
 /// AsyncValueBuilder<List<Item>>(
@@ -61,7 +60,9 @@ class ItemsFilteredAndSortedAsync extends _$ItemsFilteredAndSortedAsync {
         var filteredItems = items;
         if (filterOptions.value != null) {
           filteredItems = items
-              .where((itm) => filterOptions.filter.check(itm, filterOptions.value!))
+              .where(
+                (itm) => filterOptions.filter.check(itm, filterOptions.value!),
+              )
               .toList();
         }
 

@@ -18,12 +18,18 @@ class ContainerEditPageArgumentExtractor extends river.ConsumerWidget {
   @override
   Widget build(BuildContext context, river.WidgetRef ref) {
     var containerId = ModalRoute.of(context)!.settings.arguments as String;
-    
+
     // Watch loading states for different operations
-    final isUpdatingContainer = ref.watch(isOperationLoadingProvider(DataOperation.containerUpdate));
-    final updateError = ref.watch(getOperationErrorProvider(DataOperation.containerUpdate));
-    final deleteError = ref.watch(getOperationErrorProvider(DataOperation.containerDelete));
-    
+    final isUpdatingContainer = ref.watch(
+      isOperationLoadingProvider(DataOperation.containerUpdate),
+    );
+    final updateError = ref.watch(
+      getOperationErrorProvider(DataOperation.containerUpdate),
+    );
+    final deleteError = ref.watch(
+      getOperationErrorProvider(DataOperation.containerDelete),
+    );
+
     return AsyncValueBuilder<List<RescueContainer>>(
       value: ref.watch(allContainersAsyncProvider),
       loading: () => Scaffold(
@@ -43,82 +49,94 @@ class ContainerEditPageArgumentExtractor extends river.ConsumerWidget {
         ),
       ),
       data: (containers) {
-        var container = containers.where((c) => c.id == containerId).firstOrNull;
-        
+        var container = containers
+            .where((c) => c.id == containerId)
+            .firstOrNull;
+
         if (container == null) {
           return Scaffold(
             appBar: RescueAppBar(title: "Container not found"),
             drawer: RescueNavigationDrawer(),
-            body: const Center(
-              child: Text("Container not found"),
-            ),
+            body: const Center(child: Text("Container not found")),
           );
         }
 
         return Scaffold(
-            appBar: RescueAppBar(
-              title: Row(
-                children: [
-                  Text("Edit container ${container.number}"),
-                  if (isUpdatingContainer) ...[
-                    const SizedBox(width: 12),
-                    const SizedBox(
-                      width: 16,
-                      height: 16,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Saving...',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ],
-                ],
-              ),
-              actions: [
-                _deleteBtn(
-                    container,
-                    context,
-                    ref,
-                    () => _deleteContainer(context, ref, container))
-              ]
-            ),
-            drawer: RescueNavigationDrawer(),
-            body: Stack(
+          appBar: RescueAppBar(
+            title: Row(
               children: [
-                _page(container, (c) => _updateContainer(ref, c)),
-                
-                // Show error banners for operations
-                if (updateError != null || deleteError != null)
-                  Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    child: Column(
-                      children: [
-                        if (updateError != null)
-                          ErrorBanner(
-                            message: 'Failed to save container: ${updateError.toString()}',
-                            onRetry: () => ref.read(dataOperationsNotifierProvider.notifier).clearOperation(DataOperation.containerUpdate),
-                            onDismiss: () => ref.read(dataOperationsNotifierProvider.notifier).clearOperation(DataOperation.containerUpdate),
-                          ),
-                        if (deleteError != null)
-                          ErrorBanner(
-                            message: 'Failed to delete container: ${deleteError.toString()}',
-                            onRetry: () => _retryDelete(context, ref, container),
-                            onDismiss: () => ref.read(dataOperationsNotifierProvider.notifier).clearOperation(DataOperation.containerDelete),
-                          ),
-                      ],
-                    ),
+                Text("Edit container ${container.number}"),
+                if (isUpdatingContainer) ...[
+                  const SizedBox(width: 12),
+                  const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
                   ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Saving...',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
               ],
-            ));
+            ),
+            actions: [
+              _deleteBtn(
+                container,
+                context,
+                ref,
+                () => _deleteContainer(context, ref, container),
+              ),
+            ],
+          ),
+          drawer: RescueNavigationDrawer(),
+          body: Stack(
+            children: [
+              _page(container, (c) => _updateContainer(ref, c)),
+
+              // Show error banners for operations
+              if (updateError != null || deleteError != null)
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: Column(
+                    children: [
+                      if (updateError != null)
+                        ErrorBanner(
+                          message:
+                              'Failed to save container: ${updateError.toString()}',
+                          onRetry: () => ref
+                              .read(dataOperationsNotifierProvider.notifier)
+                              .clearOperation(DataOperation.containerUpdate),
+                          onDismiss: () => ref
+                              .read(dataOperationsNotifierProvider.notifier)
+                              .clearOperation(DataOperation.containerUpdate),
+                        ),
+                      if (deleteError != null)
+                        ErrorBanner(
+                          message:
+                              'Failed to delete container: ${deleteError.toString()}',
+                          onRetry: () => _retryDelete(context, ref, container),
+                          onDismiss: () => ref
+                              .read(dataOperationsNotifierProvider.notifier)
+                              .clearOperation(DataOperation.containerDelete),
+                        ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        );
       },
     );
   }
 
-  _page(RescueContainer container,
-      ValueChanged<RescueContainer> updateContainer) {
+  _page(
+    RescueContainer container,
+    ValueChanged<RescueContainer> updateContainer,
+  ) {
     var cont = ValueNotifier(container);
     cont.addListener(() {
       updateContainer(cont.value);
@@ -126,13 +144,19 @@ class ContainerEditPageArgumentExtractor extends river.ConsumerWidget {
     return ContainerEditPage(cont);
   }
 
-  Future<void> _updateContainer(river.WidgetRef ref, RescueContainer container) async {
+  Future<void> _updateContainer(
+    river.WidgetRef ref,
+    RescueContainer container,
+  ) async {
     try {
       // Clear any previous errors
-      ref.read(dataOperationsNotifierProvider.notifier).clearOperation(DataOperation.containerUpdate);
-      
+      ref
+          .read(dataOperationsNotifierProvider.notifier)
+          .clearOperation(DataOperation.containerUpdate);
+
       // Update using the data operations notifier which handles loading states
-      await ref.read(dataOperationsNotifierProvider.notifier)
+      await ref
+          .read(dataOperationsNotifierProvider.notifier)
           .updateContainer(ContainerDao.fromContainer(container));
     } catch (error) {
       // Error will be handled by DataOperationsNotifier and shown in banner
@@ -140,20 +164,27 @@ class ContainerEditPageArgumentExtractor extends river.ConsumerWidget {
     }
   }
 
-  Future<void> _deleteContainer(BuildContext context, river.WidgetRef ref, RescueContainer container) async {
+  Future<void> _deleteContainer(
+    BuildContext context,
+    river.WidgetRef ref,
+    RescueContainer container,
+  ) async {
     try {
       // Clear any previous errors
-      ref.read(dataOperationsNotifierProvider.notifier).clearOperation(DataOperation.containerDelete);
-      
+      ref
+          .read(dataOperationsNotifierProvider.notifier)
+          .clearOperation(DataOperation.containerDelete);
+
       await context.performWithLoading<void>(
         operation: 'Deleting container...',
         details: 'Removing container ${container.number} from warehouse',
         task: () async {
-          await ref.read(dataOperationsNotifierProvider.notifier)
+          await ref
+              .read(dataOperationsNotifierProvider.notifier)
               .deleteContainer(container.id);
         },
       );
-      
+
       if (context.mounted) {
         Navigator.popAndPushNamed(context, routeContainerOverview);
       }
@@ -170,17 +201,29 @@ class ContainerEditPageArgumentExtractor extends river.ConsumerWidget {
     }
   }
 
-  Future<void> _retryDelete(BuildContext context, river.WidgetRef ref, RescueContainer container) async {
+  Future<void> _retryDelete(
+    BuildContext context,
+    river.WidgetRef ref,
+    RescueContainer container,
+  ) async {
     // Clear error and retry delete operation
-    ref.read(dataOperationsNotifierProvider.notifier).clearOperation(DataOperation.containerDelete);
+    ref
+        .read(dataOperationsNotifierProvider.notifier)
+        .clearOperation(DataOperation.containerDelete);
     await _deleteContainer(context, ref, container);
   }
 
-  _deleteBtn(RescueContainer container, BuildContext context,
-      river.WidgetRef ref, Function() delete) {
-    final isDeletingContainer = ref.watch(isOperationLoadingProvider(DataOperation.containerDelete));
+  _deleteBtn(
+    RescueContainer container,
+    BuildContext context,
+    river.WidgetRef ref,
+    Function() delete,
+  ) {
+    final isDeletingContainer = ref.watch(
+      isOperationLoadingProvider(DataOperation.containerDelete),
+    );
     final assignmentsAsync = ref.watch(allAssignmentsAsyncProvider);
-    
+
     return assignmentsAsync.when(
       loading: () => DeleteButtonWithUsages(
         <String>{}, // Empty set while loading
@@ -204,7 +247,7 @@ class ContainerEditPageArgumentExtractor extends river.ConsumerWidget {
             .toSet();
 
         return DeleteButtonWithUsages(
-          items, 
+          items,
           isDeletingContainer ? null : delete,
           iconData: isDeletingContainer ? Icons.hourglass_empty : Icons.delete,
         );

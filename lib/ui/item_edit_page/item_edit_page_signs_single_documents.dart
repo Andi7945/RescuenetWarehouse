@@ -18,22 +18,24 @@ class ItemEditPageSignsSingleDocuments extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: LabelWithMultipleEntries(label, _addNew, _entries(), 536));
+    padding: const EdgeInsets.symmetric(horizontal: 8),
+    child: LabelWithMultipleEntries(label, _addNew, _entries(), 536),
+  );
 
   List<Widget> _entries() => docs.map(_docRow).toList();
 
   Widget _docRow(FirebaseDocument doc) => Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          RescueText.slim(doc.name),
-          InkWell(
-              onTap: () => _removeDoc(doc),
-              child: Center(child: RescueText.headline('-'))),
-        ],
-      );
+    mainAxisSize: MainAxisSize.min,
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      RescueText.slim(doc.name),
+      InkWell(
+        onTap: () => _removeDoc(doc),
+        child: Center(child: RescueText.headline('-')),
+      ),
+    ],
+  );
 
   _removeDoc(FirebaseDocument doc) {
     _changePaths(doc.id, null);
@@ -72,10 +74,7 @@ class ItemEditPageSignsSingleDocuments extends StatelessWidget {
         await uploadFile(destination, file);
       }
 
-      _changePaths(
-        id,
-        FirebaseDocument(id: id, url: destination, name: name),
-      );
+      _changePaths(id, FirebaseDocument(id: id, url: destination, name: name));
     } catch (e) {
       // Handle upload error - show snackbar or dialog
       debugPrint('Failed to upload safety datasheet: $e');

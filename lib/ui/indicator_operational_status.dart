@@ -19,22 +19,20 @@ class IndicatorOperationalStatus extends StatelessWidget {
 
   _filled(String text, Color color) {
     return Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: color,
-          border: Border.all(),
-        ),
-        child: Center(
-          child: Text(
-            text,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 12,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-            ),
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(color: color, border: Border.all()),
+      child: Center(
+        child: Text(
+          text,
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 12,
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w400,
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

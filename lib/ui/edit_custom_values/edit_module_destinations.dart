@@ -23,77 +23,93 @@ class _EditModuleDestinationsState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: RescueAppBar(title: "Module destinations"),
-        drawer: RescueNavigationDrawer(),
-        body: _body());
+      appBar: RescueAppBar(title: "Module destinations"),
+      drawer: RescueNavigationDrawer(),
+      body: _body(),
+    );
   }
 
   _body() {
     var usageAsync = ref.watch(moduleDestinationUsageNotifierProvider);
 
     return Padding(
-        padding: const EdgeInsets.only(left: 40, right: 40),
-        child: usageAsync.when(
-          data: (usage) => _table(usage),
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, stackTrace) => Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Error loading module destinations: $error'),
-                ElevatedButton(
-                  onPressed: () => ref.refresh(moduleDestinationUsageNotifierProvider),
-                  child: const Text('Retry'),
-                ),
-              ],
-            ),
+      padding: const EdgeInsets.only(left: 40, right: 40),
+      child: usageAsync.when(
+        data: (usage) => _table(usage),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stackTrace) => Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Error loading module destinations: $error'),
+              ElevatedButton(
+                onPressed: () =>
+                    ref.refresh(moduleDestinationUsageNotifierProvider),
+                child: const Text('Retry'),
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Widget _table(Map<ModuleDestination, Set<String>> moduleDestinations) =>
-      RescueTable(const ["Name", ""],
-          [..._rows(moduleDestinations), _addingRow()], const {});
+      RescueTable(
+        const ["Name", ""],
+        [..._rows(moduleDestinations), _addingRow()],
+        const {},
+      );
 
   List<TableRow> _rows(
-          Map<ModuleDestination, Set<String>> moduleDestinations) =>
-      moduleDestinations.entries.map<TableRow>(_buildRow).toList();
+    Map<ModuleDestination, Set<String>> moduleDestinations,
+  ) => moduleDestinations.entries.map<TableRow>(_buildRow).toList();
 
   TableRow _buildRow(MapEntry<ModuleDestination, Set<String>> destination) =>
-      TableRow(children: [
-        _textField(destination.key),
-        DeleteButtonWithUsages(destination.value, () {
-          ref
-              .read(moduleDestinationsNotifierProvider.notifier)
-              .delete(destination.key);
-        })
-      ]);
+      TableRow(
+        children: [
+          _textField(destination.key),
+          DeleteButtonWithUsages(destination.value, () {
+            ref
+                .read(moduleDestinationsNotifierProvider.notifier)
+                .delete(destination.key);
+          }),
+        ],
+      );
 
   _textField(ModuleDestination oldDest) {
     return Padding(
-        padding: const EdgeInsets.only(left: 16),
-        child: EditCustomValueTextField(
-            TextEditingController(text: oldDest.name),
-            (newDest) => ref
-                .read(moduleDestinationsNotifierProvider.notifier)
-                .upsert(oldDest.copyWith(name: newDest))));
+      padding: const EdgeInsets.only(left: 16),
+      child: EditCustomValueTextField(
+        TextEditingController(text: oldDest.name),
+        (newDest) => ref
+            .read(moduleDestinationsNotifierProvider.notifier)
+            .upsert(oldDest.copyWith(name: newDest)),
+      ),
+    );
   }
 
-  TableRow _addingRow() => TableRow(children: [
-        Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child: EditCustomValueTextField(_addController)),
-        _btnAdd()
-      ]);
+  TableRow _addingRow() => TableRow(
+    children: [
+      Padding(
+        padding: const EdgeInsets.only(left: 16),
+        child: EditCustomValueTextField(_addController),
+      ),
+      _btnAdd(),
+    ],
+  );
 
   _btnAdd() => IconButton(
-      onPressed: () {
-        var newDestination =
-            ModuleDestination(id: uuid.v4(), name: _addController.text);
-        ref
-            .read(moduleDestinationsNotifierProvider.notifier)
-            .upsert(newDestination);
-        _addController.clear();
-      },
-      icon: const Icon(Icons.add));
+    onPressed: () {
+      var newDestination = ModuleDestination(
+        id: uuid.v4(),
+        name: _addController.text,
+      );
+      ref
+          .read(moduleDestinationsNotifierProvider.notifier)
+          .upsert(newDestination);
+      _addController.clear();
+    },
+    icon: const Icon(Icons.add),
+  );
 }

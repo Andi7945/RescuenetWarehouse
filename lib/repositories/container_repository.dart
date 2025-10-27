@@ -48,5 +48,6 @@ class ContainerException implements Exception {
   const ContainerException(this.message, {this.code, this.originalException});
 
   @override
-  String toString() => 'ContainerException: $message${code != null ? ' (code: $code)' : ''}';
+  String toString() =>
+      'ContainerException: $message${code != null ? ' (code: $code)' : ''}';
 }

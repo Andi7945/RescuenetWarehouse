@@ -7,22 +7,22 @@ import 'data_loading_indicator.dart';
 class DebouncedLoadingIndicator extends ConsumerWidget {
   /// Unique key for the operation
   final String operationKey;
-  
+
   /// Loading configuration (quick, medium, slow, immediate)
   final DebouncedLoadingConfig config;
-  
+
   /// Optional loading message to display
   final String? message;
-  
+
   /// Whether to show as an overlay covering the content
   final bool isOverlay;
-  
+
   /// Whether to use a compact layout (smaller size)
   final bool isCompact;
-  
+
   /// Custom semantic label for accessibility
   final String? semanticsLabel;
-  
+
   /// Widget to show when not loading
   final Widget? child;
 
@@ -56,7 +56,8 @@ class DebouncedLoadingIndicator extends ConsumerWidget {
     this.message,
     this.semanticsLabel,
     this.child,
-  }) : isOverlay = true, isCompact = false;
+  }) : isOverlay = true,
+       isCompact = false;
 
   /// Creates a compact loading indicator for smaller spaces
   const DebouncedLoadingIndicator.compact({
@@ -66,19 +67,24 @@ class DebouncedLoadingIndicator extends ConsumerWidget {
     this.message,
     this.semanticsLabel,
     this.child,
-  }) : isOverlay = false, isCompact = true;
+  }) : isOverlay = false,
+       isCompact = true;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final shouldShowLoading = ref.shouldShowLoading(operationKey, config: config);
-    
+    final shouldShowLoading = ref.shouldShowLoading(
+      operationKey,
+      config: config,
+    );
+
     if (!shouldShowLoading) {
       return child ?? const SizedBox.shrink();
     }
 
     return Semantics(
       liveRegion: true,
-      label: semanticsLabel ?? (message != null ? 'Loading: $message' : 'Loading'),
+      label:
+          semanticsLabel ?? (message != null ? 'Loading: $message' : 'Loading'),
       child: DataLoadingIndicator(
         message: message,
         isOverlay: isOverlay,
@@ -93,25 +99,25 @@ class DebouncedLoadingIndicator extends ConsumerWidget {
 class DebouncedLoadingButton extends ConsumerWidget {
   /// Unique key for the operation
   final String operationKey;
-  
+
   /// Loading configuration
   final DebouncedLoadingConfig config;
-  
+
   /// Button text or widget
   final Widget child;
-  
+
   /// Callback when button is pressed
   final Future<void> Function()? onPressed;
-  
+
   /// Button style
   final ButtonStyle? style;
-  
+
   /// Icon to show during loading (optional)
   final Widget? loadingIcon;
-  
+
   /// Whether to disable button when operation is active
   final bool disableWhenActive;
-  
+
   /// Whether to show loading icon instead of progress indicator
   final bool showLoadingIcon;
 
@@ -141,16 +147,19 @@ class DebouncedLoadingButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final shouldShowLoading = ref.shouldShowLoading(operationKey, config: config);
+    final shouldShowLoading = ref.shouldShowLoading(
+      operationKey,
+      config: config,
+    );
     final isActive = ref.isOperationActive(operationKey, config: config);
-    
+
     // Determine if button should be disabled
     final isDisabled = onPressed == null || (disableWhenActive && isActive);
-    
+
     // Choose what to show based on loading state
     Widget buttonChild;
     String buttonSemanticLabel;
-    
+
     if (shouldShowLoading) {
       if (showLoadingIcon && loadingIcon != null) {
         buttonChild = loadingIcon!;
@@ -178,7 +187,7 @@ class DebouncedLoadingButton extends ConsumerWidget {
     return Semantics(
       button: true,
       label: buttonSemanticLabel,
-      hint: isDisabled 
+      hint: isDisabled
           ? (shouldShowLoading ? 'Loading in progress' : 'Button disabled')
           : 'Tap to perform action',
       enabled: !isDisabled,
@@ -210,28 +219,28 @@ class DebouncedLoadingButton extends ConsumerWidget {
 class DebouncedLoadingIconButton extends ConsumerWidget {
   /// Unique key for the operation
   final String operationKey;
-  
+
   /// Loading configuration
   final DebouncedLoadingConfig config;
-  
+
   /// Icon to display normally
   final Widget icon;
-  
+
   /// Loading widget to show during operation (defaults to CircularProgressIndicator)
   final Widget? loadingWidget;
-  
+
   /// Callback when button is pressed
   final Future<void> Function()? onPressed;
-  
+
   /// Button style
   final ButtonStyle? style;
-  
+
   /// Icon size
   final double? iconSize;
-  
+
   /// Whether to disable button when operation is active
   final bool disableWhenActive;
-  
+
   /// Tooltip text
   final String? tooltip;
 
@@ -263,29 +272,34 @@ class DebouncedLoadingIconButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final shouldShowLoading = ref.shouldShowLoading(operationKey, config: config);
+    final shouldShowLoading = ref.shouldShowLoading(
+      operationKey,
+      config: config,
+    );
     final isActive = ref.isOperationActive(operationKey, config: config);
-    
+
     // Determine if button should be disabled
     final isDisabled = onPressed == null || (disableWhenActive && isActive);
-    
+
     // Choose what to show based on loading state
     Widget buttonIcon;
     String iconSemanticLabel;
-    
+
     if (shouldShowLoading) {
-      buttonIcon = loadingWidget ?? Semantics(
-        label: 'Loading indicator',
-        child: SizedBox(
-          width: (iconSize ?? 24) * 0.7,
-          height: (iconSize ?? 24) * 0.7,
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            color: isDisabled ? Colors.grey : null,
-            semanticsLabel: 'Icon button loading',
-          ),
-        ),
-      );
+      buttonIcon =
+          loadingWidget ??
+          Semantics(
+            label: 'Loading indicator',
+            child: SizedBox(
+              width: (iconSize ?? 24) * 0.7,
+              height: (iconSize ?? 24) * 0.7,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: isDisabled ? Colors.grey : null,
+                semanticsLabel: 'Icon button loading',
+              ),
+            ),
+          );
       iconSemanticLabel = 'Icon button loading, please wait';
     } else {
       buttonIcon = icon;
@@ -295,7 +309,7 @@ class DebouncedLoadingIconButton extends ConsumerWidget {
     final button = Semantics(
       button: true,
       label: iconSemanticLabel,
-      hint: isDisabled 
+      hint: isDisabled
           ? (shouldShowLoading ? 'Loading in progress' : 'Button disabled')
           : 'Tap to perform action',
       enabled: !isDisabled,
@@ -331,19 +345,19 @@ class DebouncedLoadingIconButton extends ConsumerWidget {
 class DebouncedLoadingOverlay extends ConsumerWidget {
   /// Unique key for the operation
   final String operationKey;
-  
+
   /// Loading configuration
   final DebouncedLoadingConfig config;
-  
+
   /// Description of the operation being performed
   final String operation;
-  
+
   /// Additional details about the operation
   final String? details;
-  
+
   /// Child widget to overlay
   final Widget child;
-  
+
   /// Whether the overlay can be dismissed
   final bool canDismiss;
 
@@ -359,8 +373,11 @@ class DebouncedLoadingOverlay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final shouldShowLoading = ref.shouldShowLoading(operationKey, config: config);
-    
+    final shouldShowLoading = ref.shouldShowLoading(
+      operationKey,
+      config: config,
+    );
+
     if (!shouldShowLoading) {
       return child;
     }
@@ -370,10 +387,14 @@ class DebouncedLoadingOverlay extends ConsumerWidget {
     return Semantics(
       liveRegion: true,
       label: 'Loading overlay: $loadingMessage',
-      hint: canDismiss ? 'Tap outside to dismiss' : 'Please wait for operation to complete',
+      hint: canDismiss
+          ? 'Tap outside to dismiss'
+          : 'Please wait for operation to complete',
       child: Stack(
         children: [
-          ExcludeSemantics(child: child), // Exclude underlying content from semantics
+          ExcludeSemantics(
+            child: child,
+          ), // Exclude underlying content from semantics
           Positioned.fill(
             child: Container(
               color: Colors.black.withValues(alpha: 0.3),
@@ -414,9 +435,8 @@ class DebouncedLoadingOverlay extends ConsumerWidget {
                         label: 'Operation: $operation',
                         child: Text(
                           operation,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(fontWeight: FontWeight.w500),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -426,9 +446,12 @@ class DebouncedLoadingOverlay extends ConsumerWidget {
                           label: 'Details: ${details!}',
                           child: Text(
                             details!,
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
-                            ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                                ),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -449,13 +472,13 @@ class DebouncedLoadingOverlay extends ConsumerWidget {
 class DebouncedLoadingWrapper extends ConsumerWidget {
   /// Unique key for the operation
   final String operationKey;
-  
+
   /// Loading configuration
   final DebouncedLoadingConfig config;
-  
+
   /// Widget to show when not loading
   final Widget child;
-  
+
   /// Widget to show when loading (defaults to DataLoadingIndicator)
   final Widget? loadingWidget;
 
@@ -469,8 +492,11 @@ class DebouncedLoadingWrapper extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final shouldShowLoading = ref.shouldShowLoading(operationKey, config: config);
-    
+    final shouldShowLoading = ref.shouldShowLoading(
+      operationKey,
+      config: config,
+    );
+
     if (shouldShowLoading) {
       return Semantics(
         liveRegion: true,
@@ -479,7 +505,7 @@ class DebouncedLoadingWrapper extends ConsumerWidget {
         child: loadingWidget ?? const DataLoadingIndicator(),
       );
     }
-    
+
     return child;
   }
 }

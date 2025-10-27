@@ -31,9 +31,7 @@ class ContainerWithContentColumn extends ConsumerWidget {
       ),
       data: (allAssignments) => AsyncValueBuilder<List<Item>>(
         value: ref.watch(allItemsAsyncProvider),
-        loading: () => const DataLoadingIndicator(
-          message: 'Loading items...',
-        ),
+        loading: () => const DataLoadingIndicator(message: 'Loading items...'),
         error: (error, stackTrace) => ErrorRetryWidget(
           error: error,
           message: 'Failed to load items',
@@ -44,12 +42,15 @@ class ContainerWithContentColumn extends ConsumerWidget {
     );
   }
 
-  Widget _buildContainerContent(List<Assignment> allAssignments, List<Item> allItems) {
+  Widget _buildContainerContent(
+    List<Assignment> allAssignments,
+    List<Item> allItems,
+  ) {
     // Filter assignments for this container
     var containerAssignments = allAssignments
         .where((a) => a.containerId == _container.id)
         .toList();
-    
+
     // Create a map of items to their assignment counts for this container
     var items = <Item, int>{};
     for (var assignment in containerAssignments) {
@@ -76,18 +77,11 @@ class ContainerWithContentColumn extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.inbox_outlined,
-                    size: 48,
-                    color: Colors.grey,
-                  ),
+                  Icon(Icons.inbox_outlined, size: 48, color: Colors.grey),
                   SizedBox(height: 16),
                   Text(
                     'No items assigned to this container',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
-                    ),
+                    style: TextStyle(color: Colors.grey, fontSize: 16),
                   ),
                 ],
               ),
@@ -101,7 +95,7 @@ class ContainerWithContentColumn extends ConsumerWidget {
       shrinkWrap: true,
       children: [
         ContainerWithContentHeader(_container, items),
-        ..._sortedEntries(items).map((e) => ItemCard(e.key, e.value, true))
+        ..._sortedEntries(items).map((e) => ItemCard(e.key, e.value, true)),
       ],
     );
   }

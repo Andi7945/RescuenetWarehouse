@@ -3,11 +3,11 @@ import 'package:rescuenet_warehouse/models/container_type.dart';
 import 'package:rescuenet_warehouse/repositories/container_type_repository.dart';
 
 /// Mock implementation of ContainerTypeRepository for testing
-/// 
+///
 /// Provides predictable container type data without Firebase dependencies.
 class MockContainerTypeRepository implements ContainerTypeRepository {
   final Map<String, ContainerType> _containerTypes = {};
-  final StreamController<List<ContainerType>> _streamController = 
+  final StreamController<List<ContainerType>> _streamController =
       StreamController<List<ContainerType>>.broadcast();
 
   MockContainerTypeRepository() {
@@ -48,7 +48,7 @@ class MockContainerTypeRepository implements ContainerTypeRepository {
     for (final containerType in sampleContainerTypes) {
       _containerTypes[containerType.id] = containerType;
     }
-    
+
     _notifyListeners();
   }
 
@@ -60,8 +60,13 @@ class MockContainerTypeRepository implements ContainerTypeRepository {
   Stream<List<ContainerType>> watchContainerTypes() {
     final controller = StreamController<List<ContainerType>>.broadcast();
     controller.add(_containerTypes.values.toList());
-    final subscription = _streamController.stream.listen((items) => controller.add(items));
-    controller.onCancel = () { subscription.cancel(); controller.close(); };
+    final subscription = _streamController.stream.listen(
+      (items) => controller.add(items),
+    );
+    controller.onCancel = () {
+      subscription.cancel();
+      controller.close();
+    };
     return controller.stream;
   }
 
@@ -92,7 +97,7 @@ class MockContainerTypeRepository implements ContainerTypeRepository {
   }
 
   /// Test helper methods
-  
+
   /// Clear all container types (useful for test setup)
   void clearAll() {
     _containerTypes.clear();

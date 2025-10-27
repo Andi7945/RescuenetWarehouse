@@ -4,7 +4,8 @@ const routeContainerEditPage = "/containerEditPage";
 
 const routeContainerAssignmentOverviewPage = "/containerOverviewAssignmentPage";
 const routeContainerAssignmentSinglePage = "/containerSingleAssignmentPage";
-const routeContainerAssignmentSearchItemPage = "/containerAssignmentSearchItemPage";
+const routeContainerAssignmentSearchItemPage =
+    "/containerAssignmentSearchItemPage";
 
 const routeEditContainerTypes = "/editContainerTypes";
 const routeEditModuleDestinations = "/editModuleDestinations";

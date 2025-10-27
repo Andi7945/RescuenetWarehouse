@@ -3,7 +3,7 @@ import 'package:rescuenet_warehouse/repositories/current_location_repository.dar
 import 'package:rescuenet_warehouse/db/firebase.dart';
 
 /// Firebase implementation of CurrentLocationRepository
-/// 
+///
 /// Provides real-time synchronization with Firestore for current location data.
 class FirebaseCurrentLocationRepository implements CurrentLocationRepository {
   @override
@@ -36,7 +36,9 @@ class FirebaseCurrentLocationRepository implements CurrentLocationRepository {
   @override
   Future<void> upsertCurrentLocation(CurrentLocation currentLocation) async {
     try {
-      await currentLocationsCollection.doc(currentLocation.id).set(currentLocation);
+      await currentLocationsCollection
+          .doc(currentLocation.id)
+          .set(currentLocation);
     } catch (e) {
       throw Exception('Failed to upsert current location: $e');
     }

@@ -21,10 +21,11 @@ class CurrentLocationUsageNotifier extends _$CurrentLocationUsageNotifier {
             .where((element) => element.type != null)
             .groupBy((p0) => p0.currentLocation!)
             .mapValues(
-                (value) => value.map((e) => e.printName).whereNotNull().toSet());
+              (value) => value.map((e) => e.printName).whereNotNull().toSet(),
+            );
 
         Map<CurrentLocation, Set<String>> map = {
-          for (var e in dests) e: grouped[e] ?? Set()
+          for (var e in dests) e: grouped[e] ?? Set(),
         };
         return AsyncValue.data(map);
       },

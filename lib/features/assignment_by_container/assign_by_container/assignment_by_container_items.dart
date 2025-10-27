@@ -25,7 +25,8 @@ class AssignmentByContainerItems extends ConsumerWidget {
       error: (error, stackTrace) => ErrorRetryWidget(
         error: error,
         message: 'Failed to load container assignments',
-        onRetry: () => ref.refresh(assignmentByContainerAsyncProvider(container.id)),
+        onRetry: () =>
+            ref.refresh(assignmentByContainerAsyncProvider(container.id)),
       ),
       data: (assignedItems) => _buildAssignmentsList(assignedItems),
     );
@@ -39,26 +40,16 @@ class AssignmentByContainerItems extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.assignment_outlined,
-                size: 48,
-                color: Colors.grey,
-              ),
+              Icon(Icons.assignment_outlined, size: 48, color: Colors.grey),
               SizedBox(height: 16),
               Text(
                 'No items assigned to this container',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 16,
-                ),
+                style: TextStyle(color: Colors.grey, fontSize: 16),
               ),
               SizedBox(height: 8),
               Text(
                 'Add items using the + button below',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 14,
-                ),
+                style: TextStyle(color: Colors.grey, fontSize: 14),
               ),
             ],
           ),
@@ -69,9 +60,9 @@ class AssignmentByContainerItems extends ConsumerWidget {
     return ListView(
       shrinkWrap: true,
       children: [
-        ..._sortedEntries(assignedItems).map(
-          (e) => AssignmentByContainerSingleItem(e.key, e.value),
-        ),
+        ..._sortedEntries(
+          assignedItems,
+        ).map((e) => AssignmentByContainerSingleItem(e.key, e.value)),
       ],
     );
   }

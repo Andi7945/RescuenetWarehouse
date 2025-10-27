@@ -26,11 +26,8 @@ class RescueAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final dynamic title; // Can be String or Widget
   final List<Widget>? actions;
 
-  const RescueAppBar({
-    Key? key,
-    required this.title,
-    this.actions,
-  }) : super(key: key);
+  const RescueAppBar({Key? key, required this.title, this.actions})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

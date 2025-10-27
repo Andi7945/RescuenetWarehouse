@@ -6,10 +6,11 @@ part 'firebase_document.g.dart';
 
 @freezed
 abstract class FirebaseDocument with _$FirebaseDocument {
-  const factory FirebaseDocument(
-      {required String id,
-      required String url,
-      required String name}) = _FirebaseDocument;
+  const factory FirebaseDocument({
+    required String id,
+    required String url,
+    required String name,
+  }) = _FirebaseDocument;
 
   factory FirebaseDocument.fromJson(Map<String, dynamic> json) =>
       _$FirebaseDocumentFromJson(json);

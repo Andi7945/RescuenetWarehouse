@@ -28,19 +28,20 @@ abstract class RescueContainer with _$RescueContainer {
   String get printName => "$number: $name";
 
   factory RescueContainer.fromDao(
-          ContainerDao dao,
-          ContainerType? type,
-          ModuleDestination? moduleDestination,
-          CurrentLocation? currentLocation) =>
-      RescueContainer(
-          id: dao.id,
-          type: type,
-          moduleDestination: moduleDestination,
-          currentLocation: currentLocation,
-          number: dao.number,
-          description: dao.description,
-          name: dao.name,
-          sequentialBuild: dao.sequentialBuild,
-          isReady: dao.isReady,
-          toDeploy: dao.toDeploy);
+    ContainerDao dao,
+    ContainerType? type,
+    ModuleDestination? moduleDestination,
+    CurrentLocation? currentLocation,
+  ) => RescueContainer(
+    id: dao.id,
+    type: type,
+    moduleDestination: moduleDestination,
+    currentLocation: currentLocation,
+    number: dao.number,
+    description: dao.description,
+    name: dao.name,
+    sequentialBuild: dao.sequentialBuild,
+    isReady: dao.isReady,
+    toDeploy: dao.toDeploy,
+  );
 }

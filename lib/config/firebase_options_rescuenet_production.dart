@@ -67,7 +67,8 @@ class RescuenetProductionFirebaseOptions {
     messagingSenderId: '954628027650',
     projectId: 'rescuenet-7733b',
     storageBucket: 'rescuenet-7733b.appspot.com',
-    iosClientId: '954628027650-tjpi2enlscaadbd82hl7v3f1k7dsdid4.apps.googleusercontent.com',
+    iosClientId:
+        '954628027650-tjpi2enlscaadbd82hl7v3f1k7dsdid4.apps.googleusercontent.com',
     iosBundleId: 'net.rescuenet.app',
   );
 
@@ -77,7 +78,8 @@ class RescuenetProductionFirebaseOptions {
     messagingSenderId: '954628027650',
     projectId: 'rescuenet-7733b',
     storageBucket: 'rescuenet-7733b.appspot.com',
-    iosClientId: '954628027650-oh45gom8k9bvmck5ph4o37rab7igppkm.apps.googleusercontent.com',
+    iosClientId:
+        '954628027650-oh45gom8k9bvmck5ph4o37rab7igppkm.apps.googleusercontent.com',
     iosBundleId: 'net.rescuenet.app',
   );
 }

@@ -36,8 +36,10 @@ class _AssignmentSearchItemPageState
     return Consumer(
       builder: (context, ref, child) {
         // Watch loading state for assignment creation
-        final isCreatingAssignment = ref.watch(isOperationLoadingProvider(DataOperation.assignmentCreate));
-        
+        final isCreatingAssignment = ref.watch(
+          isOperationLoadingProvider(DataOperation.assignmentCreate),
+        );
+
         return Scaffold(
           appBar: RescueAppBar(
             title: Row(
@@ -61,7 +63,8 @@ class _AssignmentSearchItemPageState
             actions: [
               ButtonHideUnassignable(
                 hideWithoutRemainingAmount,
-                (changed) => setState(() => hideWithoutRemainingAmount = changed),
+                (changed) =>
+                    setState(() => hideWithoutRemainingAmount = changed),
               ),
             ],
           ),
@@ -98,8 +101,12 @@ class _AssignmentSearchItemPageState
               child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: items.length,
-                itemBuilder:
-                    (ctxt, idx) => _singleCard(ctxt, items[idx].$1, items[idx].$2, isCreatingAssignment),
+                itemBuilder: (ctxt, idx) => _singleCard(
+                  ctxt,
+                  items[idx].$1,
+                  items[idx].$2,
+                  isCreatingAssignment,
+                ),
               ),
             ),
           ),
@@ -108,21 +115,25 @@ class _AssignmentSearchItemPageState
     );
   }
 
-  Widget _singleCard(BuildContext context, Item item, int unassignedAmount, bool isCreatingAssignment) =>
-      InkWell(
-        onTap: isCreatingAssignment ? null : () => _selectItem(context, item),
-        child: Container(
-          decoration: isCreatingAssignment ? BoxDecoration(
-            color: Colors.grey.withOpacity(0.1),
-          ) : null,
-          child: AssignmentSearchItemCard(
-            item: item,
-            amount: unassignedAmount,
-            sortingField: _sortField(item),
-            filterField: _filterField(item),
-          ),
-        ),
-      );
+  Widget _singleCard(
+    BuildContext context,
+    Item item,
+    int unassignedAmount,
+    bool isCreatingAssignment,
+  ) => InkWell(
+    onTap: isCreatingAssignment ? null : () => _selectItem(context, item),
+    child: Container(
+      decoration: isCreatingAssignment
+          ? BoxDecoration(color: Colors.grey.withOpacity(0.1))
+          : null,
+      child: AssignmentSearchItemCard(
+        item: item,
+        amount: unassignedAmount,
+        sortingField: _sortField(item),
+        filterField: _filterField(item),
+      ),
+    ),
+  );
 
   Future<void> _selectItem(BuildContext context, Item item) async {
     try {
@@ -134,7 +145,7 @@ class _AssignmentSearchItemPageState
           await Future.delayed(const Duration(milliseconds: 500));
         },
       );
-      
+
       if (context.mounted) {
         Navigator.pop(context, item);
       }

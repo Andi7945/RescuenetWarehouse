@@ -23,7 +23,9 @@ class CsvToModelImporter {
     } else if (allowPickFile) {
       csvData = await _pickAndReadCsvFile();
     } else {
-      throw Exception('Either filePath must be provided or allowPickFile must be true');
+      throw Exception(
+        'Either filePath must be provided or allowPickFile must be true',
+      );
     }
 
     // Convert CSV to list of model objects
@@ -54,7 +56,9 @@ class CsvToModelImporter {
   /// Read CSV file from a given path
   static Future<String> _readCsvFile(String filePath) async {
     if (kIsWeb) {
-      throw Exception('Direct file path reading is not supported on web platform');
+      throw Exception(
+        'Direct file path reading is not supported on web platform',
+      );
     } else {
       final file = File(filePath);
       return await file.readAsString();
@@ -63,10 +67,10 @@ class CsvToModelImporter {
 
   /// Convert CSV string data to a list of model objects
   static List<T> _convertCsvToModels<T>(
-      String csvData,
-      T Function(Map<String, dynamic> json) fromJsonFactory,
-      {bool debug = false}
-      ) {
+    String csvData,
+    T Function(Map<String, dynamic> json) fromJsonFactory, {
+    bool debug = false,
+  }) {
     // Parse CSV
     List<List<dynamic>> csvTable = const CsvToListConverter(
       shouldParseNumbers: true,
@@ -78,7 +82,9 @@ class CsvToModelImporter {
     }
 
     // Extract headers from first row
-    List<String> headers = csvTable.first.map((e) => e.toString().trim()).toList();
+    List<String> headers = csvTable.first
+        .map((e) => e.toString().trim())
+        .toList();
 
     if (debug) {
       print('CSV Headers: $headers');
@@ -92,7 +98,9 @@ class CsvToModelImporter {
       // Skip rows that don't have the expected number of columns
       if (row.length != headers.length) {
         if (debug) {
-          print('Skipping row $i: column count mismatch (expected ${headers.length}, got ${row.length})');
+          print(
+            'Skipping row $i: column count mismatch (expected ${headers.length}, got ${row.length})',
+          );
         }
         continue;
       }
@@ -121,8 +129,7 @@ class CsvToModelImporter {
           // Convert "true"/"false" strings to booleans
           else if (value.toLowerCase() == "true") {
             value = true;
-          }
-          else if (value.toLowerCase() == "false") {
+          } else if (value.toLowerCase() == "false") {
             value = false;
           }
           // Handle JSON strings that need to be parsed

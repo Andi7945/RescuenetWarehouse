@@ -15,14 +15,17 @@ class ItemsCurrentFilterNotifier extends _$ItemsCurrentFilterNotifier {
   }
 
   setField(ItemFilter? filter) => state = CurrentItemFilter(
-      filter: filter ?? allItemFilter.values.first, value: null);
+    filter: filter ?? allItemFilter.values.first,
+    value: null,
+  );
 
   setCurrentFilterValue(String? v) => state = state.copyWith(value: v);
 }
 
 @freezed
 abstract class CurrentItemFilter with _$CurrentItemFilter {
-  factory CurrentItemFilter(
-      {required ItemFilter filter,
-      required String? value}) = _CurrentItemFilter;
+  factory CurrentItemFilter({
+    required ItemFilter filter,
+    required String? value,
+  }) = _CurrentItemFilter;
 }

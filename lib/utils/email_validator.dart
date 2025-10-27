@@ -35,7 +35,9 @@ class EmailDomainValidator {
     final normalizedEmail = email.toLowerCase().trim();
 
     // Rule 1: Check whitelist first (highest priority)
-    if (whitelistedEmails.any((e) => e.toLowerCase().trim() == normalizedEmail)) {
+    if (whitelistedEmails.any(
+      (e) => e.toLowerCase().trim() == normalizedEmail,
+    )) {
       return null; // Whitelisted emails always pass
     }
 

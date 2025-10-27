@@ -5,8 +5,11 @@ class RescueInputAmount extends StatefulWidget {
   final Function(int) onChange;
   final int amount;
 
-  const RescueInputAmount(
-      {super.key, required this.onChange, required this.amount});
+  const RescueInputAmount({
+    super.key,
+    required this.onChange,
+    required this.amount,
+  });
 
   @override
   State createState() => _RescueInputAmountState();
@@ -24,11 +27,12 @@ class _RescueInputAmountState extends State<RescueInputAmount> {
       _controller.text = "${widget.amount}";
     }
     return TextFormField(
-        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        style: const TextStyle(fontSize: 24),
-        controller: _controller,
-        onChanged: _onChange);
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      style: const TextStyle(fontSize: 24),
+      controller: _controller,
+      onChanged: _onChange,
+    );
   }
 
   @override

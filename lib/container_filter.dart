@@ -22,7 +22,8 @@ class ContainerFilter {
 }
 
 bool Function(RescueContainer, Iterable<Item>, String?) _calcFn(
-    FilterField field) {
+  FilterField field,
+) {
   return (c, itms, value) {
     if (field == FilterField.itemHasExpiringDates) {
       return itms.any((itm) => allItemFilter[field]!.check(itm, ""));
@@ -34,9 +35,11 @@ bool Function(RescueContainer, Iterable<Item>, String?) _calcFn(
 
     if (field == FilterField.all) {
       return _containerFilterMatches(value, field)(c, itms) ||
-          itms.any((itm) => allItemFilter.entries
-              .where((e) => e.key.applyToEverywhere)
-              .any((e) => e.value.check(itm, value)));
+          itms.any(
+            (itm) => allItemFilter.entries
+                .where((e) => e.key.applyToEverywhere)
+                .any((e) => e.value.check(itm, value)),
+          );
     }
 
     var itemFilter = allItemFilter[field];
@@ -47,13 +50,15 @@ bool Function(RescueContainer, Iterable<Item>, String?) _calcFn(
 }
 
 bool Function(RescueContainer, Iterable<Item>) _containerFilterMatches(
-    String value, FilterField field) {
+  String value,
+  FilterField field,
+) {
   Map<FilterField, String? Function(RescueContainer)> containerFilters = {
     FilterField.containerName: (c) => c.printName,
     FilterField.containerLocation: (c) => c.currentLocation?.name,
     FilterField.containerDestination: (c) => c.moduleDestination?.name,
     FilterField.containerType: (c) => c.type?.name,
-    FilterField.containerSequentialBuild: (c) => c.sequentialBuild.displayName
+    FilterField.containerSequentialBuild: (c) => c.sequentialBuild.displayName,
   };
 
   if (field == FilterField.all) {

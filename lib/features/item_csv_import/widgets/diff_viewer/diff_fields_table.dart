@@ -30,27 +30,30 @@ class DiffFieldsTable<T> extends StatelessWidget {
     }
 
     final importedMap = DiffService.objectToMap(importedObject);
-    final existingMap = existingObject != null ? DiffService.objectToMap(existingObject!) : null;
+    final existingMap = existingObject != null
+        ? DiffService.objectToMap(existingObject!)
+        : null;
 
     return Table(
-      columnWidths: const {
-        0: FlexColumnWidth(1),
-        1: FlexColumnWidth(2),
-      },
+      columnWidths: const {0: FlexColumnWidth(1), 1: FlexColumnWidth(2)},
       children: [
         // Header row
         TableRow(
-          decoration: BoxDecoration(
-            color: Colors.grey.shade200,
-          ),
+          decoration: BoxDecoration(color: Colors.grey.shade200),
           children: [
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-              child: Text('Field', style: TextStyle(fontWeight: FontWeight.bold)),
+              child: Text(
+                'Field',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-              child: Text('Value', style: TextStyle(fontWeight: FontWeight.bold)),
+              child: Text(
+                'Value',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
           ],
         ),
@@ -58,7 +61,8 @@ class DiffFieldsTable<T> extends StatelessWidget {
         ...fieldsToShow.map((field) {
           final importedValue = importedMap[field];
           final existingValue = existingMap?[field];
-          final isDifferent = existingObject != null &&
+          final isDifferent =
+              existingObject != null &&
               !DiffService.areValuesEqual(importedValue, existingValue);
 
           return TableRow(
@@ -68,15 +72,21 @@ class DiffFieldsTable<T> extends StatelessWidget {
             children: [
               // Field name
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 4.0,
+                  horizontal: 8.0,
+                ),
                 child: Text(
-                    ValueFormatter.formatFieldName(field),
-                    style: const TextStyle(fontWeight: FontWeight.bold)
+                  ValueFormatter.formatFieldName(field),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
               // Field value(s)
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 4.0,
+                  horizontal: 8.0,
+                ),
                 child: isDifferent
                     ? _buildDiffValues(importedValue, existingValue)
                     : Text(ValueFormatter.formatValue(importedValue)),

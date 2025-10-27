@@ -11,31 +11,37 @@ class ItemAddButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Watch loading state for item creation
-    final isCreatingItem = ref.watch(isOperationLoadingProvider(DataOperation.itemCreate));
-    final createError = ref.watch(getOperationErrorProvider(DataOperation.itemCreate));
-    
+    final isCreatingItem = ref.watch(
+      isOperationLoadingProvider(DataOperation.itemCreate),
+    );
+    final createError = ref.watch(
+      getOperationErrorProvider(DataOperation.itemCreate),
+    );
+
     return IconButton(
       onPressed: isCreatingItem ? null : () => _createNewItem(context, ref),
-      icon: isCreatingItem 
-        ? const SizedBox(
-            width: 16,
-            height: 16,
-            child: CircularProgressIndicator(strokeWidth: 2),
-          )
-        : const Icon(Icons.add),
-      tooltip: isCreatingItem 
-        ? 'Creating item...' 
-        : createError != null 
+      icon: isCreatingItem
+          ? const SizedBox(
+              width: 16,
+              height: 16,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            )
+          : const Icon(Icons.add),
+      tooltip: isCreatingItem
+          ? 'Creating item...'
+          : createError != null
           ? 'Error creating item: ${createError.toString()}'
           : 'Add new item',
     );
   }
-  
+
   Future<void> _createNewItem(BuildContext context, WidgetRef ref) async {
     try {
       // Clear any previous errors
-      ref.read(dataOperationsNotifierProvider.notifier).clearOperation(DataOperation.itemCreate);
-      
+      ref
+          .read(dataOperationsNotifierProvider.notifier)
+          .clearOperation(DataOperation.itemCreate);
+
       // Use loading overlay for item creation
       await context.performWithLoading<void>(
         operation: 'Creating new item...',

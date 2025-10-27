@@ -15,14 +15,18 @@ part 'debounced_data_operations_notifier.g.dart';
 /// intelligent loading state management that prevents loading flashes for
 /// fast operations while maintaining proper feedback for longer operations.
 @riverpod
-class DebouncedDataOperationsNotifier extends _$DebouncedDataOperationsNotifier {
+class DebouncedDataOperationsNotifier
+    extends _$DebouncedDataOperationsNotifier {
   @override
   DataOperationsState build() {
     return const DataOperationsState();
   }
 
   /// Set the state for a specific operation.
-  void _setOperationState(DataOperation operation, AsyncValue<void> operationState) {
+  void _setOperationState(
+    DataOperation operation,
+    AsyncValue<void> operationState,
+  ) {
     state = state.copyWithOperation(operation, operationState);
   }
 
@@ -41,7 +45,8 @@ class DebouncedDataOperationsNotifier extends _$DebouncedDataOperationsNotifier 
   // ============================================================================
 
   /// Create a new item with debounced loading for UI feedback
-  Future<void> createItem(Item item, {
+  Future<void> createItem(
+    Item item, {
     String? debouncedOperationKey,
     DebouncedLoadingConfig config = DebouncedLoadingConfig.medium,
   }) async {
@@ -57,7 +62,8 @@ class DebouncedDataOperationsNotifier extends _$DebouncedDataOperationsNotifier 
   }
 
   /// Update an existing item with debounced loading for UI feedback
-  Future<void> updateItem(Item item, {
+  Future<void> updateItem(
+    Item item, {
     String? debouncedOperationKey,
     DebouncedLoadingConfig config = DebouncedLoadingConfig.quick,
   }) async {
@@ -73,7 +79,8 @@ class DebouncedDataOperationsNotifier extends _$DebouncedDataOperationsNotifier 
   }
 
   /// Delete an item with debounced loading for UI feedback
-  Future<void> deleteItem(String itemId, {
+  Future<void> deleteItem(
+    String itemId, {
     String? debouncedOperationKey,
     DebouncedLoadingConfig config = DebouncedLoadingConfig.medium,
   }) async {
@@ -89,13 +96,15 @@ class DebouncedDataOperationsNotifier extends _$DebouncedDataOperationsNotifier 
   }
 
   /// Batch update multiple items with debounced loading for UI feedback
-  Future<void> batchUpdateItems(List<Item> items, {
+  Future<void> batchUpdateItems(
+    List<Item> items, {
     String? debouncedOperationKey,
     DebouncedLoadingConfig config = DebouncedLoadingConfig.slow,
   }) async {
     return _executeWithDebouncedLoading(
       operation: DataOperation.itemBatchUpdate,
-      debouncedOperationKey: debouncedOperationKey ?? 'item_batch_update_${items.length}',
+      debouncedOperationKey:
+          debouncedOperationKey ?? 'item_batch_update_${items.length}',
       config: config,
       task: () async {
         final repository = ref.read(itemRepositoryProvider);
@@ -109,13 +118,15 @@ class DebouncedDataOperationsNotifier extends _$DebouncedDataOperationsNotifier 
   // ============================================================================
 
   /// Create a new container with debounced loading for UI feedback
-  Future<void> createContainer(ContainerDao container, {
+  Future<void> createContainer(
+    ContainerDao container, {
     String? debouncedOperationKey,
     DebouncedLoadingConfig config = DebouncedLoadingConfig.medium,
   }) async {
     return _executeWithDebouncedLoading(
       operation: DataOperation.containerCreate,
-      debouncedOperationKey: debouncedOperationKey ?? 'container_create_${container.id}',
+      debouncedOperationKey:
+          debouncedOperationKey ?? 'container_create_${container.id}',
       config: config,
       task: () async {
         final repository = ref.read(containerRepositoryProvider);
@@ -125,13 +136,15 @@ class DebouncedDataOperationsNotifier extends _$DebouncedDataOperationsNotifier 
   }
 
   /// Update an existing container with debounced loading for UI feedback
-  Future<void> updateContainer(ContainerDao container, {
+  Future<void> updateContainer(
+    ContainerDao container, {
     String? debouncedOperationKey,
     DebouncedLoadingConfig config = DebouncedLoadingConfig.quick,
   }) async {
     return _executeWithDebouncedLoading(
       operation: DataOperation.containerUpdate,
-      debouncedOperationKey: debouncedOperationKey ?? 'container_update_${container.id}',
+      debouncedOperationKey:
+          debouncedOperationKey ?? 'container_update_${container.id}',
       config: config,
       task: () async {
         final repository = ref.read(containerRepositoryProvider);
@@ -141,13 +154,15 @@ class DebouncedDataOperationsNotifier extends _$DebouncedDataOperationsNotifier 
   }
 
   /// Delete a container with debounced loading for UI feedback
-  Future<void> deleteContainer(String containerId, {
+  Future<void> deleteContainer(
+    String containerId, {
     String? debouncedOperationKey,
     DebouncedLoadingConfig config = DebouncedLoadingConfig.medium,
   }) async {
     return _executeWithDebouncedLoading(
       operation: DataOperation.containerDelete,
-      debouncedOperationKey: debouncedOperationKey ?? 'container_delete_$containerId',
+      debouncedOperationKey:
+          debouncedOperationKey ?? 'container_delete_$containerId',
       config: config,
       task: () async {
         final repository = ref.read(containerRepositoryProvider);
@@ -157,13 +172,16 @@ class DebouncedDataOperationsNotifier extends _$DebouncedDataOperationsNotifier 
   }
 
   /// Batch update multiple containers with debounced loading for UI feedback
-  Future<void> batchUpdateContainers(List<ContainerDao> containers, {
+  Future<void> batchUpdateContainers(
+    List<ContainerDao> containers, {
     String? debouncedOperationKey,
     DebouncedLoadingConfig config = DebouncedLoadingConfig.slow,
   }) async {
     return _executeWithDebouncedLoading(
       operation: DataOperation.containerBatchUpdate,
-      debouncedOperationKey: debouncedOperationKey ?? 'container_batch_update_${containers.length}',
+      debouncedOperationKey:
+          debouncedOperationKey ??
+          'container_batch_update_${containers.length}',
       config: config,
       task: () async {
         final repository = ref.read(containerRepositoryProvider);
@@ -177,13 +195,15 @@ class DebouncedDataOperationsNotifier extends _$DebouncedDataOperationsNotifier 
   // ============================================================================
 
   /// Create a new assignment with debounced loading for UI feedback
-  Future<void> createAssignment(Assignment assignment, {
+  Future<void> createAssignment(
+    Assignment assignment, {
     String? debouncedOperationKey,
     DebouncedLoadingConfig config = DebouncedLoadingConfig.quick,
   }) async {
     return _executeWithDebouncedLoading(
       operation: DataOperation.assignmentCreate,
-      debouncedOperationKey: debouncedOperationKey ?? 'assignment_create_${assignment.id}',
+      debouncedOperationKey:
+          debouncedOperationKey ?? 'assignment_create_${assignment.id}',
       config: config,
       task: () async {
         final repository = ref.read(assignmentRepositoryProvider);
@@ -193,13 +213,15 @@ class DebouncedDataOperationsNotifier extends _$DebouncedDataOperationsNotifier 
   }
 
   /// Update an existing assignment with debounced loading for UI feedback
-  Future<void> updateAssignment(Assignment assignment, {
+  Future<void> updateAssignment(
+    Assignment assignment, {
     String? debouncedOperationKey,
     DebouncedLoadingConfig config = DebouncedLoadingConfig.quick,
   }) async {
     return _executeWithDebouncedLoading(
       operation: DataOperation.assignmentUpdate,
-      debouncedOperationKey: debouncedOperationKey ?? 'assignment_update_${assignment.id}',
+      debouncedOperationKey:
+          debouncedOperationKey ?? 'assignment_update_${assignment.id}',
       config: config,
       task: () async {
         final repository = ref.read(assignmentRepositoryProvider);
@@ -209,13 +231,15 @@ class DebouncedDataOperationsNotifier extends _$DebouncedDataOperationsNotifier 
   }
 
   /// Delete an assignment with debounced loading for UI feedback
-  Future<void> deleteAssignment(String assignmentId, {
+  Future<void> deleteAssignment(
+    String assignmentId, {
     String? debouncedOperationKey,
     DebouncedLoadingConfig config = DebouncedLoadingConfig.quick,
   }) async {
     return _executeWithDebouncedLoading(
       operation: DataOperation.assignmentDelete,
-      debouncedOperationKey: debouncedOperationKey ?? 'assignment_delete_$assignmentId',
+      debouncedOperationKey:
+          debouncedOperationKey ?? 'assignment_delete_$assignmentId',
       config: config,
       task: () async {
         final repository = ref.read(assignmentRepositoryProvider);
@@ -224,30 +248,18 @@ class DebouncedDataOperationsNotifier extends _$DebouncedDataOperationsNotifier 
     );
   }
 
-  /// Upsert or delete assignment based on count with debounced loading
-  Future<void> upsertOrDeleteAssignment(Assignment assignment, {
-    String? debouncedOperationKey,
-    DebouncedLoadingConfig config = DebouncedLoadingConfig.quick,
-  }) async {
-    return _executeWithDebouncedLoading(
-      operation: DataOperation.assignmentUpdate,
-      debouncedOperationKey: debouncedOperationKey ?? 'assignment_upsert_${assignment.id}',
-      config: config,
-      task: () async {
-        final repository = ref.read(assignmentRepositoryProvider);
-        await repository.upsertOrDeleteAssignment(assignment);
-      },
-    );
-  }
 
   /// Batch update multiple assignments with debounced loading for UI feedback
-  Future<void> batchUpdateAssignments(List<Assignment> assignments, {
+  Future<void> batchUpdateAssignments(
+    List<Assignment> assignments, {
     String? debouncedOperationKey,
     DebouncedLoadingConfig config = DebouncedLoadingConfig.slow,
   }) async {
     return _executeWithDebouncedLoading(
       operation: DataOperation.assignmentBatchUpdate,
-      debouncedOperationKey: debouncedOperationKey ?? 'assignment_batch_update_${assignments.length}',
+      debouncedOperationKey:
+          debouncedOperationKey ??
+          'assignment_batch_update_${assignments.length}',
       config: config,
       task: () async {
         final repository = ref.read(assignmentRepositoryProvider);
@@ -257,13 +269,16 @@ class DebouncedDataOperationsNotifier extends _$DebouncedDataOperationsNotifier 
   }
 
   /// Batch delete multiple assignments with debounced loading for UI feedback
-  Future<void> batchDeleteAssignments(List<String> assignmentIds, {
+  Future<void> batchDeleteAssignments(
+    List<String> assignmentIds, {
     String? debouncedOperationKey,
     DebouncedLoadingConfig config = DebouncedLoadingConfig.medium,
   }) async {
     return _executeWithDebouncedLoading(
       operation: DataOperation.assignmentBatchDelete,
-      debouncedOperationKey: debouncedOperationKey ?? 'assignment_batch_delete_${assignmentIds.length}',
+      debouncedOperationKey:
+          debouncedOperationKey ??
+          'assignment_batch_delete_${assignmentIds.length}',
       config: config,
       task: () async {
         final repository = ref.read(assignmentRepositoryProvider);
@@ -301,10 +316,7 @@ class DebouncedDataOperationsNotifier extends _$DebouncedDataOperationsNotifier 
       _setOperationState(operation, const AsyncValue.data(null));
     } catch (error, stackTrace) {
       // Set error state
-      _setOperationState(
-        operation,
-        AsyncValue.error(error, stackTrace),
-      );
+      _setOperationState(operation, AsyncValue.error(error, stackTrace));
       rethrow;
     } finally {
       // Complete debounced loading
@@ -313,10 +325,8 @@ class DebouncedDataOperationsNotifier extends _$DebouncedDataOperationsNotifier 
   }
 
   /// Get the appropriate debounced provider based on configuration
-  StateNotifierProvider<DebouncedLoadingNotifier, DebouncedLoadingState> _getDebouncedProvider(
-    String operationKey,
-    DebouncedLoadingConfig config,
-  ) {
+  StateNotifierProvider<DebouncedLoadingNotifier, DebouncedLoadingState>
+  _getDebouncedProvider(String operationKey, DebouncedLoadingConfig config) {
     if (config == DebouncedLoadingConfig.quick) {
       return quickOperationLoadingProvider(operationKey);
     } else if (config == DebouncedLoadingConfig.medium) {
@@ -343,21 +353,30 @@ bool isAnyDebouncedOperationLoading(IsAnyDebouncedOperationLoadingRef ref) {
 
 /// Convenience provider to check if a specific operation is loading (with debouncing)
 @riverpod
-bool isDebouncedOperationLoading(IsDebouncedOperationLoadingRef ref, DataOperation operation) {
+bool isDebouncedOperationLoading(
+  IsDebouncedOperationLoadingRef ref,
+  DataOperation operation,
+) {
   final state = ref.watch(debouncedDataOperationsNotifierProvider);
   return state.isLoading(operation);
 }
 
 /// Convenience provider to get the error for a specific operation (with debouncing)
 @riverpod
-Object? getDebouncedOperationError(GetDebouncedOperationErrorRef ref, DataOperation operation) {
+Object? getDebouncedOperationError(
+  GetDebouncedOperationErrorRef ref,
+  DataOperation operation,
+) {
   final state = ref.watch(debouncedDataOperationsNotifierProvider);
   return state.getError(operation);
 }
 
 /// Convenience provider to check if a specific operation has an error (with debouncing)
 @riverpod
-bool hasDebouncedOperationError(HasDebouncedOperationErrorRef ref, DataOperation operation) {
+bool hasDebouncedOperationError(
+  HasDebouncedOperationErrorRef ref,
+  DataOperation operation,
+) {
   final state = ref.watch(debouncedDataOperationsNotifierProvider);
   return state.hasError(operation);
 }

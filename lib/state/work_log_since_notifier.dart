@@ -19,7 +19,7 @@ class WorkLogSinceNotifier extends _$WorkLogSinceNotifier {
   Iterable<LogEntry> logs() {
     var logsAsync = ref.watch(allWorkLogsAsyncProvider);
     var date = ref.watch(workLogDateFilterNotifierProvider);
-    
+
     return logsAsync.when(
       data: (logs) {
         if (date != null) {

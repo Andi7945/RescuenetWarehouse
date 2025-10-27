@@ -11,7 +11,8 @@ class FirebaseContainerRepository implements ContainerRepository {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
   StreamSubscription<QuerySnapshot<ContainerDao>>? _containersSubscription;
-  final StreamController<List<ContainerDao>> _containersController = StreamController<List<ContainerDao>>.broadcast();
+  final StreamController<List<ContainerDao>> _containersController =
+      StreamController<List<ContainerDao>>.broadcast();
 
   FirebaseContainerRepository({
     FirebaseFirestore? firestore,
@@ -95,7 +96,7 @@ class FirebaseContainerRepository implements ContainerRepository {
       final snapshot = await containersCollection
           .where('containerTypeId', isEqualTo: containerTypeId)
           .get();
-      
+
       return snapshot.docs.map((doc) => doc.data()).toList();
     } catch (e) {
       throw _convertException(e);
@@ -108,7 +109,7 @@ class FirebaseContainerRepository implements ContainerRepository {
       final snapshot = await containersCollection
           .where('currentLocationId', isEqualTo: locationId)
           .get();
-      
+
       return snapshot.docs.map((doc) => doc.data()).toList();
     } catch (e) {
       throw _convertException(e);

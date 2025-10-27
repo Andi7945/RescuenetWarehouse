@@ -6,8 +6,7 @@ part 'container_type.freezed.dart';
 part 'container_type.g.dart';
 
 @freezed
-abstract class ContainerType
-    with _$ContainerType {
+abstract class ContainerType with _$ContainerType {
   const factory ContainerType({
     required String id,
     required String name,

@@ -1,13 +1,19 @@
 /// Service class for managing diff operations between objects
 class DiffService {
   /// Gets the list of field names that have different values
-  static List<String> getDifferences<T>(T imported, T existing, {List<String> excludeFields = const []}) {
+  static List<String> getDifferences<T>(
+    T imported,
+    T existing, {
+    List<String> excludeFields = const [],
+  }) {
     final importedMap = objectToMap(imported);
     final existingMap = objectToMap(existing);
 
     return importedMap.keys
         .where((field) => !excludeFields.contains(field))
-        .where((field) => !areValuesEqual(importedMap[field], existingMap[field]))
+        .where(
+          (field) => !areValuesEqual(importedMap[field], existingMap[field]),
+        )
         .toList();
   }
 
@@ -29,13 +35,17 @@ class DiffService {
     } else {
       // Add always-show fields first
       fieldsToShow.addAll(
-          alwaysShowFields
-              .where((field) => importedMap.containsKey(field))
-              .where((field) => !excludeFields.contains(field))
+        alwaysShowFields
+            .where((field) => importedMap.containsKey(field))
+            .where((field) => !excludeFields.contains(field)),
       );
 
       // Add changed fields
-      final differences = getDifferences(importedObj, existingObj, excludeFields: excludeFields);
+      final differences = getDifferences(
+        importedObj,
+        existingObj,
+        excludeFields: excludeFields,
+      );
       for (String field in differences) {
         if (!fieldsToShow.contains(field)) {
           fieldsToShow.add(field);
@@ -87,7 +97,8 @@ class DiffService {
     if (value1 is Map && value2 is Map) {
       if (value1.length != value2.length) return false;
       for (final key in value1.keys) {
-        if (!value2.containsKey(key) || !areValuesEqual(value1[key], value2[key])) {
+        if (!value2.containsKey(key) ||
+            !areValuesEqual(value1[key], value2[key])) {
           return false;
         }
       }
@@ -98,4 +109,3 @@ class DiffService {
     return value1 == value2;
   }
 }
-

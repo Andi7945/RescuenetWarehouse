@@ -12,8 +12,11 @@ class ContainerWithContentHeaderBottom extends StatelessWidget {
   final RescueContainer container;
   final Map<Item, int> items;
 
-  const ContainerWithContentHeaderBottom(
-      {super.key, required this.container, required this.items});
+  const ContainerWithContentHeaderBottom({
+    super.key,
+    required this.container,
+    required this.items,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,33 +29,35 @@ class ContainerWithContentHeaderBottom extends StatelessWidget {
     return _singleRowLayout();
   }
 
-  Widget _twoRowLayout() => Column(children: [
-        SignRow(_signs(), _nextExpired(), _operationalStatus(), _isColdChain()),
-        Container(
-          padding: const EdgeInsets.all(4),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              RescueBoxSequentialBuild(container), // width: 108
-              Flexible(child: RescueBoxModuleDestination(container)),
-            ],
-          ),
+  Widget _twoRowLayout() => Column(
+    children: [
+      SignRow(_signs(), _nextExpired(), _operationalStatus(), _isColdChain()),
+      Container(
+        padding: const EdgeInsets.all(4),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RescueBoxSequentialBuild(container), // width: 108
+            Flexible(child: RescueBoxModuleDestination(container)),
+          ],
         ),
-      ]);
+      ),
+    ],
+  );
 
   Widget _singleRowLayout() => Container(
-      padding: const EdgeInsets.all(4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          RescueBoxSequentialBuild(container), // width: 108
-          SignRow(
-              _signs(), _nextExpired(), _operationalStatus(), _isColdChain()),
-          RescueBoxModuleDestination(container), // maxWidth: 160
-        ],
-      ));
+    padding: const EdgeInsets.all(4),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        RescueBoxSequentialBuild(container), // width: 108
+        SignRow(_signs(), _nextExpired(), _operationalStatus(), _isColdChain()),
+        RescueBoxModuleDestination(container), // maxWidth: 160
+      ],
+    ),
+  );
 
   List<Sign> _signs() {
     return items.keys.expand((i) => i.signs).toList();

@@ -36,8 +36,9 @@ class _ContainerEditPageState extends river.ConsumerState<ContainerEditPage> {
     _nameController.text = container.name;
     _descriptionController.text = container.description ?? "";
     _containerTypeController = ValueNotifier(container.type?.id);
-    _moduleDestinationController =
-        ValueNotifier(container.moduleDestination?.id);
+    _moduleDestinationController = ValueNotifier(
+      container.moduleDestination?.id,
+    );
     _currentLocationController = ValueNotifier(container.currentLocation?.id);
     _sequentialBuildController = ValueNotifier(container.sequentialBuild.name);
 
@@ -47,7 +48,7 @@ class _ContainerEditPageState extends river.ConsumerState<ContainerEditPage> {
       _currentLocationController,
       _sequentialBuildController,
       _nameController,
-      _descriptionController
+      _descriptionController,
     ]) {
       controller.addListener(() {
         _sendChangesToStore();
@@ -67,15 +68,18 @@ class _ContainerEditPageState extends river.ConsumerState<ContainerEditPage> {
 
   _body() {
     return Padding(
-        padding: const EdgeInsets.only(left: 40, right: 40),
-        child: ListView(children: [
+      padding: const EdgeInsets.only(left: 40, right: 40),
+      child: ListView(
+        children: [
           _textField("name", _nameController),
           _textField("description", _descriptionController),
           _containerTypeDropdown(),
           _sequentialBuildDropdown(),
           _moduleDestinationDropdown(),
-          _currentLocationsDropdown()
-        ]));
+          _currentLocationsDropdown(),
+        ],
+      ),
+    );
   }
 
   _containerTypeDropdown() {
@@ -83,10 +87,11 @@ class _ContainerEditPageState extends river.ConsumerState<ContainerEditPage> {
     return AsyncValueBuilder(
       value: asyncOptions,
       data: (options) => _dropdownWithEdit(
-          "container type",
-          routeEditContainerTypes,
-          _containerTypeController,
-          options.map((e) => DropdownMenuEntry(value: e.id, label: e.name))),
+        "container type",
+        routeEditContainerTypes,
+        _containerTypeController,
+        options.map((e) => DropdownMenuEntry(value: e.id, label: e.name)),
+      ),
       loading: () => ListTile(
         title: DropdownMenu<String?>(
           enabled: false,
@@ -95,7 +100,8 @@ class _ContainerEditPageState extends river.ConsumerState<ContainerEditPage> {
         ),
         trailing: IconButton(
           icon: const Icon(Icons.edit),
-          onPressed: () => Navigator.pushNamed(context, routeEditContainerTypes),
+          onPressed: () =>
+              Navigator.pushNamed(context, routeEditContainerTypes),
         ),
       ),
     );
@@ -106,10 +112,11 @@ class _ContainerEditPageState extends river.ConsumerState<ContainerEditPage> {
     return AsyncValueBuilder(
       value: asyncDests,
       data: (dests) => _dropdownWithEdit(
-          "module destination",
-          routeEditModuleDestinations,
-          _moduleDestinationController,
-          dests.map((e) => DropdownMenuEntry(value: e.id, label: e.name))),
+        "module destination",
+        routeEditModuleDestinations,
+        _moduleDestinationController,
+        dests.map((e) => DropdownMenuEntry(value: e.id, label: e.name)),
+      ),
       loading: () => ListTile(
         title: DropdownMenu<String?>(
           enabled: false,
@@ -118,7 +125,8 @@ class _ContainerEditPageState extends river.ConsumerState<ContainerEditPage> {
         ),
         trailing: IconButton(
           icon: const Icon(Icons.edit),
-          onPressed: () => Navigator.pushNamed(context, routeEditModuleDestinations),
+          onPressed: () =>
+              Navigator.pushNamed(context, routeEditModuleDestinations),
         ),
       ),
     );
@@ -129,10 +137,11 @@ class _ContainerEditPageState extends river.ConsumerState<ContainerEditPage> {
     return AsyncValueBuilder(
       value: asyncLocs,
       data: (locs) => _dropdownWithEdit(
-          "current location",
-          routeEditCurrentLocations,
-          _currentLocationController,
-          locs.map((e) => DropdownMenuEntry(value: e.id, label: e.name))),
+        "current location",
+        routeEditCurrentLocations,
+        _currentLocationController,
+        locs.map((e) => DropdownMenuEntry(value: e.id, label: e.name)),
+      ),
       loading: () => ListTile(
         title: DropdownMenu<String?>(
           enabled: false,
@@ -141,72 +150,74 @@ class _ContainerEditPageState extends river.ConsumerState<ContainerEditPage> {
         ),
         trailing: IconButton(
           icon: const Icon(Icons.edit),
-          onPressed: () => Navigator.pushNamed(context, routeEditCurrentLocations),
+          onPressed: () =>
+              Navigator.pushNamed(context, routeEditCurrentLocations),
         ),
       ),
     );
   }
 
   _textField(String label, TextEditingController controller) => ListTile(
-      title: TextField(
-          controller: controller,
-          decoration: InputDecoration(
-            labelText: label,
-          ),
-          onChanged: (text) => _sendChangesToStore()));
+    title: TextField(
+      controller: controller,
+      decoration: InputDecoration(labelText: label),
+      onChanged: (text) => _sendChangesToStore(),
+    ),
+  );
 
   _sequentialBuildDropdown() => ListTile(
-      title: DropdownMenu(
-          initialSelection: _sequentialBuildController.value,
-          onSelected: (String? value) {
-            var v = value;
-            if (v != null) {
-              _sequentialBuildController.value = v;
-            }
-          },
-          label: const Text(
-            "sequential build",
-            overflow: TextOverflow.ellipsis,
-          ),
-          dropdownMenuEntries: SequentialBuild.values
-              .map(
-                  (e) => DropdownMenuEntry(value: e.name, label: e.displayName))
-              .toList()));
+    title: DropdownMenu(
+      initialSelection: _sequentialBuildController.value,
+      onSelected: (String? value) {
+        var v = value;
+        if (v != null) {
+          _sequentialBuildController.value = v;
+        }
+      },
+      label: const Text("sequential build", overflow: TextOverflow.ellipsis),
+      dropdownMenuEntries: SequentialBuild.values
+          .map((e) => DropdownMenuEntry(value: e.name, label: e.displayName))
+          .toList(),
+    ),
+  );
 
   _dropdownWithEdit(
-          String labelText,
-          String routeName,
-          ValueNotifier<String?> notifier,
-          Iterable<DropdownMenuEntry<String?>> entries) =>
-      ListTile(
-          title: DropdownMenu<String?>(
-              initialSelection: notifier.value,
-              onSelected: (String? value) {
-                notifier.value = value;
-              },
-              label: Text(
-                labelText,
-                overflow: TextOverflow.ellipsis,
-              ),
-              dropdownMenuEntries: entries.toList()),
-          trailing: IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: () => Navigator.pushNamed(context, routeName)));
+    String labelText,
+    String routeName,
+    ValueNotifier<String?> notifier,
+    Iterable<DropdownMenuEntry<String?>> entries,
+  ) => ListTile(
+    title: DropdownMenu<String?>(
+      initialSelection: notifier.value,
+      onSelected: (String? value) {
+        notifier.value = value;
+      },
+      label: Text(labelText, overflow: TextOverflow.ellipsis),
+      dropdownMenuEntries: entries.toList(),
+    ),
+    trailing: IconButton(
+      icon: const Icon(Icons.edit),
+      onPressed: () => Navigator.pushNamed(context, routeName),
+    ),
+  );
 
   Future<void> _sendChangesToStore() async {
     var changedContainer = widget._container.value.copyWith(
-        name: _nameController.text,
-        description: _descriptionController.text,
-        type: _type(),
-        sequentialBuild: SequentialBuild.values.firstWhere(
-            (element) => element.name == _sequentialBuildController.value),
-        moduleDestination: _destination(),
-        currentLocation: _location());
+      name: _nameController.text,
+      description: _descriptionController.text,
+      type: _type(),
+      sequentialBuild: SequentialBuild.values.firstWhere(
+        (element) => element.name == _sequentialBuildController.value,
+      ),
+      moduleDestination: _destination(),
+      currentLocation: _location(),
+    );
     widget._container.value = changedContainer;
-    
+
     // Persist changes to database with loading state
     try {
-      await ref.read(dataOperationsNotifierProvider.notifier)
+      await ref
+          .read(dataOperationsNotifierProvider.notifier)
           .updateContainer(ContainerDao.fromContainer(changedContainer));
     } catch (error) {
       // Error will be handled by DataOperationsNotifier and shown in UI
@@ -214,11 +225,15 @@ class _ContainerEditPageState extends river.ConsumerState<ContainerEditPage> {
       if (mounted) {
         setState(() {
           _nameController.text = widget._container.value.name;
-          _descriptionController.text = widget._container.value.description ?? "";
+          _descriptionController.text =
+              widget._container.value.description ?? "";
           _containerTypeController.value = widget._container.value.type?.id;
-          _moduleDestinationController.value = widget._container.value.moduleDestination?.id;
-          _currentLocationController.value = widget._container.value.currentLocation?.id;
-          _sequentialBuildController.value = widget._container.value.sequentialBuild.name;
+          _moduleDestinationController.value =
+              widget._container.value.moduleDestination?.id;
+          _currentLocationController.value =
+              widget._container.value.currentLocation?.id;
+          _sequentialBuildController.value =
+              widget._container.value.sequentialBuild.name;
         });
       }
       rethrow;
@@ -230,7 +245,8 @@ class _ContainerEditPageState extends river.ConsumerState<ContainerEditPage> {
     final containerTypes = ref.read(containerTypesAsyncProvider);
     return containerTypes.when(
       data: (types) => types.firstWhere(
-          (element) => element.id == _containerTypeController.value),
+        (element) => element.id == _containerTypeController.value,
+      ),
       loading: () => null,
       error: (_, __) => null,
     );
@@ -241,7 +257,8 @@ class _ContainerEditPageState extends river.ConsumerState<ContainerEditPage> {
     final moduleDestinations = ref.read(moduleDestinationsAsyncProvider);
     return moduleDestinations.when(
       data: (destinations) => destinations.firstWhere(
-          (element) => element.id == _moduleDestinationController.value),
+        (element) => element.id == _moduleDestinationController.value,
+      ),
       loading: () => null,
       error: (_, __) => null,
     );
@@ -252,7 +269,8 @@ class _ContainerEditPageState extends river.ConsumerState<ContainerEditPage> {
     final currentLocations = ref.read(currentLocationsAsyncProvider);
     return currentLocations.when(
       data: (locations) => locations.firstWhere(
-          (element) => element.id == _currentLocationController.value),
+        (element) => element.id == _currentLocationController.value,
+      ),
       loading: () => null,
       error: (_, __) => null,
     );

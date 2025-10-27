@@ -12,8 +12,12 @@ class SignRow extends StatelessWidget {
   final OperationalStatus operationalStatus;
   final bool isColdChain;
 
-  SignRow(this.signs, this.nextExpiringDate, this.operationalStatus,
-      this.isColdChain);
+  SignRow(
+    this.signs,
+    this.nextExpiringDate,
+    this.operationalStatus,
+    this.isColdChain,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +35,7 @@ class SignRow extends StatelessWidget {
           IndicatorExpiringDate(nextExpiringDate),
           IndicatorOperationalStatus(operationalStatus),
           ...signs.map((sign) => RescueImage(sign.imagePath, 40, 40)),
-          isColdChain ? RescueImage("coldchain.png", 40, 40) : Container()
+          isColdChain ? RescueImage("coldchain.png", 40, 40) : Container(),
         ],
       ),
     );

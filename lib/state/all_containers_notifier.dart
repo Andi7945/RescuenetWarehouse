@@ -13,17 +13,22 @@ import '../models/sequential_build.dart';
 
 part 'all_containers_notifier.g.dart';
 
-
 /// Stream-based provider for backward compatibility.
 /// This maintains the existing Stream&lt;List&lt;RescueContainer&gt;&gt; pattern that other
 /// parts of the app may depend on.
 @riverpod
 Stream<List<RescueContainer>> allContainersStream(Ref ref) {
   final repository = ref.watch(containerRepositoryProvider);
-  final containerTypesNotifier = ref.watch(containerTypesNotifierProvider.notifier);
-  final moduleDestinationsNotifier = ref.watch(moduleDestinationsNotifierProvider.notifier);
-  final currentLocationsNotifier = ref.watch(currentLocationsNotifierProvider.notifier);
-  
+  final containerTypesNotifier = ref.watch(
+    containerTypesNotifierProvider.notifier,
+  );
+  final moduleDestinationsNotifier = ref.watch(
+    moduleDestinationsNotifierProvider.notifier,
+  );
+  final currentLocationsNotifier = ref.watch(
+    currentLocationsNotifierProvider.notifier,
+  );
+
   return repository.watchContainers().map((containers) {
     return containers.map((dao) {
       var type = containerTypesNotifier.find(dao.typeId);
@@ -35,12 +40,12 @@ Stream<List<RescueContainer>> allContainersStream(Ref ref) {
 }
 
 /// AsyncValue-based containers provider for loading states support.
-/// 
+///
 /// This provider wraps the containers stream in AsyncValue to provide proper
 /// loading, error, and data states for UI components. It follows the enhanced
 /// pattern from LOADING_INDICATORS_DESIGN.md while maintaining compatibility
 /// with the existing AllContainersNotifier.
-/// 
+///
 /// Usage:
 /// ```dart
 /// AsyncValueBuilder<List<RescueContainer>>(
@@ -53,10 +58,16 @@ class AllContainersAsync extends _$AllContainersAsync {
   @override
   Stream<List<RescueContainer>> build() {
     final repository = ref.watch(containerRepositoryProvider);
-    final containerTypesNotifier = ref.watch(containerTypesNotifierProvider.notifier);
-    final moduleDestinationsNotifier = ref.watch(moduleDestinationsNotifierProvider.notifier);
-    final currentLocationsNotifier = ref.watch(currentLocationsNotifierProvider.notifier);
-    
+    final containerTypesNotifier = ref.watch(
+      containerTypesNotifierProvider.notifier,
+    );
+    final moduleDestinationsNotifier = ref.watch(
+      moduleDestinationsNotifierProvider.notifier,
+    );
+    final currentLocationsNotifier = ref.watch(
+      currentLocationsNotifierProvider.notifier,
+    );
+
     return repository.watchContainers().map((containers) {
       return containers.map((dao) {
         var type = containerTypesNotifier.find(dao.typeId);
@@ -102,7 +113,7 @@ class AllContainersAsync extends _$AllContainersAsync {
       toDeploy: false,
     );
     ref.read(containerRepositoryProvider).createContainer(newContainer);
-    
+
     // Expand the container using the same logic as the main notifier
     var type = ref
         .watch(containerTypesNotifierProvider.notifier)

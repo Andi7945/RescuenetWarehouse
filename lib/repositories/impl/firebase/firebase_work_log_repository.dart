@@ -4,7 +4,7 @@ import 'package:rescuenet_warehouse/repositories/work_log_repository.dart';
 import 'package:rescuenet_warehouse/db/firebase.dart';
 
 /// Firebase implementation of WorkLogRepository
-/// 
+///
 /// Provides real-time synchronization with Firestore for audit trail data.
 /// Work logs are typically append-only for audit integrity.
 class FirebaseWorkLogRepository implements WorkLogRepository {
@@ -13,9 +13,7 @@ class FirebaseWorkLogRepository implements WorkLogRepository {
     return workLogCollection
         .orderBy('date', descending: true)
         .snapshots()
-        .map(
-          (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
-        );
+        .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
   }
 
   @override
@@ -68,7 +66,10 @@ class FirebaseWorkLogRepository implements WorkLogRepository {
   }
 
   @override
-  Future<List<LogEntry>> getWorkLogsBetween(DateTime startDate, DateTime endDate) async {
+  Future<List<LogEntry>> getWorkLogsBetween(
+    DateTime startDate,
+    DateTime endDate,
+  ) async {
     try {
       final querySnapshot = await workLogCollection
           .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(startDate))
@@ -101,12 +102,12 @@ class FirebaseWorkLogRepository implements WorkLogRepository {
 
     try {
       final batch = FirebaseFirestore.instance.batch();
-      
+
       for (final logEntry in logEntries) {
         final docRef = workLogCollection.doc(logEntry.id);
         batch.set(docRef, logEntry);
       }
-      
+
       await batch.commit();
     } catch (e) {
       throw Exception('Failed to batch create work logs: $e');
