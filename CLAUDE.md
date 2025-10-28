@@ -145,6 +145,32 @@ flutter run -d chrome --dart-define=ORG=rescuenet --dart-define=ENV=staging
 
 **Important:** Production deployments require manual confirmation. Scripts default to staging to prevent accidents.
 
+### Deployment Safety Features
+
+All deployment scripts include automatic verification:
+- ✅ Compiled bundle contains correct Firebase project ID
+- ✅ Build manifest tracks org, env, timestamp, git commit
+- ✅ Deployment blocked if manifest doesn't match
+- ✅ Stale builds (>48h) generate warnings
+- ✅ Production deploys require typing exact project ID
+- ✅ All deployments logged to `deployments.log`
+
+**Verification Process:**
+1. Build script verifies compiled JavaScript contains correct project ID
+2. Creates `.build-manifest.json` with metadata
+3. Deploy script re-verifies manifest and bundle before deployment
+4. Logs deployment to audit trail
+
+**If verification fails:**
+- Build will abort with clear error message
+- Shows expected vs actual project ID
+- Build directory will not be created
+- Deployment will be blocked
+
+**Audit Log:**
+All deployments are logged to `deployments.log` (tracked in git) with:
+- Timestamp, user, org, environment, project ID, git commit
+
 ### Deployment Workflows
 
 **Two GitHub Actions workflows exist:**

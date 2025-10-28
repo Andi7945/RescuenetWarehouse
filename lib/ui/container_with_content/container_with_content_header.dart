@@ -112,5 +112,5 @@ class ContainerWithContentHeader extends StatelessWidget {
     );
   }
 
-  _sumWeight() => sumItemWeight(_container, _items).toStringAsFixed(2);
+  _sumWeight() => sumItemWeight(_container, _items).toStringAsFixed(0);
 }
