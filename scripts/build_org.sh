@@ -42,8 +42,7 @@ rm -rf build/web
 flutter build web \
   --dart-define=ORG="$ORG" \
   --dart-define=ENV="$ENV" \
-  --release \
-  --web-renderer canvaskit
+  --release
 
 # Verify the build contains correct Firebase config
 echo "🔍 Verifying build configuration..."

@@ -43,7 +43,7 @@ import 'features/item_overview/item_overview_page.dart';
 const String kOrgId = String.fromEnvironment('ORG', defaultValue: 'rescuenet');
 const String kEnvironment = String.fromEnvironment(
   'ENV',
-  defaultValue: 'staging',
+  defaultValue: 'production',
 );
 
 Future<void> main() async {
