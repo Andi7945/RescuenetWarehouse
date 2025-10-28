@@ -2,14 +2,27 @@
 # Verification library for safe deployments
 # Provides pure functions for Firebase project ID extraction and validation
 
-# Extract Firebase project ID from compiled JavaScript bundle
-# Pure function: input (file path) -> output (project ID or empty)
-extract_project_id_from_bundle() {
+# Extract all Firebase project IDs from compiled JavaScript bundle
+# Pure function: input (file path) -> output (list of project IDs, one per line)
+extract_all_project_ids_from_bundle() {
   local bundle_path="$1"
-  # Extract projectId from Firebase config in JavaScript
-  # Pattern: look for Firebase config object with projectId
+  # Extract all projectIds from Firebase configs in JavaScript
+  # Pattern: Firebase configs appear as: "project-id","project-id.firebaseapp.com"
+  # Multi-tenant apps may contain multiple Firebase configs
   grep -oE '"[a-z0-9-]+","[a-z0-9-]+\.firebaseapp\.com"' "$bundle_path" | \
-    grep -oE '[a-z0-9-]+' | head -1
+    grep -oE '^"[a-z0-9-]+"' | \
+    tr -d '"' | \
+    sort -u
+}
+
+# Check if specific project ID exists in bundle
+# Pure function: input (file path, project ID) -> output (0=found, 1=not found)
+check_project_id_in_bundle() {
+  local bundle_path="$1"
+  local expected_id="$2"
+
+  extract_all_project_ids_from_bundle "$bundle_path" | grep -q "^${expected_id}$"
+  return $?
 }
 
 # Get expected project ID for org/env combination
@@ -29,25 +42,40 @@ get_expected_project_id() {
 
 # Verify bundle contains expected project ID
 # Returns: 0 (success) or 1 (failure)
+# Note: Multi-tenant apps may contain multiple Firebase configs.
+# This verifies the expected project ID exists in the bundle.
 verify_bundle_project_id() {
   local bundle_path="$1"
   local expected_id="$2"
 
-  local actual_id=$(extract_project_id_from_bundle "$bundle_path")
+  # Get all project IDs from bundle
+  local all_ids=$(extract_all_project_ids_from_bundle "$bundle_path")
 
-  if [ -z "$actual_id" ]; then
-    echo "❌ Error: Could not extract project ID from bundle"
+  if [ -z "$all_ids" ]; then
+    echo "❌ Error: Could not extract any project IDs from bundle"
+    echo "   Bundle may be corrupted or missing Firebase configuration"
     return 1
   fi
 
-  if [ "$actual_id" != "$expected_id" ]; then
-    echo "❌ PROJECT ID MISMATCH!"
+  # Check if expected ID exists in bundle
+  if ! check_project_id_in_bundle "$bundle_path" "$expected_id"; then
+    echo "❌ PROJECT ID NOT FOUND!"
     echo "   Expected: $expected_id"
-    echo "   Found:    $actual_id"
+    echo "   Found in bundle:"
+    echo "$all_ids" | sed 's/^/     - /'
+    echo ""
+    echo "   The build does not contain the Firebase config for $expected_id"
     return 1
   fi
 
-  echo "✅ Project ID verified: $actual_id"
+  # Show all IDs found (informational for multi-tenant apps)
+  local id_count=$(echo "$all_ids" | wc -l | tr -d ' ')
+  if [ "$id_count" -gt 1 ]; then
+    echo "✅ Project ID verified: $expected_id (multi-tenant build with $id_count configs)"
+  else
+    echo "✅ Project ID verified: $expected_id"
+  fi
+
   return 0
 }
 

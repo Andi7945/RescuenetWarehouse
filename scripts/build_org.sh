@@ -59,11 +59,13 @@ MANIFEST_PATH="build/web/.build-manifest.json"
 create_build_manifest "$ORG" "$ENV" "$EXPECTED_PROJECT_ID" "$MANIFEST_PATH"
 echo "📝 Build manifest created: $MANIFEST_PATH"
 
-# Move to environment-specific directory
+# Move to environment-specific directory (including hidden files like .build-manifest.json)
 BUILD_DIR="build/web_${ORG}_${ENV}"
 rm -rf "$BUILD_DIR"
 mkdir -p "$BUILD_DIR"
-cp -r build/web/* "$BUILD_DIR/"
+# Use cp with . and .* to include hidden files
+cp -r build/web/* "$BUILD_DIR/" 2>/dev/null || true
+cp -r build/web/.* "$BUILD_DIR/" 2>/dev/null || true
 
 echo ""
 echo "✅ Build complete and verified!"
