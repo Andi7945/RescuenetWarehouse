@@ -79,6 +79,56 @@ verify_bundle_project_id() {
   return 0
 }
 
+# Verify bundle contains ONLY the expected project ID (single-config enforcement)
+# Returns: 0 (success) or 1 (failure)
+# Note: This is STRICTER than verify_bundle_project_id() which allows multiple configs.
+# Single-config builds should only contain ONE Firebase configuration for security and clarity.
+# This function enforces that exactly one config exists and it matches the expected ID.
+verify_bundle_single_config() {
+  local bundle_path="$1"
+  local expected_id="$2"
+
+  # Get all project IDs from bundle (reusing existing helper)
+  local all_ids=$(extract_all_project_ids_from_bundle "$bundle_path")
+
+  if [ -z "$all_ids" ]; then
+    echo "❌ Error: Could not extract any project IDs from bundle"
+    echo "   Bundle may be corrupted or missing Firebase configuration"
+    return 1
+  fi
+
+  # Count how many configs exist
+  local id_count=$(echo "$all_ids" | wc -l | tr -d ' ')
+
+  # Check if expected ID exists in bundle (reusing existing helper)
+  if ! check_project_id_in_bundle "$bundle_path" "$expected_id"; then
+    echo "❌ EXPECTED PROJECT ID NOT FOUND!"
+    echo "   Expected: $expected_id"
+    echo "   Found in bundle ($id_count config(s)):"
+    echo "$all_ids" | sed 's/^/     - /'
+    echo ""
+    echo "   The build does not contain the Firebase config for $expected_id"
+    return 1
+  fi
+
+  # Strict check: verify ONLY one config exists
+  if [ "$id_count" -ne 1 ]; then
+    echo "❌ MULTIPLE FIREBASE CONFIGS DETECTED!"
+    echo "   Expected: Single config for $expected_id"
+    echo "   Found: $id_count configs in bundle:"
+    echo "$all_ids" | sed 's/^/     - /'
+    echo ""
+    echo "   ⚠️  SECURITY RISK: Bundle contains configs for multiple Firebase projects"
+    echo "   This may expose credentials or data access to unintended environments"
+    echo "   Single-config builds should contain EXACTLY ONE Firebase configuration"
+    return 1
+  fi
+
+  # Success: single config matches expected ID
+  echo "✅ Single-config verified: $expected_id (exactly 1 config in bundle)"
+  return 0
+}
+
 # Create build manifest JSON
 create_build_manifest() {
   local org="$1"

@@ -68,3 +68,8 @@ scripts/secrets/
 scripts/*.log
 scripts/node_modules/
 scripts/backups/
+
+# Generated build-time configuration files
+# org_registry.dart is generated at build time from org_registry.dart.template
+# and should never be committed to prevent multi-config contamination
+lib/config/org_registry.dart

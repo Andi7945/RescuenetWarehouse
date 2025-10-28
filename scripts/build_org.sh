@@ -38,18 +38,39 @@ echo "📋 Target Firebase project: $EXPECTED_PROJECT_ID"
 echo "🧹 Cleaning build directory..."
 rm -rf build/web
 
+# Generate org_registry.dart with only the needed Firebase configuration
+echo "📝 Generating org_registry.dart for $ORG/$ENV..."
+TEMPLATE_PATH="lib/config/org_registry.dart.template"
+OUTPUT_PATH="lib/config/org_registry.dart"
+
+# Back up existing file if it's not a generated one
+if [ -f "$OUTPUT_PATH" ] && ! grep -q "GENERATED at build time" "$OUTPUT_PATH"; then
+  echo "   Backing up existing org_registry.dart to org_registry.dart.backup..."
+  cp "$OUTPUT_PATH" "${OUTPUT_PATH}.backup"
+fi
+
+# Generate the org_registry.dart for this specific org/env
+if ! "$SCRIPT_DIR/lib/generate_org_registry.sh" "$ORG" "$ENV" "$TEMPLATE_PATH" "$OUTPUT_PATH"; then
+  echo ""
+  echo "❌ GENERATION FAILED!"
+  echo "Failed to generate org_registry.dart for $ORG/$ENV"
+  exit 1
+fi
+
 # Build with dart-define flags
 flutter build web \
   --dart-define=ORG="$ORG" \
   --dart-define=ENV="$ENV" \
   --release
 
-# Verify the build contains correct Firebase config
-echo "🔍 Verifying build configuration..."
-if ! verify_bundle_project_id "build/web/main.dart.js" "$EXPECTED_PROJECT_ID"; then
+# Verify the build contains correct Firebase config (single-config enforcement)
+echo "🔍 Verifying build configuration (single-config mode)..."
+if ! verify_bundle_single_config "build/web/main.dart.js" "$EXPECTED_PROJECT_ID"; then
   echo ""
-  echo "❌ BUILD VERIFICATION FAILED!"
-  echo "The compiled bundle does not contain the expected Firebase project ID."
+  echo "❌ SINGLE-CONFIG VERIFICATION FAILED!"
+  echo "The compiled bundle either:"
+  echo "  - Does not contain the expected Firebase project ID, or"
+  echo "  - Contains multiple Firebase configurations (security risk)"
   echo "This build is NOT safe to deploy."
   exit 1
 fi
