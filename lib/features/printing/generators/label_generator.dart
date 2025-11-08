@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:rescuenet_warehouse/features/printing/domain/label_format.dart';
@@ -43,7 +45,8 @@ Future<pw.Document> generateLabelPdf(
 
 /// Build label widgets for a single container
 ///
-/// Returns a list of A6-sized label widgets (14.8 × 10.5 cm each).
+/// Returns a list of label widgets. Labels are rendered in different orientations
+/// depending on the output format (A6 landscape or A4 portrait grid).
 /// If the container has dangerous goods:
 /// - First label: one dangerous good + summary info
 /// - Subsequent labels: two dangerous goods per label
@@ -133,8 +136,8 @@ List<pw.Page> _buildPages(List<pw.Widget> labels, LabelFormat format) {
 
 /// Create a physical A4 page with 2×2 grid of labels
 ///
-/// A4 is 21.0 × 29.7 cm, each A6 landscape label is 14.8 × 10.5 cm
-/// Grid layout: 2 × 14.8 = 29.6 cm (width), 2 × 10.5 = 21.0 cm (height) - perfect fit
+/// A4 is 21.0 × 29.7 cm, each A6 portrait label is 10.5 × 14.8 cm
+/// Grid layout: 2 × 10.5 = 21.0 cm (width), 2 × 14.8 = 29.6 cm (height) - perfect fit
 /// Zero margins are critical for exact fit
 pw.Page _labelPageA4Grid(
   pw.Widget topLeft,
@@ -150,15 +153,15 @@ pw.Page _labelPageA4Grid(
         // Top row
         pw.Row(
           children: [
-            _withMeasurements(topLeft),
-            _withMeasurements(topRight ?? pw.Container()),
+            _withMeasurementsPortrait(topLeft),
+            _withMeasurementsPortrait(topRight ?? pw.Container()),
           ],
         ),
         // Bottom row
         pw.Row(
           children: [
-            _withMeasurements(bottomLeft ?? pw.Container()),
-            _withMeasurements(bottomRight ?? pw.Container()),
+            _withMeasurementsPortrait(bottomLeft ?? pw.Container()),
+            _withMeasurementsPortrait(bottomRight ?? pw.Container()),
           ],
         ),
       ],
@@ -175,10 +178,32 @@ pw.Page _labelPageA6(pw.Widget w) => pw.MultiPage(
   ],
 );
 
-/// Wrap label with correct measurements
+/// Wrap label with correct measurements (landscape orientation for A6 format)
 pw.Widget _withMeasurements(pw.Widget label) => pw.Container(
   child: pw.SizedBox(width: 14.8 * cm, height: 10.5 * cm, child: label),
 );
+
+/// Wrap label with portrait measurements (for A4 2×2 grid)
+/// Rotates the landscape label 90 degrees clockwise to fit portrait orientation
+pw.Widget _withMeasurementsPortrait(pw.Widget label) {
+  // Labels are built in landscape (14.8 × 10.5 cm)
+  // For A4 2×2 grid, we need portrait (10.5 × 14.8 cm)
+  // Rotate 90 degrees clockwise (π/2 radians)
+  return pw.Container(
+    width: 10.5 * cm,
+    height: 14.8 * cm,
+    child: pw.Center(
+      child: pw.Transform.rotate(
+        angle: math.pi / 2, // 90 degrees clockwise
+        child: pw.SizedBox(
+          width: 14.8 * cm,
+          height: 10.5 * cm,
+          child: label,
+        ),
+      ),
+    ),
+  );
+}
 
 /// Build the first label with summary information
 Future<pw.Column> _buildFirstLabel(
