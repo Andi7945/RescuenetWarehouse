@@ -17,6 +17,7 @@
 /// information for proper PDF branding and attribution.
 import 'dart:typed_data';
 import 'package:rescuenet_warehouse/features/printing/domain/print_context.dart';
+import 'package:rescuenet_warehouse/features/printing/domain/label_format.dart';
 import 'package:rescuenet_warehouse/models/item.dart';
 import 'package:rescuenet_warehouse/models/rescue_container.dart';
 import 'package:rescuenet_warehouse/pdf/packing_list_mapper.dart';
@@ -69,34 +70,52 @@ class PdfGenerationService {
     return results;
   }
 
-  /// Generate label PDFs for containers.
+/// Generate label PDFs for containers in both formats.
   ///
-  /// Creates container labels (typically for physical attachment to containers)
-  /// with:
+  /// Creates container labels in both A6 (one per page) and A4 2x2 (two per page)
+  /// formats. This allows users to choose their preferred format at print/save time
+  /// without regenerating the PDFs.
+  ///
+  /// Labels include:
   /// - Container number and identification
   /// - Dangerous goods warning labels
   /// - Destination information
   /// - Organization branding and user attribution
   ///
-  /// Labels are formatted for printing on physical label sheets.
-  ///
   /// Parameters:
   /// - [containers]: Map of containers to their items with quantities
   /// - [context]: Print context for user/org info
   ///
-  /// Returns a list of [PdfDocument] objects, one per container.
-  static Future<List<PdfDocument>> generateLabels(
+  /// Returns a list of [DualFormatLabelDocument] objects, one per container,
+  /// each containing both A6 and A4 versions.
+  static Future<List<DualFormatLabelDocument>> generateLabels(
     Map<RescueContainer, Map<Item, int>> containers,
     PrintContext context,
   ) async {
     final packingLists = mapPackingList(containers);
-    final results = <PdfDocument>[];
+    final results = <DualFormatLabelDocument>[];
 
     for (final list in packingLists) {
-      final doc = await generateLabelPdf(list, context);
-      final bytes = await doc.save();
+      // Generate A6 version
+      final a6Doc = await generateLabelPdf(list, context, LabelFormat.a6);
+      final a6Bytes = await a6Doc.save();
+
+      // Generate A4 2x2 version
+      final a4Doc = await generateLabelPdf(list, context, LabelFormat.a4TwoPerPage);
+      final a4Bytes = await a4Doc.save();
+
       results.add(
-        PdfDocument(fileName: 'label_${list.containerNo}.pdf', bytes: bytes),
+        DualFormatLabelDocument(
+          containerNo: '${list.containerNo}',
+          a6Document: PdfDocument(
+            fileName: 'label_${list.containerNo}_A6.pdf',
+            bytes: a6Bytes,
+          ),
+          a4Document: PdfDocument(
+            fileName: 'label_${list.containerNo}_A4.pdf',
+            bytes: a4Bytes,
+          ),
+        ),
       );
     }
 
@@ -128,6 +147,22 @@ class PdfGenerationService {
 
     return PdfDocument(fileName: 'summary.pdf', bytes: bytes);
   }
+}
+
+/// Data transfer object for label PDFs in both formats.
+///
+/// Contains both A6 and A4 2x2 versions of the same label,
+/// allowing users to choose their preferred format at print/save time.
+class DualFormatLabelDocument {
+  final String containerNo;
+  final PdfDocument a6Document;
+  final PdfDocument a4Document;
+
+  const DualFormatLabelDocument({
+    required this.containerNo,
+    required this.a6Document,
+    required this.a4Document,
+  });
 }
 
 /// Data transfer object for a generated PDF document.

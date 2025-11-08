@@ -34,6 +34,7 @@
 /// - Container/item data for PDF generation
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pdf/pdf.dart';
 import 'package:rescuenet_warehouse/features/printing/domain/print_context_provider.dart';
 import 'package:rescuenet_warehouse/features/printing/services/pdf_generation_service.dart';
 import 'package:rescuenet_warehouse/features/printing/services/print_service.dart';
@@ -43,6 +44,7 @@ import 'package:rescuenet_warehouse/features/printing/generators/common/pdf_base
 import 'package:rescuenet_warehouse/models/item.dart';
 import 'package:rescuenet_warehouse/models/rescue_container.dart';
 import 'export_options_modal.dart';
+import 'label_export_modal.dart';
 
 /// Handles export actions for printing and saving PDFs.
 ///
@@ -98,16 +100,17 @@ class ExportActions {
 
   /// Handle label export for selected containers.
   ///
-  /// Generates container label PDFs for the given containers and shows a modal
-  /// allowing the user to either print or save the labels.
+  /// Generates container label PDFs in both A6 and A4 2x2 formats, then shows
+  /// a modal allowing the user to print or save either format.
   ///
   /// Labels include:
   /// - Container identification number
   /// - Dangerous goods warning symbols
   /// - Destination information
   ///
-  /// Labels are formatted for printing on physical label sheets that can be
-  /// attached to containers.
+  /// Users can choose between:
+  /// - A6 format: One label per A6 page (10.5 x 14.8 cm landscape)
+  /// - A4 2x2 format: Two labels per A4 page (current default)
   ///
   /// Parameters:
   /// - [context]: BuildContext for showing modals
@@ -126,19 +129,40 @@ class ExportActions {
 
     if (!context.mounted) return;
 
-    await showExportOptionsModal(
+    await showLabelExportOptionsModal(
       context: context,
-      onPrint: () async {
+      onPrintA6: () async {
         for (final doc in documents) {
-          await PrintService.showPrintDialog(doc.bytes);
+          await PrintService.showPrintDialog(
+            doc.a6Document.bytes,
+            format: PdfPageFormat.a6.landscape,
+          );
         }
       },
-      onSave: () async {
+      onPrintA4: () async {
         for (final doc in documents) {
-          await FileService.saveToLocalFile(doc.bytes, doc.fileName);
+          await PrintService.showPrintDialog(
+            doc.a4Document.bytes,
+            format: PdfPageFormat.a4,
+          );
         }
       },
-      documentName: 'Labels',
+      onSaveA6: () async {
+        for (final doc in documents) {
+          await FileService.saveToLocalFile(
+            doc.a6Document.bytes,
+            doc.a6Document.fileName,
+          );
+        }
+      },
+      onSaveA4: () async {
+        for (final doc in documents) {
+          await FileService.saveToLocalFile(
+            doc.a4Document.bytes,
+            doc.a4Document.fileName,
+          );
+        }
+      },
     );
   }
 

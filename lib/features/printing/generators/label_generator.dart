@@ -1,5 +1,6 @@
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:rescuenet_warehouse/features/printing/domain/label_format.dart';
 import 'package:rescuenet_warehouse/features/printing/domain/print_context.dart';
 import 'package:rescuenet_warehouse/pdf/packing_list.dart';
 
@@ -14,6 +15,7 @@ String _colorToHex(int color) {
 Future<pw.Document> generateLabelPdf(
   PackingList packingList,
   PrintContext context,
+  LabelFormat format,
 ) async {
   final pdf = pw.Document();
 
@@ -21,7 +23,7 @@ Future<pw.Document> generateLabelPdf(
   final totalPages = (goods.length / 2).floor() + 1;
 
   // Build all label pages
-  final pages = await _buildAllPages(packingList, goods, totalPages, context);
+  final pages = await _buildAllPages(packingList, goods, totalPages, context, format);
 
   for (final page in pages) {
     pdf.addPage(page);
@@ -36,6 +38,7 @@ Future<List<pw.Page>> _buildAllPages(
   List<pw.Widget> goods,
   int totalPages,
   PrintContext context,
+  LabelFormat format,
 ) async {
   // First page: one dangerous good plus summary info
   final l1 = await _buildFirstLabel(list, goods.first, 1, totalPages, context);
@@ -61,37 +64,54 @@ Future<List<pw.Page>> _buildAllPages(
     );
   }
 
-  // Build physical pages (two labels per page)
+  // Build physical pages based on format
   final pages = <pw.Page>[];
 
-  // First physical page
-  if (additionalLabels.isNotEmpty) {
-    pages.add(_labelPage(l1, additionalLabels.first));
+  if (format == LabelFormat.a6) {
+    // A6 format: one label per page
+    pages.add(_labelPageA6(l1));
+    for (final label in additionalLabels) {
+      pages.add(_labelPageA6(label));
+    }
   } else {
-    pages.add(_labelPage(l1, null));
-  }
+    // A4 2x2 format: two labels per page (existing logic)
+    if (additionalLabels.isNotEmpty) {
+      pages.add(_labelPageA4TwoPerPage(l1, additionalLabels.first));
+    } else {
+      pages.add(_labelPageA4TwoPerPage(l1, null));
+    }
 
-  // Subsequent physical pages
-  final others = additionalLabels.skip(1).toList();
-  for (var i = 0; i < others.length; i += 2) {
-    final second = (i + 1) < others.length ? others[i + 1] : null;
-    pages.add(_labelPage(others[i], second));
+    final others = additionalLabels.skip(1).toList();
+    for (var i = 0; i < others.length; i += 2) {
+      final second = (i + 1) < others.length ? others[i + 1] : null;
+      pages.add(_labelPageA4TwoPerPage(others[i], second));
+    }
   }
 
   return pages;
 }
 
-/// Create a physical page with two labels
-pw.Page _labelPage(pw.Widget w, pw.Widget? w2) => pw.MultiPage(
+/// Create a physical A4 page with two labels
+pw.Page _labelPageA4TwoPerPage(pw.Widget w, pw.Widget? w2) => pw.MultiPage(
+  margin: pw.EdgeInsets.zero,
   build: (pw.Context context) => [
     _withMeasurements(w),
     _withMeasurements(w2 ?? pw.Container()),
   ],
 );
 
+/// Create a physical A6 page with one label
+pw.Page _labelPageA6(pw.Widget w) => pw.MultiPage(
+  pageFormat: PdfPageFormat.a6.landscape,
+  margin: pw.EdgeInsets.zero,
+  build: (pw.Context context) => [
+    _withMeasurements(w),
+  ],
+);
+
 /// Wrap label with correct measurements
 pw.Widget _withMeasurements(pw.Widget label) => pw.Container(
-  child: pw.SizedBox(width: 14.8 * cm, height: 10.51 * cm, child: label),
+  child: pw.SizedBox(width: 14.8 * cm, height: 10.5 * cm, child: label),
 );
 
 /// Build the first label with summary information
