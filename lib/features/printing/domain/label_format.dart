@@ -13,7 +13,7 @@ extension LabelFormatExtension on LabelFormat {
       case LabelFormat.a6:
         return 'A6 (one per page)';
       case LabelFormat.a4TwoPerPage:
-        return 'A4 (2x2 layout)';
+        return 'A4 (2×2 grid - 4 per page)';
     }
   }
 }

@@ -103,14 +103,17 @@ class ExportActions {
   /// Generates container label PDFs in both A6 and A4 2x2 formats, then shows
   /// a modal allowing the user to print or save either format.
   ///
+  /// All selected containers are combined into single PDFs (one for A6 format,
+  /// one for A4 2x2 format).
+  ///
   /// Labels include:
   /// - Container identification number
   /// - Dangerous goods warning symbols
   /// - Destination information
   ///
   /// Users can choose between:
-  /// - A6 format: One label per A6 page (10.5 x 14.8 cm landscape)
-  /// - A4 2x2 format: Two labels per A4 page (current default)
+  /// - A6 format: One label per A6 landscape page (10.5 x 14.8 cm)
+  /// - A4 2x2 format: Four A6-sized labels in 2x2 grid per A4 page
   ///
   /// Parameters:
   /// - [context]: BuildContext for showing modals
@@ -122,7 +125,7 @@ class ExportActions {
     Map<RescueContainer, Map<Item, int>> containers,
   ) async {
     final printContext = ref.read(printContextProvider);
-    final documents = await PdfGenerationService.generateLabels(
+    final document = await PdfGenerationService.generateLabels(
       containers,
       printContext,
     );
@@ -132,36 +135,28 @@ class ExportActions {
     await showLabelExportOptionsModal(
       context: context,
       onPrintA6: () async {
-        for (final doc in documents) {
-          await PrintService.showPrintDialog(
-            doc.a6Document.bytes,
-            format: PdfPageFormat.a6.landscape,
-          );
-        }
+        await PrintService.showPrintDialog(
+          document.a6Document.bytes,
+          format: PdfPageFormat.a6.landscape,
+        );
       },
       onPrintA4: () async {
-        for (final doc in documents) {
-          await PrintService.showPrintDialog(
-            doc.a4Document.bytes,
-            format: PdfPageFormat.a4,
-          );
-        }
+        await PrintService.showPrintDialog(
+          document.a4Document.bytes,
+          format: PdfPageFormat.a4,
+        );
       },
       onSaveA6: () async {
-        for (final doc in documents) {
-          await FileService.saveToLocalFile(
-            doc.a6Document.bytes,
-            doc.a6Document.fileName,
-          );
-        }
+        await FileService.saveToLocalFile(
+          document.a6Document.bytes,
+          document.a6Document.fileName,
+        );
       },
       onSaveA4: () async {
-        for (final doc in documents) {
-          await FileService.saveToLocalFile(
-            doc.a4Document.bytes,
-            doc.a4Document.fileName,
-          );
-        }
+        await FileService.saveToLocalFile(
+          document.a4Document.bytes,
+          document.a4Document.fileName,
+        );
       },
     );
   }

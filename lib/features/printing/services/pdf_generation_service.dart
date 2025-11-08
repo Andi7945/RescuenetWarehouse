@@ -70,11 +70,12 @@ class PdfGenerationService {
     return results;
   }
 
-/// Generate label PDFs for containers in both formats.
+/// Generate label PDFs for ALL selected containers in both formats.
   ///
-  /// Creates container labels in both A6 (one per page) and A4 2x2 (two per page)
-  /// formats. This allows users to choose their preferred format at print/save time
-  /// without regenerating the PDFs.
+  /// Creates combined container labels in both A6 (one per page) and A4 2x2 grid
+  /// (two labels per page) formats. All container labels are combined into single
+  /// PDF files for each format. This allows users to choose their preferred format
+  /// at print/save time without regenerating the PDFs.
   ///
   /// Labels include:
   /// - Container number and identification
@@ -86,40 +87,32 @@ class PdfGenerationService {
   /// - [containers]: Map of containers to their items with quantities
   /// - [context]: Print context for user/org info
   ///
-  /// Returns a list of [DualFormatLabelDocument] objects, one per container,
-  /// each containing both A6 and A4 versions.
-  static Future<List<DualFormatLabelDocument>> generateLabels(
+  /// Returns a single [DualFormatLabelsDocument] containing both A6 and A4 2x2
+  /// versions with labels from all containers combined.
+  static Future<DualFormatLabelsDocument> generateLabels(
     Map<RescueContainer, Map<Item, int>> containers,
     PrintContext context,
   ) async {
     final packingLists = mapPackingList(containers);
-    final results = <DualFormatLabelDocument>[];
 
-    for (final list in packingLists) {
-      // Generate A6 version
-      final a6Doc = await generateLabelPdf(list, context, LabelFormat.a6);
-      final a6Bytes = await a6Doc.save();
+    // Generate A6 version (all containers combined)
+    final a6Doc = await generateLabelPdf(packingLists, context, LabelFormat.a6);
+    final a6Bytes = await a6Doc.save();
 
-      // Generate A4 2x2 version
-      final a4Doc = await generateLabelPdf(list, context, LabelFormat.a4TwoPerPage);
-      final a4Bytes = await a4Doc.save();
+    // Generate A4 2x2 grid version (all containers combined)
+    final a4Doc = await generateLabelPdf(packingLists, context, LabelFormat.a4TwoPerPage);
+    final a4Bytes = await a4Doc.save();
 
-      results.add(
-        DualFormatLabelDocument(
-          containerNo: '${list.containerNo}',
-          a6Document: PdfDocument(
-            fileName: 'label_${list.containerNo}_A6.pdf',
-            bytes: a6Bytes,
-          ),
-          a4Document: PdfDocument(
-            fileName: 'label_${list.containerNo}_A4.pdf',
-            bytes: a4Bytes,
-          ),
-        ),
-      );
-    }
-
-    return results;
+    return DualFormatLabelsDocument(
+      a6Document: PdfDocument(
+        fileName: 'labels_A6.pdf',
+        bytes: a6Bytes,
+      ),
+      a4Document: PdfDocument(
+        fileName: 'labels_A4_2x2.pdf',
+        bytes: a4Bytes,
+      ),
+    );
   }
 
   /// Generate summary PDF.
@@ -149,17 +142,16 @@ class PdfGenerationService {
   }
 }
 
-/// Data transfer object for label PDFs in both formats.
+/// Data transfer object for combined label PDFs in both formats.
 ///
-/// Contains both A6 and A4 2x2 versions of the same label,
+/// Contains both A6 and A4 2x2 grid versions for ALL selected containers,
 /// allowing users to choose their preferred format at print/save time.
-class DualFormatLabelDocument {
-  final String containerNo;
+/// Labels from all containers are combined into single PDF files.
+class DualFormatLabelsDocument {
   final PdfDocument a6Document;
   final PdfDocument a4Document;
 
-  const DualFormatLabelDocument({
-    required this.containerNo,
+  const DualFormatLabelsDocument({
     required this.a6Document,
     required this.a4Document,
   });

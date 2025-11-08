@@ -67,7 +67,7 @@ Future<void> showLabelExportOptionsModal({
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
               child: Text(
-                'A4 Format (2x2 layout)',
+                'A4 Format (2×2 grid - 4 per page)',
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),

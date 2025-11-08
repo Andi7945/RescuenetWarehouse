@@ -11,19 +11,28 @@ String _colorToHex(int color) {
   return '#${(color & 0xFFFFFF).toRadixString(16).padLeft(6, '0')}';
 }
 
-/// Generate container label PDF document
+/// Generate container label PDF document from multiple packing lists
+///
+/// For each container in [packingLists], generates label widgets (one per container)
+/// and arranges them into physical pages based on [format]:
+/// - A6 format: one label per A6 page
+/// - A4 2×2 format: four labels per A4 page in a 2×2 grid
 Future<pw.Document> generateLabelPdf(
-  PackingList packingList,
+  List<PackingList> packingLists,
   PrintContext context,
   LabelFormat format,
 ) async {
   final pdf = pw.Document();
 
-  final goods = await dangerousGoodsLabels(packingList.dangerousGoods);
-  final totalPages = (goods.length / 2).floor() + 1;
+  // Build all label widgets from all containers
+  final allLabels = <pw.Widget>[];
+  for (final packingList in packingLists) {
+    final labels = await _buildLabelsForContainer(packingList, context);
+    allLabels.addAll(labels);
+  }
 
-  // Build all label pages
-  final pages = await _buildAllPages(packingList, goods, totalPages, context, format);
+  // Arrange labels into physical pages based on format
+  final pages = _buildPages(allLabels, format);
 
   for (final page in pages) {
     pdf.addPage(page);
@@ -32,73 +41,130 @@ Future<pw.Document> generateLabelPdf(
   return pdf;
 }
 
-/// Build all label pages
-Future<List<pw.Page>> _buildAllPages(
-  PackingList list,
-  List<pw.Widget> goods,
-  int totalPages,
+/// Build label widgets for a single container
+///
+/// Returns a list of A6-sized label widgets (14.8 × 10.5 cm each).
+/// If the container has dangerous goods:
+/// - First label: one dangerous good + summary info
+/// - Subsequent labels: two dangerous goods per label
+/// If no dangerous goods, returns a single label with summary info only.
+Future<List<pw.Widget>> _buildLabelsForContainer(
+  PackingList packingList,
   PrintContext context,
-  LabelFormat format,
 ) async {
-  // First page: one dangerous good plus summary info
-  final l1 = await _buildFirstLabel(list, goods.first, 1, totalPages, context);
+  final goods = await dangerousGoodsLabels(packingList.dangerousGoods);
 
-  // Additional pages: two dangerous goods per page
-  final additional = goods.skip(1).toList();
-  final additionalLabels = <pw.Widget>[];
-
-  for (var i = 0; i < additional.length; i += 2) {
-    var left = additional[i];
-    var right = additional.length > (i + 1)
-        ? additional[i + 1]
-        : pw.Container();
-    additionalLabels.add(
-      await _buildSubsequentLabel(
-        left,
-        right,
-        (i / 2).floor() + 2,
-        totalPages,
-        list.containerNo,
-        context,
-      ),
+  if (goods.isEmpty) {
+    // No dangerous goods: return single label with summary only
+    final totalPages = 1;
+    final label = await _buildFirstLabel(
+      packingList,
+      pw.Container(), // No dangerous good to display
+      1,
+      totalPages,
+      context,
     );
+    return [label];
   }
 
-  // Build physical pages based on format
+  final totalPages = (goods.length / 2).floor() + 1;
+  final labels = <pw.Widget>[];
+
+  // First label: one dangerous good plus summary info
+  final firstLabel = await _buildFirstLabel(
+    packingList,
+    goods.first,
+    1,
+    totalPages,
+    context,
+  );
+  labels.add(firstLabel);
+
+  // Additional labels: two dangerous goods per label
+  final remainingGoods = goods.skip(1).toList();
+  for (var i = 0; i < remainingGoods.length; i += 2) {
+    final left = remainingGoods[i];
+    final right = remainingGoods.length > (i + 1)
+        ? remainingGoods[i + 1]
+        : pw.Container();
+
+    final label = await _buildSubsequentLabel(
+      left,
+      right,
+      (i / 2).floor() + 2,
+      totalPages,
+      packingList.containerNo,
+      context,
+    );
+    labels.add(label);
+  }
+
+  return labels;
+}
+
+/// Arrange label widgets into physical pages based on format
+///
+/// Pure function that takes a flat list of label widgets and arranges them
+/// into PDF pages according to the specified format:
+/// - A6 format: one label per A6 page
+/// - A4 2×2 format: four labels per A4 page in a 2×2 grid
+List<pw.Page> _buildPages(List<pw.Widget> labels, LabelFormat format) {
   final pages = <pw.Page>[];
 
   if (format == LabelFormat.a6) {
     // A6 format: one label per page
-    pages.add(_labelPageA6(l1));
-    for (final label in additionalLabels) {
+    for (final label in labels) {
       pages.add(_labelPageA6(label));
     }
   } else {
-    // A4 2x2 format: two labels per page (existing logic)
-    if (additionalLabels.isNotEmpty) {
-      pages.add(_labelPageA4TwoPerPage(l1, additionalLabels.first));
-    } else {
-      pages.add(_labelPageA4TwoPerPage(l1, null));
-    }
+    // A4 2×2 format: four labels per page in a grid
+    for (var i = 0; i < labels.length; i += 4) {
+      final topLeft = labels[i];
+      final topRight = i + 1 < labels.length ? labels[i + 1] : null;
+      final bottomLeft = i + 2 < labels.length ? labels[i + 2] : null;
+      final bottomRight = i + 3 < labels.length ? labels[i + 3] : null;
 
-    final others = additionalLabels.skip(1).toList();
-    for (var i = 0; i < others.length; i += 2) {
-      final second = (i + 1) < others.length ? others[i + 1] : null;
-      pages.add(_labelPageA4TwoPerPage(others[i], second));
+      pages.add(_labelPageA4Grid(topLeft, topRight, bottomLeft, bottomRight));
     }
   }
 
   return pages;
 }
 
-/// Create a physical A4 page with two labels
-pw.Page _labelPageA4TwoPerPage(pw.Widget w, pw.Widget? w2) => pw.MultiPage(
-  margin: pw.EdgeInsets.zero,
-  build: (pw.Context context) => [
-    _withMeasurements(w),
-    _withMeasurements(w2 ?? pw.Container()),
-  ],
-);
+/// Create a physical A4 page with 2×2 grid of labels
+///
+/// A4 is 21.0 × 29.7 cm, each A6 landscape label is 14.8 × 10.5 cm
+/// Grid layout: 2 × 14.8 = 29.6 cm (width), 2 × 10.5 = 21.0 cm (height) - perfect fit
+/// Zero margins are critical for exact fit
+pw.Page _labelPageA4Grid(
+  pw.Widget topLeft,
+  pw.Widget? topRight,
+  pw.Widget? bottomLeft,
+  pw.Widget? bottomRight,
+) {
+  return pw.Page(
+    pageFormat: PdfPageFormat.a4,
+    margin: pw.EdgeInsets.zero,
+    build: (pw.Context context) => pw.Column(
+      children: [
+        // Top row
+        pw.Row(
+          children: [
+            _withMeasurements(topLeft),
+            _withMeasurements(topRight ?? pw.Container()),
+          ],
+        ),
+        // Bottom row
+        pw.Row(
+          children: [
+            _withMeasurements(bottomLeft ?? pw.Container()),
+            _withMeasurements(bottomRight ?? pw.Container()),
+          ],
+        ),
+      ],
+    ),
+  );
+}
 
 /// Create a physical A6 page with one label
 pw.Page _labelPageA6(pw.Widget w) => pw.MultiPage(
