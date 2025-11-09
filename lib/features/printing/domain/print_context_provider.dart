@@ -37,8 +37,8 @@ PrintContext printContext(PrintContextRef ref) {
   return PrintContext(
     userName: userName,
     organizationName: org.name,
-    organizationEmail: 'backoffice@rescuenet.net',
-    organizationPhone: '+31-6-14419988',
+    organizationEmail: org.contactEmail,
+    organizationPhone: org.contactPhone,
     logoAssetPath: org.largeLogoAssetPath,
     printDate: DateTime.now(),
   );

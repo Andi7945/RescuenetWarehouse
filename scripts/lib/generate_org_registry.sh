@@ -96,6 +96,8 @@ generate_org_registry() {
     features: {},
     allowedEmailDomains: ['rescuenet.net'],
     whitelistedEmails: ['Michael.Wandtke@hey.com'],
+    contactEmail: 'backoffice@rescuenet.net',
+    contactPhone: '+31-6-14419988',
   ),"
           ;;
         production)
@@ -112,6 +114,8 @@ generate_org_registry() {
     features: {},
     allowedEmailDomains: ['rescuenet.net'],
     whitelistedEmails: ['Michael.Wandtke@hey.com'],
+    contactEmail: 'backoffice@rescuenet.net',
+    contactPhone: '+31-6-14419988',
   ),"
           ;;
       esac
@@ -131,6 +135,8 @@ generate_org_registry() {
     features: {},
     allowedEmailDomains: ['humedica.org', 'rescuenet.net'],
     whitelistedEmails: ['Michael.Wandtke@hey.com'],
+    contactEmail: 'backoffice@rescuenet.net',
+    contactPhone: '+31-6-14419988',
   ),"
           ;;
       esac

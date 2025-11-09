@@ -6,7 +6,7 @@ part of 'print_context_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$printContextHash() => r'4da5110a384961ea762c3065b2ea426aab5c3a9d';
+String _$printContextHash() => r'050b812848630d5fc1507363c4ae6d9601c85dcc';
 
 /// Provides the current print context assembled from auth and org providers.
 ///

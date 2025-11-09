@@ -210,7 +210,7 @@ Future<List<pw.Widget>> dangerousGoods(
   pw.Widget Function(List<pw.Widget> ws) fn,
 ) async {
   if (goods.isEmpty) {
-    return [_noDangerousGoods()];
+    return [];  // Return empty list - no labels needed for no dangerous goods
   }
   var futures = goods.map((good) => _perGood(good, fn));
   return Future.wait(futures);
@@ -227,9 +227,6 @@ Future<pw.Widget> _perGood(
     child: renderFn(g),
   );
 }
-
-pw.Widget _noDangerousGoods() =>
-    pw.Table(children: [smallLabelFatValueRow("Dangerous goods: ", "No")]);
 
 Future<List<pw.Widget>> _dangerousGood(PackingDangerousGood good) async => [
   _dangerousGoodsTable(good),

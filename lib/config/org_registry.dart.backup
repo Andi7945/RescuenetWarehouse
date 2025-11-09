@@ -31,6 +31,8 @@ final Map<String, OrgConfig> _orgConfigs = {
     features: {},
     allowedEmailDomains: ['rescuenet.net'],
     whitelistedEmails: ['Michael.Wandtke@hey.com'],
+    contactEmail: 'backoffice@rescuenet.net',
+    contactPhone: '+31-6-14419988',
   ),
 };
 

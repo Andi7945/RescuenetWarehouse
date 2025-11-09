@@ -1,5 +1,7 @@
 import 'dart:math' as math;
+import 'dart:typed_data';
 
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:rescuenet_warehouse/features/printing/domain/label_format.dart';
@@ -7,11 +9,6 @@ import 'package:rescuenet_warehouse/features/printing/domain/print_context.dart'
 import 'package:rescuenet_warehouse/pdf/packing_list.dart';
 
 import 'common/pdf_base_widgets.dart';
-
-/// Convert Flutter color int to hex string for PDF
-String _colorToHex(int color) {
-  return '#${(color & 0xFFFFFF).toRadixString(16).padLeft(6, '0')}';
-}
 
 /// Generate container label PDF document from multiple packing lists
 ///
@@ -47,48 +44,32 @@ Future<pw.Document> generateLabelPdf(
 ///
 /// Returns a list of label widgets. Labels are rendered in different orientations
 /// depending on the output format (A6 landscape or A4 portrait grid).
-/// If the container has dangerous goods:
-/// - First label: one dangerous good + summary info
+/// - First label: summary info ONLY (no dangerous goods)
 /// - Subsequent labels: two dangerous goods per label
-/// If no dangerous goods, returns a single label with summary info only.
 Future<List<pw.Widget>> _buildLabelsForContainer(
   PackingList packingList,
   PrintContext context,
 ) async {
   final goods = await dangerousGoodsLabels(packingList.dangerousGoods);
 
-  if (goods.isEmpty) {
-    // No dangerous goods: return single label with summary only
-    final totalPages = 1;
-    final label = await _buildFirstLabel(
-      packingList,
-      pw.Container(), // No dangerous good to display
-      1,
-      totalPages,
-      context,
-    );
-    return [label];
-  }
-
-  final totalPages = (goods.length / 2).floor() + 1;
+  // Calculate total pages: 1 summary + ceiling of (dangerous goods / 2)
+  final totalPages = 1 + (goods.length / 2).ceil();
   final labels = <pw.Widget>[];
 
-  // First label: one dangerous good plus summary info
+  // First label: summary info only (no dangerous goods)
   final firstLabel = await _buildFirstLabel(
     packingList,
-    goods.first,
     1,
     totalPages,
     context,
   );
   labels.add(firstLabel);
 
-  // Additional labels: two dangerous goods per label
-  final remainingGoods = goods.skip(1).toList();
-  for (var i = 0; i < remainingGoods.length; i += 2) {
-    final left = remainingGoods[i];
-    final right = remainingGoods.length > (i + 1)
-        ? remainingGoods[i + 1]
+  // All dangerous goods on subsequent labels: two per label
+  for (var i = 0; i < goods.length; i += 2) {
+    final left = goods[i];
+    final right = goods.length > (i + 1)
+        ? goods[i + 1]
         : pw.Container();
 
     final label = await _buildSubsequentLabel(
@@ -205,76 +186,256 @@ pw.Widget _withMeasurementsPortrait(pw.Widget label) {
   );
 }
 
-/// Build the first label with summary information
+/// Build the first label with new 3-row layout
+///
+/// Row 1: Contact info (60%) + Logo (40%)
+/// Row 2: Huge container number (60%) + Destination (40%)
+/// Row 3: Details (70%) + Weight (30%)
 Future<pw.Column> _buildFirstLabel(
   PackingList list,
-  pw.Widget good,
   int currentPage,
   int numberOfPages,
   PrintContext context,
 ) async {
-  final top = await _buildHeaderForFirstLabel(
-    currentPage,
-    numberOfPages,
-    context,
-  );
+  final logo = await _loadLogo(context.logoAssetPath);
+
   return pw.Column(
     children: [
-      top,
+      // Row 1: Contact info + Logo
+      await _buildTopRow(context, logo, currentPage, numberOfPages),
       pw.SizedBox(height: 8),
-      pw.Row(
-        crossAxisAlignment: pw.CrossAxisAlignment.start,
-        children: [
-          pw.Expanded(child: _buildSummarySection(list)),
-          pw.SizedBox(width: 16),
-          pw.Expanded(child: good),
-        ],
-      ),
+
+      // Row 2: Huge container number + Destination
+      _buildMiddleRow(list),
+      pw.SizedBox(height: 8),
+
+      // Row 3: Details + Weight
+      _buildBottomRow(list),
     ],
   );
 }
 
-/// Build header for the first label
-Future<pw.Widget> _buildHeaderForFirstLabel(
-  int currentPage,
-  int numberOfPages,
+/// Load logo from assets
+Future<pw.ImageProvider> _loadLogo(String assetPath) async {
+  final ByteData data = await rootBundle.load(assetPath);
+  return pw.MemoryImage(data.buffer.asUint8List());
+}
+
+/// Build top row: Contact info (60%) + Logo (40%)
+Future<pw.Widget> _buildTopRow(
   PrintContext context,
+  pw.ImageProvider logo,
+  int currentPage,
+  int totalPages,
 ) async {
-  return pw.Row(
-    children: [
-      pw.Expanded(
-        child: pw.Padding(
-          padding: const pw.EdgeInsets.only(right: 8.0),
-          child: _buildInfoBox(context),
+  return pw.Container(
+    decoration: pw.BoxDecoration(border: pw.Border.all(width: 0.5)),
+    child: pw.Row(
+      children: [
+        // Left 60%: Contact info + Print metadata
+        pw.Expanded(
+          flex: 60,
+          child: pw.Padding(
+            padding: const pw.EdgeInsets.all(6.0),
+            child: pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              mainAxisSize: pw.MainAxisSize.min,
+              children: [
+                _buildInfoLine('Email', context.organizationEmail),
+                pw.SizedBox(height: 4),
+                _buildInfoLine('Phone', context.organizationPhone),
+                pw.SizedBox(height: 8),
+                smallText('Printed by: ${context.userName}'),
+                pw.SizedBox(height: 2),
+                smallText('Date: ${context.formattedDate}'),
+              ],
+            ),
+          ),
         ),
-        flex: 2,
-      ),
-      pw.Expanded(
-        child: _buildBox(smallText("Label $currentPage / $numberOfPages")),
-        flex: 2,
-      ),
-    ],
+
+        // Right 40%: Logo + Page indicator
+        pw.Expanded(
+          flex: 40,
+          child: pw.Column(
+            mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+            children: [
+              pw.Padding(
+                padding: const pw.EdgeInsets.all(8.0),
+                child: pw.Image(logo, height: 60),
+              ),
+              _buildPageIndicator(currentPage, totalPages),
+            ],
+          ),
+        ),
+      ],
+    ),
   );
 }
 
-/// Build summary section for first label
-pw.Widget _buildSummarySection(PackingList list) {
-  return pw.Column(
+/// Build middle row: Huge container number (60%) + Destination (40%)
+pw.Widget _buildMiddleRow(PackingList list) {
+  return pw.Container(
+    height: 80, // Double height row
+    decoration: pw.BoxDecoration(border: pw.Border.all(width: 0.5)),
+    child: pw.Row(
+      children: [
+        // Left 60%: HUGE container number
+        pw.Expanded(
+          flex: 60,
+          child: pw.Padding(
+            padding: const pw.EdgeInsets.all(8.0),
+            child: pw.Row(
+              crossAxisAlignment: pw.CrossAxisAlignment.center,
+              children: [
+                pw.Text(
+                  '#:',
+                  style: pw.TextStyle(
+                    fontSize: 32,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
+                pw.SizedBox(width: 12),
+                pw.Text(
+                  '${list.containerNo}',
+                  style: pw.TextStyle(
+                    fontSize: 48,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        // Right 40%: Destination
+        pw.Expanded(
+          flex: 40,
+          child: pw.Container(
+            padding: const pw.EdgeInsets.all(8.0),
+            decoration: pw.BoxDecoration(
+              border: pw.Border(left: pw.BorderSide(width: 0.5)),
+            ),
+            child: pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              mainAxisAlignment: pw.MainAxisAlignment.center,
+              children: [
+                pw.Text(
+                  'Destination',
+                  style: pw.TextStyle(
+                    fontSize: 9,
+                  ),
+                ),
+                pw.SizedBox(height: 4),
+                pw.Text(
+                  list.destination,
+                  style: pw.TextStyle(
+                    fontSize: 14,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                  maxLines: 3,
+                  overflow: pw.TextOverflow.clip,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+/// Build bottom row: Details (70%) + Weight (30%)
+pw.Widget _buildBottomRow(PackingList list) {
+  return pw.Container(
+    decoration: pw.BoxDecoration(border: pw.Border.all(width: 0.5)),
+    child: pw.Row(
+      children: [
+        // Left 70%: Name, Description, Type
+        pw.Expanded(
+          flex: 70,
+          child: pw.Padding(
+            padding: const pw.EdgeInsets.all(6.0),
+            child: pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              mainAxisSize: pw.MainAxisSize.min,
+              children: [
+                _buildInfoLine('Name', list.containerName),
+                pw.SizedBox(height: 4),
+                _buildInfoLine('Description', list.containerDescription),
+                pw.SizedBox(height: 4),
+                _buildInfoLine('Type', list.containerType),
+              ],
+            ),
+          ),
+        ),
+
+        // Right 30%: Weight
+        pw.Expanded(
+          flex: 30,
+          child: pw.Container(
+            padding: const pw.EdgeInsets.all(8.0),
+            decoration: pw.BoxDecoration(
+              border: pw.Border(left: pw.BorderSide(width: 0.5)),
+            ),
+            child: pw.Column(
+              mainAxisAlignment: pw.MainAxisAlignment.center,
+              crossAxisAlignment: pw.CrossAxisAlignment.center,
+              children: [
+                pw.Text(
+                  'Weight',
+                  style: pw.TextStyle(fontSize: 9),
+                ),
+                pw.SizedBox(height: 4),
+                pw.Text(
+                  '${list.totalWeight.round()} kg',
+                  style: pw.TextStyle(
+                    fontSize: 16,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+/// Build an info line with label and value
+pw.Widget _buildInfoLine(String label, String value) {
+  return pw.Row(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
-      summaryTable(summaryRows(list)),
-      pw.Row(
-        children: [
-          valueBox("Destination:", list.destination),
-          valueBox(
-            "Seq. build prio:",
-            list.sequentialBuild.displayName,
-            0.0,
-            PdfColor.fromHex(_colorToHex(list.sequentialBuild.color.value)),
+      pw.Text(
+        '$label: ',
+        style: const pw.TextStyle(fontSize: 9),
+      ),
+      pw.Expanded(
+        child: pw.Text(
+          value,
+          style: pw.TextStyle(
+            fontSize: 9,
+            fontWeight: pw.FontWeight.bold,
           ),
-        ],
+          maxLines: 1,
+          overflow: pw.TextOverflow.clip,
+        ),
       ),
     ],
+  );
+}
+
+/// Build page indicator
+pw.Widget _buildPageIndicator(int current, int total) {
+  return pw.Container(
+    padding: const pw.EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+    decoration: pw.BoxDecoration(
+      border: pw.Border(top: pw.BorderSide(width: 0.5)),
+    ),
+    child: pw.Center(
+      child: smallText('Label $current / $total'),
+    ),
   );
 }
 

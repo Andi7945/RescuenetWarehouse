@@ -29,6 +29,12 @@ class OrgConfig {
   /// Example: ['developer@gmail.com', 'admin@example.com']
   final List<String> whitelistedEmails;
 
+  /// Contact email for the organization (used in PDFs and labels)
+  final String contactEmail;
+
+  /// Contact phone number for the organization (used in PDFs and labels)
+  final String contactPhone;
+
   const OrgConfig({
     required this.id,
     required this.name,
@@ -40,5 +46,7 @@ class OrgConfig {
     this.features = const {},
     this.allowedEmailDomains = const [],
     this.whitelistedEmails = const [],
+    required this.contactEmail,
+    required this.contactPhone,
   });
 }
