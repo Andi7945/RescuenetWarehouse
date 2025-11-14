@@ -13,10 +13,12 @@ import 'common/priority_badge_widget.dart';
 
 /// Coordinate scaling configuration for label layout
 ///
-/// User-specified coordinates are defined on a 1150×1700 canvas.
-/// We scale these to fit A6 landscape (420pt × 298pt).
+/// User-specified coordinates are defined on a 1150×1700 canvas (portrait).
+/// We scale these to fit A6 landscape (420pt × 298pt) with X/Y swapped.
+/// Source X (0-1150) maps to target Y (0-298)
+/// Source Y (0-1700) maps to target X (0-420)
 class _LabelCoordinates {
-  // Source canvas dimensions (user specification)
+  // Source canvas dimensions (user specification in portrait)
   static const double sourceWidth = 1150.0;
   static const double sourceHeight = 1700.0;
 
@@ -24,20 +26,20 @@ class _LabelCoordinates {
   static const double targetWidth = 420.0;
   static const double targetHeight = 298.0;
 
-  // Scaling factors
-  static const double scaleX = targetWidth / sourceWidth;  // ≈ 0.365
-  static const double scaleY = targetHeight / sourceHeight; // ≈ 0.175
+  // Scaling factors (swapped because coordinates are inverted)
+  static const double scaleX = targetHeight / sourceWidth;  // ≈ 0.259
+  static const double scaleY = targetWidth / sourceHeight;  // ≈ 0.247
 
-  /// Scales X coordinate from source to target
+  /// Scales X coordinate from source to target (maps to Y axis)
   static double x(double sourceX) => sourceX * scaleX;
 
-  /// Scales Y coordinate from source to target
+  /// Scales Y coordinate from source to target (maps to X axis)
   static double y(double sourceY) => sourceY * scaleY;
 
-  /// Scales width from source to target
+  /// Scales width from source to target (maps to height)
   static double w(double sourceWidth) => sourceWidth * scaleX;
 
-  /// Scales height from source to target
+  /// Scales height from source to target (maps to width)
   static double h(double sourceHeight) => sourceHeight * scaleY;
 }
 
@@ -400,66 +402,66 @@ Future<pw.Widget> _buildFirstLabel(
     children: [
       // Box 1: Contact info (top-left, with border)
       pw.Positioned(
-        left: _LabelCoordinates.x(_BoxSpec.box1.x),
-        top: _LabelCoordinates.y(_BoxSpec.box1.y),
+        left: _LabelCoordinates.y(_BoxSpec.box1.y),
+        top: _LabelCoordinates.x(_BoxSpec.box1.x),
         child: pw.SizedBox(
-          width: _LabelCoordinates.w(_BoxSpec.box1.width),
-          height: _LabelCoordinates.h(_BoxSpec.box1.height),
+          width: _LabelCoordinates.h(_BoxSpec.box1.height),
+          height: _LabelCoordinates.w(_BoxSpec.box1.width),
           child: _buildBox1ContactInfo(context),
         ),
       ),
 
       // Box 2: Logo (bottom-left, no border)
       pw.Positioned(
-        left: _LabelCoordinates.x(_BoxSpec.box2.x),
-        top: _LabelCoordinates.y(_BoxSpec.box2.y),
+        left: _LabelCoordinates.y(_BoxSpec.box2.y),
+        top: _LabelCoordinates.x(_BoxSpec.box2.x),
         child: pw.SizedBox(
-          width: _LabelCoordinates.w(_BoxSpec.box2.width),
-          height: _LabelCoordinates.h(_BoxSpec.box2.height),
+          width: _LabelCoordinates.h(_BoxSpec.box2.height),
+          height: _LabelCoordinates.w(_BoxSpec.box2.width),
           child: _buildBox2Logo(logo),
         ),
       ),
 
       // Box 3: Container number (top-center, with border)
       pw.Positioned(
-        left: _LabelCoordinates.x(_BoxSpec.box3.x),
-        top: _LabelCoordinates.y(_BoxSpec.box3.y),
+        left: _LabelCoordinates.y(_BoxSpec.box3.y),
+        top: _LabelCoordinates.x(_BoxSpec.box3.x),
         child: pw.SizedBox(
-          width: _LabelCoordinates.w(_BoxSpec.box3.width),
-          height: _LabelCoordinates.h(_BoxSpec.box3.height),
+          width: _LabelCoordinates.h(_BoxSpec.box3.height),
+          height: _LabelCoordinates.w(_BoxSpec.box3.width),
           child: _buildBox3ContainerNumber(list),
         ),
       ),
 
       // Box 4: Priority badge (bottom-center, no border)
       pw.Positioned(
-        left: _LabelCoordinates.x(_BoxSpec.box4.x),
-        top: _LabelCoordinates.y(_BoxSpec.box4.y),
+        left: _LabelCoordinates.y(_BoxSpec.box4.y),
+        top: _LabelCoordinates.x(_BoxSpec.box4.x),
         child: pw.SizedBox(
-          width: _LabelCoordinates.w(_BoxSpec.box4.width),
-          height: _LabelCoordinates.h(_BoxSpec.box4.height),
+          width: _LabelCoordinates.h(_BoxSpec.box4.height),
+          height: _LabelCoordinates.w(_BoxSpec.box4.width),
           child: _buildBox4PriorityBadge(list),
         ),
       ),
 
       // Box 5: Details (top-right, with border)
       pw.Positioned(
-        left: _LabelCoordinates.x(_BoxSpec.box5.x),
-        top: _LabelCoordinates.y(_BoxSpec.box5.y),
+        left: _LabelCoordinates.y(_BoxSpec.box5.y),
+        top: _LabelCoordinates.x(_BoxSpec.box5.x),
         child: pw.SizedBox(
-          width: _LabelCoordinates.w(_BoxSpec.box5.width),
-          height: _LabelCoordinates.h(_BoxSpec.box5.height),
+          width: _LabelCoordinates.h(_BoxSpec.box5.height),
+          height: _LabelCoordinates.w(_BoxSpec.box5.width),
           child: _buildBox5Details(list),
         ),
       ),
 
       // Box 6: Weight (bottom-right, with border)
       pw.Positioned(
-        left: _LabelCoordinates.x(_BoxSpec.box6.x),
-        top: _LabelCoordinates.y(_BoxSpec.box6.y),
+        left: _LabelCoordinates.y(_BoxSpec.box6.y),
+        top: _LabelCoordinates.x(_BoxSpec.box6.x),
         child: pw.SizedBox(
-          width: _LabelCoordinates.w(_BoxSpec.box6.width),
-          height: _LabelCoordinates.h(_BoxSpec.box6.height),
+          width: _LabelCoordinates.h(_BoxSpec.box6.height),
+          height: _LabelCoordinates.w(_BoxSpec.box6.width),
           child: _buildBox6Weight(list),
         ),
       ),
