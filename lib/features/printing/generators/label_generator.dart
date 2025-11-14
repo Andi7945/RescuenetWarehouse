@@ -9,7 +9,12 @@ import 'package:rescuenet_warehouse/features/printing/domain/print_context.dart'
 import 'package:rescuenet_warehouse/pdf/packing_list.dart';
 
 import 'common/pdf_base_widgets.dart';
-import 'common/priority_badge_widget.dart';
+import 'label_boxes/contact_info_box.dart';
+import 'label_boxes/container_number_box.dart';
+import 'label_boxes/details_box.dart';
+import 'label_boxes/logo_box.dart';
+import 'label_boxes/priority_badge_box.dart';
+import 'label_boxes/weight_box.dart';
 
 /// Coordinate scaling configuration for label layout
 ///
@@ -17,7 +22,7 @@ import 'common/priority_badge_widget.dart';
 /// We scale these to fit A6 landscape (420pt × 298pt) with X/Y swapped.
 /// Source X (0-1150) maps to target Y (0-298)
 /// Source Y (0-1700) maps to target X (0-420)
-class _LabelCoordinates {
+class LabelCoordinates {
   // Source canvas dimensions (user specification in portrait)
   static const double sourceWidth = 1150.0;
   static const double sourceHeight = 1700.0;
@@ -252,143 +257,6 @@ pw.Widget _withMeasurementsPortrait(pw.Widget label) {
   );
 }
 
-/// Box 1: Contact information and print metadata (top-left, with border)
-pw.Widget _buildBox1ContactInfo(PrintContext context) {
-  return pw.Container(
-    decoration: _BoxSpec.box1.hasBorder
-      ? pw.BoxDecoration(border: pw.Border.all(width: 0.5))
-      : null,
-    padding: const pw.EdgeInsets.all(8),
-    child: pw.Column(
-      mainAxisAlignment: pw.MainAxisAlignment.start,
-      crossAxisAlignment: pw.CrossAxisAlignment.start,
-      children: [
-        pw.Text(
-          '${context.organizationEmail} / ${context.organizationPhone}',
-          style: const pw.TextStyle(fontSize: 9),
-        ),
-        pw.SizedBox(height: 4),
-        smallText('Printed by: ${context.userName}, ${_formatDate(context.printDate)}'),
-      ],
-    ),
-  );
-}
-
-/// Box 2: Organization logo (bottom-left, no border)
-pw.Widget _buildBox2Logo(pw.ImageProvider logo) {
-  return pw.Container(
-    padding: const pw.EdgeInsets.all(8),
-    child: pw.Center(
-      child: pw.Image(
-        logo,
-        height: _LabelCoordinates.h(500), // Scale logo proportionally
-        fit: pw.BoxFit.contain,
-      ),
-    ),
-  );
-}
-
-/// Box 3: Container number (top-center, with border)
-pw.Widget _buildBox3ContainerNumber(PackingList list) {
-  return pw.Container(
-    decoration: _BoxSpec.box3.hasBorder
-      ? pw.BoxDecoration(border: pw.Border.all(width: 0.5))
-      : null,
-    padding: const pw.EdgeInsets.all(8),
-    child: pw.Center(
-      child: pw.Row(
-        mainAxisAlignment: pw.MainAxisAlignment.center,
-        crossAxisAlignment: pw.CrossAxisAlignment.center,
-        children: [
-          pw.Text(
-            '#:',
-            style: pw.TextStyle(fontSize: 24),
-          ),
-          pw.SizedBox(width: 16),
-          pw.Text(
-            '${list.containerNo}',
-            style: pw.TextStyle(
-              fontSize: 96,
-              fontWeight: pw.FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
-/// Box 4: Priority badge (bottom-center, no border)
-pw.Widget _buildBox4PriorityBadge(PackingList list) {
-  // Always show badge - buildPriorityBadge handles the rendering
-  return pw.Container(
-    padding: const pw.EdgeInsets.all(8),
-    child: pw.Center(
-      child: buildPriorityBadge(
-        priority: list.priority,
-        destination: list.destination,
-        widthCm: _LabelCoordinates.w(450) / cm,  // Convert points to cm
-        heightCm: _LabelCoordinates.h(450) / cm, // Convert points to cm
-      ),
-    ),
-  );
-}
-
-/// Box 5: Container details (top-right, with border)
-pw.Widget _buildBox5Details(PackingList list) {
-  return pw.Container(
-    decoration: _BoxSpec.box5.hasBorder
-      ? pw.BoxDecoration(border: pw.Border.all(width: 0.5))
-      : null,
-    padding: const pw.EdgeInsets.all(8),
-    child: pw.Column(
-      mainAxisAlignment: pw.MainAxisAlignment.start,
-      crossAxisAlignment: pw.CrossAxisAlignment.start,
-      children: [
-        _buildInfoLine('Name', list.containerName),
-        pw.SizedBox(height: 4),
-        _buildInfoLine('Description', list.containerDescription),
-        pw.SizedBox(height: 4),
-        _buildInfoLine('Type', list.containerType),
-      ],
-    ),
-  );
-}
-
-/// Box 6: Weight display with icon (bottom-right, with border)
-pw.Widget _buildBox6Weight(PackingList list, pw.ImageProvider weightIcon) {
-  return pw.Container(
-    decoration: _BoxSpec.box6.hasBorder
-      ? pw.BoxDecoration(border: pw.Border.all(width: 0.5))
-      : null,
-    padding: const pw.EdgeInsets.all(8),
-    child: pw.Center(
-      child: pw.Row(
-        mainAxisAlignment: pw.MainAxisAlignment.center,
-        crossAxisAlignment: pw.CrossAxisAlignment.center,
-        children: [
-          // Weight icon
-          pw.Image(
-            weightIcon,
-            width: 40,
-            height: 40,
-            fit: pw.BoxFit.contain,
-          ),
-          pw.SizedBox(height: 6),
-          // Weight value
-          pw.Text(
-            '${list.totalWeight.round()}',
-            style: pw.TextStyle(
-              fontSize: 32,
-              fontWeight: pw.FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
 /// Builds the first label page with 6-box absolute positioning layout
 Future<pw.Widget> _buildFirstLabel(
   PackingList list,
@@ -403,67 +271,67 @@ Future<pw.Widget> _buildFirstLabel(
     children: [
       // Box 1: Contact info (top-left, with border)
       pw.Positioned(
-        left: _LabelCoordinates.y(_BoxSpec.box1.y),
-        top: _LabelCoordinates.x(_BoxSpec.box1.x),
+        left: LabelCoordinates.y(_BoxSpec.box1.y),
+        top: LabelCoordinates.x(_BoxSpec.box1.x),
         child: pw.SizedBox(
-          width: _LabelCoordinates.h(_BoxSpec.box1.height),
-          height: _LabelCoordinates.w(_BoxSpec.box1.width),
-          child: _buildBox1ContactInfo(context),
+          width: LabelCoordinates.h(_BoxSpec.box1.height),
+          height: LabelCoordinates.w(_BoxSpec.box1.width),
+          child: ContactInfoBox(context: context).build(),
         ),
       ),
 
       // Box 2: Logo (bottom-left, no border)
       pw.Positioned(
-        left: _LabelCoordinates.y(_BoxSpec.box2.y),
-        top: _LabelCoordinates.x(_BoxSpec.box2.x),
+        left: LabelCoordinates.y(_BoxSpec.box2.y),
+        top: LabelCoordinates.x(_BoxSpec.box2.x),
         child: pw.SizedBox(
-          width: _LabelCoordinates.h(_BoxSpec.box2.height),
-          height: _LabelCoordinates.w(_BoxSpec.box2.width),
-          child: _buildBox2Logo(logo),
+          width: LabelCoordinates.h(_BoxSpec.box2.height),
+          height: LabelCoordinates.w(_BoxSpec.box2.width),
+          child: LogoBox(logo: logo).build(),
         ),
       ),
 
       // Box 3: Container number (top-center, with border)
       pw.Positioned(
-        left: _LabelCoordinates.y(_BoxSpec.box3.y),
-        top: _LabelCoordinates.x(_BoxSpec.box3.x),
+        left: LabelCoordinates.y(_BoxSpec.box3.y),
+        top: LabelCoordinates.x(_BoxSpec.box3.x),
         child: pw.SizedBox(
-          width: _LabelCoordinates.h(_BoxSpec.box3.height),
-          height: _LabelCoordinates.w(_BoxSpec.box3.width),
-          child: _buildBox3ContainerNumber(list),
+          width: LabelCoordinates.h(_BoxSpec.box3.height),
+          height: LabelCoordinates.w(_BoxSpec.box3.width),
+          child: ContainerNumberBox(list: list).build(),
         ),
       ),
 
       // Box 4: Priority badge (bottom-center, no border)
       pw.Positioned(
-        left: _LabelCoordinates.y(_BoxSpec.box4.y),
-        top: _LabelCoordinates.x(_BoxSpec.box4.x),
+        left: LabelCoordinates.y(_BoxSpec.box4.y),
+        top: LabelCoordinates.x(_BoxSpec.box4.x),
         child: pw.SizedBox(
-          width: _LabelCoordinates.h(_BoxSpec.box4.height),
-          height: _LabelCoordinates.w(_BoxSpec.box4.width),
-          child: _buildBox4PriorityBadge(list),
+          width: LabelCoordinates.h(_BoxSpec.box4.height),
+          height: LabelCoordinates.w(_BoxSpec.box4.width),
+          child: PriorityBadgeBox(list: list).build(),
         ),
       ),
 
       // Box 5: Details (top-right, with border)
       pw.Positioned(
-        left: _LabelCoordinates.y(_BoxSpec.box5.y),
-        top: _LabelCoordinates.x(_BoxSpec.box5.x),
+        left: LabelCoordinates.y(_BoxSpec.box5.y),
+        top: LabelCoordinates.x(_BoxSpec.box5.x),
         child: pw.SizedBox(
-          width: _LabelCoordinates.h(_BoxSpec.box5.height),
-          height: _LabelCoordinates.w(_BoxSpec.box5.width),
-          child: _buildBox5Details(list),
+          width: LabelCoordinates.h(_BoxSpec.box5.height),
+          height: LabelCoordinates.w(_BoxSpec.box5.width),
+          child: DetailsBox(list: list).build(),
         ),
       ),
 
       // Box 6: Weight (bottom-right, with border)
       pw.Positioned(
-        left: _LabelCoordinates.y(_BoxSpec.box6.y),
-        top: _LabelCoordinates.x(_BoxSpec.box6.x),
+        left: LabelCoordinates.y(_BoxSpec.box6.y),
+        top: LabelCoordinates.x(_BoxSpec.box6.x),
         child: pw.SizedBox(
-          width: _LabelCoordinates.h(_BoxSpec.box6.height),
-          height: _LabelCoordinates.w(_BoxSpec.box6.width),
-          child: _buildBox6Weight(list, weightIcon),
+          width: LabelCoordinates.h(_BoxSpec.box6.height),
+          height: LabelCoordinates.w(_BoxSpec.box6.width),
+          child: WeightBox(list: list, weightIcon: weightIcon).build(),
         ),
       ),
     ],
@@ -474,30 +342,6 @@ Future<pw.Widget> _buildFirstLabel(
 Future<pw.ImageProvider> _loadLogo(String assetPath) async {
   final ByteData data = await rootBundle.load(assetPath);
   return pw.MemoryImage(data.buffer.asUint8List());
-}
-
-/// Build an info line with label and value
-pw.Widget _buildInfoLine(String label, String value) {
-  return pw.Row(
-    crossAxisAlignment: pw.CrossAxisAlignment.start,
-    children: [
-      pw.Text(
-        '$label: ',
-        style: const pw.TextStyle(fontSize: 9),
-      ),
-      pw.Expanded(
-        child: pw.Text(
-          value,
-          style: pw.TextStyle(
-            fontSize: 9,
-            fontWeight: pw.FontWeight.bold,
-          ),
-          maxLines: 1,
-          overflow: pw.TextOverflow.clip,
-        ),
-      ),
-    ],
-  );
 }
 
 /// Build subsequent labels (pages 2+)
