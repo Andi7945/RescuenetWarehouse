@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ModuleDestination {
 
- String get id; String get name;
+ String get id; String get name; int get priority;
 /// Create a copy of ModuleDestination
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $ModuleDestinationCopyWith<ModuleDestination> get copyWith => _$ModuleDestinatio
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ModuleDestination&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ModuleDestination&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.priority, priority) || other.priority == priority));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name);
+int get hashCode => Object.hash(runtimeType,id,name,priority);
 
 @override
 String toString() {
-  return 'ModuleDestination(id: $id, name: $name)';
+  return 'ModuleDestination(id: $id, name: $name, priority: $priority)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $ModuleDestinationCopyWith<$Res>  {
   factory $ModuleDestinationCopyWith(ModuleDestination value, $Res Function(ModuleDestination) _then) = _$ModuleDestinationCopyWithImpl;
 @useResult
 $Res call({
- String id, String name
+ String id, String name, int priority
 });
 
 
@@ -65,11 +65,12 @@ class _$ModuleDestinationCopyWithImpl<$Res>
 
 /// Create a copy of ModuleDestination
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? priority = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,
+as String,priority: null == priority ? _self.priority : priority // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 
@@ -154,10 +155,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  int priority)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ModuleDestination() when $default != null:
-return $default(_that.id,_that.name);case _:
+return $default(_that.id,_that.name,_that.priority);case _:
   return orElse();
 
 }
@@ -175,10 +176,10 @@ return $default(_that.id,_that.name);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  int priority)  $default,) {final _that = this;
 switch (_that) {
 case _ModuleDestination():
-return $default(_that.id,_that.name);case _:
+return $default(_that.id,_that.name,_that.priority);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,10 +196,10 @@ return $default(_that.id,_that.name);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  int priority)?  $default,) {final _that = this;
 switch (_that) {
 case _ModuleDestination() when $default != null:
-return $default(_that.id,_that.name);case _:
+return $default(_that.id,_that.name,_that.priority);case _:
   return null;
 
 }
@@ -210,11 +211,12 @@ return $default(_that.id,_that.name);case _:
 @JsonSerializable()
 
 class _ModuleDestination implements ModuleDestination {
-  const _ModuleDestination({required this.id, required this.name});
+  const _ModuleDestination({required this.id, required this.name, this.priority = 1});
   factory _ModuleDestination.fromJson(Map<String, dynamic> json) => _$ModuleDestinationFromJson(json);
 
 @override final  String id;
 @override final  String name;
+@override@JsonKey() final  int priority;
 
 /// Create a copy of ModuleDestination
 /// with the given fields replaced by the non-null parameter values.
@@ -229,16 +231,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ModuleDestination&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ModuleDestination&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.priority, priority) || other.priority == priority));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name);
+int get hashCode => Object.hash(runtimeType,id,name,priority);
 
 @override
 String toString() {
-  return 'ModuleDestination(id: $id, name: $name)';
+  return 'ModuleDestination(id: $id, name: $name, priority: $priority)';
 }
 
 
@@ -249,7 +251,7 @@ abstract mixin class _$ModuleDestinationCopyWith<$Res> implements $ModuleDestina
   factory _$ModuleDestinationCopyWith(_ModuleDestination value, $Res Function(_ModuleDestination) _then) = __$ModuleDestinationCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name
+ String id, String name, int priority
 });
 
 
@@ -266,11 +268,12 @@ class __$ModuleDestinationCopyWithImpl<$Res>
 
 /// Create a copy of ModuleDestination
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? priority = null,}) {
   return _then(_ModuleDestination(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,
+as String,priority: null == priority ? _self.priority : priority // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 

@@ -9,6 +9,7 @@ import 'package:rescuenet_warehouse/features/printing/domain/print_context.dart'
 import 'package:rescuenet_warehouse/pdf/packing_list.dart';
 
 import 'common/pdf_base_widgets.dart';
+import 'common/priority_badge_widget.dart';
 
 /// Generate container label PDF document from multiple packing lists
 ///
@@ -255,7 +256,7 @@ Future<pw.Widget> _buildTopRow(
                 pw.SizedBox(height: 8),
                 smallText('Printed by: ${context.userName}'),
                 pw.SizedBox(height: 2),
-                smallText('Date: ${context.formattedDate}'),
+                smallText('Date: ${_formatDate(context.printDate)}'),
               ],
             ),
           ),
@@ -315,7 +316,7 @@ pw.Widget _buildMiddleRow(PackingList list) {
           ),
         ),
 
-        // Right 40%: Destination
+        // Right 40%: Priority badge
         pw.Expanded(
           flex: 40,
           child: pw.Container(
@@ -323,27 +324,11 @@ pw.Widget _buildMiddleRow(PackingList list) {
             decoration: pw.BoxDecoration(
               border: pw.Border(left: pw.BorderSide(width: 0.5)),
             ),
-            child: pw.Column(
-              crossAxisAlignment: pw.CrossAxisAlignment.start,
-              mainAxisAlignment: pw.MainAxisAlignment.center,
-              children: [
-                pw.Text(
-                  'Destination',
-                  style: pw.TextStyle(
-                    fontSize: 9,
-                  ),
-                ),
-                pw.SizedBox(height: 4),
-                pw.Text(
-                  list.destination,
-                  style: pw.TextStyle(
-                    fontSize: 14,
-                    fontWeight: pw.FontWeight.bold,
-                  ),
-                  maxLines: 3,
-                  overflow: pw.TextOverflow.clip,
-                ),
-              ],
+            child: buildPriorityBadge(
+              priority: list.priority,
+              destination: list.destination,
+              widthCm: 3.5,
+              heightCm: 3.0,
             ),
           ),
         ),
@@ -530,7 +515,7 @@ pw.Widget _buildInfoBox(PrintContext context) {
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
         smallText("Printed by: ${context.userName}"),
-        smallText("Date: ${context.formattedDate}"),
+        smallText("Date: ${_formatDate(context.printDate)}"),
       ],
     ),
   );
@@ -542,3 +527,12 @@ pw.Widget _buildBox(pw.Widget w) => pw.Container(
   decoration: pw.BoxDecoration(border: pw.Border.all(width: 0.5)),
   child: w,
 );
+
+/// Formats date in readable format (e.g., "November 14, 2025")
+String _formatDate(DateTime date) {
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+  return '${months[date.month - 1]} ${date.day}, ${date.year}';
+}

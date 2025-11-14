@@ -14,6 +14,7 @@ abstract class PackingList with _$PackingList {
     required String containerDescription,
     required double totalWeight,
     required String destination,
+    @Default(1) int priority,
     required SequentialBuild sequentialBuild,
     required DateTime? expirationDate,
     required List<PackingDangerousGood> dangerousGoods,

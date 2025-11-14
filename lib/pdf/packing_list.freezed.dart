@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PackingList {
 
- int get containerNo; String get containerType; String get containerName; String get containerDescription; double get totalWeight; String get destination; SequentialBuild get sequentialBuild; DateTime? get expirationDate; List<PackingDangerousGood> get dangerousGoods; List<PackingItem> get items;
+ int get containerNo; String get containerType; String get containerName; String get containerDescription; double get totalWeight; String get destination; int get priority; SequentialBuild get sequentialBuild; DateTime? get expirationDate; List<PackingDangerousGood> get dangerousGoods; List<PackingItem> get items;
 /// Create a copy of PackingList
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $PackingListCopyWith<PackingList> get copyWith => _$PackingListCopyWithImpl<Pack
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PackingList&&(identical(other.containerNo, containerNo) || other.containerNo == containerNo)&&(identical(other.containerType, containerType) || other.containerType == containerType)&&(identical(other.containerName, containerName) || other.containerName == containerName)&&(identical(other.containerDescription, containerDescription) || other.containerDescription == containerDescription)&&(identical(other.totalWeight, totalWeight) || other.totalWeight == totalWeight)&&(identical(other.destination, destination) || other.destination == destination)&&(identical(other.sequentialBuild, sequentialBuild) || other.sequentialBuild == sequentialBuild)&&(identical(other.expirationDate, expirationDate) || other.expirationDate == expirationDate)&&const DeepCollectionEquality().equals(other.dangerousGoods, dangerousGoods)&&const DeepCollectionEquality().equals(other.items, items));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PackingList&&(identical(other.containerNo, containerNo) || other.containerNo == containerNo)&&(identical(other.containerType, containerType) || other.containerType == containerType)&&(identical(other.containerName, containerName) || other.containerName == containerName)&&(identical(other.containerDescription, containerDescription) || other.containerDescription == containerDescription)&&(identical(other.totalWeight, totalWeight) || other.totalWeight == totalWeight)&&(identical(other.destination, destination) || other.destination == destination)&&(identical(other.priority, priority) || other.priority == priority)&&(identical(other.sequentialBuild, sequentialBuild) || other.sequentialBuild == sequentialBuild)&&(identical(other.expirationDate, expirationDate) || other.expirationDate == expirationDate)&&const DeepCollectionEquality().equals(other.dangerousGoods, dangerousGoods)&&const DeepCollectionEquality().equals(other.items, items));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,containerNo,containerType,containerName,containerDescription,totalWeight,destination,sequentialBuild,expirationDate,const DeepCollectionEquality().hash(dangerousGoods),const DeepCollectionEquality().hash(items));
+int get hashCode => Object.hash(runtimeType,containerNo,containerType,containerName,containerDescription,totalWeight,destination,priority,sequentialBuild,expirationDate,const DeepCollectionEquality().hash(dangerousGoods),const DeepCollectionEquality().hash(items));
 
 @override
 String toString() {
-  return 'PackingList(containerNo: $containerNo, containerType: $containerType, containerName: $containerName, containerDescription: $containerDescription, totalWeight: $totalWeight, destination: $destination, sequentialBuild: $sequentialBuild, expirationDate: $expirationDate, dangerousGoods: $dangerousGoods, items: $items)';
+  return 'PackingList(containerNo: $containerNo, containerType: $containerType, containerName: $containerName, containerDescription: $containerDescription, totalWeight: $totalWeight, destination: $destination, priority: $priority, sequentialBuild: $sequentialBuild, expirationDate: $expirationDate, dangerousGoods: $dangerousGoods, items: $items)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $PackingListCopyWith<$Res>  {
   factory $PackingListCopyWith(PackingList value, $Res Function(PackingList) _then) = _$PackingListCopyWithImpl;
 @useResult
 $Res call({
- int containerNo, String containerType, String containerName, String containerDescription, double totalWeight, String destination, SequentialBuild sequentialBuild, DateTime? expirationDate, List<PackingDangerousGood> dangerousGoods, List<PackingItem> items
+ int containerNo, String containerType, String containerName, String containerDescription, double totalWeight, String destination, int priority, SequentialBuild sequentialBuild, DateTime? expirationDate, List<PackingDangerousGood> dangerousGoods, List<PackingItem> items
 });
 
 
@@ -62,7 +62,7 @@ class _$PackingListCopyWithImpl<$Res>
 
 /// Create a copy of PackingList
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? containerNo = null,Object? containerType = null,Object? containerName = null,Object? containerDescription = null,Object? totalWeight = null,Object? destination = null,Object? sequentialBuild = null,Object? expirationDate = freezed,Object? dangerousGoods = null,Object? items = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? containerNo = null,Object? containerType = null,Object? containerName = null,Object? containerDescription = null,Object? totalWeight = null,Object? destination = null,Object? priority = null,Object? sequentialBuild = null,Object? expirationDate = freezed,Object? dangerousGoods = null,Object? items = null,}) {
   return _then(_self.copyWith(
 containerNo: null == containerNo ? _self.containerNo : containerNo // ignore: cast_nullable_to_non_nullable
 as int,containerType: null == containerType ? _self.containerType : containerType // ignore: cast_nullable_to_non_nullable
@@ -70,7 +70,8 @@ as String,containerName: null == containerName ? _self.containerName : container
 as String,containerDescription: null == containerDescription ? _self.containerDescription : containerDescription // ignore: cast_nullable_to_non_nullable
 as String,totalWeight: null == totalWeight ? _self.totalWeight : totalWeight // ignore: cast_nullable_to_non_nullable
 as double,destination: null == destination ? _self.destination : destination // ignore: cast_nullable_to_non_nullable
-as String,sequentialBuild: null == sequentialBuild ? _self.sequentialBuild : sequentialBuild // ignore: cast_nullable_to_non_nullable
+as String,priority: null == priority ? _self.priority : priority // ignore: cast_nullable_to_non_nullable
+as int,sequentialBuild: null == sequentialBuild ? _self.sequentialBuild : sequentialBuild // ignore: cast_nullable_to_non_nullable
 as SequentialBuild,expirationDate: freezed == expirationDate ? _self.expirationDate : expirationDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,dangerousGoods: null == dangerousGoods ? _self.dangerousGoods : dangerousGoods // ignore: cast_nullable_to_non_nullable
 as List<PackingDangerousGood>,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
@@ -159,10 +160,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int containerNo,  String containerType,  String containerName,  String containerDescription,  double totalWeight,  String destination,  SequentialBuild sequentialBuild,  DateTime? expirationDate,  List<PackingDangerousGood> dangerousGoods,  List<PackingItem> items)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int containerNo,  String containerType,  String containerName,  String containerDescription,  double totalWeight,  String destination,  int priority,  SequentialBuild sequentialBuild,  DateTime? expirationDate,  List<PackingDangerousGood> dangerousGoods,  List<PackingItem> items)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PackingList() when $default != null:
-return $default(_that.containerNo,_that.containerType,_that.containerName,_that.containerDescription,_that.totalWeight,_that.destination,_that.sequentialBuild,_that.expirationDate,_that.dangerousGoods,_that.items);case _:
+return $default(_that.containerNo,_that.containerType,_that.containerName,_that.containerDescription,_that.totalWeight,_that.destination,_that.priority,_that.sequentialBuild,_that.expirationDate,_that.dangerousGoods,_that.items);case _:
   return orElse();
 
 }
@@ -180,10 +181,10 @@ return $default(_that.containerNo,_that.containerType,_that.containerName,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int containerNo,  String containerType,  String containerName,  String containerDescription,  double totalWeight,  String destination,  SequentialBuild sequentialBuild,  DateTime? expirationDate,  List<PackingDangerousGood> dangerousGoods,  List<PackingItem> items)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int containerNo,  String containerType,  String containerName,  String containerDescription,  double totalWeight,  String destination,  int priority,  SequentialBuild sequentialBuild,  DateTime? expirationDate,  List<PackingDangerousGood> dangerousGoods,  List<PackingItem> items)  $default,) {final _that = this;
 switch (_that) {
 case _PackingList():
-return $default(_that.containerNo,_that.containerType,_that.containerName,_that.containerDescription,_that.totalWeight,_that.destination,_that.sequentialBuild,_that.expirationDate,_that.dangerousGoods,_that.items);case _:
+return $default(_that.containerNo,_that.containerType,_that.containerName,_that.containerDescription,_that.totalWeight,_that.destination,_that.priority,_that.sequentialBuild,_that.expirationDate,_that.dangerousGoods,_that.items);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -200,10 +201,10 @@ return $default(_that.containerNo,_that.containerType,_that.containerName,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int containerNo,  String containerType,  String containerName,  String containerDescription,  double totalWeight,  String destination,  SequentialBuild sequentialBuild,  DateTime? expirationDate,  List<PackingDangerousGood> dangerousGoods,  List<PackingItem> items)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int containerNo,  String containerType,  String containerName,  String containerDescription,  double totalWeight,  String destination,  int priority,  SequentialBuild sequentialBuild,  DateTime? expirationDate,  List<PackingDangerousGood> dangerousGoods,  List<PackingItem> items)?  $default,) {final _that = this;
 switch (_that) {
 case _PackingList() when $default != null:
-return $default(_that.containerNo,_that.containerType,_that.containerName,_that.containerDescription,_that.totalWeight,_that.destination,_that.sequentialBuild,_that.expirationDate,_that.dangerousGoods,_that.items);case _:
+return $default(_that.containerNo,_that.containerType,_that.containerName,_that.containerDescription,_that.totalWeight,_that.destination,_that.priority,_that.sequentialBuild,_that.expirationDate,_that.dangerousGoods,_that.items);case _:
   return null;
 
 }
@@ -215,7 +216,7 @@ return $default(_that.containerNo,_that.containerType,_that.containerName,_that.
 
 
 class _PackingList implements PackingList {
-  const _PackingList({required this.containerNo, required this.containerType, required this.containerName, required this.containerDescription, required this.totalWeight, required this.destination, required this.sequentialBuild, required this.expirationDate, required final  List<PackingDangerousGood> dangerousGoods, required final  List<PackingItem> items}): _dangerousGoods = dangerousGoods,_items = items;
+  const _PackingList({required this.containerNo, required this.containerType, required this.containerName, required this.containerDescription, required this.totalWeight, required this.destination, this.priority = 1, required this.sequentialBuild, required this.expirationDate, required final  List<PackingDangerousGood> dangerousGoods, required final  List<PackingItem> items}): _dangerousGoods = dangerousGoods,_items = items;
   
 
 @override final  int containerNo;
@@ -224,6 +225,7 @@ class _PackingList implements PackingList {
 @override final  String containerDescription;
 @override final  double totalWeight;
 @override final  String destination;
+@override@JsonKey() final  int priority;
 @override final  SequentialBuild sequentialBuild;
 @override final  DateTime? expirationDate;
  final  List<PackingDangerousGood> _dangerousGoods;
@@ -251,16 +253,16 @@ _$PackingListCopyWith<_PackingList> get copyWith => __$PackingListCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PackingList&&(identical(other.containerNo, containerNo) || other.containerNo == containerNo)&&(identical(other.containerType, containerType) || other.containerType == containerType)&&(identical(other.containerName, containerName) || other.containerName == containerName)&&(identical(other.containerDescription, containerDescription) || other.containerDescription == containerDescription)&&(identical(other.totalWeight, totalWeight) || other.totalWeight == totalWeight)&&(identical(other.destination, destination) || other.destination == destination)&&(identical(other.sequentialBuild, sequentialBuild) || other.sequentialBuild == sequentialBuild)&&(identical(other.expirationDate, expirationDate) || other.expirationDate == expirationDate)&&const DeepCollectionEquality().equals(other._dangerousGoods, _dangerousGoods)&&const DeepCollectionEquality().equals(other._items, _items));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PackingList&&(identical(other.containerNo, containerNo) || other.containerNo == containerNo)&&(identical(other.containerType, containerType) || other.containerType == containerType)&&(identical(other.containerName, containerName) || other.containerName == containerName)&&(identical(other.containerDescription, containerDescription) || other.containerDescription == containerDescription)&&(identical(other.totalWeight, totalWeight) || other.totalWeight == totalWeight)&&(identical(other.destination, destination) || other.destination == destination)&&(identical(other.priority, priority) || other.priority == priority)&&(identical(other.sequentialBuild, sequentialBuild) || other.sequentialBuild == sequentialBuild)&&(identical(other.expirationDate, expirationDate) || other.expirationDate == expirationDate)&&const DeepCollectionEquality().equals(other._dangerousGoods, _dangerousGoods)&&const DeepCollectionEquality().equals(other._items, _items));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,containerNo,containerType,containerName,containerDescription,totalWeight,destination,sequentialBuild,expirationDate,const DeepCollectionEquality().hash(_dangerousGoods),const DeepCollectionEquality().hash(_items));
+int get hashCode => Object.hash(runtimeType,containerNo,containerType,containerName,containerDescription,totalWeight,destination,priority,sequentialBuild,expirationDate,const DeepCollectionEquality().hash(_dangerousGoods),const DeepCollectionEquality().hash(_items));
 
 @override
 String toString() {
-  return 'PackingList(containerNo: $containerNo, containerType: $containerType, containerName: $containerName, containerDescription: $containerDescription, totalWeight: $totalWeight, destination: $destination, sequentialBuild: $sequentialBuild, expirationDate: $expirationDate, dangerousGoods: $dangerousGoods, items: $items)';
+  return 'PackingList(containerNo: $containerNo, containerType: $containerType, containerName: $containerName, containerDescription: $containerDescription, totalWeight: $totalWeight, destination: $destination, priority: $priority, sequentialBuild: $sequentialBuild, expirationDate: $expirationDate, dangerousGoods: $dangerousGoods, items: $items)';
 }
 
 
@@ -271,7 +273,7 @@ abstract mixin class _$PackingListCopyWith<$Res> implements $PackingListCopyWith
   factory _$PackingListCopyWith(_PackingList value, $Res Function(_PackingList) _then) = __$PackingListCopyWithImpl;
 @override @useResult
 $Res call({
- int containerNo, String containerType, String containerName, String containerDescription, double totalWeight, String destination, SequentialBuild sequentialBuild, DateTime? expirationDate, List<PackingDangerousGood> dangerousGoods, List<PackingItem> items
+ int containerNo, String containerType, String containerName, String containerDescription, double totalWeight, String destination, int priority, SequentialBuild sequentialBuild, DateTime? expirationDate, List<PackingDangerousGood> dangerousGoods, List<PackingItem> items
 });
 
 
@@ -288,7 +290,7 @@ class __$PackingListCopyWithImpl<$Res>
 
 /// Create a copy of PackingList
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? containerNo = null,Object? containerType = null,Object? containerName = null,Object? containerDescription = null,Object? totalWeight = null,Object? destination = null,Object? sequentialBuild = null,Object? expirationDate = freezed,Object? dangerousGoods = null,Object? items = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? containerNo = null,Object? containerType = null,Object? containerName = null,Object? containerDescription = null,Object? totalWeight = null,Object? destination = null,Object? priority = null,Object? sequentialBuild = null,Object? expirationDate = freezed,Object? dangerousGoods = null,Object? items = null,}) {
   return _then(_PackingList(
 containerNo: null == containerNo ? _self.containerNo : containerNo // ignore: cast_nullable_to_non_nullable
 as int,containerType: null == containerType ? _self.containerType : containerType // ignore: cast_nullable_to_non_nullable
@@ -296,7 +298,8 @@ as String,containerName: null == containerName ? _self.containerName : container
 as String,containerDescription: null == containerDescription ? _self.containerDescription : containerDescription // ignore: cast_nullable_to_non_nullable
 as String,totalWeight: null == totalWeight ? _self.totalWeight : totalWeight // ignore: cast_nullable_to_non_nullable
 as double,destination: null == destination ? _self.destination : destination // ignore: cast_nullable_to_non_nullable
-as String,sequentialBuild: null == sequentialBuild ? _self.sequentialBuild : sequentialBuild // ignore: cast_nullable_to_non_nullable
+as String,priority: null == priority ? _self.priority : priority // ignore: cast_nullable_to_non_nullable
+as int,sequentialBuild: null == sequentialBuild ? _self.sequentialBuild : sequentialBuild // ignore: cast_nullable_to_non_nullable
 as SequentialBuild,expirationDate: freezed == expirationDate ? _self.expirationDate : expirationDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,dangerousGoods: null == dangerousGoods ? _self._dangerousGoods : dangerousGoods // ignore: cast_nullable_to_non_nullable
 as List<PackingDangerousGood>,items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable

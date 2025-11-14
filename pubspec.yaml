@@ -98,6 +98,7 @@ flutter:
     - assets/images/
     - assets/signes/
     - assets/fonts/liberation_sans/
+    - assets/priority_badges/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
