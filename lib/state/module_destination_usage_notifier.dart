@@ -18,7 +18,7 @@ class ModuleDestinationUsageNotifier extends _$ModuleDestinationUsageNotifier {
     return containersAsync.when(
       data: (containers) {
         Map<ModuleDestination, Set<String>> grouped = containers
-            .where((element) => element.type != null)
+            .where((element) => element.type != null && element.moduleDestination != null)
             .groupBy((p0) => p0.moduleDestination!)
             .mapValues(
               (value) => value.map((e) => e.printName).whereNotNull().toSet(),
