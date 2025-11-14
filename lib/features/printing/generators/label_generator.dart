@@ -91,7 +91,7 @@ Future<List<pw.Widget>> _buildLabelsForContainer(
 /// Pure function that takes a flat list of label widgets and arranges them
 /// into PDF pages according to the specified format:
 /// - A6 format: one label per A6 page
-/// - A4 2×2 format: four labels per A4 page in a 2×2 grid
+/// - A4 2×2 format: each label printed 5 times, four labels per A4 page in a 2×2 grid
 List<pw.Page> _buildPages(List<pw.Widget> labels, LabelFormat format) {
   final pages = <pw.Page>[];
 
@@ -101,12 +101,20 @@ List<pw.Page> _buildPages(List<pw.Widget> labels, LabelFormat format) {
       pages.add(_labelPageA6(label));
     }
   } else {
-    // A4 2×2 format: four labels per page in a grid
-    for (var i = 0; i < labels.length; i += 4) {
-      final topLeft = labels[i];
-      final topRight = i + 1 < labels.length ? labels[i + 1] : null;
-      final bottomLeft = i + 2 < labels.length ? labels[i + 2] : null;
-      final bottomRight = i + 3 < labels.length ? labels[i + 3] : null;
+    // A4 2×2 format: duplicate each label 5 times before arranging
+    final expandedLabels = <pw.Widget>[];
+    for (final label in labels) {
+      for (var i = 0; i < 5; i++) {
+        expandedLabels.add(label);
+      }
+    }
+
+    // Four labels per page in a grid
+    for (var i = 0; i < expandedLabels.length; i += 4) {
+      final topLeft = expandedLabels[i];
+      final topRight = i + 1 < expandedLabels.length ? expandedLabels[i + 1] : null;
+      final bottomLeft = i + 2 < expandedLabels.length ? expandedLabels[i + 2] : null;
+      final bottomRight = i + 3 < expandedLabels.length ? expandedLabels[i + 3] : null;
 
       pages.add(_labelPageA4Grid(topLeft, topRight, bottomLeft, bottomRight));
     }
