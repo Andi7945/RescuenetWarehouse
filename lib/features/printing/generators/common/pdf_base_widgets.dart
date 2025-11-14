@@ -247,3 +247,36 @@ pw.Widget _dangerousGoodsTable(PackingDangerousGood good) => pw.Table(
     smallRow("Remarks:", good.remarks),
   ],
 );
+
+/// Draws a weight/scale icon (triangular/trapezoid shape)
+/// Used in label weight display to match V2 design
+void drawWeightIcon(PdfGraphics canvas, PdfPoint size, PdfColor fillColor) {
+  final width = size.x;
+  final height = size.y;
+
+  // Draw trapezoid shape representing a weight/scale
+  canvas
+    ..setFillColor(fillColor)
+    ..setStrokeColor(PdfColors.black)
+    ..setLineWidth(1.5)
+    // Top line (narrower)
+    ..moveTo(width * 0.25, height * 0.2)
+    ..lineTo(width * 0.75, height * 0.2)
+    // Right slant
+    ..lineTo(width * 0.85, height * 0.7)
+    // Bottom line (wider)
+    ..lineTo(width * 0.15, height * 0.7)
+    // Left slant back to top
+    ..closePath()
+    ..fillPath();
+
+  // Draw small circle on top (weight handle)
+  final handleCenterX = width / 2;
+  final handleCenterY = height * 0.12;
+  final handleRadius = width * 0.08;
+
+  canvas
+    ..setFillColor(fillColor)
+    ..drawEllipse(handleCenterX, handleCenterY, handleRadius, handleRadius)
+    ..fillPath();
+}

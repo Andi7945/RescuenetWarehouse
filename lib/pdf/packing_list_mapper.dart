@@ -3,10 +3,27 @@ import 'package:rescuenet_warehouse/pdf/packing_item.dart';
 import 'package:rescuenet_warehouse/pdf/packing_list.dart';
 import 'package:rescuenet_warehouse/pdf/pdf_mapper_utils.dart';
 
+import '../models/container_type.dart';
 import '../models/item.dart';
 import '../item_utils.dart';
 import '../models/rescue_container.dart';
 import '../models/sign.dart';
+
+/// Formats container type with measurements.
+/// Returns format: "{name} {measurements}" or just name if no measurements.
+/// Example: "Euro L60 x W40 x H32"
+String _formatContainerType(ContainerType? type) {
+  if (type == null) return "";
+
+  final name = type.name;
+  final measurements = type.measurements;
+
+  if (measurements.isEmpty) {
+    return name;
+  }
+
+  return "$name $measurements";
+}
 
 List<PackingList> mapPackingList(
   Map<RescueContainer, Map<Item, int>> containerWithItems,
@@ -17,7 +34,7 @@ List<PackingList> mapPackingList(
 PackingList _single(MapEntry<RescueContainer, Map<Item, int>> entry) =>
     PackingList(
       containerNo: entry.key.number,
-      containerType: entry.key.type?.name ?? "",
+      containerType: _formatContainerType(entry.key.type),
       containerName: entry.key.printName,
       containerDescription: entry.key.description ?? "",
       totalWeight: sumItemWeight(entry.key, entry.value),

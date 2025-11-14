@@ -250,13 +250,12 @@ Future<pw.Widget> _buildTopRow(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               mainAxisSize: pw.MainAxisSize.min,
               children: [
-                _buildInfoLine('Email', context.organizationEmail),
-                pw.SizedBox(height: 4),
-                _buildInfoLine('Phone', context.organizationPhone),
+                pw.Text(
+                  '${context.organizationEmail} / ${context.organizationPhone}',
+                  style: const pw.TextStyle(fontSize: 9),
+                ),
                 pw.SizedBox(height: 8),
-                smallText('Printed by: ${context.userName}'),
-                pw.SizedBox(height: 2),
-                smallText('Date: ${_formatDate(context.printDate)}'),
+                smallText('Printed by: ${context.userName}, ${_formatDate(context.printDate)}'),
               ],
             ),
           ),
@@ -374,15 +373,19 @@ pw.Widget _buildBottomRow(PackingList list) {
               mainAxisAlignment: pw.MainAxisAlignment.center,
               crossAxisAlignment: pw.CrossAxisAlignment.center,
               children: [
-                pw.Text(
-                  'Weight',
-                  style: pw.TextStyle(fontSize: 9),
+                // Weight icon
+                pw.CustomPaint(
+                  size: PdfPoint(28, 28),
+                  painter: (canvas, size) {
+                    drawWeightIcon(canvas, size, PdfColors.grey300);
+                  },
                 ),
-                pw.SizedBox(height: 4),
+                pw.SizedBox(height: 6),
+                // Weight value
                 pw.Text(
-                  '${list.totalWeight.round()} kg',
+                  '${list.totalWeight.round()}',
                   style: pw.TextStyle(
-                    fontSize: 16,
+                    fontSize: 20,
                     fontWeight: pw.FontWeight.bold,
                   ),
                 ),
@@ -514,8 +517,7 @@ pw.Widget _buildInfoBox(PrintContext context) {
       mainAxisSize: pw.MainAxisSize.min,
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
-        smallText("Printed by: ${context.userName}"),
-        smallText("Date: ${_formatDate(context.printDate)}"),
+        smallText("Printed by: ${context.userName}, ${_formatDate(context.printDate)}"),
       ],
     ),
   );
@@ -528,11 +530,30 @@ pw.Widget _buildBox(pw.Widget w) => pw.Container(
   child: w,
 );
 
-/// Formats date in readable format (e.g., "November 14, 2025")
+/// Formats date with ordinal day (e.g., "April 19th 2023")
 String _formatDate(DateTime date) {
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
-  return '${months[date.month - 1]} ${date.day}, ${date.year}';
+  final ordinal = _getOrdinalSuffix(date.day);
+  return '${months[date.month - 1]} ${date.day}$ordinal ${date.year}';
+}
+
+/// Returns ordinal suffix for a day number (st, nd, rd, th)
+String _getOrdinalSuffix(int day) {
+  if (day >= 11 && day <= 13) {
+    return 'th'; // Special case: 11th, 12th, 13th
+  }
+
+  switch (day % 10) {
+    case 1:
+      return 'st'; // 1st, 21st, 31st
+    case 2:
+      return 'nd'; // 2nd, 22nd
+    case 3:
+      return 'rd'; // 3rd, 23rd
+    default:
+      return 'th'; // 4th-10th, 14th-20th, 24th-30th
+  }
 }
