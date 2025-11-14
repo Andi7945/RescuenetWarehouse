@@ -11,6 +11,61 @@ import 'package:rescuenet_warehouse/pdf/packing_list.dart';
 import 'common/pdf_base_widgets.dart';
 import 'common/priority_badge_widget.dart';
 
+/// Coordinate scaling configuration for label layout
+///
+/// User-specified coordinates are defined on a 1150×1700 canvas.
+/// We scale these to fit A6 landscape (420pt × 298pt).
+class _LabelCoordinates {
+  // Source canvas dimensions (user specification)
+  static const double sourceWidth = 1150.0;
+  static const double sourceHeight = 1700.0;
+
+  // Target page dimensions (A6 landscape in points)
+  static const double targetWidth = 420.0;
+  static const double targetHeight = 298.0;
+
+  // Scaling factors
+  static const double scaleX = targetWidth / sourceWidth;  // ≈ 0.365
+  static const double scaleY = targetHeight / sourceHeight; // ≈ 0.175
+
+  /// Scales X coordinate from source to target
+  static double x(double sourceX) => sourceX * scaleX;
+
+  /// Scales Y coordinate from source to target
+  static double y(double sourceY) => sourceY * scaleY;
+
+  /// Scales width from source to target
+  static double w(double sourceWidth) => sourceWidth * scaleX;
+
+  /// Scales height from source to target
+  static double h(double sourceHeight) => sourceHeight * scaleY;
+}
+
+/// Box dimensions and positions (source coordinates)
+class _BoxSpec {
+  final double x;
+  final double y;
+  final double width;
+  final double height;
+  final bool hasBorder;
+
+  const _BoxSpec({
+    required this.x,
+    required this.y,
+    required this.width,
+    required this.height,
+    required this.hasBorder,
+  });
+
+  // Box specifications from user requirements
+  static const box1 = _BoxSpec(x: 50, y: 50, width: 240, height: 900, hasBorder: true);
+  static const box2 = _BoxSpec(x: 50, y: 1000, width: 240, height: 700, hasBorder: false);
+  static const box3 = _BoxSpec(x: 340, y: 50, width: 500, height: 900, hasBorder: true);
+  static const box4 = _BoxSpec(x: 340, y: 1200, width: 500, height: 500, hasBorder: false);
+  static const box5 = _BoxSpec(x: 880, y: 50, width: 270, height: 1075, hasBorder: true);
+  static const box6 = _BoxSpec(x: 880, y: 1160, width: 270, height: 520, hasBorder: true);
+}
+
 /// Generate container label PDF document from multiple packing lists
 ///
 /// For each container in [packingLists], generates label widgets (one per container)
@@ -195,12 +250,145 @@ pw.Widget _withMeasurementsPortrait(pw.Widget label) {
   );
 }
 
-/// Build the first label with new 3-row layout
-///
-/// Row 1: Contact info (60%) + Logo (40%)
-/// Row 2: Huge container number (60%) + Destination (40%)
-/// Row 3: Details (70%) + Weight (30%)
-Future<pw.Column> _buildFirstLabel(
+/// Box 1: Contact information and print metadata (top-left, with border)
+pw.Widget _buildBox1ContactInfo(PrintContext context) {
+  return pw.Container(
+    decoration: _BoxSpec.box1.hasBorder
+      ? pw.BoxDecoration(border: pw.Border.all(width: 0.5))
+      : null,
+    padding: const pw.EdgeInsets.all(8),
+    child: pw.Column(
+      mainAxisAlignment: pw.MainAxisAlignment.start,
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Text(
+          '${context.organizationEmail} / ${context.organizationPhone}',
+          style: const pw.TextStyle(fontSize: 9),
+        ),
+        pw.SizedBox(height: 4),
+        smallText('Printed by: ${context.userName}, ${_formatDate(context.printDate)}'),
+      ],
+    ),
+  );
+}
+
+/// Box 2: Organization logo (bottom-left, no border)
+pw.Widget _buildBox2Logo(pw.ImageProvider logo) {
+  return pw.Container(
+    padding: const pw.EdgeInsets.all(8),
+    child: pw.Center(
+      child: pw.Image(
+        logo,
+        height: _LabelCoordinates.h(500), // Scale logo proportionally
+        fit: pw.BoxFit.contain,
+      ),
+    ),
+  );
+}
+
+/// Box 3: Container number (top-center, with border)
+pw.Widget _buildBox3ContainerNumber(PackingList list) {
+  return pw.Container(
+    decoration: _BoxSpec.box3.hasBorder
+      ? pw.BoxDecoration(border: pw.Border.all(width: 0.5))
+      : null,
+    padding: const pw.EdgeInsets.all(8),
+    child: pw.Center(
+      child: pw.Row(
+        mainAxisAlignment: pw.MainAxisAlignment.center,
+        crossAxisAlignment: pw.CrossAxisAlignment.center,
+        children: [
+          pw.Text(
+            '#:',
+            style: pw.TextStyle(fontSize: 24),
+          ),
+          pw.SizedBox(width: 16),
+          pw.Text(
+            '${list.containerNo}',
+            style: pw.TextStyle(
+              fontSize: 48,
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+/// Box 4: Priority badge (bottom-center, no border)
+pw.Widget _buildBox4PriorityBadge(PackingList list) {
+  // Always show badge - buildPriorityBadge handles the rendering
+  return pw.Container(
+    padding: const pw.EdgeInsets.all(8),
+    child: pw.Center(
+      child: buildPriorityBadge(
+        priority: list.priority,
+        destination: list.destination,
+        widthCm: _LabelCoordinates.w(450) / cm,  // Convert points to cm
+        heightCm: _LabelCoordinates.h(450) / cm, // Convert points to cm
+      ),
+    ),
+  );
+}
+
+/// Box 5: Container details (top-right, with border)
+pw.Widget _buildBox5Details(PackingList list) {
+  return pw.Container(
+    decoration: _BoxSpec.box5.hasBorder
+      ? pw.BoxDecoration(border: pw.Border.all(width: 0.5))
+      : null,
+    padding: const pw.EdgeInsets.all(8),
+    child: pw.Column(
+      mainAxisAlignment: pw.MainAxisAlignment.start,
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        _buildInfoLine('Name', list.containerName),
+        pw.SizedBox(height: 4),
+        _buildInfoLine('Description', list.containerDescription),
+        pw.SizedBox(height: 4),
+        _buildInfoLine('Type', list.containerType),
+      ],
+    ),
+  );
+}
+
+/// Box 6: Weight display with icon (bottom-right, with border)
+pw.Widget _buildBox6Weight(PackingList list) {
+  return pw.Container(
+    decoration: _BoxSpec.box6.hasBorder
+      ? pw.BoxDecoration(border: pw.Border.all(width: 0.5))
+      : null,
+    padding: const pw.EdgeInsets.all(8),
+    child: pw.Center(
+      child: pw.Column(
+        mainAxisAlignment: pw.MainAxisAlignment.center,
+        crossAxisAlignment: pw.CrossAxisAlignment.center,
+        children: [
+          // Weight icon
+          pw.CustomPaint(
+            size: PdfPoint(20, 20),
+            painter: (canvas, size) {
+              drawWeightIcon(canvas, size, PdfColors.grey300);
+            },
+          ),
+          pw.SizedBox(height: 6),
+          // Weight value
+          pw.Text(
+            '${list.totalWeight.round()}',
+            style: pw.TextStyle(
+              fontSize: 16,
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+/// Builds the first label page with 6-box absolute positioning layout
+Future<pw.Widget> _buildFirstLabel(
   PackingList list,
   int currentPage,
   int numberOfPages,
@@ -208,18 +396,73 @@ Future<pw.Column> _buildFirstLabel(
 ) async {
   final logo = await _loadLogo(context.logoAssetPath);
 
-  return pw.Column(
+  return pw.Stack(
     children: [
-      // Row 1: Contact info + Logo
-      await _buildTopRow(context, logo, currentPage, numberOfPages),
-      pw.SizedBox(height: 8),
+      // Box 1: Contact info (top-left, with border)
+      pw.Positioned(
+        left: _LabelCoordinates.x(_BoxSpec.box1.x),
+        top: _LabelCoordinates.y(_BoxSpec.box1.y),
+        child: pw.SizedBox(
+          width: _LabelCoordinates.w(_BoxSpec.box1.width),
+          height: _LabelCoordinates.h(_BoxSpec.box1.height),
+          child: _buildBox1ContactInfo(context),
+        ),
+      ),
 
-      // Row 2: Huge container number + Destination
-      _buildMiddleRow(list),
-      pw.SizedBox(height: 8),
+      // Box 2: Logo (bottom-left, no border)
+      pw.Positioned(
+        left: _LabelCoordinates.x(_BoxSpec.box2.x),
+        top: _LabelCoordinates.y(_BoxSpec.box2.y),
+        child: pw.SizedBox(
+          width: _LabelCoordinates.w(_BoxSpec.box2.width),
+          height: _LabelCoordinates.h(_BoxSpec.box2.height),
+          child: _buildBox2Logo(logo),
+        ),
+      ),
 
-      // Row 3: Details + Weight
-      _buildBottomRow(list),
+      // Box 3: Container number (top-center, with border)
+      pw.Positioned(
+        left: _LabelCoordinates.x(_BoxSpec.box3.x),
+        top: _LabelCoordinates.y(_BoxSpec.box3.y),
+        child: pw.SizedBox(
+          width: _LabelCoordinates.w(_BoxSpec.box3.width),
+          height: _LabelCoordinates.h(_BoxSpec.box3.height),
+          child: _buildBox3ContainerNumber(list),
+        ),
+      ),
+
+      // Box 4: Priority badge (bottom-center, no border)
+      pw.Positioned(
+        left: _LabelCoordinates.x(_BoxSpec.box4.x),
+        top: _LabelCoordinates.y(_BoxSpec.box4.y),
+        child: pw.SizedBox(
+          width: _LabelCoordinates.w(_BoxSpec.box4.width),
+          height: _LabelCoordinates.h(_BoxSpec.box4.height),
+          child: _buildBox4PriorityBadge(list),
+        ),
+      ),
+
+      // Box 5: Details (top-right, with border)
+      pw.Positioned(
+        left: _LabelCoordinates.x(_BoxSpec.box5.x),
+        top: _LabelCoordinates.y(_BoxSpec.box5.y),
+        child: pw.SizedBox(
+          width: _LabelCoordinates.w(_BoxSpec.box5.width),
+          height: _LabelCoordinates.h(_BoxSpec.box5.height),
+          child: _buildBox5Details(list),
+        ),
+      ),
+
+      // Box 6: Weight (bottom-right, with border)
+      pw.Positioned(
+        left: _LabelCoordinates.x(_BoxSpec.box6.x),
+        top: _LabelCoordinates.y(_BoxSpec.box6.y),
+        child: pw.SizedBox(
+          width: _LabelCoordinates.w(_BoxSpec.box6.width),
+          height: _LabelCoordinates.h(_BoxSpec.box6.height),
+          child: _buildBox6Weight(list),
+        ),
+      ),
     ],
   );
 }
@@ -228,174 +471,6 @@ Future<pw.Column> _buildFirstLabel(
 Future<pw.ImageProvider> _loadLogo(String assetPath) async {
   final ByteData data = await rootBundle.load(assetPath);
   return pw.MemoryImage(data.buffer.asUint8List());
-}
-
-/// Build top row: Contact info (60%) + Logo (40%)
-Future<pw.Widget> _buildTopRow(
-  PrintContext context,
-  pw.ImageProvider logo,
-  int currentPage,
-  int totalPages,
-) async {
-  return pw.Container(
-    decoration: pw.BoxDecoration(border: pw.Border.all(width: 0.5)),
-    child: pw.Row(
-      children: [
-        // Left 60%: Contact info + Print metadata
-        pw.Expanded(
-          flex: 60,
-          child: pw.Padding(
-            padding: const pw.EdgeInsets.all(6.0),
-            child: pw.Column(
-              crossAxisAlignment: pw.CrossAxisAlignment.start,
-              mainAxisSize: pw.MainAxisSize.min,
-              children: [
-                pw.Text(
-                  '${context.organizationEmail} / ${context.organizationPhone}',
-                  style: const pw.TextStyle(fontSize: 9),
-                ),
-                pw.SizedBox(height: 8),
-                smallText('Printed by: ${context.userName}, ${_formatDate(context.printDate)}'),
-              ],
-            ),
-          ),
-        ),
-
-        // Right 40%: Logo + Page indicator
-        pw.Expanded(
-          flex: 40,
-          child: pw.Column(
-            mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-            children: [
-              pw.Padding(
-                padding: const pw.EdgeInsets.all(8.0),
-                child: pw.Image(logo, height: 60),
-              ),
-              _buildPageIndicator(currentPage, totalPages),
-            ],
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-/// Build middle row: Huge container number (60%) + Destination (40%)
-pw.Widget _buildMiddleRow(PackingList list) {
-  return pw.Container(
-    height: 80, // Double height row
-    decoration: pw.BoxDecoration(border: pw.Border.all(width: 0.5)),
-    child: pw.Row(
-      children: [
-        // Left 60%: HUGE container number
-        pw.Expanded(
-          flex: 60,
-          child: pw.Padding(
-            padding: const pw.EdgeInsets.all(8.0),
-            child: pw.Row(
-              crossAxisAlignment: pw.CrossAxisAlignment.center,
-              children: [
-                pw.Text(
-                  '#:',
-                  style: pw.TextStyle(
-                    fontSize: 32,
-                    fontWeight: pw.FontWeight.bold,
-                  ),
-                ),
-                pw.SizedBox(width: 12),
-                pw.Text(
-                  '${list.containerNo}',
-                  style: pw.TextStyle(
-                    fontSize: 48,
-                    fontWeight: pw.FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-
-        // Right 40%: Priority badge
-        pw.Expanded(
-          flex: 40,
-          child: pw.Container(
-            padding: const pw.EdgeInsets.all(8.0),
-            decoration: pw.BoxDecoration(
-              border: pw.Border(left: pw.BorderSide(width: 0.5)),
-            ),
-            child: buildPriorityBadge(
-              priority: list.priority,
-              destination: list.destination,
-              widthCm: 3.5,
-              heightCm: 3.0,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-/// Build bottom row: Details (70%) + Weight (30%)
-pw.Widget _buildBottomRow(PackingList list) {
-  return pw.Container(
-    decoration: pw.BoxDecoration(border: pw.Border.all(width: 0.5)),
-    child: pw.Row(
-      children: [
-        // Left 70%: Name, Description, Type
-        pw.Expanded(
-          flex: 70,
-          child: pw.Padding(
-            padding: const pw.EdgeInsets.all(6.0),
-            child: pw.Column(
-              crossAxisAlignment: pw.CrossAxisAlignment.start,
-              mainAxisSize: pw.MainAxisSize.min,
-              children: [
-                _buildInfoLine('Name', list.containerName),
-                pw.SizedBox(height: 4),
-                _buildInfoLine('Description', list.containerDescription),
-                pw.SizedBox(height: 4),
-                _buildInfoLine('Type', list.containerType),
-              ],
-            ),
-          ),
-        ),
-
-        // Right 30%: Weight
-        pw.Expanded(
-          flex: 30,
-          child: pw.Container(
-            padding: const pw.EdgeInsets.all(8.0),
-            decoration: pw.BoxDecoration(
-              border: pw.Border(left: pw.BorderSide(width: 0.5)),
-            ),
-            child: pw.Column(
-              mainAxisAlignment: pw.MainAxisAlignment.center,
-              crossAxisAlignment: pw.CrossAxisAlignment.center,
-              children: [
-                // Weight icon
-                pw.CustomPaint(
-                  size: PdfPoint(28, 28),
-                  painter: (canvas, size) {
-                    drawWeightIcon(canvas, size, PdfColors.grey300);
-                  },
-                ),
-                pw.SizedBox(height: 6),
-                // Weight value
-                pw.Text(
-                  '${list.totalWeight.round()}',
-                  style: pw.TextStyle(
-                    fontSize: 20,
-                    fontWeight: pw.FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
 }
 
 /// Build an info line with label and value
@@ -419,19 +494,6 @@ pw.Widget _buildInfoLine(String label, String value) {
         ),
       ),
     ],
-  );
-}
-
-/// Build page indicator
-pw.Widget _buildPageIndicator(int current, int total) {
-  return pw.Container(
-    padding: const pw.EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-    decoration: pw.BoxDecoration(
-      border: pw.Border(top: pw.BorderSide(width: 0.5)),
-    ),
-    child: pw.Center(
-      child: smallText('Label $current / $total'),
-    ),
   );
 }
 
