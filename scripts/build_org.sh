@@ -84,9 +84,13 @@ echo "📝 Build manifest created: $MANIFEST_PATH"
 BUILD_DIR="build/web_${ORG}_${ENV}"
 rm -rf "$BUILD_DIR"
 mkdir -p "$BUILD_DIR"
-# Use cp with . and .* to include hidden files
+# Copy visible files
 cp -r build/web/* "$BUILD_DIR/" 2>/dev/null || true
-cp -r build/web/.* "$BUILD_DIR/" 2>/dev/null || true
+
+# Copy specific hidden files (safely, without .* which includes .. parent directory)
+if [ -f "build/web/.build-manifest.json" ]; then
+  cp "build/web/.build-manifest.json" "$BUILD_DIR/"
+fi
 
 echo ""
 echo "✅ Build complete and verified!"
