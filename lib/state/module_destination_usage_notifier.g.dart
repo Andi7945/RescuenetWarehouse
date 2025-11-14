@@ -7,7 +7,7 @@ part of 'module_destination_usage_notifier.dart';
 // **************************************************************************
 
 String _$moduleDestinationUsageNotifierHash() =>
-    r'9be28a8815192416679b73164fc90f99e592367a';
+    r'767dd93c9ff3f238b597c538aad423872e3899ee';
 
 /// See also [ModuleDestinationUsageNotifier].
 @ProviderFor(ModuleDestinationUsageNotifier)

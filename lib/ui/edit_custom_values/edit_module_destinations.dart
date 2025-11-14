@@ -4,9 +4,9 @@ import 'package:rescuenet_warehouse/state/module_destination_usage_notifier.dart
 import 'package:rescuenet_warehouse/state/module_destinations_notifier.dart';
 import 'package:rescuenet_warehouse/ui/delete_button_with_usages.dart';
 import 'package:rescuenet_warehouse/ui/edit_custom_values/edit_custom_value_text_field.dart';
+import 'package:rescuenet_warehouse/ui/edit_custom_values/widgets/badge_shape_selector.dart';
 import 'package:rescuenet_warehouse/main.dart';
 import 'package:rescuenet_warehouse/models/module_destination.dart';
-import 'package:rescuenet_warehouse/ui/rescue_table.dart';
 
 import '../rescue_navigation_drawer.dart';
 import '../../widgets/rescue_app_bar.dart';
@@ -55,10 +55,37 @@ class _EditModuleDestinationsState
   }
 
   Widget _table(Map<ModuleDestination, Set<String>> moduleDestinations) =>
-      RescueTable(
-        const ["Name", ""],
-        [..._rows(moduleDestinations), _addingRow()],
-        const {},
+      Table(
+        columnWidths: const {
+          0: FlexColumnWidth(2), // Name
+          1: FlexColumnWidth(2), // Badge Shape
+          2: FixedColumnWidth(80), // Delete
+        },
+        children: [
+          _headerRow(),
+          ..._rows(moduleDestinations),
+          _addingRow(),
+        ],
+      );
+
+  TableRow _headerRow() => TableRow(
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+        ),
+        children: const [
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text('Name', style: TextStyle(fontWeight: FontWeight.bold)),
+          ),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text('Badge Shape', style: TextStyle(fontWeight: FontWeight.bold)),
+          ),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text('Delete', style: TextStyle(fontWeight: FontWeight.bold)),
+          ),
+        ],
       );
 
   List<TableRow> _rows(
@@ -69,6 +96,7 @@ class _EditModuleDestinationsState
       TableRow(
         children: [
           _textField(destination.key),
+          _badgeShapeSelector(destination.key),
           DeleteButtonWithUsages(destination.value, () {
             ref
                 .read(moduleDestinationsNotifierProvider.notifier)
@@ -89,12 +117,28 @@ class _EditModuleDestinationsState
     );
   }
 
+  Widget _badgeShapeSelector(ModuleDestination destination) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      child: BadgeShapeSelector(
+        value: destination.badgeShape,
+        onChanged: (newShape) async {
+          final updated = destination.copyWith(badgeShape: newShape);
+          await ref
+              .read(moduleDestinationsNotifierProvider.notifier)
+              .upsert(updated);
+        },
+      ),
+    );
+  }
+
   TableRow _addingRow() => TableRow(
     children: [
       Padding(
         padding: const EdgeInsets.only(left: 16),
         child: EditCustomValueTextField(_addController),
       ),
+      const SizedBox.shrink(), // Empty cell for badge column
       _btnAdd(),
     ],
   );

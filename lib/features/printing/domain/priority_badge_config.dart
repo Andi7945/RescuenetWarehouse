@@ -1,3 +1,5 @@
+import 'package:rescuenet_warehouse/models/module_destination.dart';
+
 /// Configuration for priority badge shapes based on destination names.
 ///
 /// This maps destination names to specific badge shapes, following the
@@ -41,38 +43,29 @@ class PriorityBadgeConfig {
     'Medical': PriorityBadgeShape.cross,
   };
 
-  /// Gets the badge shape for a given destination and priority.
-  ///
-  /// If a specific mapping exists for the destination, it uses that.
-  /// Otherwise, falls back to the default shape for the priority level.
+  /// Pure function: Returns badge shape for a destination
+  /// Priority: 1) ModuleDestination.badgeShape, 2) Name mapping, 3) Circle default
   static PriorityBadgeShape getShapeForDestination({
-    required String destination,
-    required int priority,
+    ModuleDestination? moduleDestination,
+    String? destinationName,
+    // Legacy parameters for backward compatibility
+    String? destination,
+    int? priority,  // Kept for backward compat, but no longer used in logic
   }) {
-    // Try to find exact match first
-    final shape = destinationShapeMap[destination];
-    if (shape != null) {
-      return shape;
+    // 1. Check if ModuleDestination has explicit shape configured
+    if (moduleDestination?.badgeShape != null) {
+      return moduleDestination!.badgeShape!;
     }
 
-    // Fall back to default shape for priority level
-    return _getDefaultShapeForPriority(priority);
-  }
-
-  /// Returns the default badge shape for each priority level.
-  static PriorityBadgeShape _getDefaultShapeForPriority(int priority) {
-    switch (priority) {
-      case 1:
-        return PriorityBadgeShape.circle;
-      case 2:
-        return PriorityBadgeShape.triangle;
-      case 3:
-        return PriorityBadgeShape.star;
-      case 4:
-        return PriorityBadgeShape.heart;
-      default:
-        return PriorityBadgeShape.circle; // Safe fallback
+    // 2. Fall back to legacy name-based mapping
+    // Support both old (destination) and new (destinationName) parameter names
+    final name = destinationName ?? moduleDestination?.name ?? destination;
+    if (name != null && destinationShapeMap.containsKey(name)) {
+      return destinationShapeMap[name]!;
     }
+
+    // 3. Default to circle
+    return PriorityBadgeShape.circle;
   }
 
   /// Returns the asset path for a given badge shape.

@@ -3,6 +3,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:rescuenet_warehouse/features/printing/domain/priority_badge_config.dart';
 import 'package:rescuenet_warehouse/features/printing/generators/common/pdf_base_widgets.dart';
 import 'package:rescuenet_warehouse/features/printing/generators/common/priority_badge_shapes.dart';
+import 'package:rescuenet_warehouse/models/module_destination.dart';
 
 /// Builds a priority badge widget for container labels.
 ///
@@ -12,17 +13,19 @@ import 'package:rescuenet_warehouse/features/printing/generators/common/priority
 /// - Destination name
 ///
 /// The shape is selected based on the destination name and priority level
-/// using the PriorityBadgeConfig mapping.
+/// using the PriorityBadgeConfig mapping. If a ModuleDestination is provided,
+/// its configured badge shape takes priority.
 pw.Widget buildPriorityBadge({
   required int priority,
   required String destination,
+  ModuleDestination? moduleDestination,
   required double widthCm,
   required double heightCm,
 }) {
   // Get the appropriate shape for this destination/priority
   final shape = PriorityBadgeConfig.getShapeForDestination(
-    destination: destination,
-    priority: priority,
+    moduleDestination: moduleDestination,
+    destinationName: destination,
   );
 
   // Get background color based on priority
