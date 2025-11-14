@@ -64,8 +64,8 @@ class _BoxSpec {
   static const box2 = _BoxSpec(x: 50, y: 1000, width: 240, height: 700, hasBorder: false);
   static const box3 = _BoxSpec(x: 340, y: 50, width: 500, height: 900, hasBorder: true);
   static const box4 = _BoxSpec(x: 340, y: 1200, width: 500, height: 500, hasBorder: false);
-  static const box5 = _BoxSpec(x: 880, y: 50, width: 270, height: 1075, hasBorder: true);
-  static const box6 = _BoxSpec(x: 880, y: 1160, width: 270, height: 520, hasBorder: true);
+  static const box5 = _BoxSpec(x: 880, y: 50, width: 220, height: 1075, hasBorder: true);
+  static const box6 = _BoxSpec(x: 880, y: 1160, width: 220, height: 520, hasBorder: true);
 }
 
 /// Generate container label PDF document from multiple packing lists
@@ -308,7 +308,7 @@ pw.Widget _buildBox3ContainerNumber(PackingList list) {
           pw.Text(
             '${list.containerNo}',
             style: pw.TextStyle(
-              fontSize: 48,
+              fontSize: 96,
               fontWeight: pw.FontWeight.bold,
             ),
           ),
@@ -356,30 +356,30 @@ pw.Widget _buildBox5Details(PackingList list) {
 }
 
 /// Box 6: Weight display with icon (bottom-right, with border)
-pw.Widget _buildBox6Weight(PackingList list) {
+pw.Widget _buildBox6Weight(PackingList list, pw.ImageProvider weightIcon) {
   return pw.Container(
     decoration: _BoxSpec.box6.hasBorder
       ? pw.BoxDecoration(border: pw.Border.all(width: 0.5))
       : null,
     padding: const pw.EdgeInsets.all(8),
     child: pw.Center(
-      child: pw.Column(
+      child: pw.Row(
         mainAxisAlignment: pw.MainAxisAlignment.center,
         crossAxisAlignment: pw.CrossAxisAlignment.center,
         children: [
           // Weight icon
-          pw.CustomPaint(
-            size: PdfPoint(20, 20),
-            painter: (canvas, size) {
-              drawWeightIcon(canvas, size, PdfColors.grey300);
-            },
+          pw.Image(
+            weightIcon,
+            width: 40,
+            height: 40,
+            fit: pw.BoxFit.contain,
           ),
           pw.SizedBox(height: 6),
           // Weight value
           pw.Text(
             '${list.totalWeight.round()}',
             style: pw.TextStyle(
-              fontSize: 16,
+              fontSize: 32,
               fontWeight: pw.FontWeight.bold,
             ),
           ),
@@ -397,6 +397,7 @@ Future<pw.Widget> _buildFirstLabel(
   PrintContext context,
 ) async {
   final logo = await _loadLogo(context.logoAssetPath);
+  final weightIcon = await _loadLogo('assets/images/label_kg.png');
 
   return pw.Stack(
     children: [
@@ -462,7 +463,7 @@ Future<pw.Widget> _buildFirstLabel(
         child: pw.SizedBox(
           width: _LabelCoordinates.h(_BoxSpec.box6.height),
           height: _LabelCoordinates.w(_BoxSpec.box6.width),
-          child: _buildBox6Weight(list),
+          child: _buildBox6Weight(list, weightIcon),
         ),
       ),
     ],
