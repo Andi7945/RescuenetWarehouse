@@ -205,8 +205,213 @@ class MockWorkLogRepository implements WorkLogRepository {
       ..sort((a, b) => b.date.compareTo(a.date));
   }
 
+  /// Clear all work logs (alias for clearAll, used in tests)
+  void clearLogs() {
+    clearAll();
+  }
+
   /// Dispose resources
   void dispose() {
     _streamController.close();
+  }
+
+  @override
+  Stream<List<LogEntry>> watchWorkLogsByDateRange(
+    DateTime startDate,
+    DateTime endDate,
+  ) {
+    final controller = StreamController<List<LogEntry>>.broadcast();
+
+    // Emit current filtered logs immediately
+    Future.microtask(() {
+      if (!controller.isClosed) {
+        final filtered = _workLogs.values
+            .where((log) =>
+                (log.date.isAfter(startDate) || log.date.isAtSameMomentAs(startDate)) &&
+                log.date.isBefore(endDate))
+            .toList()
+          ..sort((a, b) => b.date.compareTo(a.date));
+        controller.add(filtered);
+      }
+    });
+
+    // Forward future updates, but only when logs in this range change
+    List<LogEntry> previousFiltered = _workLogs.values
+        .where((log) =>
+            (log.date.isAfter(startDate) || log.date.isAtSameMomentAs(startDate)) &&
+            log.date.isBefore(endDate))
+        .toList()
+      ..sort((a, b) => b.date.compareTo(a.date));
+
+    final subscription = _streamController.stream.listen((allLogs) {
+      if (!controller.isClosed) {
+        final currentFiltered = allLogs
+            .where((log) =>
+                (log.date.isAfter(startDate) || log.date.isAtSameMomentAs(startDate)) &&
+                log.date.isBefore(endDate))
+            .toList()
+          ..sort((a, b) => b.date.compareTo(a.date));
+
+        // Only emit if the filtered subset actually changed
+        if (!_listEquals(previousFiltered, currentFiltered)) {
+          controller.add(currentFiltered);
+          previousFiltered = currentFiltered;
+        }
+      }
+    });
+
+    controller.onCancel = () {
+      subscription.cancel();
+      controller.close();
+    };
+
+    return controller.stream;
+  }
+
+  @override
+  Stream<List<LogEntry>> watchWorkLogsByUser(String userId) {
+    final controller = StreamController<List<LogEntry>>.broadcast();
+
+    // Emit current filtered logs immediately
+    Future.microtask(() {
+      if (!controller.isClosed) {
+        final filtered = _workLogs.values
+            .where((log) => log.user == userId)
+            .toList()
+          ..sort((a, b) => b.date.compareTo(a.date));
+        controller.add(filtered);
+      }
+    });
+
+    // Forward future updates, but only when logs for this user change
+    List<LogEntry> previousFiltered = _workLogs.values
+        .where((log) => log.user == userId)
+        .toList()
+      ..sort((a, b) => b.date.compareTo(a.date));
+
+    final subscription = _streamController.stream.listen((allLogs) {
+      if (!controller.isClosed) {
+        final currentFiltered = allLogs
+            .where((log) => log.user == userId)
+            .toList()
+          ..sort((a, b) => b.date.compareTo(a.date));
+
+        // Only emit if the filtered subset actually changed
+        if (!_listEquals(previousFiltered, currentFiltered)) {
+          controller.add(currentFiltered);
+          previousFiltered = currentFiltered;
+        }
+      }
+    });
+
+    controller.onCancel = () {
+      subscription.cancel();
+      controller.close();
+    };
+
+    return controller.stream;
+  }
+
+  @override
+  Stream<List<LogEntry>> watchWorkLogsByItem(String itemId) {
+    final controller = StreamController<List<LogEntry>>.broadcast();
+
+    // Emit current filtered logs immediately
+    Future.microtask(() {
+      if (!controller.isClosed) {
+        final filtered = _workLogs.values
+            .where((log) => log.itemId == itemId)
+            .toList()
+          ..sort((a, b) => b.date.compareTo(a.date));
+        controller.add(filtered);
+      }
+    });
+
+    // Forward future updates, but only when logs for this item change
+    List<LogEntry> previousFiltered = _workLogs.values
+        .where((log) => log.itemId == itemId)
+        .toList()
+      ..sort((a, b) => b.date.compareTo(a.date));
+
+    final subscription = _streamController.stream.listen((allLogs) {
+      if (!controller.isClosed) {
+        final currentFiltered = allLogs
+            .where((log) => log.itemId == itemId)
+            .toList()
+          ..sort((a, b) => b.date.compareTo(a.date));
+
+        // Only emit if the filtered subset actually changed
+        if (!_listEquals(previousFiltered, currentFiltered)) {
+          controller.add(currentFiltered);
+          previousFiltered = currentFiltered;
+        }
+      }
+    });
+
+    controller.onCancel = () {
+      subscription.cancel();
+      controller.close();
+    };
+
+    return controller.stream;
+  }
+
+  @override
+  Stream<List<LogEntry>> watchWorkLogsByContainer(String containerId) {
+    final controller = StreamController<List<LogEntry>>.broadcast();
+
+    // Emit current filtered logs immediately
+    Future.microtask(() {
+      if (!controller.isClosed) {
+        final filtered = _workLogs.values
+            .where((log) => log.containerId == containerId)
+            .toList()
+          ..sort((a, b) => b.date.compareTo(a.date));
+        controller.add(filtered);
+      }
+    });
+
+    // Forward future updates, but only when logs for this container change
+    List<LogEntry> previousFiltered = _workLogs.values
+        .where((log) => log.containerId == containerId)
+        .toList()
+      ..sort((a, b) => b.date.compareTo(a.date));
+
+    final subscription = _streamController.stream.listen((allLogs) {
+      if (!controller.isClosed) {
+        final currentFiltered = allLogs
+            .where((log) => log.containerId == containerId)
+            .toList()
+          ..sort((a, b) => b.date.compareTo(a.date));
+
+        // Only emit if the filtered subset actually changed
+        if (!_listEquals(previousFiltered, currentFiltered)) {
+          controller.add(currentFiltered);
+          previousFiltered = currentFiltered;
+        }
+      }
+    });
+
+    controller.onCancel = () {
+      subscription.cancel();
+      controller.close();
+    };
+
+    return controller.stream;
+  }
+
+  /// Helper to compare two lists of log entries for equality
+  bool _listEquals(List<LogEntry> a, List<LogEntry> b) {
+    if (a.length != b.length) return false;
+
+    // Sort by ID for consistent comparison
+    final sortedA = List<LogEntry>.from(a)..sort((x, y) => x.id.compareTo(y.id));
+    final sortedB = List<LogEntry>.from(b)..sort((x, y) => x.id.compareTo(y.id));
+
+    for (var i = 0; i < sortedA.length; i++) {
+      if (sortedA[i] != sortedB[i]) return false;
+    }
+
+    return true;
   }
 }

@@ -39,4 +39,26 @@ abstract class WorkLogRepository {
 
   /// Delete a work log entry (rarely used - for error correction)
   Future<void> deleteWorkLog(String id);
+
+  // NEW: Fine-grained stream methods
+
+  /// Watch work logs within a date range.
+  /// Emits only when logs within this range change.
+  /// Useful for daily/weekly audit reports.
+  Stream<List<LogEntry>> watchWorkLogsByDateRange(
+    DateTime startDate,
+    DateTime endDate,
+  );
+
+  /// Watch work logs by a specific user.
+  /// Emits only when logs for this user change.
+  Stream<List<LogEntry>> watchWorkLogsByUser(String userId);
+
+  /// Watch work logs for a specific item.
+  /// Emits only when logs for this item change.
+  Stream<List<LogEntry>> watchWorkLogsByItem(String itemId);
+
+  /// Watch work logs for a specific container.
+  /// Emits only when logs for this container change.
+  Stream<List<LogEntry>> watchWorkLogsByContainer(String containerId);
 }

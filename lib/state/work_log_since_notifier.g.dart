@@ -7,7 +7,7 @@ part of 'work_log_since_notifier.dart';
 // **************************************************************************
 
 String _$workLogSinceNotifierHash() =>
-    r'1c4febb16b233865ac3ee28daa5c34392b82cf16';
+    r'675e09a549416f5c43d984f90a2073977118c302';
 
 /// See also [WorkLogSinceNotifier].
 @ProviderFor(WorkLogSinceNotifier)

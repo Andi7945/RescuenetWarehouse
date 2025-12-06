@@ -122,4 +122,52 @@ class FirebaseWorkLogRepository implements WorkLogRepository {
       throw Exception('Failed to delete work log: $e');
     }
   }
+
+  @override
+  Stream<List<LogEntry>> watchWorkLogsByDateRange(
+    DateTime startDate,
+    DateTime endDate,
+  ) {
+    return workLogCollection
+        .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(startDate))
+        .where('date', isLessThan: Timestamp.fromDate(endDate))
+        .orderBy('date', descending: true)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
+        );
+  }
+
+  @override
+  Stream<List<LogEntry>> watchWorkLogsByUser(String userId) {
+    return workLogCollection
+        .where('user', isEqualTo: userId)
+        .orderBy('date', descending: true)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
+        );
+  }
+
+  @override
+  Stream<List<LogEntry>> watchWorkLogsByItem(String itemId) {
+    return workLogCollection
+        .where('itemId', isEqualTo: itemId)
+        .orderBy('date', descending: true)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
+        );
+  }
+
+  @override
+  Stream<List<LogEntry>> watchWorkLogsByContainer(String containerId) {
+    return workLogCollection
+        .where('containerId', isEqualTo: containerId)
+        .orderBy('date', descending: true)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
+        );
+  }
 }

@@ -537,4 +537,22 @@ class MockWorkLogRepositoryForService implements WorkLogRepository {
 
   @override
   Future<void> deleteWorkLog(String id) => throw UnimplementedError();
+
+  @override
+  Stream<List<LogEntry>> watchWorkLogsByDateRange(
+    DateTime startDate,
+    DateTime endDate,
+  ) => throw UnimplementedError();
+
+  @override
+  Stream<List<LogEntry>> watchWorkLogsByUser(String userId) =>
+      throw UnimplementedError();
+
+  @override
+  Stream<List<LogEntry>> watchWorkLogsByItem(String itemId) =>
+      throw UnimplementedError();
+
+  @override
+  Stream<List<LogEntry>> watchWorkLogsByContainer(String containerId) =>
+      throw UnimplementedError();
 }
