@@ -6,6 +6,7 @@ import '../../routes.dart';
 import '../../repositories/auth_providers.dart';
 import '../../repositories/auth_repository.dart';
 import '../../widgets/org_logo.dart';
+import '../../widgets/rescue_app_bar.dart';
 import '../../utils/email_validator.dart';
 import '../../config/org_provider.dart';
 
@@ -139,6 +140,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const RescueAppBar(title: ''),
       body: Container(
         padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
