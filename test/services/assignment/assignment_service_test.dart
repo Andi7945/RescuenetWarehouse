@@ -478,6 +478,18 @@ class MockAssignmentRepositoryForService implements AssignmentRepository {
   @override
   Future<void> batchDeleteAssignments(List<String> assignmentIds) =>
       throw UnimplementedError();
+
+  @override
+  Stream<List<Assignment>> watchAssignmentsByContainer(String containerId) =>
+      throw UnimplementedError();
+
+  @override
+  Stream<List<Assignment>> watchAssignmentsByItem(String itemId) =>
+      throw UnimplementedError();
+
+  @override
+  Stream<Assignment?> watchAssignment(String assignmentId) =>
+      throw UnimplementedError();
 }
 
 /// Mock WorkLogRepository for testing

@@ -126,4 +126,31 @@ class FirebaseAssignmentRepository implements AssignmentRepository {
       throw Exception('Failed to batch delete assignments: $e');
     }
   }
+
+  @override
+  Stream<List<Assignment>> watchAssignmentsByContainer(String containerId) {
+    return assignmentCollection
+        .where('containerId', isEqualTo: containerId)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
+        );
+  }
+
+  @override
+  Stream<List<Assignment>> watchAssignmentsByItem(String itemId) {
+    return assignmentCollection
+        .where('itemId', isEqualTo: itemId)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
+        );
+  }
+
+  @override
+  Stream<Assignment?> watchAssignment(String assignmentId) {
+    return assignmentCollection.doc(assignmentId).snapshots().map(
+          (snapshot) => snapshot.exists ? snapshot.data() : null,
+        );
+  }
 }

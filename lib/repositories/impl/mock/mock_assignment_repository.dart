@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:collection/collection.dart';
 import 'package:rescuenet_warehouse/models/assignment.dart';
 import 'package:rescuenet_warehouse/repositories/assignment_repository.dart';
 
@@ -170,5 +171,98 @@ class MockAssignmentRepository implements AssignmentRepository {
   /// Dispose resources
   void dispose() {
     _streamController.close();
+  }
+
+  @override
+  Stream<List<Assignment>> watchAssignmentsByContainer(String containerId) {
+    final controller = StreamController<List<Assignment>>.broadcast();
+
+    // Track last emitted value to avoid duplicates
+    List<Assignment> lastEmitted = _assignments.values
+        .where((a) => a.containerId == containerId)
+        .toList();
+
+    // Emit initial value
+    controller.add(lastEmitted);
+
+    final subscription = _streamController.stream.listen((allAssignments) {
+      final filtered =
+          allAssignments.where((a) => a.containerId == containerId).toList();
+
+      // Only emit if the filtered list is different from the last emitted
+      if (!const DeepCollectionEquality().equals(lastEmitted, filtered)) {
+        lastEmitted = filtered;
+        controller.add(filtered);
+      }
+    });
+
+    controller.onCancel = () {
+      subscription.cancel();
+      controller.close();
+    };
+
+    return controller.stream;
+  }
+
+  @override
+  Stream<List<Assignment>> watchAssignmentsByItem(String itemId) {
+    final controller = StreamController<List<Assignment>>.broadcast();
+
+    List<Assignment> lastEmitted =
+        _assignments.values.where((a) => a.itemId == itemId).toList();
+
+    controller.add(lastEmitted);
+
+    final subscription = _streamController.stream.listen((allAssignments) {
+      final filtered =
+          allAssignments.where((a) => a.itemId == itemId).toList();
+
+      if (!const DeepCollectionEquality().equals(lastEmitted, filtered)) {
+        lastEmitted = filtered;
+        controller.add(filtered);
+      }
+    });
+
+    controller.onCancel = () {
+      subscription.cancel();
+      controller.close();
+    };
+
+    return controller.stream;
+  }
+
+  @override
+  Stream<Assignment?> watchAssignment(String assignmentId) {
+    final controller = StreamController<Assignment?>.broadcast();
+
+    Assignment? lastEmitted;
+    try {
+      lastEmitted = _assignments.values.firstWhere((a) => a.id == assignmentId);
+    } catch (e) {
+      lastEmitted = null;
+    }
+
+    controller.add(lastEmitted);
+
+    final subscription = _streamController.stream.listen((allAssignments) {
+      Assignment? current;
+      try {
+        current = allAssignments.firstWhere((a) => a.id == assignmentId);
+      } catch (e) {
+        current = null;
+      }
+
+      if (current != lastEmitted) {
+        lastEmitted = current;
+        controller.add(current);
+      }
+    });
+
+    controller.onCancel = () {
+      subscription.cancel();
+      controller.close();
+    };
+
+    return controller.stream;
   }
 }

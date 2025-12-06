@@ -322,6 +322,21 @@ class ThrowingMockAssignmentRepository implements AssignmentRepository {
     await Future.delayed(const Duration(milliseconds: 10));
     throw Exception('Mock get assignments by container error');
   }
+
+  @override
+  Stream<List<Assignment>> watchAssignmentsByContainer(String containerId) {
+    throw Exception('Mock watch assignments by container error');
+  }
+
+  @override
+  Stream<List<Assignment>> watchAssignmentsByItem(String itemId) {
+    throw Exception('Mock watch assignments by item error');
+  }
+
+  @override
+  Stream<Assignment?> watchAssignment(String assignmentId) {
+    throw Exception('Mock watch assignment error');
+  }
 }
 
 /// Helper class to create AsyncValue states for testing

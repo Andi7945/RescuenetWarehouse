@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rescuenet_warehouse/state/all_assignments_notifier.dart';
+import 'package:rescuenet_warehouse/state/assignments_by_container_notifier.dart';
 import 'package:rescuenet_warehouse/state/all_items_notifier.dart';
 import 'package:rescuenet_warehouse/ui/item_card.dart';
 import 'package:rescuenet_warehouse/widgets/loading/async_value_builder.dart';
@@ -20,16 +20,16 @@ class ContainerWithContentColumn extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AsyncValueBuilder<List<Assignment>>(
-      value: ref.watch(allAssignmentsAsyncProvider),
+      value: ref.watch(assignmentsByContainerProvider(_container.id)),
       loading: () => const DataLoadingIndicator(
         message: 'Loading container assignments...',
       ),
       error: (error, stackTrace) => ErrorRetryWidget(
         error: error,
         message: 'Failed to load container assignments',
-        onRetry: () => ref.refresh(allAssignmentsAsyncProvider),
+        onRetry: () => ref.refresh(assignmentsByContainerProvider(_container.id)),
       ),
-      data: (allAssignments) => AsyncValueBuilder<List<Item>>(
+      data: (containerAssignments) => AsyncValueBuilder<List<Item>>(
         value: ref.watch(allItemsAsyncProvider),
         loading: () => const DataLoadingIndicator(message: 'Loading items...'),
         error: (error, stackTrace) => ErrorRetryWidget(
@@ -37,19 +37,16 @@ class ContainerWithContentColumn extends ConsumerWidget {
           message: 'Failed to load items',
           onRetry: () => ref.refresh(allItemsAsyncProvider),
         ),
-        data: (allItems) => _buildContainerContent(allAssignments, allItems),
+        data: (allItems) => _buildContainerContent(containerAssignments, allItems),
       ),
     );
   }
 
   Widget _buildContainerContent(
-    List<Assignment> allAssignments,
+    List<Assignment> containerAssignments,
     List<Item> allItems,
   ) {
-    // Filter assignments for this container
-    var containerAssignments = allAssignments
-        .where((a) => a.containerId == _container.id)
-        .toList();
+    // containerAssignments already filtered by family provider
 
     // Create a map of items to their assignment counts for this container
     var items = <Item, int>{};

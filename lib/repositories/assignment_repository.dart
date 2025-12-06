@@ -33,4 +33,18 @@ abstract class AssignmentRepository {
 
   /// Delete multiple assignments in a single transaction
   Future<void> batchDeleteAssignments(List<String> assignmentIds);
+
+  // NEW: Fine-grained stream methods
+
+  /// Watch assignments for a specific container.
+  /// Emits only when assignments for this container change.
+  Stream<List<Assignment>> watchAssignmentsByContainer(String containerId);
+
+  /// Watch assignments for a specific item.
+  /// Emits only when assignments for this item change.
+  Stream<List<Assignment>> watchAssignmentsByItem(String itemId);
+
+  /// Watch a single assignment by ID.
+  /// Emits only when this specific assignment changes.
+  Stream<Assignment?> watchAssignment(String assignmentId);
 }

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rescuenet_warehouse/models/item_sorting_options.dart';
-import 'package:rescuenet_warehouse/state/all_assignments_notifier.dart';
+import 'package:rescuenet_warehouse/state/assignments_by_container_notifier.dart';
 import 'package:rescuenet_warehouse/state/assignable_items_notifier.dart';
 import 'package:rescuenet_warehouse/state/items_current_filter_notifier.dart';
 
@@ -14,7 +14,7 @@ List<(Item, int)> assignableItems(
   ItemSortingOption sorting,
 ) {
   final itemsAssignableAsync = ref.watch(assignableItemsAsyncProvider);
-  final assignmentsAsync = ref.watch(allAssignmentsAsyncProvider);
+  final assignmentsAsync = ref.watch(assignmentsByContainerProvider(containerId));
 
   // Return empty list if either assignable items or assignments are loading or in error state
   final itemsAssignable = itemsAssignableAsync.valueOrNull;
@@ -24,7 +24,7 @@ List<(Item, int)> assignableItems(
   }
 
   var alreadyAssigned = assignments
-      .where((a) => a.containerId == containerId && a.count != 0)
+      .where((a) => a.count != 0)
       .map((a) => a.itemId)
       .toList();
 

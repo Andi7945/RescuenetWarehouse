@@ -1,5 +1,6 @@
 import 'package:rescuenet_warehouse/collection_extensions.dart';
 import 'package:rescuenet_warehouse/models/assignment.dart';
+import 'package:rescuenet_warehouse/state/assignments_by_item_notifier.dart';
 import 'package:rescuenet_warehouse/state/all_assignments_notifier.dart';
 import 'package:rescuenet_warehouse/state/all_containers_notifier.dart';
 import 'package:rescuenet_warehouse/state/current_item_notifier.dart';
@@ -16,16 +17,14 @@ class CurrentItemAssignmentsNotifier extends _$CurrentItemAssignmentsNotifier {
   Map<RescueContainer, int> build() {
     var currentItem = ref.watch(currentItemNotifierProvider);
     if (currentItem == null) return {};
-    var assignmentsAsync = ref.watch(allAssignmentsAsyncProvider);
+    var assignmentsAsync = ref.watch(assignmentsByItemProvider(currentItem.id));
     var containersAsync = ref.watch(allContainersAsyncProvider);
 
     return assignmentsAsync.when(
       data: (assignments) {
         return containersAsync.when(
           data: (containers) {
-            var grouped = assignments
-                .where((a) => a.itemId == currentItem.id)
-                .groupBy((a) => a.containerId);
+            var grouped = assignments.groupBy((a) => a.containerId);
 
             Map<RescueContainer, int> result = {};
             for (var entry in grouped.entries) {

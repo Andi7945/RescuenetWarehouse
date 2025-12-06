@@ -1,7 +1,7 @@
 import 'package:rescuenet_warehouse/models/assignment.dart';
 import 'package:rescuenet_warehouse/models/item.dart';
 import 'package:rescuenet_warehouse/state/all_items_notifier.dart';
-import 'package:rescuenet_warehouse/state/all_assignments_notifier.dart';
+import 'package:rescuenet_warehouse/state/assignments_by_container_notifier.dart';
 import 'package:rescuenet_warehouse/services/assignment/assignment_service_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -11,14 +11,10 @@ part 'assignment_by_container_state.g.dart';
 class AssignmentByContainerState extends _$AssignmentByContainerState {
   @override
   Map<Item, Assignment> build(String containerId) {
-    var assignmentsAsync = ref.watch(allAssignmentsAsyncProvider);
+    var assignmentsAsync = ref.watch(assignmentsByContainerProvider(containerId));
 
     return assignmentsAsync.when(
-      data: (assignments) {
-        var containerAssignments = assignments.where(
-          (a) => a.containerId == containerId,
-        );
-
+      data: (containerAssignments) {
         var assignedItems = Map.fromEntries(
           containerAssignments.map((a) {
             var i = ref.read(allItemsNotifierProvider.notifier).byId(a.itemId);
@@ -82,18 +78,13 @@ class AssignmentByContainerAsync extends _$AssignmentByContainerAsync {
   @override
   Stream<Map<Item, Assignment>> build(String containerId) {
     // Watch both assignments and items as streams
-    final assignmentsStream = ref.watch(allAssignmentsAsyncProvider.future);
+    final assignmentsStream = ref.watch(assignmentsByContainerProvider(containerId).future);
     final itemsStream = ref.watch(allItemsAsyncProvider.future);
 
     return Stream.fromFuture(
       Future.wait([assignmentsStream, itemsStream]).then((results) {
-        final allAssignments = results[0] as List<Assignment>;
+        final containerAssignments = results[0] as List<Assignment>;
         final allItems = results[1] as List<Item>;
-
-        // Filter assignments for this container
-        var containerAssignments = allAssignments.where(
-          (a) => a.containerId == containerId,
-        );
 
         var assignedItems = <Item, Assignment>{};
         for (var assignment in containerAssignments) {
