@@ -36,3 +36,16 @@ EnvironmentChipConfig getEnvironmentChipConfig(String environment) {
       );
   }
 }
+
+/// Pure function: Returns warning chip configuration for environment mismatch.
+///
+/// Shows when the detected runtime environment differs from build-time environment.
+/// Uses high-visibility orange styling to draw attention to the mismatch.
+({Color backgroundColor, Color textColor, String label})
+    getEnvironmentWarningChipConfig(String actualEnvironment) {
+  return (
+    backgroundColor: Colors.orange.shade700,
+    textColor: Colors.white,
+    label: '⚠️ Actually: ${actualEnvironment.toUpperCase()}',
+  );
+}

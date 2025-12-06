@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../config/environment_config.dart';
+import '../config/environment_detector.dart';
 import '../config/org_provider.dart';
+import '../config/detected_environment_provider.dart';
 
 /// Custom AppBar that displays an environment indicator chip.
 ///
@@ -32,7 +34,7 @@ class RescueAppBar extends ConsumerWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final environment = ref.watch(currentEnvironmentProvider);
-    final config = getEnvironmentChipConfig(environment);
+    final detection = ref.watch(detectedEnvironmentProvider);
 
     // Convert title to Widget if it's a String
     Widget titleWidget;
@@ -50,10 +52,39 @@ class RescueAppBar extends ConsumerWidget implements PreferredSizeWidget {
         children: [
           titleWidget,
           const SizedBox(width: 12),
-          _EnvironmentChip(config: config),
+          _buildEnvironmentChips(environment, detection),
         ],
       ),
       actions: actions,
+    );
+  }
+
+  /// Builds environment chip(s) based on detection state.
+  /// Shows single chip if no mismatch, two chips if mismatch detected.
+  Widget _buildEnvironmentChips(String environment, EnvironmentDetectionResult detection) {
+    final chipConfig = getEnvironmentChipConfig(environment);
+
+    // If no mismatch, show single chip (current behavior)
+    if (!detection.hasMismatch) {
+      return _EnvironmentChip(config: chipConfig);
+    }
+
+    // If mismatch detected, show two chips side-by-side
+    final warningConfig = getEnvironmentWarningChipConfig(detection.actualEnv);
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _EnvironmentChip(config: chipConfig),
+        const SizedBox(width: 8),
+        _EnvironmentChip(
+          config: EnvironmentChipConfig(
+            label: warningConfig.label,
+            backgroundColor: warningConfig.backgroundColor,
+            textColor: warningConfig.textColor,
+          ),
+        ),
+      ],
     );
   }
 

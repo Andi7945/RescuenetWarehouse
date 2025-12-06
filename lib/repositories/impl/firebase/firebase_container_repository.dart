@@ -94,7 +94,7 @@ class FirebaseContainerRepository implements ContainerRepository {
   Future<List<ContainerDao>> getContainersByType(String containerTypeId) async {
     try {
       final snapshot = await containersCollection
-          .where('containerTypeId', isEqualTo: containerTypeId)
+          .where('typeId', isEqualTo: containerTypeId)
           .get();
 
       return snapshot.docs.map((doc) => doc.data()).toList();
