@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rescuenet_warehouse/state/assignments_by_container_notifier.dart';
-import 'package:rescuenet_warehouse/state/all_items_notifier.dart';
+import 'package:rescuenet_warehouse/state/items_by_ids_notifier.dart';
 import 'package:rescuenet_warehouse/ui/item_card.dart';
 import 'package:rescuenet_warehouse/widgets/loading/async_value_builder.dart';
 import 'package:rescuenet_warehouse/widgets/loading/data_loading_indicator.dart';
@@ -29,36 +29,45 @@ class ContainerWithContentColumn extends ConsumerWidget {
         message: 'Failed to load container assignments',
         onRetry: () => ref.refresh(assignmentsByContainerProvider(_container.id)),
       ),
-      data: (containerAssignments) => AsyncValueBuilder<List<Item>>(
-        value: ref.watch(allItemsAsyncProvider),
-        loading: () => const DataLoadingIndicator(message: 'Loading items...'),
-        error: (error, stackTrace) => ErrorRetryWidget(
-          error: error,
-          message: 'Failed to load items',
-          onRetry: () => ref.refresh(allItemsAsyncProvider),
-        ),
-        data: (allItems) => _buildContainerContent(containerAssignments, allItems),
-      ),
+      data: (containerAssignments) {
+        // Extract item IDs from assignments for fine-grained watching
+        final itemIds = containerAssignments
+            .where((a) => a.count > 0)
+            .map((a) => a.itemId)
+            .toList();
+
+        return AsyncValueBuilder<List<Item>>(
+          value: ref.watch(itemsByIdsProvider(itemIds)),
+          loading: () => const DataLoadingIndicator(message: 'Loading items...'),
+          error: (error, stackTrace) => ErrorRetryWidget(
+            error: error,
+            message: 'Failed to load items',
+            onRetry: () => ref.refresh(itemsByIdsProvider(itemIds)),
+          ),
+          data: (items) => _buildContainerContent(containerAssignments, items),
+        );
+      },
     );
   }
 
   Widget _buildContainerContent(
     List<Assignment> containerAssignments,
-    List<Item> allItems,
+    List<Item> filteredItems,
   ) {
     // containerAssignments already filtered by family provider
+    // filteredItems already filtered to only items in this container's assignments
 
     // Create a map of items to their assignment counts for this container
     var items = <Item, int>{};
+
+    // Create a lookup map for O(1) access
+    var itemsById = {for (var item in filteredItems) item.id: item};
+
     for (var assignment in containerAssignments) {
       if (assignment.count > 0) {
-        try {
-          var item = allItems.firstWhere((i) => i.id == assignment.itemId);
+        var item = itemsById[assignment.itemId];
+        if (item != null) {
           items[item] = assignment.count;
-        } catch (e) {
-          // Item not found - skip this assignment (this should not happen in normal operation)
-          // Using debugPrint to avoid production warnings
-          // debugPrint('Warning: Item with ID ${assignment.itemId} not found for container ${_container.id}');
         }
       }
     }

@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'dart:html' as html;
-import 'dart:js' as js;
+import 'dart:html' if (dart.library.io) 'repository_providers_stub.dart' as html;
+import 'dart:js' if (dart.library.io) 'repository_providers_stub.dart' as js;
 import 'auth_repository.dart';
 import 'item_repository.dart';
 import 'container_repository.dart';

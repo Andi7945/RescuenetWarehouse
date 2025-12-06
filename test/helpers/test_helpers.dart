@@ -191,6 +191,21 @@ class ThrowingMockItemRepository implements ItemRepository {
     await Future.delayed(const Duration(milliseconds: 10));
     throw Exception('Mock get by status error');
   }
+
+  @override
+  Stream<Item?> watchItem(String itemId) {
+    throw Exception('Mock watch item error');
+  }
+
+  @override
+  Stream<List<Item>> watchItemsByStatus(OperationalStatus status) {
+    throw Exception('Mock watch items by status error');
+  }
+
+  @override
+  Stream<List<Item>> watchItemsByIds(List<String> itemIds) {
+    throw Exception('Mock watch items by ids error');
+  }
 }
 
 /// Mock repository that throws errors for container operations

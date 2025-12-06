@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../item_repository.dart';
 import '../../../models/item.dart';
+import '../../../models/operational_status.dart';
 import '../../../db/firebase.dart';
 
 /// Firebase implementation of ItemRepository.
@@ -131,6 +132,64 @@ class FirebaseItemRepository implements ItemRepository {
       });
     } catch (e) {
       throw _convertException(e);
+    }
+  }
+
+  // Fine-grained stream methods
+
+  @override
+  Stream<Item?> watchItem(String itemId) {
+    try {
+      return itemsCollection.doc(itemId).snapshots().map(
+            (snapshot) => snapshot.exists ? snapshot.data() : null,
+          );
+    } catch (e) {
+      return Stream.error(_convertException(e));
+    }
+  }
+
+  @override
+  Stream<List<Item>> watchItemsByStatus(OperationalStatus status) {
+    try {
+      return itemsCollection
+          .where('operationalStatus', isEqualTo: status.toString())
+          .snapshots()
+          .map(
+            (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
+          );
+    } catch (e) {
+      return Stream.error(_convertException(e));
+    }
+  }
+
+  @override
+  Stream<List<Item>> watchItemsByIds(List<String> itemIds) {
+    try {
+      if (itemIds.isEmpty) {
+        return Stream.value([]);
+      }
+
+      // Firestore 'in' query has max 10 items limit
+      // For larger sets, need to chunk or use different approach
+      if (itemIds.length <= 10) {
+        return itemsCollection
+            .where(FieldPath.documentId, whereIn: itemIds)
+            .snapshots()
+            .map(
+              (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
+            );
+      } else {
+        // For >10 items, fall back to collection stream with client-side filtering
+        // This is a Firestore limitation - consider alternative for production
+        return itemsCollection.snapshots().map(
+              (snapshot) => snapshot.docs
+                  .map((doc) => doc.data())
+                  .where((item) => itemIds.contains(item.id))
+                  .toList(),
+            );
+      }
+    } catch (e) {
+      return Stream.error(_convertException(e));
     }
   }
 
