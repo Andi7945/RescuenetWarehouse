@@ -262,6 +262,31 @@ class ThrowingMockContainerRepository implements ContainerRepository {
     await Future.delayed(const Duration(milliseconds: 10));
     throw Exception('Mock container get error');
   }
+
+  @override
+  Stream<ContainerDao?> watchContainer(String containerId) {
+    throw Exception('Mock watch container error');
+  }
+
+  @override
+  Stream<List<ContainerDao>> watchContainersByLocation(String locationId) {
+    throw Exception('Mock watch containers by location error');
+  }
+
+  @override
+  Stream<List<ContainerDao>> watchContainersByType(String containerTypeId) {
+    throw Exception('Mock watch containers by type error');
+  }
+
+  @override
+  Stream<List<ContainerDao>> watchContainersByReadyStatus(bool isReady) {
+    throw Exception('Mock watch containers by ready status error');
+  }
+
+  @override
+  Stream<List<ContainerDao>> watchContainersByDeployStatus(bool toDeploy) {
+    throw Exception('Mock watch containers by deploy status error');
+  }
 }
 
 /// Mock repository that throws errors for assignment operations

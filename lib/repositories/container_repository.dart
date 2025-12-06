@@ -37,6 +37,28 @@ abstract class ContainerRepository {
   /// Batch update multiple containers in a single transaction.
   /// All operations succeed or all fail together.
   Future<void> batchUpdateContainers(List<ContainerDao> containers);
+
+  // NEW: Fine-grained stream methods
+
+  /// Watch a single container by ID.
+  /// Emits only when this specific container changes.
+  Stream<ContainerDao?> watchContainer(String containerId);
+
+  /// Watch containers at a specific location.
+  /// Emits only when containers at this location change.
+  Stream<List<ContainerDao>> watchContainersByLocation(String locationId);
+
+  /// Watch containers of a specific type.
+  /// Emits only when containers of this type change.
+  Stream<List<ContainerDao>> watchContainersByType(String containerTypeId);
+
+  /// Watch containers by ready status.
+  /// Emits only when containers with this status change.
+  Stream<List<ContainerDao>> watchContainersByReadyStatus(bool isReady);
+
+  /// Watch containers by deployment status.
+  /// Emits only when containers with this status change.
+  Stream<List<ContainerDao>> watchContainersByDeployStatus(bool toDeploy);
 }
 
 /// Exception thrown by ContainerRepository implementations.

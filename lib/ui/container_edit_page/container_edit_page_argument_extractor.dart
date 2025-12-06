@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as river;
 import 'package:rescuenet_warehouse/routes.dart';
 import 'package:rescuenet_warehouse/state/all_assignments_notifier.dart';
-import 'package:rescuenet_warehouse/state/all_containers_notifier.dart';
+import 'package:rescuenet_warehouse/state/container_by_id_notifier.dart';
 import 'package:rescuenet_warehouse/state/all_items_notifier.dart';
 import 'package:rescuenet_warehouse/ui/container_edit_page/container_edit_page.dart';
 import 'package:rescuenet_warehouse/models/rescue_container.dart';
@@ -30,8 +30,10 @@ class ContainerEditPageArgumentExtractor extends river.ConsumerWidget {
       getOperationErrorProvider(DataOperation.containerDelete),
     );
 
-    return AsyncValueBuilder<List<RescueContainer>>(
-      value: ref.watch(allContainersAsyncProvider),
+    // Migration: Use containerByIdProvider for single container lookup
+    // This ensures only this edit page rebuilds when the specific container changes
+    return AsyncValueBuilder<RescueContainer?>(
+      value: ref.watch(containerByIdProvider(containerId)),
       loading: () => Scaffold(
         appBar: RescueAppBar(title: "Loading..."),
         drawer: RescueNavigationDrawer(),
@@ -45,14 +47,10 @@ class ContainerEditPageArgumentExtractor extends river.ConsumerWidget {
         body: ErrorRetryWidget(
           error: error,
           message: 'Failed to load container information',
-          onRetry: () => ref.refresh(allContainersAsyncProvider),
+          onRetry: () => ref.refresh(containerByIdProvider(containerId)),
         ),
       ),
-      data: (containers) {
-        var container = containers
-            .where((c) => c.id == containerId)
-            .firstOrNull;
-
+      data: (container) {
         if (container == null) {
           return Scaffold(
             appBar: RescueAppBar(title: "Container not found"),

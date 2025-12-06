@@ -5,7 +5,7 @@ import 'package:rescuenet_warehouse/features/assignment_by_container/assign_by_c
 import 'package:rescuenet_warehouse/features/assignment_by_container/assign_by_container/assignment_by_container_state.dart';
 import 'package:rescuenet_warehouse/models/item.dart';
 import 'package:rescuenet_warehouse/routes.dart';
-import 'package:rescuenet_warehouse/state/all_containers_notifier.dart';
+import 'package:rescuenet_warehouse/state/container_by_id_notifier.dart';
 import 'package:rescuenet_warehouse/state/data_operations_notifier.dart';
 import 'package:rescuenet_warehouse/ui/rescue_navigation_drawer.dart';
 import 'package:rescuenet_warehouse/ui/rescue_text.dart';
@@ -24,8 +24,10 @@ class AssignmentByContainerPage extends river.ConsumerWidget {
       isOperationLoadingProvider(DataOperation.assignmentCreate),
     );
 
-    return AsyncValueBuilder<List<RescueContainer>>(
-      value: ref.watch(allContainersAsyncProvider),
+    // Migration: Use containerByIdProvider for single container lookup
+    // This ensures only this assignment page rebuilds when the specific container changes
+    return AsyncValueBuilder<RescueContainer?>(
+      value: ref.watch(containerByIdProvider(containerId)),
       loading: () => Scaffold(
         appBar: RescueAppBar(title: "Loading..."),
         drawer: RescueNavigationDrawer(),
@@ -39,14 +41,10 @@ class AssignmentByContainerPage extends river.ConsumerWidget {
         body: ErrorRetryWidget(
           error: error,
           message: 'Failed to load container information',
-          onRetry: () => ref.refresh(allContainersAsyncProvider),
+          onRetry: () => ref.refresh(containerByIdProvider(containerId)),
         ),
       ),
-      data: (containers) {
-        var container = containers
-            .where((c) => c.id == containerId)
-            .firstOrNull;
-
+      data: (container) {
         if (container == null) {
           return Scaffold(
             appBar: RescueAppBar(title: "Container not found"),

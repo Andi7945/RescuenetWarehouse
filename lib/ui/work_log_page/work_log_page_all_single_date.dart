@@ -4,7 +4,7 @@ import 'package:rescuenet_warehouse/state/all_items_notifier.dart';
 import 'package:rescuenet_warehouse/ui/work_log_page/work_log_page_entry.dart';
 
 import '../../models/log_entry_summed.dart';
-import '../../state/all_containers_notifier.dart';
+import '../../state/container_by_id_notifier.dart';
 import '../rescue_text.dart';
 
 class WorkLogPageAllSingleDate extends ConsumerWidget {
@@ -19,8 +19,10 @@ class WorkLogPageAllSingleDate extends ConsumerWidget {
       return Container();
     }
 
+    // Migration: Use containerByIdProvider for single container lookup
+    // This ensures only this widget rebuilds when the specific container changes
     return ref
-        .watch(allContainersAsyncProvider)
+        .watch(containerByIdProvider(containerId))
         .when(
           loading: () => const Padding(
             padding: EdgeInsets.all(16.0),
@@ -46,17 +48,14 @@ class WorkLogPageAllSingleDate extends ConsumerWidget {
                   ),
                   const SizedBox(height: 8),
                   ElevatedButton(
-                    onPressed: () => ref.refresh(allContainersAsyncProvider),
+                    onPressed: () => ref.refresh(containerByIdProvider(containerId)),
                     child: const Text('Retry'),
                   ),
                 ],
               ),
             ),
           ),
-          data: (containers) {
-            var container = containers
-                .where((c) => c.id == containerId)
-                .firstOrNull;
+          data: (container) {
             return table(container?.printName, ref);
           },
         );

@@ -139,6 +139,53 @@ class FirebaseContainerRepository implements ContainerRepository {
     return upsertContainer(container);
   }
 
+  @override
+  Stream<ContainerDao?> watchContainer(String containerId) {
+    return containersCollection.doc(containerId).snapshots().map(
+          (snapshot) => snapshot.exists ? snapshot.data() : null,
+        );
+  }
+
+  @override
+  Stream<List<ContainerDao>> watchContainersByLocation(String locationId) {
+    return containersCollection
+        .where('currentLocationId', isEqualTo: locationId)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
+        );
+  }
+
+  @override
+  Stream<List<ContainerDao>> watchContainersByType(String containerTypeId) {
+    return containersCollection
+        .where('typeId', isEqualTo: containerTypeId)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
+        );
+  }
+
+  @override
+  Stream<List<ContainerDao>> watchContainersByReadyStatus(bool isReady) {
+    return containersCollection
+        .where('isReady', isEqualTo: isReady)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
+        );
+  }
+
+  @override
+  Stream<List<ContainerDao>> watchContainersByDeployStatus(bool toDeploy) {
+    return containersCollection
+        .where('toDeploy', isEqualTo: toDeploy)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
+        );
+  }
+
   /// Converts Firebase and other exceptions to ContainerException.
   ContainerException _convertException(Object exception) {
     if (exception is FirebaseException) {
