@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rescuenet_warehouse/state/assignments_by_container_notifier.dart';
-import 'package:rescuenet_warehouse/state/items_by_ids_notifier.dart';
+import 'package:rescuenet_warehouse/state/items_for_container_notifier.dart';
 import 'package:rescuenet_warehouse/ui/item_card.dart';
-import 'package:rescuenet_warehouse/widgets/loading/async_value_builder.dart';
 import 'package:rescuenet_warehouse/widgets/loading/data_loading_indicator.dart';
 import 'package:rescuenet_warehouse/widgets/loading/error_retry_widget.dart';
 
@@ -19,35 +18,38 @@ class ContainerWithContentColumn extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return AsyncValueBuilder<List<Assignment>>(
-      value: ref.watch(assignmentsByContainerProvider(_container.id)),
-      loading: () => const DataLoadingIndicator(
-        message: 'Loading container assignments...',
-      ),
-      error: (error, stackTrace) => ErrorRetryWidget(
-        error: error,
-        message: 'Failed to load container assignments',
-        onRetry: () => ref.refresh(assignmentsByContainerProvider(_container.id)),
-      ),
-      data: (containerAssignments) {
-        // Extract item IDs from assignments for fine-grained watching
-        final itemIds = containerAssignments
-            .where((a) => a.count > 0)
-            .map((a) => a.itemId)
-            .toList();
-
-        return AsyncValueBuilder<List<Item>>(
-          value: ref.watch(itemsByIdsProvider(itemIds)),
-          loading: () => const DataLoadingIndicator(message: 'Loading items...'),
-          error: (error, stackTrace) => ErrorRetryWidget(
-            error: error,
-            message: 'Failed to load items',
-            onRetry: () => ref.refresh(itemsByIdsProvider(itemIds)),
-          ),
-          data: (items) => _buildContainerContent(containerAssignments, items),
-        );
-      },
+    // Watch both assignments and items for this container
+    // Both providers take containerId (String) - no list equality issues
+    final assignmentsAsync = ref.watch(
+      assignmentsByContainerProvider(_container.id),
     );
+    final itemsAsync = ref.watch(
+      itemsForContainerProvider(_container.id),
+    );
+
+    // Show loading if either is loading
+    if (assignmentsAsync.isLoading || itemsAsync.isLoading) {
+      return const DataLoadingIndicator(message: 'Loading container items...');
+    }
+
+    // Show error if either has error (prioritize assignments error)
+    final error = assignmentsAsync.error ?? itemsAsync.error;
+    if (error != null) {
+      return ErrorRetryWidget(
+        error: error,
+        message: 'Failed to load container data',
+        onRetry: () {
+          ref.refresh(assignmentsByContainerProvider(_container.id));
+          ref.refresh(itemsForContainerProvider(_container.id));
+        },
+      );
+    }
+
+    // Both have data - build content
+    final assignments = assignmentsAsync.valueOrNull ?? [];
+    final items = itemsAsync.valueOrNull ?? [];
+
+    return _buildContainerContent(assignments, items);
   }
 
   Widget _buildContainerContent(
