@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rescuenet_warehouse/state/all_items_notifier.dart';
-import 'package:rescuenet_warehouse/ui/work_log_page/work_log_page_entry.dart';
+import 'package:rescuenet_warehouse/features/worklog/ui/components/work_log_page_entry.dart';
 
-import '../../models/log_entry_summed.dart';
-import '../../state/container_by_id_notifier.dart';
-import '../rescue_text.dart';
+import 'package:rescuenet_warehouse/models/log_entry_summed.dart';
+import 'package:rescuenet_warehouse/state/container_by_id_notifier.dart';
+import 'package:rescuenet_warehouse/ui/rescue_text.dart';
 
 class WorkLogPageAllSingleDate extends ConsumerWidget {
   final List<LogEntrySummed> entries;

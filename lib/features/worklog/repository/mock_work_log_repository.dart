@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:rescuenet_warehouse/models/log_entry.dart';
-import 'package:rescuenet_warehouse/repositories/work_log_repository.dart';
+import 'package:rescuenet_warehouse/features/worklog/repository/work_log_repository.dart';
 
 /// Mock implementation of WorkLogRepository for testing
 ///

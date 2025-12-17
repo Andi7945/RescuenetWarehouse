@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:rescuenet_warehouse/repositories/repository_providers.dart';
+import 'package:rescuenet_warehouse/features/worklog/providers/work_log_providers.dart';
 
-import '../models/log_entry.dart';
+import '../../../../models/log_entry.dart';
 
 part 'all_work_logs_notifier.g.dart';
 

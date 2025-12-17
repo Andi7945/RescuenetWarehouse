@@ -9,10 +9,11 @@ import 'package:rescuenet_warehouse/repositories/impl/mock/mock_item_repository.
 import 'package:rescuenet_warehouse/repositories/impl/mock/mock_container_repository.dart';
 import 'package:rescuenet_warehouse/repositories/impl/mock/mock_assignment_repository.dart';
 import 'package:rescuenet_warehouse/repositories/impl/mock/mock_auth_repository.dart';
-import 'package:rescuenet_warehouse/repositories/impl/mock/mock_work_log_repository.dart';
+import 'package:rescuenet_warehouse/features/worklog/repository/mock_work_log_repository.dart';
 import 'package:rescuenet_warehouse/repositories/impl/mock/mock_container_type_repository.dart';
 import 'package:rescuenet_warehouse/repositories/impl/mock/mock_current_location_repository.dart';
 import 'package:rescuenet_warehouse/repositories/impl/mock/mock_module_destination_repository.dart';
+import 'package:rescuenet_warehouse/features/worklog/providers/work_log_providers.dart';
 import 'package:rescuenet_warehouse/repositories/item_repository.dart';
 import 'package:rescuenet_warehouse/repositories/container_repository.dart';
 import 'package:rescuenet_warehouse/repositories/assignment_repository.dart';

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as river;
 import 'package:rescuenet_warehouse/ui/container_chooser_action.dart';
 import 'package:rescuenet_warehouse/ui/rescue_text.dart';
-import 'package:rescuenet_warehouse/ui/work_log_page/work_log_page_body_from_date.dart';
+import 'package:rescuenet_warehouse/features/worklog/ui/components/work_log_page_body_from_date.dart';
 
-import '../../state/work_log_date_filter_notifier.dart';
-import '../rescue_navigation_drawer.dart';
-import '../../widgets/rescue_app_bar.dart';
-import 'work_log_page_body_all.dart';
+import 'package:rescuenet_warehouse/features/worklog/business_logic/notifiers/work_log_date_filter_notifier.dart';
+import 'package:rescuenet_warehouse/ui/rescue_navigation_drawer.dart';
+import 'package:rescuenet_warehouse/widgets/rescue_app_bar.dart';
+import 'package:rescuenet_warehouse/features/worklog/ui/components/work_log_page_body_all.dart';
 
 class WorkLogPage extends river.ConsumerStatefulWidget {
   @override

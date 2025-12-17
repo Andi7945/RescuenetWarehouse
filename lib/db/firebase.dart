@@ -3,7 +3,6 @@ import 'package:rescuenet_warehouse/models/assignment.dart';
 import 'package:rescuenet_warehouse/models/container_type.dart';
 import 'package:rescuenet_warehouse/models/current_location.dart';
 import 'package:rescuenet_warehouse/models/item.dart';
-import 'package:rescuenet_warehouse/models/log_entry.dart';
 import 'package:rescuenet_warehouse/models/module_destination.dart';
 import '../models/container_dao.dart';
 
@@ -19,13 +18,6 @@ final itemsCollection = FirebaseFirestore.instance
     .withConverter<Item>(
       fromFirestore: (snapshot, _) => Item.fromJson(snapshot.data()!),
       toFirestore: (Item type, _) => type.toJson(),
-    );
-
-final workLogCollection = FirebaseFirestore.instance
-    .collection("work_log")
-    .withConverter<LogEntry>(
-      fromFirestore: (snapshot, _) => LogEntry.fromJson(snapshot.data()!),
-      toFirestore: (LogEntry type, _) => type.toJson(),
     );
 
 final currentLocationsCollection = FirebaseFirestore.instance

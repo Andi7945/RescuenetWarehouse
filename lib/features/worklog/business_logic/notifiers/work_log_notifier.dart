@@ -1,11 +1,11 @@
 import 'package:rescuenet_warehouse/models/log_entry_summed.dart';
-import 'package:rescuenet_warehouse/state/all_work_logs_notifier.dart';
+import 'package:rescuenet_warehouse/features/worklog/business_logic/notifiers/all_work_logs_notifier.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rescuenet_warehouse/collection_extensions.dart';
 import "package:collection/collection.dart";
 
-import '../models/log_entry.dart';
-import '../ui/work_log_page/work_log_helper.dart';
+import '../../../../models/log_entry.dart';
+import '../aggregation.dart';
 
 part 'work_log_notifier.g.dart';
 

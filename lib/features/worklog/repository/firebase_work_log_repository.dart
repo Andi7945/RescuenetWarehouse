@@ -1,16 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rescuenet_warehouse/models/log_entry.dart';
-import 'package:rescuenet_warehouse/repositories/work_log_repository.dart';
-import 'package:rescuenet_warehouse/db/firebase.dart';
+import 'package:rescuenet_warehouse/features/worklog/repository/work_log_repository.dart';
 
 /// Firebase implementation of WorkLogRepository
 ///
 /// Provides real-time synchronization with Firestore for audit trail data.
 /// Work logs are typically append-only for audit integrity.
 class FirebaseWorkLogRepository implements WorkLogRepository {
+  /// Firestore collection reference for work logs
+  static final _workLogCollection = FirebaseFirestore.instance
+      .collection("work_log")
+      .withConverter<LogEntry>(
+        fromFirestore: (snapshot, _) => LogEntry.fromJson(snapshot.data()!),
+        toFirestore: (LogEntry type, _) => type.toJson(),
+      );
+
   @override
   Stream<List<LogEntry>> watchWorkLogs() {
-    return workLogCollection
+    return _workLogCollection
         .orderBy('date', descending: true)
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
@@ -19,7 +26,7 @@ class FirebaseWorkLogRepository implements WorkLogRepository {
   @override
   Future<LogEntry?> getWorkLog(String id) async {
     try {
-      final doc = await workLogCollection.doc(id).get();
+      final doc = await _workLogCollection.doc(id).get();
       return doc.exists ? doc.data() : null;
     } catch (e) {
       throw Exception('Failed to get work log: $e');
@@ -29,7 +36,7 @@ class FirebaseWorkLogRepository implements WorkLogRepository {
   @override
   Future<List<LogEntry>> getWorkLogsForItem(String itemId) async {
     try {
-      final querySnapshot = await workLogCollection
+      final querySnapshot = await _workLogCollection
           .where('itemId', isEqualTo: itemId)
           .orderBy('date', descending: true)
           .get();
@@ -42,7 +49,7 @@ class FirebaseWorkLogRepository implements WorkLogRepository {
   @override
   Future<List<LogEntry>> getWorkLogsForContainer(String containerId) async {
     try {
-      final querySnapshot = await workLogCollection
+      final querySnapshot = await _workLogCollection
           .where('containerId', isEqualTo: containerId)
           .orderBy('date', descending: true)
           .get();
@@ -55,7 +62,7 @@ class FirebaseWorkLogRepository implements WorkLogRepository {
   @override
   Future<List<LogEntry>> getWorkLogsSince(DateTime date) async {
     try {
-      final querySnapshot = await workLogCollection
+      final querySnapshot = await _workLogCollection
           .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(date))
           .orderBy('date', descending: true)
           .get();
@@ -71,7 +78,7 @@ class FirebaseWorkLogRepository implements WorkLogRepository {
     DateTime endDate,
   ) async {
     try {
-      final querySnapshot = await workLogCollection
+      final querySnapshot = await _workLogCollection
           .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(startDate))
           .where('date', isLessThanOrEqualTo: Timestamp.fromDate(endDate))
           .orderBy('date', descending: true)
@@ -85,7 +92,7 @@ class FirebaseWorkLogRepository implements WorkLogRepository {
   @override
   Future<void> createWorkLog(LogEntry logEntry) async {
     try {
-      await workLogCollection.doc(logEntry.id).set(logEntry);
+      await _workLogCollection.doc(logEntry.id).set(logEntry);
     } catch (e) {
       throw Exception('Failed to create work log: $e');
     }
@@ -104,7 +111,7 @@ class FirebaseWorkLogRepository implements WorkLogRepository {
       final batch = FirebaseFirestore.instance.batch();
 
       for (final logEntry in logEntries) {
-        final docRef = workLogCollection.doc(logEntry.id);
+        final docRef = _workLogCollection.doc(logEntry.id);
         batch.set(docRef, logEntry);
       }
 
@@ -117,7 +124,7 @@ class FirebaseWorkLogRepository implements WorkLogRepository {
   @override
   Future<void> deleteWorkLog(String id) async {
     try {
-      await workLogCollection.doc(id).delete();
+      await _workLogCollection.doc(id).delete();
     } catch (e) {
       throw Exception('Failed to delete work log: $e');
     }
@@ -128,7 +135,7 @@ class FirebaseWorkLogRepository implements WorkLogRepository {
     DateTime startDate,
     DateTime endDate,
   ) {
-    return workLogCollection
+    return _workLogCollection
         .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(startDate))
         .where('date', isLessThan: Timestamp.fromDate(endDate))
         .orderBy('date', descending: true)
@@ -140,7 +147,7 @@ class FirebaseWorkLogRepository implements WorkLogRepository {
 
   @override
   Stream<List<LogEntry>> watchWorkLogsByUser(String userId) {
-    return workLogCollection
+    return _workLogCollection
         .where('user', isEqualTo: userId)
         .orderBy('date', descending: true)
         .snapshots()
@@ -151,7 +158,7 @@ class FirebaseWorkLogRepository implements WorkLogRepository {
 
   @override
   Stream<List<LogEntry>> watchWorkLogsByItem(String itemId) {
-    return workLogCollection
+    return _workLogCollection
         .where('itemId', isEqualTo: itemId)
         .orderBy('date', descending: true)
         .snapshots()
@@ -162,7 +169,7 @@ class FirebaseWorkLogRepository implements WorkLogRepository {
 
   @override
   Stream<List<LogEntry>> watchWorkLogsByContainer(String containerId) {
-    return workLogCollection
+    return _workLogCollection
         .where('containerId', isEqualTo: containerId)
         .orderBy('date', descending: true)
         .snapshots()

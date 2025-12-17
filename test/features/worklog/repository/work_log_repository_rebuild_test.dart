@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rescuenet_warehouse/models/log_entry.dart';
-import 'package:rescuenet_warehouse/repositories/impl/mock/mock_work_log_repository.dart';
+import 'package:rescuenet_warehouse/features/worklog/repository/mock_work_log_repository.dart';
 
 void main() {
   group('WorkLogRepository Rebuild Efficiency', () {

@@ -90,27 +90,6 @@ final assignmentRepositoryProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef AssignmentRepositoryRef = AutoDisposeProviderRef<AssignmentRepository>;
-String _$workLogRepositoryHash() => r'e78d9704a9c052f2165f5852ab54b6235ac55129';
-
-/// Provider for WorkLogRepository.
-/// Returns Firebase implementation in production, Mock implementation in tests.
-///
-/// Copied from [workLogRepository].
-@ProviderFor(workLogRepository)
-final workLogRepositoryProvider =
-    AutoDisposeProvider<WorkLogRepository>.internal(
-      workLogRepository,
-      name: r'workLogRepositoryProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$workLogRepositoryHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef WorkLogRepositoryRef = AutoDisposeProviderRef<WorkLogRepository>;
 String _$containerTypeRepositoryHash() =>
     r'25834a6690acd9bbee84598ccde7ddbeba3baf39';
 

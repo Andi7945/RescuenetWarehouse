@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:rescuenet_warehouse/state/work_logs_by_date_range_notifier.dart';
-import 'package:rescuenet_warehouse/state/work_logs_by_user_notifier.dart';
+import 'package:rescuenet_warehouse/features/worklog/business_logic/notifiers/work_logs_by_date_range_notifier.dart';
+import 'package:rescuenet_warehouse/features/worklog/business_logic/notifiers/work_logs_by_user_notifier.dart';
 import 'package:rescuenet_warehouse/models/log_entry.dart';
-import 'package:rescuenet_warehouse/repositories/repository_providers.dart';
-import 'package:rescuenet_warehouse/repositories/impl/mock/mock_work_log_repository.dart';
+import 'package:rescuenet_warehouse/features/worklog/providers/work_log_providers.dart';
+import 'package:rescuenet_warehouse/features/worklog/repository/mock_work_log_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Helper to create test provider container with shared repository

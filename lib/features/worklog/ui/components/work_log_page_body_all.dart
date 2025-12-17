@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:rescuenet_warehouse/models/log_entry_summed.dart';
-import 'package:rescuenet_warehouse/state/work_log_notifier.dart';
+import 'package:rescuenet_warehouse/features/worklog/business_logic/notifiers/work_log_notifier.dart';
 import 'package:rescuenet_warehouse/ui/rescue_text.dart';
-import 'package:rescuenet_warehouse/ui/work_log_page/work_log_page_all_single_date.dart';
+import 'package:rescuenet_warehouse/features/worklog/ui/components/work_log_page_all_single_date.dart';
 
 class WorkLogPageBodyAll extends ConsumerWidget {
   final DateFormat formatter = DateFormat('MMM d, yyyy');

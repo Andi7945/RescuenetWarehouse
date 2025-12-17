@@ -33,11 +33,19 @@ firebase firestore:import --collection-name "items" --project "RescueNet" --csv 
 ## Architecture
 
 ### State Management
-Uses **Riverpod** with code generation. All state notifiers are in `lib/state/` and use `@riverpod` annotations.
+Uses **Riverpod** with code generation. State notifiers use `@riverpod` annotations.
+
+**Architecture Patterns:**
+- **Feature-based structure**: Domain features organized in `lib/features/` with repository, business logic, providers, and UI
+- **Legacy structure**: Some notifiers remain in `lib/state/` (being gradually migrated to feature folders)
+- **Data providers**: Firebase collection access in repository layer
+- **Business logic separation**: Pure functions separated from state management
+- **Fine-grained reactivity**: Specialized stream providers for targeted rebuilds
 
 Key patterns:
-- Data providers in `lib/db/` handle Firebase collections  
-- State notifiers manage UI state and derived data
+- Repository pattern with abstract interfaces for data access
+- Dependency injection via Riverpod providers
+- Pure business logic functions separated from UI
 - Eager initialization in `main.dart` ensures providers stay alive
 
 ### Data Models
@@ -81,6 +89,67 @@ Located in `lib/features/printing/` with clean separation of concerns.
 **Legacy:**
 - `lib/pdf/` folder contains DTO models and mappers (still used)
 - Old PDF generation files have been removed (fully migrated to `lib/features/printing/`)
+
+### Work Log Feature
+
+Located in `lib/features/worklog/` with feature-based architecture following clean separation of concerns.
+
+**Architecture:**
+- **repository/** - Repository pattern with abstract interface and implementations (Firebase, Mock)
+- **business_logic/notifiers/** - Riverpod state notifiers for different use cases
+- **business_logic/aggregation.dart** - Pure functions for data aggregation
+- **providers/** - Dependency injection configuration
+- **ui/** - UI pages and components
+- **worklog.dart** - Public API barrel file
+
+**Key Principles:**
+- Repository pattern abstracts data source (Firebase/Mock)
+- Fine-grained reactivity: Specialized providers rebuild only when relevant data changes
+- Pure business logic separated from state management
+- Clear separation between data layer, business logic, and UI
+
+**Fine-Grained State Notifiers:**
+- `AllWorkLogsNotifier`: All work log entries (full collection)
+- `WorkLogsByDateRangeNotifier`: Logs within specific date range
+- `WorkLogsByUserNotifier`: Logs for specific user
+- `WorkLogsByItemNotifier`: Logs for specific item (audit trail)
+- `WorkLogsByContainerNotifier`: Logs for specific container (audit trail)
+- `WorkLogSinceNotifier`: Logs since a specific date (filtered view)
+- `WorkLogDateFilterNotifier`: Date filter state for UI
+
+**Repository Interface:**
+```dart
+abstract class WorkLogRepository {
+  Stream<List<LogEntry>> watchWorkLogs();
+  Stream<List<LogEntry>> watchWorkLogsByDateRange(DateTime start, DateTime end);
+  Stream<List<LogEntry>> watchWorkLogsByUser(String userId);
+  Stream<List<LogEntry>> watchWorkLogsByItem(String itemId);
+  Stream<List<LogEntry>> watchWorkLogsByContainer(String containerId);
+  // ... create, update, delete methods
+}
+```
+
+**Usage:**
+```dart
+// Import the barrel file
+import 'package:rescuenet_warehouse/features/worklog/worklog.dart';
+
+// Watch work logs for specific container (fine-grained - only rebuilds when this container's logs change)
+final containerLogs = ref.watch(workLogsByContainerProvider(containerId));
+
+// Watch work logs for date range (fine-grained - only rebuilds when logs in this range change)
+final todayLogs = ref.watch(workLogsByDateRangeProvider(startDate, endDate));
+
+// Aggregate daily changes using pure function
+final summary = sumDailyChanges(logEntries);
+```
+
+**Benefits:**
+- Fine-grained reactivity prevents unnecessary rebuilds
+- Repository pattern enables easy testing with mock data
+- Pure business logic functions are reusable and testable
+- Clear API surface via barrel file
+- Complete audit trail with specialized query capabilities
 
 ## Domain Model
 

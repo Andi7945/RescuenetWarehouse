@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rescuenet_warehouse/models/rescue_container.dart';
 import 'package:rescuenet_warehouse/ui/rescue_text.dart';
-
-import '../rescue_image.dart';
+import 'package:rescuenet_warehouse/ui/rescue_image.dart';
 
 TableRow header() => TableRow(
   children: [

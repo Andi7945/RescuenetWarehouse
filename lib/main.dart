@@ -8,7 +8,7 @@ import 'package:rescuenet_warehouse/features/item_export/item_export_page.dart';
 import 'package:rescuenet_warehouse/state/all_assignments_notifier.dart';
 import 'package:rescuenet_warehouse/state/all_containers_notifier.dart';
 import 'package:rescuenet_warehouse/state/all_items_notifier.dart';
-import 'package:rescuenet_warehouse/state/all_work_logs_notifier.dart';
+import 'package:rescuenet_warehouse/features/worklog/business_logic/notifiers/all_work_logs_notifier.dart';
 import 'package:rescuenet_warehouse/state/container_current_filter_notifier.dart';
 import 'package:rescuenet_warehouse/state/container_hidden_by_selection_notifier.dart';
 import 'package:rescuenet_warehouse/state/container_types_notifier.dart';
@@ -31,7 +31,7 @@ import 'package:rescuenet_warehouse/ui/item_edit_page/item_edit_page_argument_ex
 import 'package:rescuenet_warehouse/ui/auth_page/login_register_page.dart';
 import 'package:rescuenet_warehouse/routes.dart';
 import 'package:rescuenet_warehouse/features/item_csv_import/widgets/import_export/item_import_overview.dart';
-import 'package:rescuenet_warehouse/ui/work_log_page/work_log_page.dart';
+import 'package:rescuenet_warehouse/features/worklog/ui/work_log_page.dart';
 import 'package:uuid/uuid.dart';
 
 import 'repositories/auth_providers.dart';
