@@ -43,12 +43,6 @@ echo "📝 Generating org_registry.dart for $ORG/$ENV..."
 TEMPLATE_PATH="lib/config/org_registry.dart.template"
 OUTPUT_PATH="lib/config/org_registry.dart"
 
-# Back up existing file if it's not a generated one
-if [ -f "$OUTPUT_PATH" ] && ! grep -q "GENERATED at build time" "$OUTPUT_PATH"; then
-  echo "   Backing up existing org_registry.dart to org_registry.dart.backup..."
-  cp "$OUTPUT_PATH" "${OUTPUT_PATH}.backup"
-fi
-
 # Generate the org_registry.dart for this specific org/env
 if ! "$SCRIPT_DIR/lib/generate_org_registry.sh" "$ORG" "$ENV" "$TEMPLATE_PATH" "$OUTPUT_PATH"; then
   echo ""
@@ -91,6 +85,10 @@ cp -r build/web/* "$BUILD_DIR/" 2>/dev/null || true
 if [ -f "build/web/.build-manifest.json" ]; then
   cp "build/web/.build-manifest.json" "$BUILD_DIR/"
 fi
+
+# Restore org_registry.dart to the committed multi-config version for local dev
+echo "🔄 Restoring org_registry.dart for local development..."
+git restore lib/config/org_registry.dart
 
 echo ""
 echo "✅ Build complete and verified!"

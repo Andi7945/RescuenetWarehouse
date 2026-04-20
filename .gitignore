@@ -70,6 +70,6 @@ scripts/node_modules/
 scripts/backups/
 
 # Generated build-time configuration files
-# org_registry.dart is generated at build time from org_registry.dart.template
-# and should never be committed to prevent multi-config contamination
-lib/config/org_registry.dart
+# Note: org_registry.dart is tracked in git (multi-config version for local dev).
+# build_org.sh overwrites it temporarily with a single-config version during builds,
+# then restores it via git restore.

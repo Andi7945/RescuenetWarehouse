@@ -74,7 +74,6 @@ jobs:
             --dart-define=ORG="$ORG" \
             --dart-define=ENV="$ENV" \
             --release \
-            --web-renderer canvaskit
 
           # Move to environment-specific directory
           BUILD_DIR="build/web_${ORG}_${ENV}"

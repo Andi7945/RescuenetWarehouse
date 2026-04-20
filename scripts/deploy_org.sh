@@ -42,7 +42,7 @@ fi
 # Re-verify bundle project ID
 EXPECTED_PROJECT_ID=$(get_expected_project_id "$ORG" "$ENV")
 echo "🔍 Re-verifying bundle configuration..."
-if ! verify_bundle_project_id "$BUILD_DIR/main.dart.js" "$EXPECTED_PROJECT_ID"; then
+if ! verify_bundle_single_config "$BUILD_DIR/main.dart.js" "$EXPECTED_PROJECT_ID"; then
   echo ""
   echo "❌ DEPLOYMENT BLOCKED!"
   echo "Bundle verification failed. Build may be corrupted."
