@@ -79,7 +79,7 @@ class AssignmentService {
       final assignment =
           currentAssignment?.copyWith(count: newAmount) ??
           Assignment(
-            id: _uuid.v4(),
+            id: '${itemId}__${containerId}',
             itemId: itemId,
             containerId: containerId,
             count: newAmount,
@@ -131,7 +131,7 @@ class AssignmentService {
 
     // Create new assignment
     final assignment = Assignment(
-      id: _uuid.v4(),
+      id: '${itemId}__${containerId}',
       itemId: itemId,
       containerId: containerId,
       count: initialCount,
