@@ -32,6 +32,15 @@
   <title>rescuenet_warehouse</title>
   <link rel="manifest" href="manifest.json">
 
+  <style>
+    /* Prevent macOS browser back/forward navigation on horizontal trackpad swipe.
+       Flutter renders to <canvas>, so the browser sees no scrollable DOM element
+       and interprets leftward swipes as "go back". */
+    html, body {
+      overscroll-behavior-x: none;
+    }
+  </style>
+
   <!-- Mock Firebase for Playwright testing only - MUST load before Flutter -->
   <script>
     // Load mock Firebase when running Playwright tests or when mock=true parameter is present
