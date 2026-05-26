@@ -96,7 +96,7 @@ generate_org_registry() {
     features: {},
     allowedEmailDomains: ['rescuenet.net'],
     whitelistedEmails: ['Michael.Wandtke@hey.com'],
-    adminEmails: const ['Michael.Wandtke@hey.com', 'logistics@rescuenet.net'],
+    adminEmails: const ['Michael.Wandtke@hey.com', 'gertjanpieterse@rescuenet.net'],
     contactEmail: 'backoffice@rescuenet.net',
     contactPhone: '+31-6-14419988',
   ),"
@@ -115,7 +115,7 @@ generate_org_registry() {
     features: {},
     allowedEmailDomains: ['rescuenet.net'],
     whitelistedEmails: ['Michael.Wandtke@hey.com'],
-    adminEmails: const ['Michael.Wandtke@hey.com', 'logistics@rescuenet.net'],
+    adminEmails: const ['Michael.Wandtke@hey.com', 'gertjanpieterse@rescuenet.net'],
     contactEmail: 'backoffice@rescuenet.net',
     contactPhone: '+31-6-14419988',
   ),"
