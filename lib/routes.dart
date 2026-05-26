@@ -22,3 +22,5 @@ const routeItemImportOverview = "/routeItemImportOverview";
 const routeItemEditPage = "/editItem";
 
 const routeDeleteMultipleItems = "/deleteMultipleItems";
+
+const routeContainerRenumber = "/containerRenumber";

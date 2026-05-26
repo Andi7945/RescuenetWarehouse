@@ -36,6 +36,7 @@ import 'package:uuid/uuid.dart';
 
 import 'repositories/auth_providers.dart';
 import 'features/item_delete_multiple/item_delete_multiple_page.dart';
+import 'package:rescuenet_warehouse/features/container_renumber/ui/container_renumber_page.dart';
 import 'config/org_registry.dart';
 import 'features/item_overview/item_overview_page.dart';
 
@@ -105,6 +106,7 @@ class MyApp extends StatelessWidget {
           routeExport: (_) => ExportPage(),
           routeItemImportOverview: (_) => ItemImportOverviewPage(),
           routeDeleteMultipleItems: (_) => ItemDeleteMultiplePage(),
+          routeContainerRenumber: (_) => const ContainerRenumberPage(),
         },
       ),
     );

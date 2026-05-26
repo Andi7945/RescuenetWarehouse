@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../config/org_provider.dart';
 import '../models/auth_state.dart';
 import 'auth_repository.dart';
 import 'repository_providers.dart';
@@ -50,6 +51,17 @@ String? currentUserName(CurrentUserNameRef ref) {
 bool isAuthenticated(IsAuthenticatedRef ref) {
   final user = ref.watch(currentUserProvider);
   return user != null;
+}
+
+/// Returns true if the currently signed-in user is in the org's admin email list.
+/// Case-insensitive. Returns false when not authenticated.
+@riverpod
+bool isAdmin(IsAdminRef ref) {
+  final user = ref.watch(currentUserProvider);
+  if (user == null) return false;
+  final org = ref.watch(currentOrgProvider);
+  final email = user.email?.toLowerCase() ?? '';
+  return org.adminEmails.any((e) => e.toLowerCase() == email);
 }
 
 /// Notifier for authentication operations.

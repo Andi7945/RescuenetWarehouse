@@ -29,6 +29,10 @@ class OrgConfig {
   /// Example: ['developer@gmail.com', 'admin@example.com']
   final List<String> whitelistedEmails;
 
+  /// List of email addresses with admin access (e.g. container renumbering).
+  /// Empty list = no admin access for anyone. Case-insensitive at runtime.
+  final List<String> adminEmails;
+
   /// Contact email for the organization (used in PDFs and labels)
   final String contactEmail;
 
@@ -46,6 +50,7 @@ class OrgConfig {
     this.features = const {},
     this.allowedEmailDomains = const [],
     this.whitelistedEmails = const [],
+    this.adminEmails = const [],
     required this.contactEmail,
     required this.contactPhone,
   });

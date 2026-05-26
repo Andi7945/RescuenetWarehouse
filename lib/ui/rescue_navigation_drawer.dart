@@ -12,6 +12,7 @@ class RescueNavigationDrawer extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentUser = ref.watch(currentUserProvider);
     final authNotifier = ref.read(authNotifierProvider.notifier);
+    final isAdmin = ref.watch(isAdminProvider);
     return Drawer(
       child: ListView(
         children: <Widget>[
@@ -56,6 +57,10 @@ class RescueNavigationDrawer extends ConsumerWidget {
           _option("Import items from csv", routeItemImportOverview, context),
           Divider(),
           _option("Delete multiple items", routeDeleteMultipleItems, context),
+          if (isAdmin) ...[
+            const Divider(),
+            _option('Renumber Containers', routeContainerRenumber, context),
+          ],
         ],
       ),
     );

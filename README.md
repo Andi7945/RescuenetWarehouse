@@ -40,6 +40,38 @@ There are different roles:
 #### Container view
 * List items to assign
 
+## Admin Access
+
+Certain features (e.g. renumbering containers) are restricted to admin users. Admin access is email-based and configured per organisation in `scripts/lib/generate_org_registry.sh`.
+
+Find the `adminEmails` list in the rescuenet OrgConfig block and add the relevant addresses:
+
+```dart
+adminEmails: const [
+  'admin@rescuenet.net',
+  'logistics@rescuenet.net',
+],
+```
+
+After editing, rebuild and deploy:
+```bash
+./scripts/release_org.sh rescuenet staging
+```
+
+> **Do not edit `lib/config/org_registry.dart` directly** — it is generated at build time and will be overwritten.
+
+### Testing admin access locally
+
+Regenerate `org_registry.dart` without a full build, then run the app as normal:
+
+```bash
+./scripts/lib/generate_org_registry.sh rescuenet staging \
+  lib/config/org_registry.dart.template \
+  lib/config/org_registry.dart
+
+flutter run -d chrome --dart-define=ORG=rescuenet --dart-define=ENV=staging
+```
+
 ## Build
 We use [json annotations](https://github.com/google/json_serializable.dart/tree/master/example) to reduce boilerplate code. To generate new files:
 - dart run build_runner build

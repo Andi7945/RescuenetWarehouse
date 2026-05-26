@@ -85,6 +85,26 @@ final isAuthenticatedProvider = AutoDisposeProvider<bool>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef IsAuthenticatedRef = AutoDisposeProviderRef<bool>;
+String _$isAdminHash() => r'da4f9c2642005ded55478956d1306b5b5bf8f303';
+
+/// Returns true if the currently signed-in user is in the org's admin email list.
+/// Case-insensitive. Returns false when not authenticated.
+///
+/// Copied from [isAdmin].
+@ProviderFor(isAdmin)
+final isAdminProvider = AutoDisposeProvider<bool>.internal(
+  isAdmin,
+  name: r'isAdminProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$isAdminHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef IsAdminRef = AutoDisposeProviderRef<bool>;
 String _$authNotifierHash() => r'88b3cc75387d7211bdd2363b04497fe1a3e6b299';
 
 /// Notifier for authentication operations.

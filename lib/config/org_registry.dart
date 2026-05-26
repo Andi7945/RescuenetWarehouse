@@ -10,7 +10,6 @@
 
 import 'package:firebase_core/firebase_core.dart';
 import 'org_config.dart';
-import 'firebase_options_rescuenet_production.dart' as rescuenet_prod;
 import 'firebase_options_rescuenet_testing.dart' as rescuenet_staging;
 
 /// Registry of all available organizations in the multi-tenant system.
@@ -26,12 +25,13 @@ final Map<String, OrgConfig> _orgConfigs = {
     smallLogoAssetPath: 'assets/images/LogoRN.png',
     largeLogoAssetPath: 'assets/images/rn_logo_big.png',
     productionFirebase:
-        rescuenet_prod.RescuenetProductionFirebaseOptions.currentPlatform,
+        rescuenet_staging.RescuenetStagingFirebaseOptions.currentPlatform,
     stagingFirebase:
         rescuenet_staging.RescuenetStagingFirebaseOptions.currentPlatform,
     features: {},
     allowedEmailDomains: ['rescuenet.net'],
     whitelistedEmails: ['Michael.Wandtke@hey.com'],
+    adminEmails: const ['Michael.Wandtke@hey.com', 'logistics@rescuenet.net'],
     contactEmail: 'backoffice@rescuenet.net',
     contactPhone: '+31-6-14419988',
   ),
