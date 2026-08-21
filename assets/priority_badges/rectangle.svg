@@ -1,5 +1,0 @@
-<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
-    <rect width="200" height="100" x="0" y="50" fill="red" />
-    <text x="100" y="80" font-size="30" text-anchor="middle" fill="black">Prio 1</text>
-    <text x="100" y="120" font-size="30" text-anchor="middle" fill="black">Office</text>
-</svg>

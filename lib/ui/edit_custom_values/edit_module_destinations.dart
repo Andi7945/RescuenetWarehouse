@@ -4,7 +4,6 @@ import 'package:rescuenet_warehouse/state/module_destination_usage_notifier.dart
 import 'package:rescuenet_warehouse/state/module_destinations_notifier.dart';
 import 'package:rescuenet_warehouse/ui/delete_button_with_usages.dart';
 import 'package:rescuenet_warehouse/ui/edit_custom_values/edit_custom_value_text_field.dart';
-import 'package:rescuenet_warehouse/ui/edit_custom_values/widgets/badge_shape_selector.dart';
 import 'package:rescuenet_warehouse/main.dart';
 import 'package:rescuenet_warehouse/models/module_destination.dart';
 
@@ -59,8 +58,7 @@ class _EditModuleDestinationsState
         columnWidths: const {
           0: FlexColumnWidth(2), // Name
           1: FixedColumnWidth(120), // Priority
-          2: FlexColumnWidth(2), // Badge Shape
-          3: FixedColumnWidth(80), // Delete
+          2: FixedColumnWidth(80), // Delete
         },
         children: [
           _headerRow(),
@@ -87,10 +85,6 @@ class _EditModuleDestinationsState
           ),
           Padding(
             padding: EdgeInsets.all(8.0),
-            child: Text('Badge Shape', style: TextStyle(fontWeight: FontWeight.bold)),
-          ),
-          Padding(
-            padding: EdgeInsets.all(8.0),
             child: Text('Delete', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
         ],
@@ -105,7 +99,6 @@ class _EditModuleDestinationsState
         children: [
           _textField(destination.key),
           _prioritySelector(destination.key),
-          _badgeShapeSelector(destination.key),
           DeleteButtonWithUsages(destination.value, () {
             ref
                 .read(moduleDestinationsNotifierProvider.notifier)
@@ -149,26 +142,10 @@ class _EditModuleDestinationsState
               id: destination.id,
               name: destination.name,
               priority: value,
-              badgeShape: destination.badgeShape,
             ),
           ),
     ),
   );
-
-  Widget _badgeShapeSelector(ModuleDestination destination) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-      child: BadgeShapeSelector(
-        value: destination.badgeShape,
-        onChanged: (newShape) async {
-          final updated = destination.copyWith(badgeShape: newShape);
-          await ref
-              .read(moduleDestinationsNotifierProvider.notifier)
-              .upsert(updated);
-        },
-      ),
-    );
-  }
 
   TableRow _addingRow() => TableRow(
     children: [
@@ -177,7 +154,6 @@ class _EditModuleDestinationsState
         child: EditCustomValueTextField(_addController),
       ),
       const SizedBox.shrink(), // Empty cell for priority column
-      const SizedBox.shrink(), // Empty cell for badge column
       _btnAdd(),
     ],
   );

@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:rescuenet_warehouse/features/printing/domain/priority_badge_config.dart';
 
 part 'module_destination.freezed.dart';
 
@@ -15,7 +14,6 @@ abstract class ModuleDestination with _$ModuleDestination {
     /// such destinations sort last. Nullable because existing Firestore
     /// documents predate this field.
     int? priority,
-    PriorityBadgeShape? badgeShape, // nullable for backward compat
   }) = _ModuleDestination;
 
   factory ModuleDestination.fromJson(Map<String, dynamic> json) =>
