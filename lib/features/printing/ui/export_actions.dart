@@ -35,6 +35,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pdf/pdf.dart';
+import 'package:rescuenet_warehouse/features/printing/domain/container_refresh.dart';
 import 'package:rescuenet_warehouse/features/printing/domain/print_context_provider.dart';
 import 'package:rescuenet_warehouse/features/printing/services/pdf_generation_service.dart';
 import 'package:rescuenet_warehouse/features/printing/services/print_service.dart';
@@ -43,6 +44,9 @@ import 'package:rescuenet_warehouse/features/printing/services/safety_datasheet_
 import 'package:rescuenet_warehouse/features/printing/generators/common/pdf_base_widgets.dart';
 import 'package:rescuenet_warehouse/models/item.dart';
 import 'package:rescuenet_warehouse/models/rescue_container.dart';
+import 'package:rescuenet_warehouse/state/container_types_notifier.dart';
+import 'package:rescuenet_warehouse/state/current_locations_notifier.dart';
+import 'package:rescuenet_warehouse/state/module_destinations_notifier.dart';
 import 'export_options_modal.dart';
 import 'label_export_modal.dart';
 
@@ -52,6 +56,33 @@ import 'label_export_modal.dart';
 /// async and handle context mounting checks properly to avoid using
 /// BuildContext after widget disposal.
 class ExportActions {
+  /// Re-resolves the denormalised type / destination / location on every
+  /// container key against the current notifier state.
+  ///
+  /// The container providers resolve these once per container-stream emission
+  /// and never re-run when a type / destination / location is edited, so
+  /// without this the PDF prints stale names and priorities until reload.
+  /// See [refreshContainer] for the resolve-or-keep fallback behaviour.
+  static Map<RescueContainer, Map<Item, int>> _refreshed(
+    WidgetRef ref,
+    Map<RescueContainer, Map<Item, int>> containers,
+  ) {
+    final types = ref.read(containerTypesNotifierProvider);
+    final destinations = ref.read(moduleDestinationsNotifierProvider);
+    final locations = ref.read(currentLocationsNotifierProvider);
+    return containers.map(
+      (container, items) => MapEntry(
+        refreshContainer(
+          container,
+          types: types,
+          destinations: destinations,
+          locations: locations,
+        ),
+        items,
+      ),
+    );
+  }
+
   /// Handle packing list export for selected containers.
   ///
   /// Generates packing list PDFs for the given containers and shows a modal
@@ -71,9 +102,10 @@ class ExportActions {
     WidgetRef ref,
     Map<RescueContainer, Map<Item, int>> containers,
   ) async {
+    final fresh = _refreshed(ref, containers);
     final printContext = ref.read(printContextProvider);
     final documents = await PdfGenerationService.generatePackingLists(
-      containers,
+      fresh,
       printContext,
     );
 
@@ -124,9 +156,10 @@ class ExportActions {
     WidgetRef ref,
     Map<RescueContainer, Map<Item, int>> containers,
   ) async {
+    final fresh = _refreshed(ref, containers);
     final printContext = ref.read(printContextProvider);
     final document = await PdfGenerationService.generateLabels(
-      containers,
+      fresh,
       printContext,
     );
 
@@ -183,9 +216,10 @@ class ExportActions {
     WidgetRef ref,
     Map<RescueContainer, Map<Item, int>> containers,
   ) async {
+    final fresh = _refreshed(ref, containers);
     final printContext = ref.read(printContextProvider);
     final document = await PdfGenerationService.generateSummary(
-      containers,
+      fresh,
       printContext,
     );
 
