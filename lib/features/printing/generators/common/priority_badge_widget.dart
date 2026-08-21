@@ -4,6 +4,7 @@ import 'package:rescuenet_warehouse/features/printing/domain/priority_badge_conf
 import 'package:rescuenet_warehouse/features/printing/generators/common/pdf_base_widgets.dart';
 import 'package:rescuenet_warehouse/features/printing/generators/common/priority_badge_shapes.dart';
 import 'package:rescuenet_warehouse/models/module_destination.dart';
+import 'package:rescuenet_warehouse/pdf/print_sorting.dart';
 
 /// Builds a priority badge widget for container labels.
 ///
@@ -113,9 +114,14 @@ void _drawShape(
 }
 
 /// Returns the background color for a priority level.
+///
 /// Note: Priority 4 has different colors for heart vs. cross.
+/// [unprioritisedRank] renders uncoloured (white fill) so a destination
+/// without a configured priority is visibly unconfigured on the label.
 PdfColor _getPriorityColor(int priority, PriorityBadgeShape shape) {
   switch (priority) {
+    case unprioritisedRank:
+      return PdfColors.white;
     case 1:
       return PdfColors.red;
     case 2:

@@ -10,8 +10,12 @@ abstract class ModuleDestination with _$ModuleDestination {
   const factory ModuleDestination({
     required String id,
     required String name,
-    @Default(1) int priority,
-    PriorityBadgeShape? badgeShape,  // NEW: nullable for backward compat
+
+    /// Load priority 1 (first) .. 4 (last). `null` means not configured yet -
+    /// such destinations sort last. Nullable because existing Firestore
+    /// documents predate this field.
+    int? priority,
+    PriorityBadgeShape? badgeShape, // nullable for backward compat
   }) = _ModuleDestination;
 
   factory ModuleDestination.fromJson(Map<String, dynamic> json) =>

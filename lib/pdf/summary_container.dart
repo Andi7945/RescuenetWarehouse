@@ -16,6 +16,7 @@ abstract class SummaryContainer with _$SummaryContainer {
     required String dangerousGoods,
     required String coldChain,
     required String moduleDestination,
+    required int priority,
     required SequentialBuild sequentialBuild,
   }) = _SummaryContainer;
 }

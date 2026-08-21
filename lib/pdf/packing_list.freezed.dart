@@ -216,7 +216,7 @@ return $default(_that.containerNo,_that.containerType,_that.containerName,_that.
 
 
 class _PackingList implements PackingList {
-  const _PackingList({required this.containerNo, required this.containerType, required this.containerName, required this.containerDescription, required this.totalWeight, required this.destination, this.priority = 1, required this.sequentialBuild, required this.expirationDate, required final  List<PackingDangerousGood> dangerousGoods, required final  List<PackingItem> items}): _dangerousGoods = dangerousGoods,_items = items;
+  const _PackingList({required this.containerNo, required this.containerType, required this.containerName, required this.containerDescription, required this.totalWeight, required this.destination, required this.priority, required this.sequentialBuild, required this.expirationDate, required final  List<PackingDangerousGood> dangerousGoods, required final  List<PackingItem> items}): _dangerousGoods = dangerousGoods,_items = items;
   
 
 @override final  int containerNo;
@@ -225,7 +225,7 @@ class _PackingList implements PackingList {
 @override final  String containerDescription;
 @override final  double totalWeight;
 @override final  String destination;
-@override@JsonKey() final  int priority;
+@override final  int priority;
 @override final  SequentialBuild sequentialBuild;
 @override final  DateTime? expirationDate;
  final  List<PackingDangerousGood> _dangerousGoods;

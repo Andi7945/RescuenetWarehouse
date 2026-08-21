@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SummaryContainer {
 
- int get containerNr; String get name; String get description; String get type; int get value; double get weight; String get expirationDate; String get dangerousGoods; String get coldChain; String get moduleDestination; SequentialBuild get sequentialBuild;
+ int get containerNr; String get name; String get description; String get type; int get value; double get weight; String get expirationDate; String get dangerousGoods; String get coldChain; String get moduleDestination; int get priority; SequentialBuild get sequentialBuild;
 /// Create a copy of SummaryContainer
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $SummaryContainerCopyWith<SummaryContainer> get copyWith => _$SummaryContainerCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SummaryContainer&&(identical(other.containerNr, containerNr) || other.containerNr == containerNr)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.type, type) || other.type == type)&&(identical(other.value, value) || other.value == value)&&(identical(other.weight, weight) || other.weight == weight)&&(identical(other.expirationDate, expirationDate) || other.expirationDate == expirationDate)&&(identical(other.dangerousGoods, dangerousGoods) || other.dangerousGoods == dangerousGoods)&&(identical(other.coldChain, coldChain) || other.coldChain == coldChain)&&(identical(other.moduleDestination, moduleDestination) || other.moduleDestination == moduleDestination)&&(identical(other.sequentialBuild, sequentialBuild) || other.sequentialBuild == sequentialBuild));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SummaryContainer&&(identical(other.containerNr, containerNr) || other.containerNr == containerNr)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.type, type) || other.type == type)&&(identical(other.value, value) || other.value == value)&&(identical(other.weight, weight) || other.weight == weight)&&(identical(other.expirationDate, expirationDate) || other.expirationDate == expirationDate)&&(identical(other.dangerousGoods, dangerousGoods) || other.dangerousGoods == dangerousGoods)&&(identical(other.coldChain, coldChain) || other.coldChain == coldChain)&&(identical(other.moduleDestination, moduleDestination) || other.moduleDestination == moduleDestination)&&(identical(other.priority, priority) || other.priority == priority)&&(identical(other.sequentialBuild, sequentialBuild) || other.sequentialBuild == sequentialBuild));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,containerNr,name,description,type,value,weight,expirationDate,dangerousGoods,coldChain,moduleDestination,sequentialBuild);
+int get hashCode => Object.hash(runtimeType,containerNr,name,description,type,value,weight,expirationDate,dangerousGoods,coldChain,moduleDestination,priority,sequentialBuild);
 
 @override
 String toString() {
-  return 'SummaryContainer(containerNr: $containerNr, name: $name, description: $description, type: $type, value: $value, weight: $weight, expirationDate: $expirationDate, dangerousGoods: $dangerousGoods, coldChain: $coldChain, moduleDestination: $moduleDestination, sequentialBuild: $sequentialBuild)';
+  return 'SummaryContainer(containerNr: $containerNr, name: $name, description: $description, type: $type, value: $value, weight: $weight, expirationDate: $expirationDate, dangerousGoods: $dangerousGoods, coldChain: $coldChain, moduleDestination: $moduleDestination, priority: $priority, sequentialBuild: $sequentialBuild)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $SummaryContainerCopyWith<$Res>  {
   factory $SummaryContainerCopyWith(SummaryContainer value, $Res Function(SummaryContainer) _then) = _$SummaryContainerCopyWithImpl;
 @useResult
 $Res call({
- int containerNr, String name, String description, String type, int value, double weight, String expirationDate, String dangerousGoods, String coldChain, String moduleDestination, SequentialBuild sequentialBuild
+ int containerNr, String name, String description, String type, int value, double weight, String expirationDate, String dangerousGoods, String coldChain, String moduleDestination, int priority, SequentialBuild sequentialBuild
 });
 
 
@@ -62,7 +62,7 @@ class _$SummaryContainerCopyWithImpl<$Res>
 
 /// Create a copy of SummaryContainer
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? containerNr = null,Object? name = null,Object? description = null,Object? type = null,Object? value = null,Object? weight = null,Object? expirationDate = null,Object? dangerousGoods = null,Object? coldChain = null,Object? moduleDestination = null,Object? sequentialBuild = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? containerNr = null,Object? name = null,Object? description = null,Object? type = null,Object? value = null,Object? weight = null,Object? expirationDate = null,Object? dangerousGoods = null,Object? coldChain = null,Object? moduleDestination = null,Object? priority = null,Object? sequentialBuild = null,}) {
   return _then(_self.copyWith(
 containerNr: null == containerNr ? _self.containerNr : containerNr // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -74,7 +74,8 @@ as double,expirationDate: null == expirationDate ? _self.expirationDate : expira
 as String,dangerousGoods: null == dangerousGoods ? _self.dangerousGoods : dangerousGoods // ignore: cast_nullable_to_non_nullable
 as String,coldChain: null == coldChain ? _self.coldChain : coldChain // ignore: cast_nullable_to_non_nullable
 as String,moduleDestination: null == moduleDestination ? _self.moduleDestination : moduleDestination // ignore: cast_nullable_to_non_nullable
-as String,sequentialBuild: null == sequentialBuild ? _self.sequentialBuild : sequentialBuild // ignore: cast_nullable_to_non_nullable
+as String,priority: null == priority ? _self.priority : priority // ignore: cast_nullable_to_non_nullable
+as int,sequentialBuild: null == sequentialBuild ? _self.sequentialBuild : sequentialBuild // ignore: cast_nullable_to_non_nullable
 as SequentialBuild,
   ));
 }
@@ -160,10 +161,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int containerNr,  String name,  String description,  String type,  int value,  double weight,  String expirationDate,  String dangerousGoods,  String coldChain,  String moduleDestination,  SequentialBuild sequentialBuild)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int containerNr,  String name,  String description,  String type,  int value,  double weight,  String expirationDate,  String dangerousGoods,  String coldChain,  String moduleDestination,  int priority,  SequentialBuild sequentialBuild)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SummaryContainer() when $default != null:
-return $default(_that.containerNr,_that.name,_that.description,_that.type,_that.value,_that.weight,_that.expirationDate,_that.dangerousGoods,_that.coldChain,_that.moduleDestination,_that.sequentialBuild);case _:
+return $default(_that.containerNr,_that.name,_that.description,_that.type,_that.value,_that.weight,_that.expirationDate,_that.dangerousGoods,_that.coldChain,_that.moduleDestination,_that.priority,_that.sequentialBuild);case _:
   return orElse();
 
 }
@@ -181,10 +182,10 @@ return $default(_that.containerNr,_that.name,_that.description,_that.type,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int containerNr,  String name,  String description,  String type,  int value,  double weight,  String expirationDate,  String dangerousGoods,  String coldChain,  String moduleDestination,  SequentialBuild sequentialBuild)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int containerNr,  String name,  String description,  String type,  int value,  double weight,  String expirationDate,  String dangerousGoods,  String coldChain,  String moduleDestination,  int priority,  SequentialBuild sequentialBuild)  $default,) {final _that = this;
 switch (_that) {
 case _SummaryContainer():
-return $default(_that.containerNr,_that.name,_that.description,_that.type,_that.value,_that.weight,_that.expirationDate,_that.dangerousGoods,_that.coldChain,_that.moduleDestination,_that.sequentialBuild);case _:
+return $default(_that.containerNr,_that.name,_that.description,_that.type,_that.value,_that.weight,_that.expirationDate,_that.dangerousGoods,_that.coldChain,_that.moduleDestination,_that.priority,_that.sequentialBuild);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -201,10 +202,10 @@ return $default(_that.containerNr,_that.name,_that.description,_that.type,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int containerNr,  String name,  String description,  String type,  int value,  double weight,  String expirationDate,  String dangerousGoods,  String coldChain,  String moduleDestination,  SequentialBuild sequentialBuild)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int containerNr,  String name,  String description,  String type,  int value,  double weight,  String expirationDate,  String dangerousGoods,  String coldChain,  String moduleDestination,  int priority,  SequentialBuild sequentialBuild)?  $default,) {final _that = this;
 switch (_that) {
 case _SummaryContainer() when $default != null:
-return $default(_that.containerNr,_that.name,_that.description,_that.type,_that.value,_that.weight,_that.expirationDate,_that.dangerousGoods,_that.coldChain,_that.moduleDestination,_that.sequentialBuild);case _:
+return $default(_that.containerNr,_that.name,_that.description,_that.type,_that.value,_that.weight,_that.expirationDate,_that.dangerousGoods,_that.coldChain,_that.moduleDestination,_that.priority,_that.sequentialBuild);case _:
   return null;
 
 }
@@ -216,7 +217,7 @@ return $default(_that.containerNr,_that.name,_that.description,_that.type,_that.
 
 
 class _SummaryContainer implements SummaryContainer {
-  const _SummaryContainer({required this.containerNr, required this.name, required this.description, required this.type, required this.value, required this.weight, required this.expirationDate, required this.dangerousGoods, required this.coldChain, required this.moduleDestination, required this.sequentialBuild});
+  const _SummaryContainer({required this.containerNr, required this.name, required this.description, required this.type, required this.value, required this.weight, required this.expirationDate, required this.dangerousGoods, required this.coldChain, required this.moduleDestination, required this.priority, required this.sequentialBuild});
   
 
 @override final  int containerNr;
@@ -229,6 +230,7 @@ class _SummaryContainer implements SummaryContainer {
 @override final  String dangerousGoods;
 @override final  String coldChain;
 @override final  String moduleDestination;
+@override final  int priority;
 @override final  SequentialBuild sequentialBuild;
 
 /// Create a copy of SummaryContainer
@@ -241,16 +243,16 @@ _$SummaryContainerCopyWith<_SummaryContainer> get copyWith => __$SummaryContaine
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SummaryContainer&&(identical(other.containerNr, containerNr) || other.containerNr == containerNr)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.type, type) || other.type == type)&&(identical(other.value, value) || other.value == value)&&(identical(other.weight, weight) || other.weight == weight)&&(identical(other.expirationDate, expirationDate) || other.expirationDate == expirationDate)&&(identical(other.dangerousGoods, dangerousGoods) || other.dangerousGoods == dangerousGoods)&&(identical(other.coldChain, coldChain) || other.coldChain == coldChain)&&(identical(other.moduleDestination, moduleDestination) || other.moduleDestination == moduleDestination)&&(identical(other.sequentialBuild, sequentialBuild) || other.sequentialBuild == sequentialBuild));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SummaryContainer&&(identical(other.containerNr, containerNr) || other.containerNr == containerNr)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.type, type) || other.type == type)&&(identical(other.value, value) || other.value == value)&&(identical(other.weight, weight) || other.weight == weight)&&(identical(other.expirationDate, expirationDate) || other.expirationDate == expirationDate)&&(identical(other.dangerousGoods, dangerousGoods) || other.dangerousGoods == dangerousGoods)&&(identical(other.coldChain, coldChain) || other.coldChain == coldChain)&&(identical(other.moduleDestination, moduleDestination) || other.moduleDestination == moduleDestination)&&(identical(other.priority, priority) || other.priority == priority)&&(identical(other.sequentialBuild, sequentialBuild) || other.sequentialBuild == sequentialBuild));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,containerNr,name,description,type,value,weight,expirationDate,dangerousGoods,coldChain,moduleDestination,sequentialBuild);
+int get hashCode => Object.hash(runtimeType,containerNr,name,description,type,value,weight,expirationDate,dangerousGoods,coldChain,moduleDestination,priority,sequentialBuild);
 
 @override
 String toString() {
-  return 'SummaryContainer(containerNr: $containerNr, name: $name, description: $description, type: $type, value: $value, weight: $weight, expirationDate: $expirationDate, dangerousGoods: $dangerousGoods, coldChain: $coldChain, moduleDestination: $moduleDestination, sequentialBuild: $sequentialBuild)';
+  return 'SummaryContainer(containerNr: $containerNr, name: $name, description: $description, type: $type, value: $value, weight: $weight, expirationDate: $expirationDate, dangerousGoods: $dangerousGoods, coldChain: $coldChain, moduleDestination: $moduleDestination, priority: $priority, sequentialBuild: $sequentialBuild)';
 }
 
 
@@ -261,7 +263,7 @@ abstract mixin class _$SummaryContainerCopyWith<$Res> implements $SummaryContain
   factory _$SummaryContainerCopyWith(_SummaryContainer value, $Res Function(_SummaryContainer) _then) = __$SummaryContainerCopyWithImpl;
 @override @useResult
 $Res call({
- int containerNr, String name, String description, String type, int value, double weight, String expirationDate, String dangerousGoods, String coldChain, String moduleDestination, SequentialBuild sequentialBuild
+ int containerNr, String name, String description, String type, int value, double weight, String expirationDate, String dangerousGoods, String coldChain, String moduleDestination, int priority, SequentialBuild sequentialBuild
 });
 
 
@@ -278,7 +280,7 @@ class __$SummaryContainerCopyWithImpl<$Res>
 
 /// Create a copy of SummaryContainer
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? containerNr = null,Object? name = null,Object? description = null,Object? type = null,Object? value = null,Object? weight = null,Object? expirationDate = null,Object? dangerousGoods = null,Object? coldChain = null,Object? moduleDestination = null,Object? sequentialBuild = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? containerNr = null,Object? name = null,Object? description = null,Object? type = null,Object? value = null,Object? weight = null,Object? expirationDate = null,Object? dangerousGoods = null,Object? coldChain = null,Object? moduleDestination = null,Object? priority = null,Object? sequentialBuild = null,}) {
   return _then(_SummaryContainer(
 containerNr: null == containerNr ? _self.containerNr : containerNr // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -290,7 +292,8 @@ as double,expirationDate: null == expirationDate ? _self.expirationDate : expira
 as String,dangerousGoods: null == dangerousGoods ? _self.dangerousGoods : dangerousGoods // ignore: cast_nullable_to_non_nullable
 as String,coldChain: null == coldChain ? _self.coldChain : coldChain // ignore: cast_nullable_to_non_nullable
 as String,moduleDestination: null == moduleDestination ? _self.moduleDestination : moduleDestination // ignore: cast_nullable_to_non_nullable
-as String,sequentialBuild: null == sequentialBuild ? _self.sequentialBuild : sequentialBuild // ignore: cast_nullable_to_non_nullable
+as String,priority: null == priority ? _self.priority : priority // ignore: cast_nullable_to_non_nullable
+as int,sequentialBuild: null == sequentialBuild ? _self.sequentialBuild : sequentialBuild // ignore: cast_nullable_to_non_nullable
 as SequentialBuild,
   ));
 }

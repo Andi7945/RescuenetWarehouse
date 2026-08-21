@@ -10,7 +10,7 @@ _ModuleDestination _$ModuleDestinationFromJson(Map<String, dynamic> json) =>
     _ModuleDestination(
       id: json['id'] as String,
       name: json['name'] as String,
-      priority: (json['priority'] as num?)?.toInt() ?? 1,
+      priority: (json['priority'] as num?)?.toInt(),
       badgeShape: $enumDecodeNullable(
         _$PriorityBadgeShapeEnumMap,
         json['badgeShape'],

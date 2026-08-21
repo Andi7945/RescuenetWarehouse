@@ -58,8 +58,9 @@ class _EditModuleDestinationsState
       Table(
         columnWidths: const {
           0: FlexColumnWidth(2), // Name
-          1: FlexColumnWidth(2), // Badge Shape
-          2: FixedColumnWidth(80), // Delete
+          1: FixedColumnWidth(120), // Priority
+          2: FlexColumnWidth(2), // Badge Shape
+          3: FixedColumnWidth(80), // Delete
         },
         children: [
           _headerRow(),
@@ -76,6 +77,13 @@ class _EditModuleDestinationsState
           Padding(
             padding: EdgeInsets.all(8.0),
             child: Text('Name', style: TextStyle(fontWeight: FontWeight.bold)),
+          ),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'Priority',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
           Padding(
             padding: EdgeInsets.all(8.0),
@@ -96,6 +104,7 @@ class _EditModuleDestinationsState
       TableRow(
         children: [
           _textField(destination.key),
+          _prioritySelector(destination.key),
           _badgeShapeSelector(destination.key),
           DeleteButtonWithUsages(destination.value, () {
             ref
@@ -116,6 +125,35 @@ class _EditModuleDestinationsState
       ),
     );
   }
+
+  /// Load priority editor. Constructs a new [ModuleDestination] instead of
+  /// using `copyWith` so that clearing the priority back to `null` works
+  /// (Freezed `copyWith` cannot distinguish omitted from explicit null).
+  Widget _prioritySelector(ModuleDestination destination) => Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+    child: DropdownButton<int?>(
+      value: destination.priority,
+      isExpanded: true,
+      hint: const Text('Not set'),
+      items: const [
+        DropdownMenuItem<int?>(value: null, child: Text('Not set')),
+        DropdownMenuItem<int?>(value: 1, child: Text('1')),
+        DropdownMenuItem<int?>(value: 2, child: Text('2')),
+        DropdownMenuItem<int?>(value: 3, child: Text('3')),
+        DropdownMenuItem<int?>(value: 4, child: Text('4')),
+      ],
+      onChanged: (value) => ref
+          .read(moduleDestinationsNotifierProvider.notifier)
+          .upsert(
+            ModuleDestination(
+              id: destination.id,
+              name: destination.name,
+              priority: value,
+              badgeShape: destination.badgeShape,
+            ),
+          ),
+    ),
+  );
 
   Widget _badgeShapeSelector(ModuleDestination destination) {
     return Padding(
@@ -138,6 +176,7 @@ class _EditModuleDestinationsState
         padding: const EdgeInsets.only(left: 16),
         child: EditCustomValueTextField(_addController),
       ),
+      const SizedBox.shrink(), // Empty cell for priority column
       const SizedBox.shrink(), // Empty cell for badge column
       _btnAdd(),
     ],

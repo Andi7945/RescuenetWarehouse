@@ -2,6 +2,7 @@ import 'package:rescuenet_warehouse/pdf/packing_dangerous_good.dart';
 import 'package:rescuenet_warehouse/pdf/packing_item.dart';
 import 'package:rescuenet_warehouse/pdf/packing_list.dart';
 import 'package:rescuenet_warehouse/pdf/pdf_mapper_utils.dart';
+import 'package:rescuenet_warehouse/pdf/print_sorting.dart';
 
 import '../models/container_type.dart';
 import '../models/item.dart';
@@ -25,10 +26,26 @@ String _formatContainerType(ContainerType? type) {
   return "$name $measurements";
 }
 
+/// Maps containers to packing lists.
+///
+/// The resulting lists are ordered like the summary list
+/// (destination priority -> destination -> container number) so that printed
+/// stacks of packing lists match the packing order.
 List<PackingList> mapPackingList(
   Map<RescueContainer, Map<Item, int>> containerWithItems,
 ) {
-  return containerWithItems.entries.map(_single).toList();
+  final entries = containerWithItems.entries.toList()
+    ..sort(
+      (a, b) => compareContainersForSummary(
+        aPriority: a.key.moduleDestination?.priority ?? unprioritisedRank,
+        aDestination: a.key.moduleDestination?.name ?? "",
+        aNumber: a.key.number,
+        bPriority: b.key.moduleDestination?.priority ?? unprioritisedRank,
+        bDestination: b.key.moduleDestination?.name ?? "",
+        bNumber: b.key.number,
+      ),
+    );
+  return entries.map(_single).toList();
 }
 
 PackingList _single(MapEntry<RescueContainer, Map<Item, int>> entry) =>
@@ -39,7 +56,7 @@ PackingList _single(MapEntry<RescueContainer, Map<Item, int>> entry) =>
       containerDescription: entry.key.description ?? "",
       totalWeight: sumItemWeight(entry.key, entry.value),
       destination: entry.key.moduleDestination?.name ?? "",
-      priority: entry.key.moduleDestination?.priority ?? 1,
+      priority: entry.key.moduleDestination?.priority ?? unprioritisedRank,
       sequentialBuild: entry.key.sequentialBuild,
       expirationDate: nextExpirationDate(entry.value),
       dangerousGoods: _dangerousGoods(
@@ -72,8 +89,9 @@ PackingDangerousGood _singleGood(Sign sign) => PackingDangerousGood(
   imagePath: _buildImagePath(sign.imagePath),
 );
 
+/// Items are ordered: dangerous goods -> cold chain -> heaviest first.
 List<PackingItem> _items(Map<Item, int> items) =>
-    items.entries.map(_singleItem).toList();
+    sortItemsForPackingList(items).map(_singleItem).toList();
 
 PackingItem _singleItem(MapEntry<Item, int> item) => PackingItem(
   name: item.key.name ?? "",
